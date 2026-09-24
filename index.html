@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Broken Phone</title>
+
+    <link rel="stylesheet" href="menu.css">
+</head>
+
+<body>
+
+    <main class="menu-screen">
+
+        <!-- GAME TITLE -->
+        <div class="game-title">
+            <span>BROKEN</span>
+            <span>PHONE</span>
+        </div>
+
+        <!-- MENU -->
+        <nav class="main-menu">
+
+            <button class="menu-button" id="newGameBtn">
+                NEW GAME
+            </button>
+
+            <button class="menu-button" id="continueBtn">
+                CONTINUE
+            </button>
+
+            <button class="menu-button" id="settingsBtn">
+                SETTINGS
+            </button>
+
+            <button class="menu-button" id="quitBtn">
+                QUIT
+            </button>
+
+        </nav>
+
+        <!-- SETTINGS PANEL -->
+        <section class="settings-panel" id="settingsPanel">
+
+            <button class="close-settings" id="closeSettings">
+                ×
+            </button>
+
+            <h2>SETTINGS</h2>
+
+            <label for="volume">
+                VOLUME
+            </label>
+
+            <input
+                type="range"
+                id="volume"
+                min="0"
+                max="100"
+                value="70"
+            >
+
+            <p id="volumeValue">70%</p>
+
+        </section>
+
+        <!-- QUIT MESSAGE -->
+        <div class="quit-message" id="quitMessage">
+            <p>Are you sure you want to leave?</p>
+
+            <button id="stayBtn">STAY</button>
+            <button id="leaveBtn">LEAVE</button>
+        </div>
+
+    </main>
+
+    <script src="menu.js"></script>
+
+</body>
+</html>
