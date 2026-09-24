@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+@import url(
+    'https://fonts.googleapis.com/css2?family=Special+Elite&display=swap'
+);
 
 
 /* =========================================
-   BASIC RESET
+   RESET
 ========================================= */
 
 * {
@@ -20,7 +22,6 @@ body {
 
 
 body {
-
     background: #080504;
 
     font-family:
@@ -33,7 +34,7 @@ body {
 
 
 /* =========================================
-   MAIN SCREEN
+   MAIN MENU
 ========================================= */
 
 .menu-screen {
@@ -60,7 +61,7 @@ body {
 
 
 /* =========================================
-   DARK ATMOSPHERIC OVERLAY
+   DARK OVERLAY
 ========================================= */
 
 .menu-screen::after {
@@ -91,7 +92,7 @@ body {
 
 
 /* =========================================
-   SUBTLE LIGHT FLICKER
+   LIGHT FLICKER
 ========================================= */
 
 .menu-screen::before {
@@ -150,7 +151,7 @@ body {
 
 
 /* =========================================
-   BACKGROUND SLOW MOVEMENT
+   SLOW BACKGROUND MOVEMENT
 ========================================= */
 
 @keyframes backgroundBreath {
@@ -170,7 +171,7 @@ body {
 
 
 /* =========================================
-   PARTICLES
+   FLOATING PARTICLES
 ========================================= */
 
 .particles {
@@ -190,9 +191,6 @@ body {
 .particle {
 
     position: absolute;
-
-    width: 3px;
-    height: 3px;
 
     border-radius: 50%;
 
@@ -221,12 +219,9 @@ body {
         opacity: 0;
     }
 
-
     15% {
-
         opacity: 0.65;
     }
-
 
     50% {
 
@@ -236,12 +231,9 @@ body {
             scale(1);
     }
 
-
     80% {
-
         opacity: 0.25;
     }
-
 
     100% {
 
@@ -256,7 +248,7 @@ body {
 
 
 /* =========================================
-   GAME TITLE
+   TITLE
 ========================================= */
 
 .game-title {
@@ -264,7 +256,6 @@ body {
     position: absolute;
 
     left: 5%;
-
     top: 15%;
 
     z-index: 5;
@@ -287,9 +278,7 @@ body {
     letter-spacing: 5px;
 
     text-shadow:
-
         3px 3px 0 #17100d,
-
         -1px -1px 0 #17100d;
 
     transform: rotate(-2deg);
@@ -300,13 +289,11 @@ body {
 
 
 .game-title span:first-child {
-
     margin-left: 8px;
 }
 
 
 .game-title span:last-child {
-
     margin-left: 38px;
 }
 
@@ -330,7 +317,7 @@ body {
 
 
 /* =========================================
-   MAIN MENU
+   MAIN MENU BUTTONS
 ========================================= */
 
 .main-menu {
@@ -338,7 +325,6 @@ body {
     position: absolute;
 
     left: 5%;
-
     top: 39%;
 
     z-index: 6;
@@ -353,10 +339,6 @@ body {
 }
 
 
-/* =========================================
-   BUTTONS
-========================================= */
-
 .menu-button {
 
     position: relative;
@@ -368,12 +350,10 @@ body {
     padding: 10px 22px;
 
     border:
-
         1px solid
         rgba(229, 215, 195, 0.75);
 
     background:
-
         rgba(10, 8, 7, 0.72);
 
     color: #eee2d2;
@@ -392,13 +372,9 @@ body {
     cursor: pointer;
 
     transition:
-
         transform 0.18s ease,
-
         background 0.18s ease,
-
         color 0.18s ease,
-
         box-shadow 0.18s ease;
 }
 
@@ -412,7 +388,6 @@ body {
     inset: 4px;
 
     border:
-
         1px solid
         rgba(238, 226, 210, 0.25);
 
@@ -431,7 +406,6 @@ body {
     color: #ffffff;
 
     box-shadow:
-
         0 0 12px
         rgba(220, 190, 150, 0.15);
 }
@@ -446,7 +420,7 @@ body {
 
 
 /* =========================================
-   SETTINGS
+   SETTINGS PANEL
 ========================================= */
 
 .settings-panel {
@@ -483,7 +457,6 @@ body {
 
 
 .settings-panel.active {
-
     display: block;
 }
 
@@ -501,7 +474,6 @@ body {
     display: block;
 
     margin-top: 30px;
-
     margin-bottom: 10px;
 
     letter-spacing: 2px;
@@ -521,6 +493,53 @@ body {
     text-align: right;
 }
 
+
+/* =========================================
+   MUTE BUTTON
+========================================= */
+
+.mute-button {
+
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 12px;
+
+    border:
+        1px solid
+        #d8c5ae;
+
+    background:
+        transparent;
+
+    color:
+        #eee2d2;
+
+    font-family:
+        inherit;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.mute-button:hover {
+
+    background:
+        #eee2d2;
+
+    color:
+        #120e0c;
+}
+
+
+/* =========================================
+   CLOSE SETTINGS
+========================================= */
 
 .close-settings {
 
@@ -542,7 +561,7 @@ body {
 
 
 /* =========================================
-   QUIT WINDOW
+   QUIT
 ========================================= */
 
 .quit-message {
@@ -577,7 +596,6 @@ body {
 
 
 .quit-message.active {
-
     display: block;
 }
 
@@ -630,8 +648,8 @@ body {
 
     z-index: 8;
 
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
 
     display: flex;
 
@@ -644,28 +662,38 @@ body {
 
     border-radius: 50%;
 
+    background:
+        rgba(8, 5, 4, 0.45);
+
     color:
         #eee2d2;
 
-    font-size: 16px;
+    font-size: 17px;
+
+    cursor: pointer;
 
     opacity: 0.7;
 
-    animation:
-        musicPulse 2.5s ease-in-out infinite;
+    transition:
+        opacity 0.2s,
+        transform 0.2s;
 }
 
 
-@keyframes musicPulse {
+.audio-indicator:hover {
 
-    0%,
-    100% {
-        opacity: 0.45;
-    }
+    opacity: 1;
 
-    50% {
-        opacity: 0.95;
-    }
+    transform:
+        scale(1.08);
+}
+
+
+.audio-indicator.muted {
+
+    opacity: 0.35;
+
+    text-decoration: line-through;
 }
 
 
@@ -678,7 +706,6 @@ body {
     .game-title {
 
         left: 7%;
-
         top: 12%;
 
         font-size: 42px;
@@ -688,7 +715,6 @@ body {
     .main-menu {
 
         left: 7%;
-
         top: 37%;
     }
 
