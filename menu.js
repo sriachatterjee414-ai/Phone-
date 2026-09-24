@@ -28,6 +28,9 @@ const volume =
 const volumeValue =
     document.getElementById("volumeValue");
 
+const muteButton =
+    document.getElementById("muteButton");
+
 const quitBtn =
     document.getElementById("quitBtn");
 
@@ -43,156 +46,317 @@ const leaveBtn =
 const particleContainer =
     document.getElementById("particles");
 
+const audioIndicator =
+    document.getElementById("audioIndicator");
+
+const hallAmbience =
+    document.getElementById("hallAmbience");
+
+const radioStatic =
+    document.getElementById("radioStatic");
+
 
 /* =========================================
-   HORROR AMBIENCE
-   Browser-generated audio.
-
-   No MP3 required.
+   AUDIO SETTINGS
 ========================================= */
 
-let audioContext = null;
-
-let masterGain = null;
-
-let droneOscillator = null;
-
-let droneGain = null;
+let soundEnabled = true;
 
 let audioStarted = false;
 
+let radioTimer = null;
 
-/* Start the atmospheric sound */
 
-function startHorrorAmbience() {
+/* =========================================
+   LOAD SAVED SETTINGS
+========================================= */
 
-    if (audioStarted) {
+const savedVolume =
+    localStorage.getItem(
+        "brokenPhoneVolume"
+    );
+
+
+if (savedVolume !== null) {
+
+    volume.value =
+        savedVolume;
+
+    volumeValue.textContent =
+        savedVolume + "%";
+}
+
+
+const savedSound =
+    localStorage.getItem(
+        "brokenPhoneSound"
+    );
+
+
+if (savedSound === "off") {
+
+    soundEnabled = false;
+
+    updateSoundButton();
+}
+
+
+/* =========================================
+   APPLY VOLUME
+========================================= */
+
+function applyVolume() {
+
+    const volumeLevel =
+        Number(volume.value) / 100;
+
+
+    /*
+       Hall ambience is deliberately
+       quieter than the master volume.
+    */
+
+    hallAmbience.volume =
+        volumeLevel * 0.45;
+
+
+    /*
+       Radio static is louder so it can
+       actually be heard when it happens.
+    */
+
+    radioStatic.volume =
+        volumeLevel * 0.75;
+}
+
+
+/* =========================================
+   START MENU AUDIO
+========================================= */
+
+function startMenuAudio() {
+
+    if (!soundEnabled) {
         return;
     }
 
-    audioStarted = true;
 
-
-    audioContext =
-        new (
-            window.AudioContext ||
-            window.webkitAudioContext
-        )();
-
-
-    masterGain =
-        audioContext.createGain();
-
-
-    masterGain.gain.value = 0.08;
-
-
-    masterGain.connect(
-        audioContext.destination
-    );
+    applyVolume();
 
 
     /*
-       Very low drone.
-       This is deliberately subtle.
+       The browser allows audio after
+       the user has interacted with
+       the page.
     */
 
-    droneOscillator =
-        audioContext.createOscillator();
+    if (!audioStarted) {
 
+        hallAmbience.currentTime = 0;
 
-    droneGain =
-        audioContext.createGain();
+        hallAmbience
+            .play()
+            .then(() => {
 
+                audioStarted = true;
 
-    droneOscillator.type = "sine";
+                startRadioStatic();
 
-    droneOscillator.frequency.value = 55;
+            })
+            .catch(() => {
 
-    droneGain.gain.value = 0.18;
+                /*
+                   If the browser blocks it,
+                   the next click will try again.
+                */
 
+                audioStarted = false;
+            });
 
-    droneOscillator.connect(
-        droneGain
-    );
-
-    droneGain.connect(
-        masterGain
-    );
-
-
-    droneOscillator.start();
-
-
-    /*
-       Second quieter tone gives the
-       ambience a little movement.
-    */
-
-    const secondOscillator =
-        audioContext.createOscillator();
-
-
-    const secondGain =
-        audioContext.createGain();
-
-
-    secondOscillator.type =
-        "triangle";
-
-    secondOscillator.frequency.value =
-        82.4;
-
-    secondGain.gain.value =
-        0.025;
-
-
-    secondOscillator.connect(
-        secondGain
-    );
-
-    secondGain.connect(
-        masterGain
-    );
-
-
-    secondOscillator.start();
-
-
-    /*
-       Slow volume breathing.
-    */
-
-    setInterval(() => {
-
-        if (!audioContext) {
-            return;
-        }
-
-        const now =
-            audioContext.currentTime;
-
-        masterGain.gain.cancelScheduledValues(
-            now
-        );
-
-        masterGain.gain.setValueAtTime(
-            0.045,
-            now
-        );
-
-        masterGain.gain.linearRampToValueAtTime(
-            0.08,
-            now + 3
-        );
-
-        masterGain.gain.linearRampToValueAtTime(
-            0.045,
-            now + 6
-        );
-
-    }, 6000);
+    }
 }
+
+
+/* =========================================
+   RANDOM RADIO STATIC
+========================================= */
+
+function startRadioStatic() {
+
+    if (radioTimer !== null) {
+        clearTimeout(radioTimer);
+    }
+
+
+    const delay =
+        12000 +
+        Math.random() * 22000;
+
+
+    radioTimer =
+        setTimeout(() => {
+
+            playRadioStatic();
+
+            startRadioStatic();
+
+        }, delay);
+}
+
+
+/* =========================================
+   PLAY RADIO STATIC
+========================================= */
+
+function playRadioStatic() {
+
+    if (!soundEnabled) {
+        return;
+    }
+
+
+    radioStatic.currentTime = 0;
+
+
+    radioStatic
+        .play()
+        .catch(() => {
+            // Browser may block it until interaction.
+        });
+}
+
+
+/* =========================================
+   STOP AUDIO
+========================================= */
+
+function stopMenuAudio() {
+
+    hallAmbience.pause();
+
+    radioStatic.pause();
+
+    radioStatic.currentTime = 0;
+
+
+    if (radioTimer !== null) {
+
+        clearTimeout(
+            radioTimer
+        );
+
+        radioTimer = null;
+    }
+}
+
+
+/* =========================================
+   MUTE / UNMUTE
+========================================= */
+
+function updateSoundButton() {
+
+    if (soundEnabled) {
+
+        muteButton.textContent =
+            "SOUND: ON";
+
+        audioIndicator.textContent =
+            "♪";
+
+        audioIndicator.classList.remove(
+            "muted"
+        );
+
+    } else {
+
+        muteButton.textContent =
+            "SOUND: OFF";
+
+        audioIndicator.textContent =
+            "×";
+
+        audioIndicator.classList.add(
+            "muted"
+        );
+    }
+}
+
+
+function toggleSound() {
+
+    soundEnabled =
+        !soundEnabled;
+
+
+    localStorage.setItem(
+        "brokenPhoneSound",
+        soundEnabled
+            ? "on"
+            : "off"
+    );
+
+
+    updateSoundButton();
+
+
+    if (soundEnabled) {
+
+        startMenuAudio();
+
+    } else {
+
+        stopMenuAudio();
+    }
+}
+
+
+muteButton.addEventListener(
+    "click",
+    toggleSound
+);
+
+
+audioIndicator.addEventListener(
+    "click",
+    toggleSound
+);
+
+
+/* =========================================
+   VOLUME SLIDER
+========================================= */
+
+volume.addEventListener(
+    "input",
+    () => {
+
+        const value =
+            volume.value;
+
+
+        volumeValue.textContent =
+            value + "%";
+
+
+        localStorage.setItem(
+            "brokenPhoneVolume",
+            value
+        );
+
+
+        applyVolume();
+
+
+        /*
+           A volume change is also
+           user interaction, so try
+           starting the ambience.
+        */
+
+        startMenuAudio();
+    }
+);
 
 
 /* =========================================
@@ -201,10 +365,16 @@ function startHorrorAmbience() {
 
 function createParticles() {
 
-    for (let i = 0; i < 35; i++) {
+    for (
+        let i = 0;
+        i < 35;
+        i++
+    ) {
 
         const particle =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
 
 
         particle.classList.add(
@@ -251,6 +421,23 @@ createParticles();
 
 
 /* =========================================
+   START AUDIO ON FIRST MENU INTERACTION
+========================================= */
+
+document.addEventListener(
+    "click",
+    () => {
+
+        startMenuAudio();
+
+    },
+    {
+        once: true
+    }
+);
+
+
+/* =========================================
    NEW GAME
 ========================================= */
 
@@ -258,10 +445,20 @@ newGameBtn.addEventListener(
     "click",
     () => {
 
-        startHorrorAmbience();
+        startMenuAudio();
 
-        window.location.href =
-            "signin.html";
+
+        /*
+           Give the audio a moment to start
+           before changing pages.
+        */
+
+        setTimeout(() => {
+
+            window.location.href =
+                "signin.html";
+
+        }, 150);
 
     }
 );
@@ -275,7 +472,7 @@ continueBtn.addEventListener(
     "click",
     () => {
 
-        startHorrorAmbience();
+        startMenuAudio();
 
 
         const savedName =
@@ -286,8 +483,12 @@ continueBtn.addEventListener(
 
         if (savedName) {
 
-            window.location.href =
-                "signin.html";
+            setTimeout(() => {
+
+                window.location.href =
+                    "signin.html";
+
+            }, 150);
 
         } else {
 
@@ -307,7 +508,8 @@ settingsBtn.addEventListener(
     "click",
     () => {
 
-        startHorrorAmbience();
+        startMenuAudio();
+
 
         settingsPanel.classList.add(
             "active"
@@ -330,57 +532,6 @@ closeSettings.addEventListener(
 
 
 /* =========================================
-   VOLUME
-========================================= */
-
-volume.addEventListener(
-    "input",
-    () => {
-
-        const value =
-            volume.value;
-
-
-        volumeValue.textContent =
-            value + "%";
-
-
-        localStorage.setItem(
-            "brokenPhoneVolume",
-            value
-        );
-
-
-        if (masterGain) {
-
-            masterGain.gain.value =
-                Number(value) / 100 * 0.12;
-        }
-
-    }
-);
-
-
-/* Load saved volume */
-
-const savedVolume =
-    localStorage.getItem(
-        "brokenPhoneVolume"
-    );
-
-
-if (savedVolume !== null) {
-
-    volume.value =
-        savedVolume;
-
-
-    volumeValue.textContent =
-        savedVolume + "%";
-}
-
-
-/* =========================================
    QUIT
 ========================================= */
 
@@ -388,7 +539,8 @@ quitBtn.addEventListener(
     "click",
     () => {
 
-        startHorrorAmbience();
+        startMenuAudio();
+
 
         quitMessage.classList.add(
             "active"
@@ -422,13 +574,8 @@ leaveBtn.addEventListener(
     "click",
     () => {
 
-        /*
-           Browsers normally prevent a webpage
-           from closing itself.
+        stopMenuAudio();
 
-           So for the prototype, we show a
-           simple exit state.
-        */
 
         document.body.innerHTML = `
 
@@ -451,3 +598,12 @@ leaveBtn.addEventListener(
         `;
     }
 );
+
+
+/* =========================================
+   INITIALIZE
+========================================= */
+
+updateSoundButton();
+
+applyVolume();
