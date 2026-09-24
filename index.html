@@ -18,7 +18,7 @@
 
     <main class="menu-screen">
 
-        <!-- Atmospheric particles -->
+        <!-- Atmospheric floating particles -->
         <div
             class="particles"
             id="particles"
@@ -27,10 +27,8 @@
 
         <!-- Game title -->
         <div class="game-title">
-
             <span>BROKEN</span>
             <span>PHONE</span>
-
         </div>
 
 
@@ -44,7 +42,6 @@
                 NEW GAME
             </button>
 
-
             <button
                 class="menu-button"
                 id="continueBtn"
@@ -52,14 +49,12 @@
                 CONTINUE
             </button>
 
-
             <button
                 class="menu-button"
                 id="settingsBtn"
             >
                 SETTINGS
             </button>
-
 
             <button
                 class="menu-button"
@@ -71,7 +66,7 @@
         </nav>
 
 
-        <!-- Settings -->
+        <!-- Settings panel -->
         <section
             class="settings-panel"
             id="settingsPanel"
@@ -84,14 +79,11 @@
                 ×
             </button>
 
-
             <h2>SETTINGS</h2>
-
 
             <label for="volume">
                 MASTER VOLUME
             </label>
-
 
             <input
                 type="range"
@@ -101,10 +93,16 @@
                 value="70"
             >
 
-
             <p id="volumeValue">
                 70%
             </p>
+
+            <button
+                class="mute-button"
+                id="muteButton"
+            >
+                SOUND: ON
+            </button>
 
         </section>
 
@@ -119,11 +117,9 @@
                 Are you sure you want to leave?
             </p>
 
-
             <button id="stayBtn">
                 STAY
             </button>
-
 
             <button id="leaveBtn">
                 LEAVE
@@ -132,13 +128,35 @@
         </div>
 
 
-        <!-- Small audio indicator -->
-        <div
+        <!-- Audio indicator -->
+        <button
             class="audio-indicator"
             id="audioIndicator"
+            aria-label="Toggle sound"
         >
             ♪
-        </div>
+        </button>
+
+
+        <!--
+            MENU AUDIO
+
+            Both files are in the same folder
+            as this HTML file.
+        -->
+
+        <audio
+            id="hallAmbience"
+            src="hall_ambience.mp3"
+            loop
+            preload="auto"
+        ></audio>
+
+        <audio
+            id="radioStatic"
+            src="radio_static.mp3"
+            preload="auto"
+        ></audio>
 
     </main>
 
