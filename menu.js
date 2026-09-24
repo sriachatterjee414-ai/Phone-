@@ -1,125 +1,453 @@
-const newGameBtn = document.getElementById("newGameBtn");
-const continueBtn = document.getElementById("continueBtn");
-
-const settingsBtn = document.getElementById("settingsBtn");
-const settingsPanel = document.getElementById("settingsPanel");
-const closeSettings = document.getElementById("closeSettings");
-
-const volume = document.getElementById("volume");
-const volumeValue = document.getElementById("volumeValue");
-
-const quitBtn = document.getElementById("quitBtn");
-const quitMessage = document.getElementById("quitMessage");
-
-const stayBtn = document.getElementById("stayBtn");
-const leaveBtn = document.getElementById("leaveBtn");
+/* =========================================
+   BROKEN PHONE — MAIN MENU
+========================================= */
 
 
-// ===============================
-// NEW GAME
-// ===============================
+/* =========================================
+   ELEMENTS
+========================================= */
 
-newGameBtn.addEventListener("click", () => {
+const newGameBtn =
+    document.getElementById("newGameBtn");
 
-    window.location.href = "signin.html";
+const continueBtn =
+    document.getElementById("continueBtn");
 
-});
+const settingsBtn =
+    document.getElementById("settingsBtn");
+
+const settingsPanel =
+    document.getElementById("settingsPanel");
+
+const closeSettings =
+    document.getElementById("closeSettings");
+
+const volume =
+    document.getElementById("volume");
+
+const volumeValue =
+    document.getElementById("volumeValue");
+
+const quitBtn =
+    document.getElementById("quitBtn");
+
+const quitMessage =
+    document.getElementById("quitMessage");
+
+const stayBtn =
+    document.getElementById("stayBtn");
+
+const leaveBtn =
+    document.getElementById("leaveBtn");
+
+const particleContainer =
+    document.getElementById("particles");
 
 
-// ===============================
-// CONTINUE
-// ===============================
+/* =========================================
+   HORROR AMBIENCE
+   Browser-generated audio.
 
-continueBtn.addEventListener("click", () => {
+   No MP3 required.
+========================================= */
 
-    const savedName = localStorage.getItem("brokenPhonePlayerName");
+let audioContext = null;
 
-    if (savedName) {
+let masterGain = null;
 
-        window.location.href = "signin.html";
+let droneOscillator = null;
 
-    } else {
+let droneGain = null;
 
-        alert("No saved game found.");
+let audioStarted = false;
 
+
+/* Start the atmospheric sound */
+
+function startHorrorAmbience() {
+
+    if (audioStarted) {
+        return;
     }
 
-});
+    audioStarted = true;
 
 
-// ===============================
-// SETTINGS
-// ===============================
-
-settingsBtn.addEventListener("click", () => {
-
-    settingsPanel.classList.add("active");
-
-});
-
-closeSettings.addEventListener("click", () => {
-
-    settingsPanel.classList.remove("active");
-
-});
+    audioContext =
+        new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
 
 
-// ===============================
-// VOLUME
-// ===============================
+    masterGain =
+        audioContext.createGain();
 
-volume.addEventListener("input", () => {
 
-    volumeValue.textContent = volume.value + "%";
+    masterGain.gain.value = 0.08;
 
-    localStorage.setItem(
-        "brokenPhoneVolume",
-        volume.value
+
+    masterGain.connect(
+        audioContext.destination
     );
 
-});
+
+    /*
+       Very low drone.
+       This is deliberately subtle.
+    */
+
+    droneOscillator =
+        audioContext.createOscillator();
 
 
-// Load saved volume
+    droneGain =
+        audioContext.createGain();
 
-const savedVolume =
-    localStorage.getItem("brokenPhoneVolume");
 
-if (savedVolume !== null) {
+    droneOscillator.type = "sine";
 
-    volume.value = savedVolume;
+    droneOscillator.frequency.value = 55;
 
-    volumeValue.textContent =
-        savedVolume + "%";
+    droneGain.gain.value = 0.18;
 
+
+    droneOscillator.connect(
+        droneGain
+    );
+
+    droneGain.connect(
+        masterGain
+    );
+
+
+    droneOscillator.start();
+
+
+    /*
+       Second quieter tone gives the
+       ambience a little movement.
+    */
+
+    const secondOscillator =
+        audioContext.createOscillator();
+
+
+    const secondGain =
+        audioContext.createGain();
+
+
+    secondOscillator.type =
+        "triangle";
+
+    secondOscillator.frequency.value =
+        82.4;
+
+    secondGain.gain.value =
+        0.025;
+
+
+    secondOscillator.connect(
+        secondGain
+    );
+
+    secondGain.connect(
+        masterGain
+    );
+
+
+    secondOscillator.start();
+
+
+    /*
+       Slow volume breathing.
+    */
+
+    setInterval(() => {
+
+        if (!audioContext) {
+            return;
+        }
+
+        const now =
+            audioContext.currentTime;
+
+        masterGain.gain.cancelScheduledValues(
+            now
+        );
+
+        masterGain.gain.setValueAtTime(
+            0.045,
+            now
+        );
+
+        masterGain.gain.linearRampToValueAtTime(
+            0.08,
+            now + 3
+        );
+
+        masterGain.gain.linearRampToValueAtTime(
+            0.045,
+            now + 6
+        );
+
+    }, 6000);
 }
 
 
-// ===============================
-// QUIT
-// ===============================
+/* =========================================
+   PARTICLES
+========================================= */
 
-quitBtn.addEventListener("click", () => {
+function createParticles() {
 
-    quitMessage.classList.add("active");
+    for (let i = 0; i < 35; i++) {
 
-});
+        const particle =
+            document.createElement("span");
 
-stayBtn.addEventListener("click", () => {
 
-    quitMessage.classList.remove("active");
+        particle.classList.add(
+            "particle"
+        );
 
-});
 
-leaveBtn.addEventListener("click", () => {
+        particle.style.left =
+            Math.random() * 100 + "%";
 
-    /*
-       Browsers normally don't allow a webpage
-       to close itself.
 
-       For now we return to a blank screen.
-    */
+        particle.style.top =
+            Math.random() * 100 + "%";
 
-    document.body.innerHTML = "";
 
-});
+        particle.style.animationDuration =
+            (5 + Math.random() * 8) + "s";
+
+
+        particle.style.animationDelay =
+            (Math.random() * 8) + "s";
+
+
+        const size =
+            1 + Math.random() * 3;
+
+
+        particle.style.width =
+            size + "px";
+
+
+        particle.style.height =
+            size + "px";
+
+
+        particleContainer.appendChild(
+            particle
+        );
+    }
+}
+
+
+createParticles();
+
+
+/* =========================================
+   NEW GAME
+========================================= */
+
+newGameBtn.addEventListener(
+    "click",
+    () => {
+
+        startHorrorAmbience();
+
+        window.location.href =
+            "signin.html";
+
+    }
+);
+
+
+/* =========================================
+   CONTINUE
+========================================= */
+
+continueBtn.addEventListener(
+    "click",
+    () => {
+
+        startHorrorAmbience();
+
+
+        const savedName =
+            localStorage.getItem(
+                "brokenPhonePlayerName"
+            );
+
+
+        if (savedName) {
+
+            window.location.href =
+                "signin.html";
+
+        } else {
+
+            alert(
+                "No saved game found."
+            );
+        }
+    }
+);
+
+
+/* =========================================
+   SETTINGS
+========================================= */
+
+settingsBtn.addEventListener(
+    "click",
+    () => {
+
+        startHorrorAmbience();
+
+        settingsPanel.classList.add(
+            "active"
+        );
+
+    }
+);
+
+
+closeSettings.addEventListener(
+    "click",
+    () => {
+
+        settingsPanel.classList.remove(
+            "active"
+        );
+
+    }
+);
+
+
+/* =========================================
+   VOLUME
+========================================= */
+
+volume.addEventListener(
+    "input",
+    () => {
+
+        const value =
+            volume.value;
+
+
+        volumeValue.textContent =
+            value + "%";
+
+
+        localStorage.setItem(
+            "brokenPhoneVolume",
+            value
+        );
+
+
+        if (masterGain) {
+
+            masterGain.gain.value =
+                Number(value) / 100 * 0.12;
+        }
+
+    }
+);
+
+
+/* Load saved volume */
+
+const savedVolume =
+    localStorage.getItem(
+        "brokenPhoneVolume"
+    );
+
+
+if (savedVolume !== null) {
+
+    volume.value =
+        savedVolume;
+
+
+    volumeValue.textContent =
+        savedVolume + "%";
+}
+
+
+/* =========================================
+   QUIT
+========================================= */
+
+quitBtn.addEventListener(
+    "click",
+    () => {
+
+        startHorrorAmbience();
+
+        quitMessage.classList.add(
+            "active"
+        );
+
+    }
+);
+
+
+/* =========================================
+   STAY
+========================================= */
+
+stayBtn.addEventListener(
+    "click",
+    () => {
+
+        quitMessage.classList.remove(
+            "active"
+        );
+
+    }
+);
+
+
+/* =========================================
+   LEAVE
+========================================= */
+
+leaveBtn.addEventListener(
+    "click",
+    () => {
+
+        /*
+           Browsers normally prevent a webpage
+           from closing itself.
+
+           So for the prototype, we show a
+           simple exit state.
+        */
+
+        document.body.innerHTML = `
+
+            <div style="
+                width:100vw;
+                height:100vh;
+                background:#080504;
+                color:#eee2d2;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-family:'Courier New',monospace;
+                letter-spacing:4px;
+            ">
+
+                GAME CLOSED
+
+            </div>
+
+        `;
+    }
+);
