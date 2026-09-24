@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Broken Phone</title>
 
@@ -13,45 +18,80 @@
 
     <main class="menu-screen">
 
-        <!-- GAME TITLE -->
+        <!-- Atmospheric particles -->
+        <div
+            class="particles"
+            id="particles"
+        ></div>
+
+
+        <!-- Game title -->
         <div class="game-title">
+
             <span>BROKEN</span>
             <span>PHONE</span>
+
         </div>
 
-        <!-- MENU -->
+
+        <!-- Main menu -->
         <nav class="main-menu">
 
-            <button class="menu-button" id="newGameBtn">
+            <button
+                class="menu-button"
+                id="newGameBtn"
+            >
                 NEW GAME
             </button>
 
-            <button class="menu-button" id="continueBtn">
+
+            <button
+                class="menu-button"
+                id="continueBtn"
+            >
                 CONTINUE
             </button>
 
-            <button class="menu-button" id="settingsBtn">
+
+            <button
+                class="menu-button"
+                id="settingsBtn"
+            >
                 SETTINGS
             </button>
 
-            <button class="menu-button" id="quitBtn">
+
+            <button
+                class="menu-button"
+                id="quitBtn"
+            >
                 QUIT
             </button>
 
         </nav>
 
-        <!-- SETTINGS PANEL -->
-        <section class="settings-panel" id="settingsPanel">
 
-            <button class="close-settings" id="closeSettings">
+        <!-- Settings -->
+        <section
+            class="settings-panel"
+            id="settingsPanel"
+        >
+
+            <button
+                class="close-settings"
+                id="closeSettings"
+            >
                 ×
             </button>
 
+
             <h2>SETTINGS</h2>
 
+
             <label for="volume">
-                VOLUME
+                MASTER VOLUME
             </label>
+
 
             <input
                 type="range"
@@ -61,21 +101,50 @@
                 value="70"
             >
 
-            <p id="volumeValue">70%</p>
+
+            <p id="volumeValue">
+                70%
+            </p>
 
         </section>
 
-        <!-- QUIT MESSAGE -->
-        <div class="quit-message" id="quitMessage">
-            <p>Are you sure you want to leave?</p>
 
-            <button id="stayBtn">STAY</button>
-            <button id="leaveBtn">LEAVE</button>
+        <!-- Quit confirmation -->
+        <div
+            class="quit-message"
+            id="quitMessage"
+        >
+
+            <p>
+                Are you sure you want to leave?
+            </p>
+
+
+            <button id="stayBtn">
+                STAY
+            </button>
+
+
+            <button id="leaveBtn">
+                LEAVE
+            </button>
+
+        </div>
+
+
+        <!-- Small audio indicator -->
+        <div
+            class="audio-indicator"
+            id="audioIndicator"
+        >
+            ♪
         </div>
 
     </main>
 
+
     <script src="menu.js"></script>
 
 </body>
+
 </html>
