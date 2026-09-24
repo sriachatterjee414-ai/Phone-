@@ -1,0 +1,308 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: #080504;
+    font-family: "Special Elite", "Courier New", monospace;
+}
+
+.menu-screen {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    min-height: 500px;
+
+    background-image: url("1000033767.png");
+    background-size: cover;
+    background-position: center;
+
+    overflow: hidden;
+}
+
+/* DARK OVERLAY */
+
+.menu-screen::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.72) 0%,
+            rgba(0, 0, 0, 0.45) 28%,
+            rgba(0, 0, 0, 0.05) 60%,
+            rgba(0, 0, 0, 0.12) 100%
+        );
+
+    pointer-events: none;
+}
+
+
+/* GAME TITLE */
+
+.game-title {
+    position: absolute;
+
+    left: 5%;
+    top: 17%;
+
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    color: #eee2d2;
+
+    font-size: clamp(38px, 4.5vw, 78px);
+
+    line-height: 0.82;
+
+    letter-spacing: 5px;
+
+    text-shadow:
+        3px 3px 0 #17100d,
+        -1px -1px 0 #17100d;
+
+    transform: rotate(-2deg);
+}
+
+.game-title span:first-child {
+    margin-left: 8px;
+}
+
+.game-title span:last-child {
+    margin-left: 38px;
+}
+
+
+/* MAIN MENU */
+
+.main-menu {
+    position: absolute;
+
+    left: 5%;
+    top: 39%;
+
+    z-index: 3;
+
+    width: 250px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+/* BUTTON */
+
+.menu-button {
+    position: relative;
+
+    width: 230px;
+    min-height: 50px;
+
+    padding: 10px 22px;
+
+    border: 1px solid rgba(229, 215, 195, 0.75);
+
+    background:
+        rgba(10, 8, 7, 0.72);
+
+    color: #eee2d2;
+
+    font-family: "Special Elite", "Courier New", monospace;
+
+    font-size: 19px;
+
+    letter-spacing: 3px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+/* LITTLE IMPERFECT / HANDMADE EFFECT */
+
+.menu-button::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 4px;
+
+    border: 1px solid rgba(238, 226, 210, 0.25);
+
+    pointer-events: none;
+}
+
+
+/* HOVER */
+
+.menu-button:hover {
+    transform: translateX(12px);
+
+    background: rgba(34, 25, 21, 0.92);
+
+    color: #ffffff;
+
+    box-shadow:
+        0 0 12px rgba(220, 190, 150, 0.15);
+}
+
+
+/* CLICK */
+
+.menu-button:active {
+    transform: translateX(8px) scale(0.98);
+}
+
+
+/* SETTINGS */
+
+.settings-panel {
+    position: absolute;
+
+    z-index: 10;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: min(420px, 80vw);
+
+    padding: 35px;
+
+    background: rgba(12, 9, 8, 0.96);
+
+    border: 1px solid #d8c5ae;
+
+    color: #eee2d2;
+
+    display: none;
+
+    box-shadow:
+        0 0 35px rgba(0, 0, 0, 0.8);
+}
+
+.settings-panel.active {
+    display: block;
+}
+
+.settings-panel h2 {
+    margin-top: 0;
+
+    letter-spacing: 4px;
+}
+
+.settings-panel label {
+    display: block;
+
+    margin-top: 30px;
+    margin-bottom: 10px;
+
+    letter-spacing: 2px;
+}
+
+#volume {
+    width: 100%;
+}
+
+#volumeValue {
+    text-align: right;
+}
+
+
+/* CLOSE */
+
+.close-settings {
+    position: absolute;
+
+    right: 12px;
+    top: 8px;
+
+    border: none;
+    background: transparent;
+
+    color: #eee2d2;
+
+    font-size: 30px;
+
+    cursor: pointer;
+}
+
+
+/* QUIT */
+
+.quit-message {
+    position: absolute;
+
+    z-index: 10;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: min(420px, 80vw);
+
+    padding: 30px;
+
+    text-align: center;
+
+    background: rgba(10, 8, 7, 0.96);
+
+    border: 1px solid #d8c5ae;
+
+    color: #eee2d2;
+
+    display: none;
+}
+
+.quit-message.active {
+    display: block;
+}
+
+.quit-message button {
+    margin: 15px 6px 0;
+
+    padding: 10px 22px;
+
+    border: 1px solid #d8c5ae;
+
+    background: transparent;
+
+    color: #eee2d2;
+
+    font-family: inherit;
+
+    cursor: pointer;
+}
+
+.quit-message button:hover {
+    background: #eee2d2;
+    color: #120e0c;
+}
