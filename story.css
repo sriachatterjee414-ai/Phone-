@@ -1,0 +1,580 @@
+/* =========================================
+   BROKEN PHONE
+   STORY / OPENING SCENE
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+
+    margin: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    background: #080604;
+}
+
+
+body {
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    color: #e9d7bd;
+}
+
+
+/* =========================================
+   GAME
+========================================= */
+
+#game {
+
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    overflow: hidden;
+
+    background: #080604;
+}
+
+
+/* =========================================
+   ROOM
+========================================= */
+
+.room {
+
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+}
+
+
+.room-image {
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+        url("investigation_room.png");
+
+    background-size: cover;
+
+    background-position: center;
+
+    transform: scale(1.02);
+
+    transition:
+        filter 2.5s ease,
+        transform 3s ease;
+}
+
+
+/* =========================================
+   WAKE EFFECT
+========================================= */
+
+.wake-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 5;
+
+    background: #000;
+
+    pointer-events: none;
+
+    transition:
+        opacity 4s ease;
+}
+
+
+.wake-overlay.opening {
+
+    opacity: 0;
+}
+
+
+/* =========================================
+   BLUR
+========================================= */
+
+.blur-layer {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 4;
+
+    pointer-events: none;
+
+    backdrop-filter: blur(14px);
+
+    background:
+        rgba(0, 0, 0, 0.25);
+
+    opacity: 1;
+
+    transition:
+        opacity 4s ease,
+        backdrop-filter 4s ease;
+}
+
+
+.blur-layer.clear {
+
+    opacity: 0;
+
+    backdrop-filter: blur(0);
+}
+
+
+/* =========================================
+   ROOM MOVEMENT
+========================================= */
+
+.room-image.waking {
+
+    transform:
+        scale(1.08);
+
+    filter:
+        brightness(0.45)
+        contrast(0.9);
+}
+
+
+.room-image.awake {
+
+    transform:
+        scale(1.02);
+
+    filter:
+        brightness(0.82)
+        contrast(1.04);
+}
+
+
+/* =========================================
+   OFFICER
+========================================= */
+
+.officer {
+
+    position: absolute;
+
+    z-index: 8;
+
+    left: 55%;
+
+    bottom: -3%;
+
+    width: min(430px, 38vw);
+
+    opacity: 1;
+
+    transform:
+        translateX(120px)
+        scale(0.98);
+
+    transition:
+        transform 1.5s ease,
+        opacity 1s ease;
+}
+
+
+.officer.approach {
+
+    transform:
+        translateX(0)
+        scale(1);
+}
+
+
+.officer img {
+
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    filter:
+        drop-shadow(
+            0 10px 18px
+            rgba(0, 0, 0, 0.55)
+        );
+}
+
+
+.hidden {
+
+    display: none !important;
+}
+
+
+/* =========================================
+   DIALOGUE BOX
+========================================= */
+
+.dialogue-box {
+
+    position: absolute;
+
+    z-index: 15;
+
+    left: 50%;
+
+    bottom: 4%;
+
+    transform:
+        translateX(-50%);
+
+    width: min(1050px, 88vw);
+
+    min-height: 145px;
+
+    padding:
+        24px 70px 24px 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(25, 16, 11, 0.97),
+            rgba(51, 31, 19, 0.94)
+        );
+
+    border:
+        1px solid
+        rgba(218, 183, 137, 0.75);
+
+    box-shadow:
+
+        0 0 0 1px
+        rgba(91, 60, 36, 0.5),
+
+        0 12px 40px
+        rgba(0, 0, 0, 0.65);
+
+    animation:
+        dialogueAppear 0.5s ease;
+}
+
+
+.dialogue-box::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 6px;
+
+    border:
+        1px solid
+        rgba(218, 183, 137, 0.18);
+
+    pointer-events: none;
+}
+
+
+.speaker-name {
+
+    position: relative;
+
+    margin-bottom: 12px;
+
+    color: #c9a46d;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+
+.dialogue-text {
+
+    position: relative;
+
+    color: #eee2d1;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(16px, 1.45vw, 21px);
+
+    line-height: 1.55;
+
+    min-height: 62px;
+}
+
+
+/* =========================================
+   NEXT BUTTON
+========================================= */
+
+.next-button {
+
+    position: absolute;
+
+    right: 20px;
+
+    bottom: 17px;
+
+    width: 38px;
+    height: 38px;
+
+    border:
+        1px solid
+        #b99565;
+
+    border-radius: 50%;
+
+    background:
+        rgba(30, 18, 11, 0.8);
+
+    color: #d8bc91;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.next-button:hover {
+
+    background:
+        #b99565;
+
+    color:
+        #170e09;
+
+    transform:
+        scale(1.08);
+}
+
+
+/* =========================================
+   OBJECTIVE
+========================================= */
+
+.objective {
+
+    position: absolute;
+
+    z-index: 20;
+
+    top: 8%;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    width: min(480px, 80vw);
+
+    padding: 22px 30px;
+
+    text-align: center;
+
+    background:
+        rgba(18, 11, 7, 0.94);
+
+    border-top:
+        1px solid
+        #b99565;
+
+    border-bottom:
+        1px solid
+        #b99565;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.45);
+
+    animation:
+        objectiveAppear 0.7s ease;
+}
+
+
+.objective-label {
+
+    color:
+        #a9885c;
+
+    font-size: 12px;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 9px;
+}
+
+
+.objective-text {
+
+    color:
+        #ead8bc;
+
+    font-size: 21px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   HUD
+========================================= */
+
+.investigation-hud {
+
+    position: absolute;
+
+    z-index: 10;
+
+    top: 25px;
+
+    left: 28px;
+
+    padding: 12px 17px;
+
+    background:
+        rgba(18, 12, 8, 0.72);
+
+    border-left:
+        2px solid
+        #a98252;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+.case-label {
+
+    color:
+        #c9a46d;
+
+    font-size: 13px;
+
+    letter-spacing: 3px;
+}
+
+
+.case-status {
+
+    margin-top: 5px;
+
+    color:
+        #aa9a87;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes dialogueAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translate(-50%, 25px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translate(-50%, 0);
+    }
+}
+
+
+@keyframes objectiveAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translate(-50%, -20px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translate(-50%, 0);
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .officer {
+
+        left: 45%;
+
+        width: 58vw;
+    }
+
+
+    .dialogue-box {
+
+        bottom: 2%;
+
+        width: 94vw;
+
+        min-height: 160px;
+
+        padding: 20px 55px 20px 20px;
+    }
+
+
+    .dialogue-text {
+
+        font-size: 15px;
+    }
+}
