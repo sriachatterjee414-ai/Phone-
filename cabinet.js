@@ -1,16 +1,57 @@
-```javascript
 /* =========================================
    BROKEN PHONE
    FILE CABINET
    INVENTORY + LEAF MATCHING MINI-GAME
+   + LOCKED / UNLOCKED CABINET
 ========================================= */
+
+
+/* =========================================
+   CABINET LOCK / UNLOCK
+========================================= */
+
+const CABINET_LOCKED_IMAGE =
+    "cabinet_locked.png";
+
+const CABINET_UNLOCKED_IMAGE =
+    "cabinet_unlocked.png";
+
+
+const cabinetScene =
+    document.getElementById(
+        "cabinetScene"
+    );
+
+
+function updateCabinetImage(){
+
+    if(
+        localStorage.getItem(
+            "brokenPhone_leafPuzzleSolved"
+        ) === "true"
+    ){
+
+        cabinetScene.style.backgroundImage =
+            `url("${CABINET_UNLOCKED_IMAGE}")`;
+
+    }
+    else{
+
+        cabinetScene.style.backgroundImage =
+            `url("${CABINET_LOCKED_IMAGE}")`;
+
+    }
+
+}
 
 
 /* =========================================
    INVENTORY
 ========================================= */
 
-const KEY = "brokenPhoneInventory";
+const KEY =
+    "brokenPhoneInventory";
+
 
 const DATA = {
 
@@ -28,10 +69,15 @@ const DATA = {
 
 
 const slots =
-    document.getElementById("inventorySlots");
+    document.getElementById(
+        "inventorySlots"
+    );
+
 
 const toast =
-    document.getElementById("toast");
+    document.getElementById(
+        "toast"
+    );
 
 
 function inv(){
@@ -42,7 +88,9 @@ function inv(){
             localStorage.getItem(KEY)
         ) || [];
 
-    }catch(e){
+    }
+
+    catch(e){
 
         return [];
 
@@ -71,20 +119,39 @@ function render(){
 
     const a = inv();
 
-    for(let i = 0; i < 8; i++){
+
+    for(
+        let i = 0;
+        i < 8;
+        i++
+    ){
 
         const s =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         s.className =
             "inventory-slot";
 
 
-        if(a[i] && DATA[a[i]]){
+        if(
+            a[i] &&
+            DATA[a[i]]
+        ){
 
             s.innerHTML = `
-                <img src="${DATA[a[i]].img}">
-                <span>${DATA[a[i]].name}</span>
+
+                <img
+                    src="${DATA[a[i]].img}"
+                    alt=""
+                >
+
+                <span>
+                    ${DATA[a[i]].name}
+                </span>
+
             `;
 
         }
@@ -106,18 +173,26 @@ function collect(id,el){
     let a = inv();
 
 
-    if(a.includes(id)){
+    if(
+        a.includes(id)
+    ){
 
-        showToast("Already collected.");
+        showToast(
+            "Already collected."
+        );
 
         return;
 
     }
 
 
-    if(a.length >= 8){
+    if(
+        a.length >= 8
+    ){
 
-        showToast("Inventory full.");
+        showToast(
+            "Inventory full."
+        );
 
         return;
 
@@ -129,13 +204,18 @@ function collect(id,el){
     save(a);
 
 
-    el.classList.add("hidden");
+    el.classList.add(
+        "hidden"
+    );
+
 
     render();
 
 
     document
-        .getElementById("collectSound")
+        .getElementById(
+            "collectSound"
+        )
         .play()
         .catch(()=>{});
 
@@ -153,14 +233,20 @@ function collect(id,el){
 
 function showToast(message){
 
-    toast.textContent = message;
+    toast.textContent =
+        message;
 
-    toast.classList.add("show");
+
+    toast.classList.add(
+        "show"
+    );
 
 
     setTimeout(()=>{
 
-        toast.classList.remove("show");
+        toast.classList.remove(
+            "show"
+        );
 
     },1600);
 
@@ -172,7 +258,9 @@ function showToast(message){
 ========================================= */
 
 document
-    .getElementById("backButton")
+    .getElementById(
+        "backButton"
+    )
     .onclick = () => {
 
         location.href =
@@ -186,7 +274,9 @@ document
 ========================================= */
 
 document
-    .querySelectorAll(".item")
+    .querySelectorAll(
+        ".item"
+    )
     .forEach(el => {
 
         el.onclick = () => {
@@ -205,14 +295,16 @@ document
    MUSIC
 ========================================= */
 
-document
-    .getElementById("music")
-    .volume = .18;
+const music =
+    document.getElementById(
+        "music"
+    );
 
 
-document
-    .getElementById("music")
-    .play()
+music.volume = .18;
+
+
+music.play()
     .catch(()=>{});
 
 
@@ -230,13 +322,30 @@ inv().forEach(id => {
             `[data-item="${id}"]`
         );
 
+
     if(e){
 
-        e.classList.add("hidden");
+        e.classList.add(
+            "hidden"
+        );
 
     }
 
 });
+
+
+/* =========================================
+   INITIAL CABINET IMAGE
+========================================= */
+
+/*
+   If the puzzle was already solved,
+   the unlocked cabinet is shown.
+
+   Otherwise the locked cabinet is shown.
+*/
+
+updateCabinetImage();
 
 
 /* =====================================================
@@ -244,9 +353,9 @@ inv().forEach(id => {
 ===================================================== */
 
 
-/* -----------------------------------------
+/* =========================================
    ELEMENTS
------------------------------------------ */
+========================================= */
 
 const puzzleButton =
     document.getElementById(
@@ -296,9 +405,9 @@ const closeClue =
     );
 
 
-/* -----------------------------------------
+/* =========================================
    GAME VARIABLES
------------------------------------------ */
+========================================= */
 
 let firstCard = null;
 
@@ -309,60 +418,17 @@ let lockBoard = false;
 let matchedPairs = 0;
 
 
-/*
-   IMPORTANT:
-
-   Change this image later to your actual
-   leaf PNG.
-
-   For now you can simply use:
-   leaf.png
-*/
+/* =========================================
+   LEAF IMAGE
+========================================= */
 
 const LEAF_IMAGE =
     "leaf.png";
 
 
-/*
-   Other images are deliberately used as
-   decoys.
-
-   You can replace these later with your
-   own investigation-object PNGs.
-*/
-
-const CARD_IMAGES = [
-
-    "leaf.png",
-
-    "paper_clip.png",
-
-    "replacement_battery.png",
-
-    "leaf.png",
-
-    "paper_clip.png",
-
-    "replacement_battery.png",
-
-    "leaf.png",
-
-    "paper_clip.png",
-
-    "replacement_battery.png",
-
-    "leaf.png",
-
-    "paper_clip.png",
-
-    "replacement_battery.png"
-
-];
-
-
-/* -----------------------------------------
+/* =========================================
    SHUFFLE
------------------------------------------ */
+========================================= */
 
 function shuffle(array){
 
@@ -374,8 +440,10 @@ function shuffle(array){
 
         const j =
             Math.floor(
-                Math.random() * (i + 1)
+                Math.random() *
+                (i + 1)
             );
+
 
         [
             array[i],
@@ -388,14 +456,15 @@ function shuffle(array){
 
     }
 
+
     return array;
 
 }
 
 
-/* -----------------------------------------
+/* =========================================
    OPEN PUZZLE
------------------------------------------ */
+========================================= */
 
 puzzleButton.onclick = () => {
 
@@ -404,9 +473,9 @@ puzzleButton.onclick = () => {
 };
 
 
-/* -----------------------------------------
+/* =========================================
    CREATE PUZZLE
------------------------------------------ */
+========================================= */
 
 function openLeafPuzzle(){
 
@@ -417,7 +486,10 @@ function openLeafPuzzle(){
 
     leafGrid.innerHTML = "";
 
-    puzzleMessage.textContent = "";
+
+    puzzleMessage.textContent =
+        "";
+
 
     continuePuzzle.classList.add(
         "hidden"
@@ -434,12 +506,14 @@ function openLeafPuzzle(){
 
 
     /*
-       Create 12 cards.
+       12 cards.
 
        There are 6 pairs.
 
-       One of those pairs is the
-       important matching leaf pair.
+       The leaf pair is the important
+       evidence pair.
+
+       The other pairs are decoys.
     */
 
     const cards = [
@@ -454,6 +528,7 @@ function openLeafPuzzle(){
             image:LEAF_IMAGE
         },
 
+
         {
             id:"clip",
             image:"paper_clip.png"
@@ -463,6 +538,7 @@ function openLeafPuzzle(){
             id:"clip",
             image:"paper_clip.png"
         },
+
 
         {
             id:"battery",
@@ -474,6 +550,7 @@ function openLeafPuzzle(){
             image:"replacement_battery.png"
         },
 
+
         {
             id:"leaf2",
             image:LEAF_IMAGE
@@ -483,6 +560,7 @@ function openLeafPuzzle(){
             id:"leaf2",
             image:LEAF_IMAGE
         },
+
 
         {
             id:"clip2",
@@ -493,6 +571,7 @@ function openLeafPuzzle(){
             id:"clip2",
             image:"paper_clip.png"
         },
+
 
         {
             id:"battery2",
@@ -519,14 +598,17 @@ function openLeafPuzzle(){
 }
 
 
-/* -----------------------------------------
+/* =========================================
    CREATE INDIVIDUAL CARD
------------------------------------------ */
+========================================= */
 
 function createCard(card){
 
     const element =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     element.className =
         "leafCard";
@@ -543,6 +625,7 @@ function createCard(card){
             <div class="cardBack">
                 ?
             </div>
+
 
             <div class="cardFront">
 
@@ -565,14 +648,16 @@ function createCard(card){
     };
 
 
-    leafGrid.appendChild(element);
+    leafGrid.appendChild(
+        element
+    );
 
 }
 
 
-/* -----------------------------------------
+/* =========================================
    FLIP CARD
------------------------------------------ */
+========================================= */
 
 function flipCard(card){
 
@@ -584,15 +669,23 @@ function flipCard(card){
         return;
 
 
-    if(card.classList.contains("matched"))
+    if(
+        card.classList.contains(
+            "matched"
+        )
+    )
         return;
 
 
-    card.classList.add("flipped");
+    card.classList.add(
+        "flipped"
+    );
 
 
     document
-        .getElementById("flipSound")
+        .getElementById(
+            "flipSound"
+        )
         .play()
         .catch(()=>{});
 
@@ -608,29 +701,38 @@ function flipCard(card){
 
     secondCard = card;
 
+
     checkMatch();
 
 }
 
 
-/* -----------------------------------------
+/* =========================================
    CHECK MATCH
------------------------------------------ */
+========================================= */
 
 function checkMatch(){
 
     const firstID =
         firstCard.dataset.id;
 
+
     const secondID =
         secondCard.dataset.id;
 
 
-    if(firstID === secondID){
+    /* =====================================
+       CORRECT MATCH
+    ===================================== */
+
+    if(
+        firstID === secondID
+    ){
 
         firstCard.classList.add(
             "matched"
         );
+
 
         secondCard.classList.add(
             "matched"
@@ -638,12 +740,10 @@ function checkMatch(){
 
 
         /*
-           Only the actual leaf pair
-           counts as the important
-           discovery.
+           The important discovery is
+           finding the leaf pair.
 
-           Other pairs are just
-           distractions.
+           The other pairs are decoys.
         */
 
         if(
@@ -653,25 +753,38 @@ function checkMatch(){
 
             matchedPairs++;
 
+
             puzzleMessage.textContent =
                 "The leaves match.";
 
+
             finishPuzzle();
 
-        }else{
+
+        }
+        else{
 
             matchedPairs++;
 
+
             puzzleMessage.textContent =
                 "Matched.";
+
 
             resetTurn();
 
         }
 
-    }else{
+    }
+
+    else{
+
+        /* =================================
+           WRONG MATCH
+        ================================= */
 
         lockBoard = true;
+
 
         puzzleMessage.textContent =
             "No match.";
@@ -682,6 +795,7 @@ function checkMatch(){
             firstCard.classList.remove(
                 "flipped"
             );
+
 
             secondCard.classList.remove(
                 "flipped"
@@ -697,9 +811,9 @@ function checkMatch(){
 }
 
 
-/* -----------------------------------------
+/* =========================================
    RESET TURN
------------------------------------------ */
+========================================= */
 
 function resetTurn(){
 
@@ -712,9 +826,9 @@ function resetTurn(){
 }
 
 
-/* -----------------------------------------
+/* =========================================
    FINISH PUZZLE
------------------------------------------ */
+========================================= */
 
 function finishPuzzle(){
 
@@ -722,7 +836,9 @@ function finishPuzzle(){
 
 
     document
-        .querySelectorAll(".leafCard")
+        .querySelectorAll(
+            ".leafCard"
+        )
         .forEach(card => {
 
             card.classList.add(
@@ -743,9 +859,9 @@ function finishPuzzle(){
 }
 
 
-/* -----------------------------------------
+/* =========================================
    CONTINUE AFTER PUZZLE
------------------------------------------ */
+========================================= */
 
 continuePuzzle.onclick = () => {
 
@@ -760,10 +876,9 @@ continuePuzzle.onclick = () => {
 
 
     /*
-       Save that the puzzle has been solved.
+       Save puzzle completion.
 
-       This means it can later be connected
-       to your investigation/objective system.
+       This unlocks the cabinet.
     */
 
     localStorage.setItem(
@@ -771,12 +886,23 @@ continuePuzzle.onclick = () => {
         "true"
     );
 
+
+    /*
+       Change:
+
+       cabinet_locked.png
+              ↓
+       cabinet_unlocked.png
+    */
+
+    updateCabinetImage();
+
 };
 
 
-/* -----------------------------------------
+/* =========================================
    CLOSE PUZZLE
------------------------------------------ */
+========================================= */
 
 closePuzzle.onclick = () => {
 
@@ -787,9 +913,9 @@ closePuzzle.onclick = () => {
 };
 
 
-/* -----------------------------------------
+/* =========================================
    CLOSE CLUE
------------------------------------------ */
+========================================= */
 
 closeClue.onclick = () => {
 
@@ -798,4 +924,3 @@ closeClue.onclick = () => {
     );
 
 };
-```
