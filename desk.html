@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Broken Phone — Desk</title>
+<link rel="stylesheet" href="desk.css">
+</head>
+<body>
+<main id="deskGame">
+    <div id="deskScene" class="locked"></div>
+
+    <button id="backButton" class="back">← BACK</button>
+    <div class="place-title">DESK DRAWER</div>
+
+    <button id="unlockButton" class="unlock-button">EXAMINE LOCK</button>
+
+    <div id="drawerPuzzle" class="modal hidden">
+        <div class="puzzle-box">
+            <button id="closePuzzle" class="close">×</button>
+            <div class="puzzle-title">DRAWER LOCK</div>
+            <p>Match three or more identical symbols. Reach 10 matches to release the lock.</p>
+            <div id="matchGrid" class="match-grid"></div>
+            <div class="progress"><span id="matchCount">0</span> / 10</div>
+        </div>
+    </div>
+
+    <div id="itemsLayer" class="items-layer hidden">
+        <button class="item hotspot screwdriver" data-item="precision_screwdriver" title="Collect">
+            <img src="precision_screwdriver.png" alt="Precision screwdriver">
+            <span>COLLECT</span>
+        </button>
+        <button class="item hotspot battery" data-item="replacement_battery" title="Collect">
+            <img src="replacement_battery.png" alt="Replacement battery">
+            <span>COLLECT</span>
+        </button>
+        <button class="item hotspot key" data-item="old_key" title="Collect">
+            <img src="old_key.png" alt="Old key">
+            <span>COLLECT</span>
+        </button>
+    </div>
+
+    <section class="inventory-panel">
+        <div class="inventory-title">INVENTORY</div>
+        <div id="inventorySlots" class="inventory-slots"></div>
+    </section>
+
+    <div id="toast" class="toast"></div>
+
+    <audio id="music" src="investigation_music.mp3" loop></audio>
+    <audio id="clickSound" src="ui_click.mp3"></audio>
+    <audio id="unlockSound" src="drawer_unlock.mp3"></audio>
+    <audio id="collectSound" src="item_collect.mp3"></audio>
+</main>
+<script src="desk.js"></script>
+</body>
+</html>

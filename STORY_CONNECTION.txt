@@ -1,0 +1,9 @@
+At the end of story.js, replace the final part of finishDialogue() with the investigation transition.
+
+After Ryan leaves, use:
+
+setTimeout(() => {
+    window.location.href = "investigation.html";
+}, 2200);
+
+Do not put the investigation room inside story.html. The story ends, then investigation.html starts as its own game section.

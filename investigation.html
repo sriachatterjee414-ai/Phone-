@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Broken Phone — Investigation</title>
+<link rel="stylesheet" href="investigation.css">
+</head>
+<body>
+<main id="investigation">
+    <div id="room"></div>
+
+    <section id="handIntro" class="intro">
+        <div class="intro-phone">
+            <img src="hand_broken_phone.png" alt="Hand holding broken phone">
+        </div>
+        <div class="intro-box">
+            <div class="speaker">YOU</div>
+            <p>Let's start collecting the parts.</p>
+            <button id="startSearch">START SEARCH</button>
+        </div>
+    </section>
+
+    <section id="searchScreen" class="hidden">
+        <div class="topbar">
+            <div>
+                <span class="case">CASE 001</span>
+                <span class="title">EVIDENCE SEARCH</span>
+            </div>
+            <button id="doneButton">DONE</button>
+        </div>
+
+        <div class="location-menu">
+            <button class="location-choice" data-page="desk.html">
+                <strong>DESK</strong>
+                <span>Check the desk and drawers</span>
+            </button>
+
+            <button class="location-choice" data-page="table.html">
+                <strong>TABLE</strong>
+                <span>Search the work table</span>
+            </button>
+
+            <button class="location-choice" data-page="cabinet.html">
+                <strong>FILE CABINET</strong>
+                <span>Search the cabinet</span>
+            </button>
+        </div>
+
+        <div id="statusMessage" class="status-message"></div>
+
+        <section class="inventory-panel">
+            <div class="inventory-title">INVENTORY</div>
+            <div id="inventorySlots" class="inventory-slots"></div>
+        </section>
+    </section>
+
+    <div id="toast" class="toast"></div>
+
+    <audio id="bgMusic" src="investigation_music.mp3" loop></audio>
+    <audio id="clickSound" src="ui_click.mp3"></audio>
+    <audio id="collectSound" src="item_collect.mp3"></audio>
+</main>
+<script src="investigation.js"></script>
+</body>
+</html>

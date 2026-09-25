@@ -1,0 +1,36 @@
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050403;color:#eee2d2;font-family:"Courier New",monospace}
+button{font:inherit}
+#deskGame{position:relative;width:100vw;height:100vh;overflow:hidden;background:#050403}
+#deskScene{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;transition:background-image .5s ease}
+#deskScene.locked{background-image:url("desk_drawer_locked.png")}
+#deskScene.open{background-image:url("desk_drawer_open.png")}
+.back{position:absolute;top:22px;left:25px;z-index:30;padding:10px 18px;background:rgba(10,7,5,.86);border:1px solid #c9a46b;color:#eee2d2;cursor:pointer}
+.place-title{position:absolute;top:25px;left:50%;transform:translateX(-50%);z-index:30;letter-spacing:4px;font-size:17px;text-shadow:0 2px 8px #000}
+.unlock-button{position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);z-index:20;padding:16px 25px;background:rgba(15,10,7,.92);border:1px solid #c9a46b;color:#e8cda3;cursor:pointer;letter-spacing:2px}
+.items-layer{position:absolute;inset:0;z-index:25}
+.hidden{display:none!important}
+.item{position:absolute;border:0;background:transparent;cursor:pointer;padding:0;filter:drop-shadow(0 7px 8px rgba(0,0,0,.7))}
+.item img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.item span{position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);background:rgba(10,7,5,.9);color:#e8cda3;border:1px solid rgba(200,160,100,.6);font-size:10px;padding:4px 7px;opacity:0;transition:.2s;white-space:nowrap}
+.item:hover span{opacity:1}
+.screwdriver{left:72%;top:58%;width:135px;height:70px}
+.battery{left:17%;top:57%;width:155px;height:125px}
+.key{left:47%;top:58%;width:105px;height:75px}
+.inventory-panel{position:absolute;left:30px;right:30px;bottom:16px;height:105px;background:rgba(10,7,5,.95);border:1px solid rgba(190,150,95,.6);z-index:40;padding:8px 12px}
+.inventory-title{font-size:11px;letter-spacing:3px;color:#c9a46b;margin-bottom:5px}
+.inventory-slots{display:flex;gap:8px}
+.inventory-slot{width:70px;height:68px;border:1px solid rgba(190,150,95,.45);display:flex;align-items:center;justify-content:center;position:relative;background:rgba(255,255,255,.03)}
+.inventory-slot img{max-width:88%;max-height:88%;object-fit:contain}
+.inventory-slot span{position:absolute;bottom:1px;left:2px;right:2px;font-size:7px;text-align:center;background:rgba(0,0,0,.55)}
+.modal{position:absolute;inset:0;z-index:60;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center}
+.puzzle-box{width:650px;padding:25px;background:#18100b;border:1px solid #c9a46b;box-shadow:0 20px 60px #000;position:relative;text-align:center}
+.close{position:absolute;right:12px;top:10px;border:0;background:none;color:#e8cda3;font-size:28px;cursor:pointer}
+.puzzle-title{font-size:19px;letter-spacing:3px;color:#e8cda3}
+.puzzle-box p{font:16px Georgia,serif;color:#d7c8b7}
+.match-grid{width:456px;height:456px;margin:18px auto;display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
+.tile{border:1px solid rgba(255,255,255,.12);background:#30231a;color:#e8cda3;font-size:18px;cursor:pointer}
+.tile.selected{outline:2px solid #e8cda3}
+.progress{letter-spacing:2px;color:#e8cda3}
+.toast{position:absolute;left:50%;bottom:125px;transform:translateX(-50%);z-index:80;padding:10px 18px;background:#120c08;border:1px solid #c9a46b;opacity:0;transition:.2s}
+.toast.show{opacity:1}

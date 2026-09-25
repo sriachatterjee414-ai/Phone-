@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Broken Phone — Work Table</title>
+<link rel="stylesheet" href="table.css">
+</head>
+<body>
+<main id="tableGame">
+<div id="tableScene"></div>
+<button id="backButton">← BACK</button>
+<div class="title">WORK TABLE</div>
+<div class="hint">Search the surface carefully.</div>
+
+<button class="item tweezers" data-item="screen_connector">
+<img src="screen_connector.png" alt="Screen connector"><span>COLLECT</span>
+</button>
+<button class="item tape" data-item="cassette_tape">
+<img src="cassette_tape.png" alt="Cassette tape"><span>COLLECT</span>
+</button>
+
+<section class="inventory-panel">
+<div class="inventory-title">INVENTORY</div><div id="inventorySlots" class="inventory-slots"></div>
+</section>
+<div id="toast" class="toast"></div>
+
+<audio id="music" src="investigation_music.mp3" loop></audio>
+<audio id="collectSound" src="item_collect.mp3"></audio>
+</main>
+<script src="table.js"></script>
+</body>
+</html>
