@@ -3,7 +3,9 @@
    STORY SCREEN
 ========================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+@import url(
+    'https://fonts.googleapis.com/css2?family=Special+Elite&display=swap'
+);
 
 * {
     box-sizing: border-box;
@@ -12,9 +14,13 @@
 html,
 body {
     margin: 0;
+    padding: 0;
+
     width: 100%;
     height: 100%;
+
     overflow: hidden;
+
     background: #050403;
 }
 
@@ -33,10 +39,10 @@ body {
 ========================================= */
 
 #game {
+    position: relative;
+
     width: 100vw;
     height: 100vh;
-
-    position: relative;
 
     overflow: hidden;
 
@@ -62,15 +68,11 @@ body {
 }
 
 
-/*
-   IMPORTANT:
-
-   roomImage is a DIV, not an <img>.
-   Therefore room.png is loaded here.
-*/
+/* =========================================
+   ROOM IMAGE
+========================================= */
 
 #roomImage {
-
     position: absolute;
 
     inset: 0;
@@ -88,6 +90,10 @@ body {
     background-repeat: no-repeat;
 
     transform: scale(1.04);
+
+    filter:
+        blur(0)
+        brightness(0.82);
 
     transition:
         filter 2.5s ease,
@@ -107,7 +113,8 @@ body {
         blur(18px)
         brightness(0.25);
 
-    transform: scale(1.10);
+    transform:
+        scale(1.10);
 }
 
 
@@ -117,12 +124,13 @@ body {
         blur(0)
         brightness(0.82);
 
-    transform: scale(1.04);
+    transform:
+        scale(1.04);
 }
 
 
 /* =========================================
-   DARK WAKE OVERLAY
+   WAKE OVERLAY
 ========================================= */
 
 #wakeOverlay {
@@ -164,7 +172,11 @@ body {
 
     pointer-events: none;
 
-    backdrop-filter: blur(15px);
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
 
     opacity: 1;
 
@@ -178,35 +190,32 @@ body {
 
     opacity: 0;
 
-    backdrop-filter: blur(0);
+    backdrop-filter:
+        blur(0);
+
+    -webkit-backdrop-filter:
+        blur(0);
 }
 
 
 /* =========================================
-   OFFICER
-========================================= */
-/* =========================================
-   POLICE OFFICER
-========================================= */
-
-/* =========================================
-   POLICE OFFICER
+   RYAN
 ========================================= */
 
 #officer {
+
     position: absolute;
 
-    /* CENTER RYAN */
     left: 50%;
     bottom: 0;
 
-    /* KEEP HIS CURRENT SIZE */
     height: 92vh;
     width: auto;
 
     z-index: 20;
 
     display: flex;
+
     align-items: flex-end;
     justify-content: center;
 
@@ -214,9 +223,11 @@ body {
 
     transform:
         translateX(-50%)
-        scale(0.98);
+        translateY(0)
+        scale(1);
 
-    transform-origin: bottom center;
+    transform-origin:
+        bottom center;
 
     transition:
         transform 1.4s ease,
@@ -226,9 +237,10 @@ body {
 }
 
 
-/* Actual PNG */
+/* Ryan image */
 
 #officerImage {
+
     display: block;
 
     height: 92vh;
@@ -239,19 +251,24 @@ body {
 
     object-fit: contain;
 
-    object-position: bottom center;
+    object-position:
+        bottom center;
 
     filter:
         drop-shadow(
             0 10px 25px
             rgba(0,0,0,0.65)
         );
+
+    transition:
+        opacity 0.15s ease;
 }
 
 
-/* Officer starts slightly farther away */
+/* Ryan hidden */
 
 #officer.hidden {
+
     opacity: 0;
 
     transform:
@@ -261,19 +278,178 @@ body {
 }
 
 
-/* Officer approaches */
+/* Ryan approaches */
 
 #officer.approach {
+
     opacity: 1;
 
     transform:
         translateX(-50%)
+        translateY(0)
         scale(1);
 }
 
 
 /* =========================================
-   RESPONSIVE
+   NAME PROMPT
+========================================= */
+
+#namePrompt {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 60;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        rgba(0,0,0,0.48);
+
+    transition:
+        opacity 0.35s ease;
+}
+
+
+.name-prompt-box {
+
+    width: min(520px, 90%);
+
+    padding: 35px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25,16,10,0.98),
+            rgba(12,8,5,0.98)
+        );
+
+    border:
+        1px solid
+        rgba(190,150,95,0.75);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,0.8);
+}
+
+
+.name-prompt-title {
+
+    color: #e8cda3;
+
+    font-size: 24px;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 12px;
+}
+
+
+.name-prompt-subtitle {
+
+    color: #b9a997;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 17px;
+
+    margin-bottom: 24px;
+}
+
+
+#storyPlayerName {
+
+    width: 100%;
+
+    padding: 14px 16px;
+
+    outline: none;
+
+    border:
+        1px solid
+        rgba(190,150,95,0.55);
+
+    background:
+        rgba(0,0,0,0.55);
+
+    color: #eee2d2;
+
+    font-family:
+        "Special Elite",
+        monospace;
+
+    font-size: 18px;
+
+    text-align: center;
+}
+
+
+#storyPlayerName:focus {
+
+    border-color:
+        #e3c18b;
+
+    box-shadow:
+        0 0 15px
+        rgba(210,170,105,0.15);
+}
+
+
+#nameContinue {
+
+    margin-top: 18px;
+
+    padding: 13px 30px;
+
+    border:
+        1px solid
+        #e3c18b;
+
+    background:
+        #c9a46b;
+
+    color:
+        #26170e;
+
+    font-family:
+        "Special Elite",
+        monospace;
+
+    font-size: 15px;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+#nameContinue:hover {
+
+    transform:
+        scale(1.05);
+
+    background:
+        #ead0a0;
+}
+
+
+/* =========================================
+   DIALOGUE
 ========================================= */
 
 #dialogueBox {
@@ -281,9 +457,7 @@ body {
     position: absolute;
 
     left: 3%;
-
     right: 3%;
-
     bottom: 3%;
 
     min-height: 185px;
@@ -299,7 +473,8 @@ body {
             rgba(35,21,13,0.91)
         );
 
-    border: 1px solid
+    border:
+        1px solid
         rgba(190,150,95,0.75);
 
     box-shadow:
@@ -323,7 +498,8 @@ body {
 
     inset: 9px;
 
-    border: 1px solid
+    border:
+        1px solid
         rgba(190,150,95,0.30);
 
     pointer-events: none;
@@ -382,22 +558,22 @@ body {
     position: absolute;
 
     right: 25px;
-
     bottom: 20px;
 
     width: 52px;
-
     height: 52px;
 
     border-radius: 50%;
 
-    border: 1px solid
+    border:
+        1px solid
         #e3c18b;
 
     background:
         #c9a46b;
 
-    color: #26170e;
+    color:
+        #26170e;
 
     font-size: 20px;
 
@@ -422,18 +598,6 @@ body {
 
 
 /* =========================================
-   HIDDEN
-========================================= */
-
-.hidden {
-
-    opacity: 0 !important;
-
-    pointer-events: none !important;
-}
-
-
-/* =========================================
    OBJECTIVE
 ========================================= */
 
@@ -442,7 +606,6 @@ body {
     position: absolute;
 
     top: 12%;
-
     left: 50%;
 
     transform:
@@ -450,7 +613,11 @@ body {
 
     z-index: 40;
 
+    min-width: 300px;
+
     padding: 16px 30px;
+
+    text-align: center;
 
     background:
         rgba(20,12,8,0.94);
@@ -467,6 +634,25 @@ body {
     box-shadow:
         0 8px 30px
         rgba(0,0,0,0.6);
+
+    transition:
+        opacity 0.4s ease;
+}
+
+
+.objective-label {
+
+    font-size: 12px;
+
+    margin-bottom: 8px;
+
+    opacity: 0.7;
+}
+
+
+.objective-text {
+
+    font-size: 18px;
 }
 
 
@@ -479,7 +665,6 @@ body {
     position: absolute;
 
     top: 25px;
-
     right: 25px;
 
     z-index: 50;
@@ -499,47 +684,45 @@ body {
     letter-spacing: 2px;
 
     font-size: 12px;
+
+    line-height: 1.6;
 }
 
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.hidden {
+
+    opacity: 0 !important;
+
+    pointer-events: none !important;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
 
 @media (max-width: 1000px) {
 
-    #officer {
-        right: 2%;
-        height: 88vh;
-    }
-
+    #officer,
     #officerImage {
+
         height: 88vh;
     }
-}
-
-
-@media (max-height: 700px) {
-
-    #officer {
-        height: 88vh;
-    }
-
-    #officerImage {
-        height: 88vh;
-    }
-}
-
 
     #dialogueBox {
 
         left: 2%;
-
         right: 2%;
-
         bottom: 2%;
 
         min-height: 170px;
 
         padding: 22px;
     }
-
 
     #speakerName {
 
@@ -548,7 +731,6 @@ body {
         margin-bottom: 12px;
     }
 
-
     #dialogueText {
 
         font-size: 18px;
@@ -556,15 +738,74 @@ body {
         padding-right: 45px;
     }
 
-
     #nextDialogue {
 
         width: 45px;
-
         height: 45px;
 
         right: 15px;
-
         bottom: 15px;
+    }
+}
+
+
+@media (max-height: 700px) {
+
+    #officer,
+    #officerImage {
+
+        height: 84vh;
+    }
+
+    #dialogueBox {
+
+        min-height: 150px;
+
+        padding: 18px 24px;
+    }
+
+    #speakerName {
+
+        margin-bottom: 8px;
+
+        font-size: 16px;
+    }
+
+    #dialogueText {
+
+        font-size: 17px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    #officer,
+    #officerImage {
+
+        height: 72vh;
+    }
+
+    .name-prompt-box {
+
+        padding: 25px;
+    }
+
+    .name-prompt-title {
+
+        font-size: 19px;
+    }
+
+    #dialogueText {
+
+        font-size: 16px;
+    }
+
+    #objective {
+
+        min-width: 260px;
+
+        padding:
+            14px 18px;
     }
 }
