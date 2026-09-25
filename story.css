@@ -185,76 +185,78 @@ body {
 /* =========================================
    OFFICER
 ========================================= */
+/* =========================================
+   POLICE OFFICER
+========================================= */
 
 #officer {
-
     position: absolute;
 
-    /*
-       Right side of room
-    */
-
-    right: 3%;
-
-    /*
-       IMPORTANT:
-       Keep character's feet at bottom,
-       but don't let him disappear.
-    */
-
+    /* Put him on the right side */
+    right: 5%;
     bottom: 0;
 
+    /* BIG CHARACTER */
+    height: 92vh;
     width: auto;
 
-    max-width: none;
-
-    min-width: 0;
-
-    height: 96vh;
-
-    z-index: 10;
+    z-index: 20;
 
     display: flex;
-
     align-items: flex-end;
-
     justify-content: center;
-
-    pointer-events: none;
 
     opacity: 1;
 
     transform:
-        translateX(180px)
-        scale(0.92);
+        translateX(120px)
+        scale(0.98);
 
     transform-origin: bottom center;
 
     transition:
-        transform 1.5s ease,
-        opacity 1.2s ease;
+        transform 1.4s ease,
+        opacity 0.8s ease;
+
+    pointer-events: none;
 }
 
 
-/*
-   Hidden before the officer arrives.
-*/
+/* Actual PNG */
 
-.officer_hidden {
+#officerImage {
+    display: block;
 
-    opacity: 0 !important;
+    height: 92vh;
+    width: auto;
+
+    max-width: none;
+    max-height: none;
+
+    object-fit: contain;
+
+    object-position: bottom center;
+
+    filter:
+        drop-shadow(0 10px 25px rgba(0,0,0,0.65));
+}
+
+
+/* Officer starts slightly farther away */
+
+#officer.hidden {
+    opacity: 0;
 
     transform:
         translateX(180px)
-        scale(0.90) !important;
+        scale(0.90);
 }
 
 
-/*
-   Officer approaches.
-*/
+/* Officer approaches camera */
 
 #officer.approach {
+    opacity: 1;
 
     transform:
         translateX(0)
@@ -262,34 +264,8 @@ body {
 }
 
 
-/*
-   The actual PNG.
-*/
-
-#officerImage {
-
-    display: block;
-
-    width: auto;
-
-    height: 100%;
-    max-width: none;
-
-    object-fit: contain;
-
-    object-position:
-        center bottom;
-
-    filter:
-        drop-shadow(
-            0 12px 25px
-            rgba(0,0,0,0.65)
-        );
-}
-
-
 /* =========================================
-   DIALOGUE BOX
+   RESPONSIVE
 ========================================= */
 
 #dialogueBox {
@@ -518,22 +494,29 @@ body {
 }
 
 
-/* =========================================
-   MOBILE
-========================================= */
-
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
 
     #officer {
-
-        right: 0;
-
-        width: auto;
-
-       
-
-        height: 82vh;
+        right: 2%;
+        height: 88vh;
     }
+
+    #officerImage {
+        height: 88vh;
+    }
+}
+
+
+@media (max-height: 700px) {
+
+    #officer {
+        height: 88vh;
+    }
+
+    #officerImage {
+        height: 88vh;
+    }
+}
 
 
     #dialogueBox {
