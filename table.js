@@ -1,9 +1,42 @@
-```javascript
 /* =========================================
    BROKEN PHONE
    WORK TABLE
    INVENTORY + FLIP/MATCH MINI-GAME
+   + LOCKED / UNLOCKED TABLE
 ========================================= */
+
+
+/* =========================================
+   TABLE LOCK / UNLOCK
+========================================= */
+
+const TABLE_LOCKED_IMAGE = "table_locked.png";
+const TABLE_UNLOCKED_IMAGE = "table_unlocked.png";
+
+const tableScene =
+    document.getElementById("tableScene");
+
+
+function updateTableImage(){
+
+    if(
+        localStorage.getItem(
+            "brokenPhone_leafPuzzleSolved"
+        ) === "true"
+    ){
+
+        tableScene.style.backgroundImage =
+            `url("${TABLE_UNLOCKED_IMAGE}")`;
+
+    }
+    else{
+
+        tableScene.style.backgroundImage =
+            `url("${TABLE_LOCKED_IMAGE}")`;
+
+    }
+
+}
 
 
 /* =========================================
@@ -80,7 +113,7 @@ function render(){
     const a = inv();
 
 
-    for(let i=0;i<8;i++){
+    for(let i = 0; i < 8; i++){
 
         const s =
             document.createElement("div");
@@ -278,6 +311,13 @@ inv().forEach(id => {
 });
 
 
+/* =========================================
+   INITIAL TABLE IMAGE
+========================================= */
+
+updateTableImage();
+
+
 /* =====================================================
    FLIP & MATCH MINI-GAME
 ===================================================== */
@@ -350,15 +390,6 @@ let lockBoard = false;
    PUZZLE IMAGE
 ========================================= */
 
-/*
-   PUT YOUR LEAF PNG IN THIS FOLDER:
-
-       leaf.png
-
-   Later we can replace this with
-   the actual leaf from your story.
-*/
-
 const LEAF_IMAGE =
     "leaf.png";
 
@@ -404,11 +435,11 @@ function openPuzzle(){
 
 
     /*
-       12 cards.
+       12 cards total.
 
-       The important pair is LEAF.
+       ONE important leaf pair.
 
-       The remaining pairs are decoys.
+       Five other pairs are decoys.
     */
 
     const cards = [
@@ -469,13 +500,13 @@ function openPuzzle(){
 
 
         {
-            id:"leafSmall",
-            image:"leaf.png"
+            id:"paper",
+            image:"paper_clip.png"
         },
 
         {
-            id:"leafSmall",
-            image:"leaf.png"
+            id:"paper",
+            image:"paper_clip.png"
         }
 
     ];
@@ -584,7 +615,7 @@ function createCard(card){
 
 
 /* =========================================
-   FLIP
+   FLIP CARD
 ========================================= */
 
 function flipCard(card){
@@ -636,7 +667,7 @@ function flipCard(card){
 
 
 /* =========================================
-   MATCH
+   CHECK MATCH
 ========================================= */
 
 function checkMatch(){
@@ -648,6 +679,10 @@ function checkMatch(){
     const second =
         secondCard.dataset.id;
 
+
+    /* =====================================
+       CORRECT MATCH
+    ===================================== */
 
     if(first === second){
 
@@ -661,17 +696,11 @@ function checkMatch(){
 
 
         /*
-           The player has found the
-           matching leaf.
-
-           We don't require them to
-           match every decoy pair.
+           Only the LEAF pair completes
+           the investigation puzzle.
         */
 
-        if(
-            first === "leaf" ||
-            first === "leafSmall"
-        ){
+        if(first === "leaf"){
 
             puzzleMessage.textContent =
                 "The leaves match.";
@@ -693,7 +722,9 @@ function checkMatch(){
     }
 
 
-    /* WRONG MATCH */
+    /* =====================================
+       WRONG MATCH
+    ===================================== */
 
     lockBoard = true;
 
@@ -736,7 +767,7 @@ function resetTurn(){
 
 
 /* =========================================
-   FINISH
+   FINISH PUZZLE
 ========================================= */
 
 function finishPuzzle(){
@@ -767,17 +798,21 @@ function finishPuzzle(){
 
 
     /*
-       Save completion.
-
-       We can later connect this
-       directly to the investigation
-       objective system.
+       Save puzzle completion.
     */
 
     localStorage.setItem(
         "brokenPhone_leafPuzzleSolved",
         "true"
     );
+
+
+    /*
+       CHANGE TABLE IMAGE:
+       LOCKED → UNLOCKED
+    */
+
+    updateTableImage();
 
 }
 
@@ -824,4 +859,3 @@ closeClue.onclick = () => {
     );
 
 };
-```
