@@ -1,35 +1,30 @@
 /* =========================================
    BROKEN PHONE
-   STORY / OPENING SCENE
+   STORY SCREEN
 ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
 * {
     box-sizing: border-box;
 }
 
-
 html,
 body {
-
     margin: 0;
-
     width: 100%;
     height: 100%;
-
     overflow: hidden;
-
-    background: #080604;
+    background: #050403;
 }
 
-
 body {
-
     font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+        "Special Elite",
+        "Courier New",
+        monospace;
 
-    color: #e9d7bd;
+    color: #eee2d2;
 }
 
 
@@ -38,15 +33,14 @@ body {
 ========================================= */
 
 #game {
-
-    position: relative;
-
     width: 100vw;
     height: 100vh;
 
+    position: relative;
+
     overflow: hidden;
 
-    background: #080604;
+    background: #050403;
 }
 
 
@@ -54,69 +48,113 @@ body {
    ROOM
 ========================================= */
 
-.room {
-
+#room {
     position: absolute;
 
     inset: 0;
 
+    width: 100%;
+    height: 100%;
+
     overflow: hidden;
+
+    background: #050403;
 }
 
 
-.room-image {
+/*
+   IMPORTANT:
+
+   roomImage is a DIV, not an <img>.
+   Therefore room.png is loaded here.
+*/
+
+#roomImage {
 
     position: absolute;
 
     inset: 0;
 
+    width: 100%;
+    height: 100%;
+
     background-image:
-        url("investigation_room.png");
+        url("room.png");
 
     background-size: cover;
 
-    background-position: center;
+    background-position: center center;
 
-    transform: scale(1.02);
+    background-repeat: no-repeat;
+
+    transform: scale(1.04);
 
     transition:
         filter 2.5s ease,
         transform 3s ease;
+
+    z-index: 1;
 }
 
 
 /* =========================================
-   WAKE EFFECT
+   WAKING EFFECT
 ========================================= */
 
-.wake-overlay {
+#roomImage.waking {
+
+    filter:
+        blur(18px)
+        brightness(0.25);
+
+    transform: scale(1.10);
+}
+
+
+#roomImage.awake {
+
+    filter:
+        blur(0)
+        brightness(0.82);
+
+    transform: scale(1.04);
+}
+
+
+/* =========================================
+   DARK WAKE OVERLAY
+========================================= */
+
+#wakeOverlay {
 
     position: absolute;
 
     inset: 0;
 
-    z-index: 5;
-
     background: #000;
+
+    opacity: 1;
+
+    z-index: 5;
 
     pointer-events: none;
 
     transition:
-        opacity 4s ease;
+        opacity 3.5s ease;
 }
 
 
-.wake-overlay.opening {
+#wakeOverlay.opening {
 
     opacity: 0;
 }
 
 
 /* =========================================
-   BLUR
+   BLUR LAYER
 ========================================= */
 
-.blur-layer {
+#blurLayer {
 
     position: absolute;
 
@@ -126,20 +164,17 @@ body {
 
     pointer-events: none;
 
-    backdrop-filter: blur(14px);
-
-    background:
-        rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
 
     opacity: 1;
 
     transition:
-        opacity 4s ease,
-        backdrop-filter 4s ease;
+        opacity 2.5s ease,
+        backdrop-filter 2.5s ease;
 }
 
 
-.blur-layer.clear {
+#blurLayer.clear {
 
     opacity: 0;
 
@@ -148,60 +183,78 @@ body {
 
 
 /* =========================================
-   ROOM MOVEMENT
-========================================= */
-
-.room-image.waking {
-
-    transform:
-        scale(1.08);
-
-    filter:
-        brightness(0.45)
-        contrast(0.9);
-}
-
-
-.room-image.awake {
-
-    transform:
-        scale(1.02);
-
-    filter:
-        brightness(0.82)
-        contrast(1.04);
-}
-
-
-/* =========================================
    OFFICER
 ========================================= */
 
-.officer {
+#officer {
 
     position: absolute;
 
-    z-index: 8;
+    /*
+       Right side of room
+    */
 
-    left: 55%;
+    right: 7%;
 
-    bottom: -3%;
+    /*
+       IMPORTANT:
+       Keep character's feet at bottom,
+       but don't let him disappear.
+    */
 
-    width: min(430px, 38vw);
+    bottom: 0;
+
+    width: 31vw;
+
+    max-width: 520px;
+
+    min-width: 300px;
+
+    height: 82vh;
+
+    z-index: 10;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    pointer-events: none;
 
     opacity: 1;
 
     transform:
         translateX(120px)
-        scale(0.98);
+        scale(0.94);
+
+    transform-origin: bottom center;
 
     transition:
         transform 1.5s ease,
-        opacity 1s ease;
+        opacity 1.2s ease;
 }
 
 
-.officer.approach {
+/*
+   Hidden before the officer arrives.
+*/
+
+.officer_hidden {
+
+    opacity: 0 !important;
+
+    transform:
+        translateX(180px)
+        scale(0.90) !important;
+}
+
+
+/*
+   Officer approaches.
+*/
+
+#officer.approach {
 
     transform:
         translateX(0)
@@ -209,25 +262,28 @@ body {
 }
 
 
-.officer img {
+/*
+   The actual PNG.
+*/
+
+#officerImage {
 
     display: block;
 
     width: 100%;
 
-    height: auto;
+    height: 100%;
+
+    object-fit: contain;
+
+    object-position:
+        center bottom;
 
     filter:
         drop-shadow(
-            0 10px 18px
-            rgba(0, 0, 0, 0.55)
+            0 10px 20px
+            rgba(0,0,0,0.65)
         );
-}
-
-
-.hidden {
-
-    display: none !important;
 }
 
 
@@ -235,104 +291,100 @@ body {
    DIALOGUE BOX
 ========================================= */
 
-.dialogue-box {
+#dialogueBox {
 
     position: absolute;
 
-    z-index: 15;
+    left: 3%;
 
-    left: 50%;
+    right: 3%;
 
-    bottom: 4%;
+    bottom: 3%;
 
-    transform:
-        translateX(-50%);
+    min-height: 185px;
 
-    width: min(1050px, 88vw);
+    padding: 28px 34px;
 
-    min-height: 145px;
-
-    padding:
-        24px 70px 24px 30px;
+    z-index: 30;
 
     background:
         linear-gradient(
-            135deg,
-            rgba(25, 16, 11, 0.97),
-            rgba(51, 31, 19, 0.94)
+            90deg,
+            rgba(24,15,10,0.96),
+            rgba(35,21,13,0.91)
         );
 
-    border:
-        1px solid
-        rgba(218, 183, 137, 0.75);
+    border: 1px solid
+        rgba(190,150,95,0.75);
 
     box-shadow:
-
         0 0 0 1px
-        rgba(91, 60, 36, 0.5),
+        rgba(190,150,95,0.12),
 
-        0 12px 40px
-        rgba(0, 0, 0, 0.65);
+        0 10px 35px
+        rgba(0,0,0,0.75);
 
-    animation:
-        dialogueAppear 0.5s ease;
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
 }
 
 
-.dialogue-box::before {
+#dialogueBox::before {
 
     content: "";
 
     position: absolute;
 
-    inset: 6px;
+    inset: 9px;
 
-    border:
-        1px solid
-        rgba(218, 183, 137, 0.18);
+    border: 1px solid
+        rgba(190,150,95,0.30);
 
     pointer-events: none;
 }
 
 
-.speaker-name {
+/* =========================================
+   SPEAKER
+========================================= */
+
+#speakerName {
 
     position: relative;
 
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 
-    color: #c9a46d;
+    color: #e8cda3;
 
-    font-family:
-        Georgia,
-        serif;
+    font-size: 22px;
 
-    font-size: 18px;
-
-    font-weight: bold;
-
-    letter-spacing: 3px;
+    letter-spacing: 4px;
 
     text-transform: uppercase;
 }
 
 
-.dialogue-text {
+/* =========================================
+   DIALOGUE TEXT
+========================================= */
+
+#dialogueText {
 
     position: relative;
 
-    color: #eee2d1;
+    max-width: 90%;
+
+    color: #eee2d2;
 
     font-family:
         Georgia,
+        "Times New Roman",
         serif;
 
-    font-size:
-        clamp(16px, 1.45vw, 21px);
+    font-size: 22px;
 
     line-height: 1.55;
-
-    min-height: 62px;
 }
 
 
@@ -340,46 +392,59 @@ body {
    NEXT BUTTON
 ========================================= */
 
-.next-button {
+#nextDialogue {
 
     position: absolute;
 
-    right: 20px;
+    right: 25px;
 
-    bottom: 17px;
+    bottom: 20px;
 
-    width: 38px;
-    height: 38px;
+    width: 52px;
 
-    border:
-        1px solid
-        #b99565;
+    height: 52px;
 
     border-radius: 50%;
 
-    background:
-        rgba(30, 18, 11, 0.8);
+    border: 1px solid
+        #e3c18b;
 
-    color: #d8bc91;
+    background:
+        #c9a46b;
+
+    color: #26170e;
 
     font-size: 20px;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    z-index: 35;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
 }
 
 
-.next-button:hover {
-
-    background:
-        #b99565;
-
-    color:
-        #170e09;
+#nextDialogue:hover {
 
     transform:
         scale(1.08);
+
+    background:
+        #ead0a0;
+}
+
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.hidden {
+
+    opacity: 0 !important;
+
+    pointer-events: none !important;
 }
 
 
@@ -387,163 +452,68 @@ body {
    OBJECTIVE
 ========================================= */
 
-.objective {
+#objective {
 
     position: absolute;
 
-    z-index: 20;
-
-    top: 8%;
+    top: 12%;
 
     left: 50%;
 
     transform:
         translateX(-50%);
 
-    width: min(480px, 80vw);
+    z-index: 40;
 
-    padding: 22px 30px;
-
-    text-align: center;
+    padding: 16px 30px;
 
     background:
-        rgba(18, 11, 7, 0.94);
+        rgba(20,12,8,0.94);
 
-    border-top:
+    border:
         1px solid
-        #b99565;
+        rgba(210,170,105,0.7);
 
-    border-bottom:
-        1px solid
-        #b99565;
+    color:
+        #e8cda3;
+
+    letter-spacing: 2px;
 
     box-shadow:
         0 8px 30px
-        rgba(0, 0, 0, 0.45);
-
-    animation:
-        objectiveAppear 0.7s ease;
-}
-
-
-.objective-label {
-
-    color:
-        #a9885c;
-
-    font-size: 12px;
-
-    letter-spacing: 4px;
-
-    margin-bottom: 9px;
-}
-
-
-.objective-text {
-
-    color:
-        #ead8bc;
-
-    font-size: 21px;
-
-    letter-spacing: 1px;
+        rgba(0,0,0,0.6);
 }
 
 
 /* =========================================
-   HUD
+   INVESTIGATION HUD
 ========================================= */
 
-.investigation-hud {
+#investigationHUD {
 
     position: absolute;
 
-    z-index: 10;
-
     top: 25px;
 
-    left: 28px;
+    right: 25px;
 
-    padding: 12px 17px;
+    z-index: 50;
+
+    padding: 12px 18px;
 
     background:
-        rgba(18, 12, 8, 0.72);
+        rgba(15,10,7,0.85);
 
-    border-left:
-        2px solid
-        #a98252;
-
-    box-shadow:
-        0 4px 15px
-        rgba(0, 0, 0, 0.35);
-}
-
-
-.case-label {
+    border:
+        1px solid
+        rgba(190,150,95,0.6);
 
     color:
-        #c9a46d;
-
-    font-size: 13px;
-
-    letter-spacing: 3px;
-}
-
-
-.case-status {
-
-    margin-top: 5px;
-
-    color:
-        #aa9a87;
-
-    font-size: 10px;
+        #d9c09a;
 
     letter-spacing: 2px;
-}
 
-
-/* =========================================
-   ANIMATIONS
-========================================= */
-
-@keyframes dialogueAppear {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translate(-50%, 25px);
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translate(-50%, 0);
-    }
-}
-
-
-@keyframes objectiveAppear {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translate(-50%, -20px);
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translate(-50%, 0);
-    }
+    font-size: 12px;
 }
 
 
@@ -551,30 +521,58 @@ body {
    MOBILE
 ========================================= */
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
 
-    .officer {
+    #officer {
 
-        left: 45%;
+        right: 2%;
 
-        width: 58vw;
+        width: 48vw;
+
+        min-width: 220px;
+
+        height: 68vh;
     }
 
 
-    .dialogue-box {
+    #dialogueBox {
+
+        left: 2%;
+
+        right: 2%;
 
         bottom: 2%;
 
-        width: 94vw;
+        min-height: 170px;
 
-        min-height: 160px;
-
-        padding: 20px 55px 20px 20px;
+        padding: 22px;
     }
 
 
-    .dialogue-text {
+    #speakerName {
 
-        font-size: 15px;
+        font-size: 17px;
+
+        margin-bottom: 12px;
+    }
+
+
+    #dialogueText {
+
+        font-size: 18px;
+
+        padding-right: 45px;
+    }
+
+
+    #nextDialogue {
+
+        width: 45px;
+
+        height: 45px;
+
+        right: 15px;
+
+        bottom: 15px;
     }
 }
