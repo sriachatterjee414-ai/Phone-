@@ -3,11 +3,6 @@
    SIGN IN
 ========================================= */
 
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
 const playerName =
     document.getElementById("playerName");
 
@@ -37,9 +32,9 @@ enterGame.addEventListener("click", () => {
         playerPassword.value.trim();
 
 
-    /* =====================================
+    /* -------------------------
        CHECK NAME
-    ===================================== */
+    ------------------------- */
 
     if (name === "") {
 
@@ -52,9 +47,9 @@ enterGame.addEventListener("click", () => {
     }
 
 
-    /* =====================================
+    /* -------------------------
        CHECK PASSWORD
-    ===================================== */
+    ------------------------- */
 
     if (password === "") {
 
@@ -67,26 +62,19 @@ enterGame.addEventListener("click", () => {
     }
 
 
-    /* =====================================
-       CLEAR ERROR
-    ===================================== */
-
-    errorMessage.textContent = "";
-
-
-    /* =====================================
-       SAVE PLAYER NAME
-    ===================================== */
+    /* -------------------------
+       SAVE PLAYER DATA
+    ------------------------- */
 
     localStorage.setItem(
         "brokenPhonePlayerName",
         name
     );
 
-
-    /* =====================================
-       SAVE GAME STATE
-    ===================================== */
+    localStorage.setItem(
+        "brokenPhonePlayerPassword",
+        password
+    );
 
     localStorage.setItem(
         "brokenPhoneStarted",
@@ -94,20 +82,12 @@ enterGame.addEventListener("click", () => {
     );
 
 
-    /*
-       We can use this later for
-       Continue Game.
-    */
-
-    localStorage.setItem(
-        "brokenPhoneLastPage",
-        "story.html"
-    );
-
-
-    /* =====================================
+    /* -------------------------
        ENTER STORY
-    ===================================== */
+       
+       Your actual file is:
+       story.html
+    ------------------------- */
 
     window.location.href =
         "story.html";
@@ -116,61 +96,33 @@ enterGame.addEventListener("click", () => {
 
 
 /* =========================================
-   BACK TO MAIN MENU
-========================================= */
-
-backButton.addEventListener("click", () => {
-
-    window.location.href =
-        "index.html";
-
-});
-
-
-/* =========================================
-   ENTER KEY SUPPORT
+   ENTER WITH ENTER KEY
 ========================================= */
 
 document.addEventListener(
     "keydown",
     (event) => {
 
-        if (
-            event.key === "Enter"
-        ) {
-
-            /*
-               Don't submit twice while
-               the button is being used.
-            */
-
-            event.preventDefault();
+        if (event.key === "Enter") {
 
             enterGame.click();
+
         }
+
     }
 );
 
 
 /* =========================================
-   REMOVE ERROR WHEN USER TYPES
+   BACK TO MENU
 ========================================= */
 
-playerName.addEventListener(
-    "input",
+backButton.addEventListener(
+    "click",
     () => {
 
-        errorMessage.textContent = "";
-
-    }
-);
-
-
-playerPassword.addEventListener(
-    "input",
-    () => {
-
-        errorMessage.textContent = "";
+        window.location.href =
+            "index.html";
 
     }
 );
