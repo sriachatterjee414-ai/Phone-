@@ -1,13 +1,29 @@
 /* =========================================
    BROKEN PHONE
    FILE CABINET
-   INVENTORY + LEAF MATCHING MINI-GAME
-   + LOCKED / UNLOCKED CABINET
+
+   FLOW:
+
+   LOCKED CABINET
+        ↓
+   UNLOCK
+        ↓
+   MINI-GAME
+        ↓
+   SOLVED
+        ↓
+   UNLOCKED CABINET
+        ↓
+   COLLECT ITEMS
+        ↓
+   INVENTORY
+        ↓
+   BACK TO INVESTIGATION
 ========================================= */
 
 
 /* =========================================
-   CABINET LOCK / UNLOCK
+   CABINET IMAGES
 ========================================= */
 
 const CABINET_LOCKED_IMAGE =
@@ -18,27 +34,74 @@ const CABINET_UNLOCKED_IMAGE =
 
 
 const cabinetScene =
-    document.getElementById(
-        "cabinetScene"
-    );
+    document.getElementById("cabinetScene");
+
+const unlockButton =
+    document.getElementById("unlockButton");
+
+const itemsLayer =
+    document.getElementById("itemsLayer");
 
 
-function updateCabinetImage(){
+/* =========================================
+   CABINET PUZZLE SAVE
+========================================= */
 
-    if(
+const CABINET_PUZZLE_KEY =
+    "brokenPhone_cabinetPuzzleSolved";
+
+
+/* =========================================
+   UPDATE CABINET
+========================================= */
+
+function updateCabinet() {
+
+    const solved =
         localStorage.getItem(
-            "brokenPhone_leafPuzzleSolved"
-        ) === "true"
-    ){
+            CABINET_PUZZLE_KEY
+        ) === "true";
+
+
+    if (solved) {
+
+        /* -----------------------------
+           UNLOCKED
+        ----------------------------- */
 
         cabinetScene.style.backgroundImage =
             `url("${CABINET_UNLOCKED_IMAGE}")`;
 
+
+        unlockButton.classList.add(
+            "hidden"
+        );
+
+
+        itemsLayer.classList.remove(
+            "hidden"
+        );
+
     }
-    else{
+
+    else {
+
+        /* -----------------------------
+           LOCKED
+        ----------------------------- */
 
         cabinetScene.style.backgroundImage =
             `url("${CABINET_LOCKED_IMAGE}")`;
+
+
+        unlockButton.classList.remove(
+            "hidden"
+        );
+
+
+        itemsLayer.classList.add(
+            "hidden"
+        );
 
     }
 
@@ -49,26 +112,37 @@ function updateCabinetImage(){
    INVENTORY
 ========================================= */
 
-const KEY =
+const INVENTORY_KEY =
     "brokenPhoneInventory";
 
 
-const DATA = {
+const ITEM_DATA = {
 
-    replacement_battery:{
-        name:"Replacement Battery",
-        img:"replacement_battery.png"
+    replacement_battery: {
+
+        name:
+            "Replacement Battery",
+
+        img:
+            "replacement_battery.png"
+
     },
 
-    paper_clip:{
-        name:"Paper Clip",
-        img:"paper_clip.png"
+
+    paper_clip: {
+
+        name:
+            "Paper Clip",
+
+        img:
+            "paper_clip.png"
+
     }
 
 };
 
 
-const slots =
+const inventorySlots =
     document.getElementById(
         "inventorySlots"
     );
@@ -80,17 +154,19 @@ const toast =
     );
 
 
-function inv(){
+function getInventory() {
 
-    try{
+    try {
 
         return JSON.parse(
-            localStorage.getItem(KEY)
+            localStorage.getItem(
+                INVENTORY_KEY
+            )
         ) || [];
 
     }
 
-    catch(e){
+    catch (error) {
 
         return [];
 
@@ -99,57 +175,58 @@ function inv(){
 }
 
 
-function save(a){
+function saveInventory(items) {
 
     localStorage.setItem(
-        KEY,
-        JSON.stringify(a)
+        INVENTORY_KEY,
+        JSON.stringify(items)
     );
 
 }
 
 
 /* =========================================
-   INVENTORY RENDER
+   RENDER INVENTORY
 ========================================= */
 
-function render(){
+function renderInventory() {
 
-    slots.innerHTML = "";
+    inventorySlots.innerHTML = "";
 
-    const a = inv();
+    const inventory =
+        getInventory();
 
 
-    for(
+    for (
         let i = 0;
         i < 8;
         i++
-    ){
+    ) {
 
-        const s =
+        const slot =
             document.createElement(
                 "div"
             );
 
 
-        s.className =
+        slot.className =
             "inventory-slot";
 
 
-        if(
-            a[i] &&
-            DATA[a[i]]
-        ){
+        if (
+            inventory[i] &&
+            ITEM_DATA[inventory[i]]
+        ) {
 
-            s.innerHTML = `
+            slot.innerHTML = `
 
                 <img
-                    src="${DATA[a[i]].img}"
+                    src="${ITEM_DATA[inventory[i]].img}"
                     alt=""
                 >
 
                 <span>
-                    ${DATA[a[i]].name}
+                    ${ITEM_DATA[inventory[i]].name}
                 </span>
 
             `;
@@ -157,7 +234,9 @@ function render(){
         }
 
 
-        slots.appendChild(s);
+        inventorySlots.appendChild(
+            slot
+        );
 
     }
 
@@ -168,14 +247,17 @@ function render(){
    COLLECT ITEM
 ========================================= */
 
-function collect(id,el){
+function collectItem(id, element) {
 
-    let a = inv();
+    let inventory =
+        getInventory();
 
 
-    if(
-        a.includes(id)
-    ){
+    /* Already collected */
+
+    if (
+        inventory.includes(id)
+    ) {
 
         showToast(
             "Already collected."
@@ -186,9 +268,11 @@ function collect(id,el){
     }
 
 
-    if(
-        a.length >= 8
-    ){
+    /* Inventory full */
+
+    if (
+        inventory.length >= 8
+    ) {
 
         showToast(
             "Inventory full."
@@ -199,30 +283,94 @@ function collect(id,el){
     }
 
 
-    a.push(id);
+    /* Add item */
 
-    save(a);
+    inventory.push(id);
+
+    saveInventory(
+        inventory
+    );
 
 
-    el.classList.add(
+    /* Hide item */
+
+    element.classList.add(
         "hidden"
     );
 
 
-    render();
+    /* Update inventory */
+
+    renderInventory();
 
 
-    document
-        .getElementById(
+    /* Sound */
+
+    const sound =
+        document.getElementById(
             "collectSound"
-        )
-        .play()
-        .catch(()=>{});
+        );
+
+
+    sound.play().catch(
+        () => {}
+    );
 
 
     showToast(
-        `${DATA[id].name} added to inventory.`
+        `${ITEM_DATA[id].name} added to inventory.`
     );
+
+}
+
+
+/* =========================================
+   COLLECTIBLE BUTTONS
+========================================= */
+
+document
+    .querySelectorAll(".item")
+    .forEach(function(item) {
+
+        item.onclick = function() {
+
+            collectItem(
+                item.dataset.item,
+                item
+            );
+
+        };
+
+    });
+
+
+/* =========================================
+   RESTORE COLLECTED ITEMS
+========================================= */
+
+function restoreCollectedItems() {
+
+    const inventory =
+        getInventory();
+
+
+    inventory.forEach(function(id) {
+
+        const item =
+            document.querySelector(
+                `[data-item="${id}"]`
+            );
+
+
+        if (item) {
+
+            item.classList.add(
+                "hidden"
+            );
+
+        }
+
+    });
 
 }
 
@@ -231,7 +379,7 @@ function collect(id,el){
    TOAST
 ========================================= */
 
-function showToast(message){
+function showToast(message) {
 
     toast.textContent =
         message;
@@ -242,13 +390,13 @@ function showToast(message){
     );
 
 
-    setTimeout(()=>{
+    setTimeout(function() {
 
         toast.classList.remove(
             "show"
         );
 
-    },1600);
+    }, 1600);
 
 }
 
@@ -258,37 +406,13 @@ function showToast(message){
 ========================================= */
 
 document
-    .getElementById(
-        "backButton"
-    )
-    .onclick = () => {
+    .getElementById("backButton")
+    .onclick = function() {
 
         location.href =
             "investigation.html";
 
     };
-
-
-/* =========================================
-   COLLECTIBLE CLICK EVENTS
-========================================= */
-
-document
-    .querySelectorAll(
-        ".item"
-    )
-    .forEach(el => {
-
-        el.onclick = () => {
-
-            collect(
-                el.dataset.item,
-                el
-            );
-
-        };
-
-    });
 
 
 /* =========================================
@@ -301,67 +425,16 @@ const music =
     );
 
 
-music.volume = .18;
+music.volume = 0.18;
 
-
-music.play()
-    .catch(()=>{});
-
-
-/* =========================================
-   RESTORE COLLECTED ITEMS
-========================================= */
-
-render();
-
-
-inv().forEach(id => {
-
-    const e =
-        document.querySelector(
-            `[data-item="${id}"]`
-        );
-
-
-    if(e){
-
-        e.classList.add(
-            "hidden"
-        );
-
-    }
-
-});
+music.play().catch(
+    () => {}
+);
 
 
 /* =========================================
-   INITIAL CABINET IMAGE
+   MINI-GAME ELEMENTS
 ========================================= */
-
-/*
-   If the puzzle was already solved,
-   the unlocked cabinet is shown.
-
-   Otherwise the locked cabinet is shown.
-*/
-
-updateCabinetImage();
-
-
-/* =====================================================
-   LEAF MATCHING MINI-GAME
-===================================================== */
-
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
-const puzzleButton =
-    document.getElementById(
-        "leafPuzzleButton"
-    );
-
 
 const puzzleOverlay =
     document.getElementById(
@@ -393,20 +466,8 @@ const continuePuzzle =
     );
 
 
-const clueOverlay =
-    document.getElementById(
-        "clueOverlay"
-    );
-
-
-const closeClue =
-    document.getElementById(
-        "closeClue"
-    );
-
-
 /* =========================================
-   GAME VARIABLES
+   PUZZLE VARIABLES
 ========================================= */
 
 let firstCard = null;
@@ -414,8 +475,6 @@ let firstCard = null;
 let secondCard = null;
 
 let lockBoard = false;
-
-let matchedPairs = 0;
 
 
 /* =========================================
@@ -430,13 +489,13 @@ const LEAF_IMAGE =
    SHUFFLE
 ========================================= */
 
-function shuffle(array){
+function shuffle(array) {
 
-    for(
+    for (
         let i = array.length - 1;
         i > 0;
         i--
-    ){
+    ) {
 
         const j =
             Math.floor(
@@ -463,21 +522,21 @@ function shuffle(array){
 
 
 /* =========================================
-   OPEN PUZZLE
+   CLICK UNLOCK
 ========================================= */
 
-puzzleButton.onclick = () => {
+unlockButton.onclick = function() {
 
-    openLeafPuzzle();
+    openPuzzle();
 
 };
 
 
 /* =========================================
-   CREATE PUZZLE
+   OPEN PUZZLE
 ========================================= */
 
-function openLeafPuzzle(){
+function openPuzzle() {
 
     puzzleOverlay.classList.remove(
         "hidden"
@@ -486,10 +545,8 @@ function openLeafPuzzle(){
 
     leafGrid.innerHTML = "";
 
-
     puzzleMessage.textContent =
         "";
-
 
     continuePuzzle.classList.add(
         "hidden"
@@ -502,85 +559,83 @@ function openLeafPuzzle(){
 
     lockBoard = false;
 
-    matchedPairs = 0;
+
+    createPuzzle();
+
+}
 
 
-    /*
-       12 cards.
+/* =========================================
+   CREATE PUZZLE
+========================================= */
 
-       There are 6 pairs.
-
-       The leaf pair is the important
-       evidence pair.
-
-       The other pairs are decoys.
-    */
+function createPuzzle() {
 
     const cards = [
 
         {
-            id:"leaf",
-            image:LEAF_IMAGE
+            id: "leaf",
+            image: LEAF_IMAGE
         },
 
         {
-            id:"leaf",
-            image:LEAF_IMAGE
-        },
-
-
-        {
-            id:"clip",
-            image:"paper_clip.png"
-        },
-
-        {
-            id:"clip",
-            image:"paper_clip.png"
+            id: "leaf",
+            image: LEAF_IMAGE
         },
 
 
         {
-            id:"battery",
-            image:"replacement_battery.png"
+            id: "clip",
+            image: "paper_clip.png"
         },
 
         {
-            id:"battery",
-            image:"replacement_battery.png"
-        },
-
-
-        {
-            id:"leaf2",
-            image:LEAF_IMAGE
-        },
-
-        {
-            id:"leaf2",
-            image:LEAF_IMAGE
+            id: "clip",
+            image: "paper_clip.png"
         },
 
 
         {
-            id:"clip2",
-            image:"paper_clip.png"
+            id: "battery",
+            image: "replacement_battery.png"
         },
 
         {
-            id:"clip2",
-            image:"paper_clip.png"
+            id: "battery",
+            image: "replacement_battery.png"
         },
 
 
         {
-            id:"battery2",
-            image:"replacement_battery.png"
+            id: "leaf2",
+            image: LEAF_IMAGE
         },
 
         {
-            id:"battery2",
-            image:"replacement_battery.png"
+            id: "leaf2",
+            image: LEAF_IMAGE
+        },
+
+
+        {
+            id: "clip2",
+            image: "paper_clip.png"
+        },
+
+        {
+            id: "clip2",
+            image: "paper_clip.png"
+        },
+
+
+        {
+            id: "battery2",
+            image: "replacement_battery.png"
+        },
+
+        {
+            id: "battery2",
+            image: "replacement_battery.png"
         }
 
     ];
@@ -589,7 +644,7 @@ function openLeafPuzzle(){
     shuffle(cards);
 
 
-    cards.forEach(card => {
+    cards.forEach(function(card) {
 
         createCard(card);
 
@@ -599,10 +654,10 @@ function openLeafPuzzle(){
 
 
 /* =========================================
-   CREATE INDIVIDUAL CARD
+   CREATE CARD
 ========================================= */
 
-function createCard(card){
+function createCard(card) {
 
     const element =
         document.createElement(
@@ -626,7 +681,6 @@ function createCard(card){
                 ?
             </div>
 
-
             <div class="cardFront">
 
                 <img
@@ -641,7 +695,7 @@ function createCard(card){
     `;
 
 
-    element.onclick = () => {
+    element.onclick = function() {
 
         flipCard(element);
 
@@ -659,17 +713,17 @@ function createCard(card){
    FLIP CARD
 ========================================= */
 
-function flipCard(card){
+function flipCard(card) {
 
-    if(lockBoard)
+    if (lockBoard)
         return;
 
 
-    if(card === firstCard)
+    if (card === firstCard)
         return;
 
 
-    if(
+    if (
         card.classList.contains(
             "matched"
         )
@@ -682,24 +736,29 @@ function flipCard(card){
     );
 
 
-    document
-        .getElementById(
+    const sound =
+        document.getElementById(
             "flipSound"
-        )
-        .play()
-        .catch(()=>{});
+        );
 
 
-    if(!firstCard){
+    sound.play().catch(
+        () => {}
+    );
 
-        firstCard = card;
+
+    if (!firstCard) {
+
+        firstCard =
+            card;
 
         return;
 
     }
 
 
-    secondCard = card;
+    secondCard =
+        card;
 
 
     checkMatch();
@@ -711,7 +770,7 @@ function flipCard(card){
    CHECK MATCH
 ========================================= */
 
-function checkMatch(){
+function checkMatch() {
 
     const firstID =
         firstCard.dataset.id;
@@ -722,12 +781,12 @@ function checkMatch(){
 
 
     /* =====================================
-       CORRECT MATCH
+       MATCH
     ===================================== */
 
-    if(
+    if (
         firstID === secondID
-    ){
+    ) {
 
         firstCard.classList.add(
             "matched"
@@ -740,36 +799,26 @@ function checkMatch(){
 
 
         /*
-           The important discovery is
-           finding the leaf pair.
-
-           The other pairs are decoys.
+           Either leaf pair counts as
+           finding the evidence.
         */
 
-        if(
+        if (
             firstID === "leaf" ||
             firstID === "leaf2"
-        ){
-
-            matchedPairs++;
-
+        ) {
 
             puzzleMessage.textContent =
                 "The leaves match.";
 
-
             finishPuzzle();
 
-
         }
-        else{
 
-            matchedPairs++;
-
+        else {
 
             puzzleMessage.textContent =
                 "Matched.";
-
 
             resetTurn();
 
@@ -777,7 +826,7 @@ function checkMatch(){
 
     }
 
-    else{
+    else {
 
         /* =================================
            WRONG MATCH
@@ -790,7 +839,7 @@ function checkMatch(){
             "No match.";
 
 
-        setTimeout(()=>{
+        setTimeout(function() {
 
             firstCard.classList.remove(
                 "flipped"
@@ -804,7 +853,7 @@ function checkMatch(){
 
             resetTurn();
 
-        },700);
+        }, 700);
 
     }
 
@@ -815,7 +864,7 @@ function checkMatch(){
    RESET TURN
 ========================================= */
 
-function resetTurn(){
+function resetTurn() {
 
     firstCard = null;
 
@@ -827,10 +876,10 @@ function resetTurn(){
 
 
 /* =========================================
-   FINISH PUZZLE
+   PUZZLE COMPLETE
 ========================================= */
 
-function finishPuzzle(){
+function finishPuzzle() {
 
     lockBoard = true;
 
@@ -839,7 +888,7 @@ function finishPuzzle(){
         .querySelectorAll(
             ".leafCard"
         )
-        .forEach(card => {
+        .forEach(function(card) {
 
             card.classList.add(
                 "disabled"
@@ -860,42 +909,38 @@ function finishPuzzle(){
 
 
 /* =========================================
-   CONTINUE AFTER PUZZLE
+   UNLOCK CABINET
 ========================================= */
 
-continuePuzzle.onclick = () => {
+continuePuzzle.onclick = function() {
+
+    /*
+       Save ONLY the cabinet puzzle.
+
+       This does NOT unlock the table.
+    */
+
+    localStorage.setItem(
+        CABINET_PUZZLE_KEY,
+        "true"
+    );
+
+
+    /* Close puzzle */
 
     puzzleOverlay.classList.add(
         "hidden"
     );
 
 
-    clueOverlay.classList.remove(
-        "hidden"
+    /* Change locked → unlocked */
+
+    updateCabinet();
+
+
+    showToast(
+        "Cabinet unlocked."
     );
-
-
-    /*
-       Save puzzle completion.
-
-       This unlocks the cabinet.
-    */
-
-    localStorage.setItem(
-        "brokenPhone_leafPuzzleSolved",
-        "true"
-    );
-
-
-    /*
-       Change:
-
-       cabinet_locked.png
-              ↓
-       cabinet_unlocked.png
-    */
-
-    updateCabinetImage();
 
 };
 
@@ -904,7 +949,7 @@ continuePuzzle.onclick = () => {
    CLOSE PUZZLE
 ========================================= */
 
-closePuzzle.onclick = () => {
+closePuzzle.onclick = function() {
 
     puzzleOverlay.classList.add(
         "hidden"
@@ -914,13 +959,11 @@ closePuzzle.onclick = () => {
 
 
 /* =========================================
-   CLOSE CLUE
+   INITIALIZE
 ========================================= */
 
-closeClue.onclick = () => {
+renderInventory();
 
-    clueOverlay.classList.add(
-        "hidden"
-    );
+restoreCollectedItems();
 
-};
+updateCabinet();
