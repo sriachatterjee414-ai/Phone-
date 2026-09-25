@@ -1,76 +1,97 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Broken Phone — File Cabinet</title>
 
 <link rel="stylesheet" href="cabinet.css">
+
 </head>
+
 
 <body>
 
 <main id="cabinetGame">
 
-    <!-- BACKGROUND -->
+    <!-- =================================
+         CABINET BACKGROUND
+    ================================== -->
+
     <div id="cabinetScene"></div>
 
-    <!-- TOP UI -->
-    <button id="backButton">← BACK</button>
 
-    <div class="title">FILE CABINET</div>
+    <!-- =================================
+         TOP UI
+    ================================== -->
 
-    <div class="hint">
-        Something useful may have been left behind.
+    <button id="backButton">
+        ← BACK
+    </button>
+
+    <div class="title">
+        FILE CABINET
     </div>
 
 
-    <!-- =========================
+    <!-- =================================
+         UNLOCK BUTTON
+    ================================== -->
+
+    <button id="unlockButton">
+        UNLOCK
+    </button>
+
+
+    <!-- =================================
          COLLECTIBLE ITEMS
-    ========================== -->
+         HIDDEN UNTIL CABINET IS UNLOCKED
+    ================================== -->
 
-    <button class="item connector"
-            data-item="replacement_battery">
+    <div id="itemsLayer" class="hidden">
 
-        <img src="replacement_battery.png"
-             alt="Replacement battery">
+        <button
+            class="item connector"
+            data-item="replacement_battery"
+        >
 
-        <span>COLLECT</span>
+            <img
+                src="replacement_battery.png"
+                alt="Replacement battery"
+            >
 
-    </button>
+            <span>COLLECT</span>
 
-
-    <button class="item clip"
-            data-item="paper_clip">
-
-        <img src="paper_clip.png"
-             alt="Paper clip">
-
-        <span>COLLECT</span>
-
-    </button>
+        </button>
 
 
-    <!-- =========================
-         MINI-GAME TRIGGER
-    ========================== -->
+        <button
+            class="item clip"
+            data-item="paper_clip"
+        >
 
-    <button id="leafPuzzleButton">
+            <img
+                src="paper_clip.png"
+                alt="Paper clip"
+            >
 
-        <span class="puzzleIcon">?</span>
+            <span>COLLECT</span>
 
-        <span class="puzzleLabel">
-            INSPECT
-        </span>
+        </button>
 
-    </button>
+    </div>
 
 
-    <!-- =========================
+    <!-- =================================
          INVENTORY
-    ========================== -->
+    ================================== -->
 
     <section class="inventory-panel">
 
@@ -78,51 +99,66 @@
             INVENTORY
         </div>
 
-        <div id="inventorySlots"
-             class="inventory-slots">
-        </div>
+        <div
+            id="inventorySlots"
+            class="inventory-slots"
+        ></div>
 
     </section>
 
 
-    <!-- TOAST -->
-    <div id="toast" class="toast"></div>
+    <!-- =================================
+         TOAST
+    ================================== -->
+
+    <div
+        id="toast"
+        class="toast"
+    ></div>
 
 
-    <!-- =========================
-         LEAF MATCHING MINI-GAME
-    ========================== -->
+    <!-- =================================
+         LEAF PUZZLE
+    ================================== -->
 
-    <div id="puzzleOverlay" class="hidden">
+    <div
+        id="puzzleOverlay"
+        class="hidden"
+    >
 
         <div id="puzzleWindow">
 
-            <button id="closePuzzle">
+            <button
+                id="closePuzzle"
+                class="closeButton"
+            >
                 ×
             </button>
+
 
             <div class="puzzleTitle">
                 MATCH THE EVIDENCE
             </div>
 
+
             <div class="puzzleInstruction">
-                Some of these objects are identical.
+
                 Find the two matching leaves.
+
             </div>
 
 
-            <div id="leafGrid">
-                <!-- JavaScript creates cards -->
-            </div>
+            <div id="leafGrid"></div>
 
 
-            <div id="puzzleMessage">
-            </div>
+            <div id="puzzleMessage"></div>
 
 
-            <button id="continuePuzzle"
-                    class="hidden">
-                CONTINUE
+            <button
+                id="continuePuzzle"
+                class="hidden"
+            >
+                UNLOCK CABINET
             </button>
 
         </div>
@@ -130,57 +166,26 @@
     </div>
 
 
-    <!-- =========================
-         CLUE WINDOW
-    ========================== -->
+    <!-- =================================
+         AUDIO
+    ================================== -->
 
-    <div id="clueOverlay" class="hidden">
+    <audio
+        id="music"
+        src="investigation_music.mp3"
+        loop
+    ></audio>
 
-        <div id="clueWindow">
+    <audio
+        id="collectSound"
+        src="item_collect.mp3"
+    ></audio>
 
-            <div class="clueTitle">
-                EVIDENCE FOUND
-            </div>
+    <audio
+        id="flipSound"
+        src="item_collect.mp3"
+    ></audio>
 
-            <div class="clueText">
-                A small dried leaf was caught
-                between the cabinet files.
-
-                <br><br>
-
-                It appears to have come from
-                somewhere outside the precinct.
-
-                <br><br>
-
-                <strong>
-                    CLUE ADDED TO INVESTIGATION.
-                </strong>
-            </div>
-
-            <button id="closeClue">
-                CONTINUE
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- AUDIO -->
-
-    <audio id="music"
-           src="investigation_music.mp3"
-           loop>
-    </audio>
-
-    <audio id="collectSound"
-           src="item_collect.mp3">
-    </audio>
-
-    <audio id="flipSound"
-           src="item_collect.mp3">
-    </audio>
 
 </main>
 
@@ -188,5 +193,5 @@
 <script src="cabinet.js"></script>
 
 </body>
+
 </html>
-```
