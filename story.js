@@ -3,6 +3,7 @@
    PART 1 — OPENING SEQUENCE
 
    FLOW:
+
    MENU
       ↓
    SIGN IN
@@ -10,6 +11,8 @@
    WAKE UP
       ↓
    RYAN HALE
+      ↓
+   PLAYER NAME
       ↓
    NORMAL PHONE ASSIGNMENT
       ↓
@@ -69,6 +72,7 @@ const radioStatic =
 
 const doorOpen =
     document.getElementById("doorOpen");
+
 const namePrompt =
     document.getElementById("namePrompt");
 
@@ -102,11 +106,9 @@ function startRoomAudio() {
     roomAmbience
         .play()
         .catch(() => {
-            /*
-                Browser may wait for
-                user interaction before
-                allowing audio.
-            */
+            console.log(
+                "Room ambience waiting for user interaction."
+            );
         });
 }
 
@@ -129,15 +131,17 @@ function playSound(
 
 
 /* =========================================
-   OPENING SEQUENCE
+   OPENING
 ========================================= */
 
 function beginOpening() {
 
-    /*
-        Room starts dark and slightly
-        blurred, as if Y/N is waking up.
-    */
+    console.log(
+        "BROKEN PHONE — OPENING STARTED"
+    );
+
+
+    /* Start room in waking state */
 
     if (roomImage) {
 
@@ -147,14 +151,12 @@ function beginOpening() {
     }
 
 
-    /* Background ambience */
+    /* Start ambience */
 
     startRoomAudio();
 
 
-    /*
-        Small waking sound.
-    */
+    /* Wake sound */
 
     setTimeout(() => {
 
@@ -166,9 +168,7 @@ function beginOpening() {
     }, 900);
 
 
-    /*
-        Vision slowly clears.
-    */
+    /* Clear vision */
 
     setTimeout(() => {
 
@@ -202,10 +202,7 @@ function beginOpening() {
     }, 1800);
 
 
-    /*
-        Ryan appears after Y/N
-        has fully woken up.
-    */
+    /* Ryan appears */
 
     setTimeout(() => {
 
@@ -216,12 +213,24 @@ function beginOpening() {
 
 
 /* =========================================
-   RYAN HALE
+   RYAN
 ========================================= */
 
 function showOfficer() {
 
-    if (!officer) return;
+    if (!officer) {
+
+        console.error(
+            "ERROR: #officer was not found."
+        );
+
+        return;
+    }
+
+
+    console.log(
+        "Ryan Hale entering."
+    );
 
 
     officer.classList.remove(
@@ -229,28 +238,30 @@ function showOfficer() {
     );
 
 
-    /*
-        Ryan starts slightly
-        farther away.
-    */
-
     officer.classList.remove(
         "approach"
     );
 
 
-    setTimeout(() => {
+    /* Trigger CSS transition */
 
-        officer.classList.add(
-            "approach"
-        );
+    requestAnimationFrame(() => {
 
-    }, 100);
+        requestAnimationFrame(() => {
+
+            officer.classList.add(
+                "approach"
+            );
+
+        });
+
+    });
 
 
     /*
-        Give the player a moment
-        before dialogue begins.
+       IMPORTANT:
+       Ask for the player's name only
+       after Ryan has appeared.
     */
 
     setTimeout(() => {
@@ -259,22 +270,59 @@ function showOfficer() {
 
     }, 1800);
 }
+
+
 /* =========================================
-   PLAYER NAME PROMPT
+   PLAYER NAME
 ========================================= */
 
 function askPlayerName() {
 
-    if (!namePrompt) {
+    /*
+       If the player already entered
+       a name previously, don't ask
+       them again.
+    */
+
+    if (playerName !== "") {
+
+        console.log(
+            "Saved player name:",
+            playerName
+        );
+
         startDialogue();
+
         return;
     }
 
-    namePrompt.classList.remove("hidden");
+
+    if (!namePrompt) {
+
+        console.warn(
+            "Name prompt not found. Starting dialogue."
+        );
+
+        startDialogue();
+
+        return;
+    }
+
+
+    namePrompt.classList.remove(
+        "hidden"
+    );
+
 
     if (storyPlayerName) {
+
         storyPlayerName.value = "";
-        storyPlayerName.focus();
+
+        setTimeout(() => {
+
+            storyPlayerName.focus();
+
+        }, 100);
     }
 }
 
@@ -287,8 +335,10 @@ function savePlayerName() {
 
     if (!storyPlayerName) return;
 
+
     const enteredName =
         storyPlayerName.value.trim();
+
 
     if (enteredName === "") {
 
@@ -297,18 +347,38 @@ function savePlayerName() {
         return;
     }
 
-    playerName = enteredName;
+
+    playerName =
+        enteredName;
+
 
     localStorage.setItem(
         "brokenPhonePlayerName",
         playerName
     );
 
-    namePrompt.classList.add("hidden");
+
+    console.log(
+        "Player name saved:",
+        playerName
+    );
+
+
+    if (namePrompt) {
+
+        namePrompt.classList.add(
+            "hidden"
+        );
+    }
+
 
     startDialogue();
 }
 
+
+/* =========================================
+   NAME BUTTON
+========================================= */
 
 if (nameContinue) {
 
@@ -318,6 +388,10 @@ if (nameContinue) {
     );
 }
 
+
+/* =========================================
+   NAME ENTER KEY
+========================================= */
 
 if (storyPlayerName) {
 
@@ -335,15 +409,12 @@ if (storyPlayerName) {
     );
 }
 
+
 /* =========================================
    COMPLETE STORY DIALOGUE
 ========================================= */
 
 const dialogue = [
-
-    /* =====================================
-       Y/N WAKES
-    ===================================== */
 
     {
         speaker: "RYAN",
@@ -653,7 +724,7 @@ const dialogue = [
 
 
     /* =====================================
-       LAST CONVERSATION — MYSTERY
+       MYSTERY
     ===================================== */
 
     {
@@ -1016,6 +1087,10 @@ const dialogue = [
 ];
 
 
+/* =========================================
+   DIALOGUE STATE
+========================================= */
+
 let dialogueIndex = 0;
 
 
@@ -1025,13 +1100,22 @@ let dialogueIndex = 0;
 
 function startDialogue() {
 
-    if (!dialogueBox) return;
+    if (!dialogueBox) {
+
+        console.error(
+            "ERROR: #dialogueBox not found."
+        );
+
+        return;
+    }
+
+
+    dialogueIndex = 0;
 
     dialogueBox.classList.remove(
         "hidden"
     );
 
-    dialogueIndex = 0;
 
     displayDialogue();
 }
@@ -1042,10 +1126,6 @@ function startDialogue() {
 ========================================= */
 
 function displayDialogue() {
-
-    /*
-       End of dialogue.
-    */
 
     if (
         dialogueIndex >=
@@ -1062,36 +1142,45 @@ function displayDialogue() {
         dialogue[dialogueIndex];
 
 
-    /*
-       Speaker name.
-    */
+    if (speakerName) {
 
-    speakerName.textContent =
-        line.speaker;
-
-
-    /*
-       Replace every Y/N with
-       the player's chosen name.
-    */
-
-    const finalText =
-        line.text.replace(
-            /Y\/N/g,
-            playerName
-        );
-
-
-    dialogueText.textContent =
-        finalText;
+        speakerName.textContent =
+            line.speaker;
+    }
 
 
     /*
-       Change Ryan's expression.
+       Replace Y/N with the username.
     */
+
+    let finalText =
+        line.text;
+
+
+    if (playerName !== "") {
+
+        finalText =
+            finalText.replace(
+                /Y\/N/g,
+                playerName
+            );
+    }
+
+
+    if (dialogueText) {
+
+        dialogueText.textContent =
+            finalText;
+    }
+
 
     changeOfficerExpression(
         line.expression
+    );
+
+
+    console.log(
+        `${line.speaker}: ${finalText}`
     );
 }
 
@@ -1107,57 +1196,36 @@ function changeOfficerExpression(
     if (!officerImage) return;
 
 
-    switch (expression) {
+    const expressionImages = {
 
-        case "serious":
+        neutral:
+            "officer_neutral.png",
 
-            officerImage.src =
-                "officer_serious.png";
+        serious:
+            "officer_serious.png",
 
-            break;
+        concerned:
+            "officer_concerned.png",
 
+        surprised:
+            "officer_surprised.png",
 
-        case "concerned":
+        sarcastic:
+            "officer_sarcastic.png",
 
-            officerImage.src =
-                "officer_concerned.png";
-
-            break;
-
-
-        case "surprised":
-
-            officerImage.src =
-                "officer_surprised.png";
-
-            break;
+        annoyed:
+            "officer_annoyed.png"
+    };
 
 
-        case "sarcastic":
-
-            officerImage.src =
-                "officer_sarcastic.png";
-
-            break;
+    const image =
+        expressionImages[expression]
+        ||
+        expressionImages.neutral;
 
 
-        case "annoyed":
-
-            officerImage.src =
-                "officer_annoyed.png";
-
-            break;
-
-
-        case "neutral":
-
-        default:
-
-            officerImage.src =
-                "officer_neutral.png";
-
-            break;
-    }
+    officerImage.src =
+        image;
 }
 
 
@@ -1219,6 +1287,20 @@ document.addEventListener(
                 )
             ) {
 
+                /*
+                   Don't advance dialogue
+                   when typing the username.
+                */
+
+                if (
+                    document.activeElement ===
+                    storyPlayerName
+                ) {
+
+                    return;
+                }
+
+
                 event.preventDefault();
 
                 advanceDialogue();
@@ -1229,10 +1311,15 @@ document.addEventListener(
 
 
 /* =========================================
-   FINISH CONVERSATION
+   FINISH DIALOGUE
 ========================================= */
 
 function finishDialogue() {
+
+    console.log(
+        "Ryan's conversation finished."
+    );
+
 
     if (dialogueBox) {
 
@@ -1242,24 +1329,16 @@ function finishDialogue() {
     }
 
 
-    /*
-       Ryan's final expression.
-    */
-
     changeOfficerExpression(
         "neutral"
     );
 
 
     /*
-       Short pause.
+       Ryan leaves.
     */
 
     setTimeout(() => {
-
-        /*
-           Ryan walks away.
-        */
 
         if (officer) {
 
@@ -1268,16 +1347,12 @@ function finishDialogue() {
             );
 
             officer.style.transform =
-                "translateX(180px) scale(0.98)";
+                "translateX(calc(-50% + 180px)) scale(0.98)";
 
             officer.style.opacity =
                 "0";
         }
 
-
-        /*
-           Door sound.
-        */
 
         playSound(
             doorOpen,
@@ -1288,8 +1363,7 @@ function finishDialogue() {
 
 
     /*
-       Then the first actual
-       gameplay objective.
+       Show objective after Ryan leaves.
     */
 
     setTimeout(() => {
@@ -1306,7 +1380,16 @@ function finishDialogue() {
 
 function showObjective() {
 
-    if (!objective) return;
+    if (!objective) {
+
+        console.error(
+            "ERROR: #objective not found."
+        );
+
+        enableInvestigation();
+
+        return;
+    }
 
 
     objective.classList.remove(
@@ -1314,22 +1397,9 @@ function showObjective() {
     );
 
 
-    /*
-       Support either:
-       .objective-label
-       or
-       .objective-title
-    */
-
     const objectiveLabel =
         objective.querySelector(
             ".objective-label"
-        );
-
-
-    const objectiveTitle =
-        objective.querySelector(
-            ".objective-title"
         );
 
 
@@ -1346,13 +1416,6 @@ function showObjective() {
     }
 
 
-    if (objectiveTitle) {
-
-        objectiveTitle.textContent =
-            "NEW OBJECTIVE";
-    }
-
-
     if (objectiveText) {
 
         objectiveText.textContent =
@@ -1361,8 +1424,8 @@ function showObjective() {
 
 
     /*
-       Let the objective stay
-       visible briefly.
+       Keep objective visible
+       for a few seconds.
     */
 
     setTimeout(() => {
@@ -1392,30 +1455,6 @@ function showObjective() {
 
 function enableInvestigation() {
 
-    /*
-       The room is now officially
-       in gameplay mode.
-
-       NEXT STAGE:
-
-       DESK
-       PHONE
-       COMPUTER
-       EVIDENCE BOARD
-       DRAWERS
-       PAPERS
-       CLICKABLE OBJECTS
-       SEARCH SYSTEM
-       REPAIR MINI-GAME
-    */
-
-    if (roomImage) {
-
-        roomImage.style.cursor =
-            "default";
-    }
-
-
     console.log(
         "================================="
     );
@@ -1425,27 +1464,71 @@ function enableInvestigation() {
     );
 
     console.log(
+        "PLAYER:",
+        playerName
+    );
+
+    console.log(
         "OBJECTIVE: Repair the damaged phone."
     );
 
     console.log(
         "================================="
     );
+
+
+    if (roomImage) {
+
+        roomImage.style.cursor =
+            "default";
+    }
+
+
+    /*
+       This is where the next stage
+       of the game can be connected:
+
+       - Desk
+       - Damaged phone
+       - Computer
+       - Evidence board
+       - Drawers
+       - Papers
+       - Search system
+       - Repair mini-game
+    */
+
+    document.dispatchEvent(
+        new CustomEvent(
+            "investigationStarted",
+            {
+                detail: {
+                    playerName:
+                        playerName
+                }
+            }
+        )
+    );
 }
 
 
 /* =========================================
-   START
+   START GAME
 ========================================= */
 
 window.addEventListener(
     "load",
     () => {
 
+        console.log(
+            "Broken Phone story.html loaded."
+        );
+
+
         /*
-           Small delay after story.html
-           loads so the transition
-           doesn't feel abrupt.
+           Small delay so the transition
+           from the previous screen feels
+           intentional.
         */
 
         setTimeout(() => {
@@ -1453,6 +1536,5 @@ window.addEventListener(
             beginOpening();
 
         }, 700);
-
     }
 );
