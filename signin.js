@@ -3,197 +3,180 @@
    SIGN IN
 ========================================= */
 
+document.addEventListener("DOMContentLoaded", () => {
 
-/* =========================================
-   ELEMENTS
-========================================= */
+    const playerName =
+        document.getElementById("playerName");
 
-const playerName =
-    document.getElementById("playerName");
+    const playerPassword =
+        document.getElementById("playerPassword");
 
-const playerPassword =
-    document.getElementById("playerPassword");
+    const enterGame =
+        document.getElementById("enterGame");
 
-const enterGame =
-    document.getElementById("enterGame");
+    const backButton =
+        document.getElementById("backButton");
 
-const backButton =
-    document.getElementById("backButton");
-
-const errorMessage =
-    document.getElementById("errorMessage");
-
-
-/* =========================================
-   LOGIN FUNCTION
-========================================= */
-
-function enterStory() {
-
-    const name =
-        playerName.value.trim();
-
-    const password =
-        playerPassword.value.trim();
+    const errorMessage =
+        document.getElementById("errorMessage");
 
 
     /* =====================================
-       CHECK NAME
+       LOGIN
     ===================================== */
 
-    if (name === "") {
+    function enterStory() {
 
-        errorMessage.textContent =
-            "Please enter your ID / name.";
+        const name =
+            playerName.value.trim();
 
-        playerName.focus();
+        const password =
+            playerPassword.value.trim();
 
-        return;
+
+        /* CHECK NAME */
+
+        if (name === "") {
+
+            errorMessage.textContent =
+                "Please enter your ID / name.";
+
+            playerName.focus();
+
+            return;
+        }
+
+
+        /* CHECK PASSWORD */
+
+        if (password === "") {
+
+            errorMessage.textContent =
+                "Please enter your password.";
+
+            playerPassword.focus();
+
+            return;
+        }
+
+
+        /* CLEAR ERROR */
+
+        errorMessage.textContent = "";
+
+
+        /* SAVE NAME */
+
+        localStorage.setItem(
+            "brokenPhonePlayerName",
+            name
+        );
+
+
+        /* SAVE PASSWORD */
+
+        localStorage.setItem(
+            "brokenPhonePlayerPassword",
+            password
+        );
+
+
+        /* SAVE GAME STATE */
+
+        localStorage.setItem(
+            "brokenPhoneStarted",
+            "true"
+        );
+
+
+        localStorage.setItem(
+            "brokenPhoneLastPage",
+            "story.html"
+        );
+
+
+        /* GO TO STORY */
+
+        window.location.assign("story.html");
     }
 
 
     /* =====================================
-       CHECK PASSWORD
+       ENTER BUTTON
     ===================================== */
-
-    if (password === "") {
-
-        errorMessage.textContent =
-            "Please enter your password.";
-
-        playerPassword.focus();
-
-        return;
-    }
-
-
-    /* =====================================
-       CLEAR ERROR
-    ===================================== */
-
-    errorMessage.textContent = "";
-
-
-    /* =====================================
-       SAVE PLAYER NAME
-    ===================================== */
-
-    localStorage.setItem(
-        "brokenPhonePlayerName",
-        name
-    );
-
-
-    /* =====================================
-       SAVE PASSWORD
-    ===================================== */
-
-    localStorage.setItem(
-        "brokenPhonePlayerPassword",
-        password
-    );
-
-
-    /* =====================================
-       SAVE GAME STATE
-    ===================================== */
-
-    localStorage.setItem(
-        "brokenPhoneStarted",
-        "true"
-    );
-
-
-    localStorage.setItem(
-        "brokenPhoneLastPage",
-        "story.html"
-    );
-
-
-    /* =====================================
-       ENTER STORY
-    ===================================== */
-
-    window.location.href =
-        "story.html";
-}
-
-
-/* =========================================
-   ENTER BUTTON
-========================================= */
-
-if (enterGame) {
 
     enterGame.addEventListener(
         "click",
         enterStory
     );
-}
 
 
-/* =========================================
-   ENTER KEY SUPPORT
-========================================= */
+    /* =====================================
+       ENTER KEY
+    ===================================== */
 
-document.addEventListener(
-    "keydown",
-    (event) => {
+    playerName.addEventListener(
+        "keydown",
+        (event) => {
 
-        if (event.key === "Enter") {
+            if (event.key === "Enter") {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            enterStory();
+                enterStory();
+            }
         }
-    }
-);
+    );
 
 
-/* =========================================
-   BACK TO MAIN MENU
-========================================= */
+    playerPassword.addEventListener(
+        "keydown",
+        (event) => {
 
-if (backButton) {
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                enterStory();
+            }
+        }
+    );
+
+
+    /* =====================================
+       BACK BUTTON
+    ===================================== */
 
     backButton.addEventListener(
         "click",
         () => {
 
-            window.location.href =
-                "index.html";
+            window.location.assign(
+                "index.html"
+            );
         }
     );
-}
 
 
-/* =========================================
-   REMOVE ERROR WHEN USER TYPES
-========================================= */
-
-if (playerName) {
+    /* =====================================
+       REMOVE ERROR WHEN TYPING
+    ===================================== */
 
     playerName.addEventListener(
         "input",
         () => {
 
-            if (errorMessage) {
-                errorMessage.textContent = "";
-            }
+            errorMessage.textContent = "";
         }
     );
-}
 
-
-if (playerPassword) {
 
     playerPassword.addEventListener(
         "input",
         () => {
 
-            if (errorMessage) {
-                errorMessage.textContent = "";
-            }
+            errorMessage.textContent = "";
         }
     );
-}
+
+});
