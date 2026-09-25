@@ -1,6 +1,6 @@
 /* =========================================
-  BROKEN PHONE
-  SIGN IN
+   BROKEN PHONE
+   SIGN IN
 ========================================= */
 
 
@@ -9,66 +9,62 @@
 ========================================= */
 
 const playerName =
-document.getElementById("playerName");
+    document.getElementById("playerName");
 
 const playerPassword =
-document.getElementById("playerPassword");
+    document.getElementById("playerPassword");
 
 const enterGame =
-document.getElementById("enterGame");
+    document.getElementById("enterGame");
 
 const backButton =
-document.getElementById("backButton");
+    document.getElementById("backButton");
 
 const errorMessage =
-document.getElementById("errorMessage");
+    document.getElementById("errorMessage");
 
 
 /* =========================================
-  ENTER GAME
+   LOGIN FUNCTION
 ========================================= */
 
-enterGame.addEventListener("click", () => {
+function enterStory() {
 
-const name =
-playerName.value.trim();
+    const name =
+        playerName.value.trim();
 
-const password =
-playerPassword.value.trim();
-
-
-    /* =====================================
-    /* -------------------------
-      CHECK NAME
-    ===================================== */
-    ------------------------- */
-
-if (name === "") {
-
-errorMessage.textContent =
-"Please enter your ID / name.";
-
-playerName.focus();
-
-return;
-}
+    const password =
+        playerPassword.value.trim();
 
 
     /* =====================================
-    /* -------------------------
-      CHECK PASSWORD
+       CHECK NAME
     ===================================== */
-    ------------------------- */
 
-if (password === "") {
+    if (name === "") {
 
-errorMessage.textContent =
-"Please enter your password.";
+        errorMessage.textContent =
+            "Please enter your ID / name.";
 
-playerPassword.focus();
+        playerName.focus();
 
-return;
-}
+        return;
+    }
+
+
+    /* =====================================
+       CHECK PASSWORD
+    ===================================== */
+
+    if (password === "") {
+
+        errorMessage.textContent =
+            "Please enter your password.";
+
+        playerPassword.focus();
+
+        return;
+    }
 
 
     /* =====================================
@@ -81,121 +77,123 @@ return;
     /* =====================================
        SAVE PLAYER NAME
     ===================================== */
-    /* -------------------------
-       SAVE PLAYER DATA
-    ------------------------- */
 
-localStorage.setItem(
-"brokenPhonePlayerName",
-name
-);
+    localStorage.setItem(
+        "brokenPhonePlayerName",
+        name
+    );
+
+
+    /* =====================================
+       SAVE PASSWORD
+    ===================================== */
+
+    localStorage.setItem(
+        "brokenPhonePlayerPassword",
+        password
+    );
 
 
     /* =====================================
        SAVE GAME STATE
     ===================================== */
 
-localStorage.setItem(
+    localStorage.setItem(
         "brokenPhoneStarted",
         "true"
-        "brokenPhonePlayerPassword",
-        password
-);
+    );
 
 
-    /*
-       We can use this later for
-       Continue Game.
-    */
-
-localStorage.setItem(
+    localStorage.setItem(
         "brokenPhoneLastPage",
         "story.html"
-        "brokenPhoneStarted",
-        "true"
-);
+    );
 
 
     /* =====================================
-    /* -------------------------
-      ENTER STORY
+       ENTER STORY
     ===================================== */
-       
-       Your actual file is:
-       story.html
-    ------------------------- */
 
-window.location.href =
-"story.html";
+    window.location.href =
+        "story.html";
+}
 
-});
+
+/* =========================================
+   ENTER BUTTON
+========================================= */
+
+if (enterGame) {
+
+    enterGame.addEventListener(
+        "click",
+        enterStory
+    );
+}
+
+
+/* =========================================
+   ENTER KEY SUPPORT
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            enterStory();
+        }
+    }
+);
 
 
 /* =========================================
    BACK TO MAIN MENU
 ========================================= */
 
-backButton.addEventListener("click", () => {
+if (backButton) {
 
-    window.location.href =
-        "index.html";
+    backButton.addEventListener(
+        "click",
+        () => {
 
-});
-
-
-/* =========================================
-   ENTER KEY SUPPORT
-   ENTER WITH ENTER KEY
-========================================= */
-
-document.addEventListener(
-"keydown",
-(event) => {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            /*
-               Don't submit twice while
-               the button is being used.
-            */
-
-            event.preventDefault();
-        if (event.key === "Enter") {
-
-enterGame.click();
-
+            window.location.href =
+                "index.html";
+        }
+    );
 }
-
-}
-);
 
 
 /* =========================================
    REMOVE ERROR WHEN USER TYPES
-   BACK TO MENU
 ========================================= */
 
-playerName.addEventListener(
-    "input",
-    () => {
+if (playerName) {
 
-        errorMessage.textContent = "";
+    playerName.addEventListener(
+        "input",
+        () => {
 
-    }
-);
-
-
-playerPassword.addEventListener(
-    "input",
-backButton.addEventListener(
-    "click",
-() => {
-
-        errorMessage.textContent = "";
-        window.location.href =
-            "index.html";
-
+            if (errorMessage) {
+                errorMessage.textContent = "";
+            }
+        }
+    );
 }
-);
+
+
+if (playerPassword) {
+
+    playerPassword.addEventListener(
+        "input",
+        () => {
+
+            if (errorMessage) {
+                errorMessage.textContent = "";
+            }
+        }
+    );
+}
