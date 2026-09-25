@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Broken Phone — Investigation</title>
+
+    <link
+        rel="stylesheet"
+        href="story.css"
+    >
+
+</head>
+
+<body>
+
+    <main id="game">
+
+        <!-- =====================================
+             ROOM
+        ====================================== -->
+
+        <div
+            id="room"
+            class="room"
+        >
+
+            <div
+                id="roomImage"
+                class="room-image"
+            ></div>
+
+            <!-- Dark overlay used during waking -->
+            <div
+                id="wakeOverlay"
+                class="wake-overlay"
+            ></div>
+
+            <!-- Blur layer -->
+            <div
+                id="blurLayer"
+                class="blur-layer"
+            ></div>
+
+
+            <!-- =================================
+                 POLICE OFFICER
+            ================================== -->
+
+            <div
+                id="officer"
+                class="officer hidden"
+            >
+
+                <img
+                    id="officerImage"
+                    src="officer_neutral.png"
+                    alt="Police officer"
+                >
+
+            </div>
+
+
+            <!-- =================================
+                 DIALOGUE
+            ================================== -->
+
+            <section
+                id="dialogueBox"
+                class="dialogue-box hidden"
+            >
+
+                <div
+                    id="speakerName"
+                    class="speaker-name"
+                >
+                    OFFICER
+                </div>
+
+                <div
+                    id="dialogueText"
+                    class="dialogue-text"
+                ></div>
+
+                <button
+                    id="nextDialogue"
+                    class="next-button"
+                >
+                    ▾
+                </button>
+
+            </section>
+
+
+            <!-- =================================
+                 OBJECTIVE
+            ================================== -->
+
+            <div
+                id="objective"
+                class="objective hidden"
+            >
+
+                <div class="objective-label">
+                    NEW OBJECTIVE
+                </div>
+
+                <div class="objective-text">
+                    Find the broken phone.
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 INVESTIGATION HUD
+            ================================== -->
+
+            <div
+                id="investigationHUD"
+                class="investigation-hud hidden"
+            >
+
+                <div class="case-label">
+                    CASE 001
+                </div>
+
+                <div class="case-status">
+                    INVESTIGATION ACTIVE
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 AUDIO
+            ================================== -->
+
+            <audio
+                id="roomAmbience"
+                src="room_ambience.mp3"
+                loop
+            ></audio>
+
+            <audio
+                id="wakeSound"
+                src="wake_sound.mp3"
+            ></audio>
+
+            <audio
+                id="radioStatic"
+                src="radio_static.mp3"
+            ></audio>
+
+            <audio
+                id="doorOpen"
+                src="door_open.mp3"
+            ></audio>
+
+        </div>
+
+    </main>
+
+
+    <script src="story.js"></script>
+
+</body>
+
+</html>
