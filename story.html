@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -16,194 +15,187 @@
         rel="stylesheet"
         href="story.css"
     >
-
 </head>
 
 <body>
 
-    <main id="game">
+<main id="game">
 
-        <!-- =====================================
-             ROOM
-        ====================================== -->
+    <!-- =====================================
+         ROOM
+    ====================================== -->
+
+    <div id="room" class="room">
+
+        <div id="roomImage" class="room-image"></div>
 
         <div
-            id="room"
-            class="room"
+            id="wakeOverlay"
+            class="wake-overlay"
+        ></div>
+
+        <div
+            id="blurLayer"
+            class="blur-layer"
+        ></div>
+
+
+        <!-- =================================
+             RYAN HALE
+        ================================== -->
+
+        <div
+            id="officer"
+            class="officer hidden"
         >
 
-            <div
-                id="roomImage"
-                class="room-image"
-            ></div>
-
-            <!-- Dark overlay used during waking -->
-            <div
-                id="wakeOverlay"
-                class="wake-overlay"
-            ></div>
-
-            <!-- Blur layer -->
-            <div
-                id="blurLayer"
-                class="blur-layer"
-            ></div>
-
-
-            <!-- =================================
-                 POLICE OFFICER
-            ================================== -->
-
-            <div
-                id="officer"
-                class="officer hidden"
+            <img
+                id="officerImage"
+                src="officer_neutral.png"
+                alt="Ryan Hale"
             >
 
-                <img
-                    id="officerImage"
-                    src="officer_neutral.png"
-                    alt="Police officer"
-                >
-
-            </div>
-<!-- =================================
-     PLAYER NAME
-================================== -->
-
-<section
-    id="namePrompt"
-    class="name-prompt hidden"
->
-
-    <div class="name-prompt-box">
-
-        <div class="name-prompt-title">
-            WHAT SHOULD I CALL YOU?
         </div>
 
-        <div class="name-prompt-subtitle">
-            Enter your name.
-        </div>
 
-        <input
-            id="storyPlayerName"
-            type="text"
-            maxlength="20"
-            autocomplete="off"
-            placeholder="Your name..."
+        <!-- =================================
+             PLAYER NAME
+        ================================== -->
+
+        <section
+            id="namePrompt"
+            class="name-prompt hidden"
         >
 
-        <button id="nameContinue">
-            CONTINUE
-        </button>
+            <div class="name-prompt-box">
+
+                <div class="name-prompt-title">
+                    WHAT SHOULD I CALL YOU?
+                </div>
+
+                <div class="name-prompt-subtitle">
+                    Enter your name.
+                </div>
+
+                <input
+                    id="storyPlayerName"
+                    type="text"
+                    maxlength="20"
+                    autocomplete="off"
+                    placeholder="Your name..."
+                >
+
+                <button id="nameContinue">
+                    CONTINUE
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             DIALOGUE
+        ================================== -->
+
+        <section
+            id="dialogueBox"
+            class="dialogue-box hidden"
+        >
+
+            <div
+                id="speakerName"
+                class="speaker-name"
+            >
+                RYAN
+            </div>
+
+            <div
+                id="dialogueText"
+                class="dialogue-text"
+            ></div>
+
+            <button
+                id="nextDialogue"
+                class="next-button"
+                type="button"
+            >
+                ▾
+            </button>
+
+        </section>
+
+
+        <!-- =================================
+             OBJECTIVE
+        ================================== -->
+
+        <div
+            id="objective"
+            class="objective hidden"
+        >
+
+            <div class="objective-label">
+                NEW OBJECTIVE
+            </div>
+
+            <div class="objective-text">
+                Repair the damaged phone.
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             INVESTIGATION HUD
+        ================================== -->
+
+        <div
+            id="investigationHUD"
+            class="investigation-hud hidden"
+        >
+
+            <div class="case-label">
+                CASE 001
+            </div>
+
+            <div class="case-status">
+                INVESTIGATION ACTIVE
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             AUDIO
+        ================================== -->
+
+        <audio
+            id="roomAmbience"
+            src="room_ambience.mp3"
+            loop
+        ></audio>
+
+        <audio
+            id="wakeSound"
+            src="wake_sound.mp3"
+        ></audio>
+
+        <audio
+            id="radioStatic"
+            src="radio_static.mp3"
+        ></audio>
+
+        <audio
+            id="doorOpen"
+            src="door_open.mp3"
+        ></audio>
 
     </div>
 
-</section>
+</main>
 
-            <!-- =================================
-                 DIALOGUE
-            ================================== -->
-
-            <section
-                id="dialogueBox"
-                class="dialogue-box hidden"
-            >
-
-                <div
-                    id="speakerName"
-                    class="speaker-name"
-                >
-                    OFFICER
-                </div>
-
-                <div
-                    id="dialogueText"
-                    class="dialogue-text"
-                ></div>
-
-                <button
-                    id="nextDialogue"
-                    class="next-button"
-                >
-                    ▾
-                </button>
-
-            </section>
-
-
-            <!-- =================================
-                 OBJECTIVE
-            ================================== -->
-
-            <div
-                id="objective"
-                class="objective hidden"
-            >
-
-                <div class="objective-label">
-                    NEW OBJECTIVE
-                </div>
-
-                <div class="objective-text">
-                    Find the broken phone.
-                </div>
-
-            </div>
-
-
-            <!-- =================================
-                 INVESTIGATION HUD
-            ================================== -->
-
-            <div
-                id="investigationHUD"
-                class="investigation-hud hidden"
-            >
-
-                <div class="case-label">
-                    CASE 001
-                </div>
-
-                <div class="case-status">
-                    INVESTIGATION ACTIVE
-                </div>
-
-            </div>
-
-
-            <!-- =================================
-                 AUDIO
-            ================================== -->
-
-            <audio
-                id="roomAmbience"
-                src="room_ambience.mp3"
-                loop
-            ></audio>
-
-            <audio
-                id="wakeSound"
-                src="wake_sound.mp3"
-            ></audio>
-
-            <audio
-                id="radioStatic"
-                src="radio_static.mp3"
-            ></audio>
-
-            <audio
-                id="doorOpen"
-                src="door_open.mp3"
-            ></audio>
-
-        </div>
-
-    </main>
-
-
-    <script src="story.js"></script>
+<script src="story.js"></script>
 
 </body>
-
 </html>
