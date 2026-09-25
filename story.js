@@ -69,6 +69,14 @@ const radioStatic =
 
 const doorOpen =
     document.getElementById("doorOpen");
+const namePrompt =
+    document.getElementById("namePrompt");
+
+const storyPlayerName =
+    document.getElementById("storyPlayerName");
+
+const nameContinue =
+    document.getElementById("nameContinue");
 
 
 /* =========================================
@@ -78,15 +86,7 @@ const doorOpen =
 let playerName =
     localStorage.getItem(
         "brokenPhonePlayerName"
-    );
-
-if (
-    !playerName ||
-    playerName.trim() === ""
-) {
-
-    playerName = "Y/N";
-}
+    ) || "";
 
 
 /* =========================================
@@ -255,11 +255,85 @@ function showOfficer() {
 
     setTimeout(() => {
 
-        startDialogue();
+        askPlayerName();
 
     }, 1800);
 }
+/* =========================================
+   PLAYER NAME PROMPT
+========================================= */
 
+function askPlayerName() {
+
+    if (!namePrompt) {
+        startDialogue();
+        return;
+    }
+
+    namePrompt.classList.remove("hidden");
+
+    if (storyPlayerName) {
+        storyPlayerName.value = "";
+        storyPlayerName.focus();
+    }
+}
+
+
+/* =========================================
+   SAVE PLAYER NAME
+========================================= */
+
+function savePlayerName() {
+
+    if (!storyPlayerName) return;
+
+    const enteredName =
+        storyPlayerName.value.trim();
+
+    if (enteredName === "") {
+
+        storyPlayerName.focus();
+
+        return;
+    }
+
+    playerName = enteredName;
+
+    localStorage.setItem(
+        "brokenPhonePlayerName",
+        playerName
+    );
+
+    namePrompt.classList.add("hidden");
+
+    startDialogue();
+}
+
+
+if (nameContinue) {
+
+    nameContinue.addEventListener(
+        "click",
+        savePlayerName
+    );
+}
+
+
+if (storyPlayerName) {
+
+    storyPlayerName.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                savePlayerName();
+            }
+        }
+    );
+}
 
 /* =========================================
    COMPLETE STORY DIALOGUE
