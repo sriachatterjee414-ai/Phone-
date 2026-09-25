@@ -1416,43 +1416,27 @@ document.addEventListener(
 function finishDialogue() {
 
     if (dialogueBox) {
-
-        dialogueBox.classList.add(
-            "hidden"
-        );
+        dialogueBox.classList.add("hidden");
     }
 
-
-    /*
-        Ryan returns to neutral.
-    */
-
-    changeOfficerExpression(
-        "neutral"
-    );
+    changeOfficerExpression("neutral");
 
 
-    /*
-        Ryan walks away.
-    */
+    /* ================================
+       RYAN LEAVES
+    ================================= */
 
     setTimeout(() => {
 
         if (officer) {
 
-            officer.classList.remove(
-                "approach"
-            );
-
+            officer.classList.remove("approach");
 
             officer.style.transform =
                 "translateX(180px) scale(0.98)";
 
-
-            officer.style.opacity =
-                "0";
+            officer.style.opacity = "0";
         }
-
 
         playSound(
             doorOpen,
@@ -1462,19 +1446,30 @@ function finishDialogue() {
     }, 500);
 
 
-    /*
-        Show first gameplay objective.
-    */
+    /* ================================
+       SHOW OBJECTIVE
+    ================================= */
 
     setTimeout(() => {
 
         showObjective();
 
     }, 2200);
-}
 
 
-/* =========================================
+    /* ================================
+       GO TO INVESTIGATION
+       AFTER OBJECTIVE
+    ================================= */
+
+    setTimeout(() => {
+
+        window.location.href =
+            "investigation.html";
+
+    }, 5200);
+
+}/* =========================================
    OBJECTIVE
 ========================================= */
 
