@@ -1,50 +1,1280 @@
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;overflow:hidden}
-body{background:linear-gradient(135deg,#d9dde2,#f5f6f8 48%,#d5d8dc)}
-button{font:inherit}
-.investigation-stage{position:relative;width:100%;height:100%;min-height:700px;background:
-radial-gradient(circle at 72% 20%,rgba(255,255,255,.95),transparent 30%),
-linear-gradient(135deg,#e5e8eb 0%,#f9fafb 48%,#d7dadd 100%);}
-.phone-tab{position:absolute;right:28px;top:45%;z-index:50;border:0;border-radius:16px 0 0 16px;background:#222;color:#fff;padding:14px 12px;font-weight:800;letter-spacing:1.5px;box-shadow:0 8px 24px rgba(0,0,0,.18);cursor:pointer;writing-mode:vertical-rl}
-.phone-tab:hover{background:#333}
-.phone-shell{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(390px,38vw);min-width:300px;aspect-ratio:390/795;transition:opacity .25s,transform .25s;z-index:20}
-.phone-shell.hidden-phone{opacity:0;transform:translate(-50%,-50%) scale(.92);pointer-events:none}
-.phone-frame{width:100%;height:100%;padding:5px;border-radius:53px;background:linear-gradient(145deg,#1b1b1d,#050505 48%,#38383a);box-shadow:0 25px 55px rgba(0,0,0,.35),0 4px 10px rgba(0,0,0,.35)}
-.phone-bezel{position:relative;width:100%;height:100%;border-radius:48px;overflow:hidden;background:#c9ddec;border:3px solid #101010}
-.dynamic-island{position:absolute;z-index:30;left:50%;top:10px;transform:translateX(-50%);width:105px;height:28px;border-radius:20px;background:#050505}
-.screen{position:absolute;inset:0;overflow:hidden}
-.hidden{display:none!important}
-.side-button{position:absolute;background:#111;z-index:-1;border-radius:4px}
-.side-left{left:-5px;width:5px}
-.side-left.top{top:20%;height:42px}.side-left.middle{top:29%;height:62px}.side-right{right:-5px;top:24%;height:95px;width:5px}
-.lock-screen{background:linear-gradient(160deg,#8fc5df 0%,#c5d6df 43%,#e8c9c7 100%);color:#fff}
-.status-bar{position:absolute;left:24px;right:24px;top:15px;height:28px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:650;z-index:4}
-.lock-date{position:absolute;top:112px;left:0;right:0;text-align:center;font-size:17px;font-weight:500}
-.lock-time{position:absolute;top:65px;left:0;right:0;text-align:center;font-size:60px;font-weight:300;letter-spacing:-2px}
-.lock-weather{position:absolute;left:34px;right:34px;top:185px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.lock-weather>div{height:99px;border-radius:19px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.25);padding:14px 16px;position:relative}
-.lock-weather span,.lock-weather strong,.lock-weather b,.lock-weather small{display:block}
-.lock-weather b{font-size:31px;font-weight:400;margin-top:4px}.lock-weather small{font-size:14px;margin-top:3px;opacity:.92}.sun{position:absolute!important;right:14px;top:21px;font-size:31px}
-.lock-bottom{position:absolute;left:32px;right:32px;bottom:28px;display:flex;justify-content:space-between}
-.lock-shortcut{width:45px;height:45px;border-radius:50%;background:rgba(40,40,40,.35);display:grid;place-items:center;font-size:20px}
-.unlock-card{position:absolute;left:22px;right:22px;bottom:90px;background:rgba(255,255,255,.94);color:#30343a;border-radius:24px;padding:14px 14px 16px;box-shadow:0 14px 35px rgba(0,0,0,.18)}
-.unlock-title{text-align:center;font-size:15px;font-weight:800}.unlock-subtitle{text-align:center;font-size:12px;color:#777;margin:2px 0 9px}
-.passcode-dots{display:flex;justify-content:center;gap:8px;margin-bottom:10px}.passcode-dots span{width:8px;height:8px;border:1px solid #555;border-radius:50%}.passcode-dots span.filled{background:#222}
-.passcode-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.passcode-pad button{height:38px;border:0;border-radius:12px;background:#eef0f2;color:#222;font-weight:700;cursor:pointer}.passcode-pad button:active{transform:scale(.97)}
-.passcode-error{height:14px;text-align:center;color:#c33;font-size:11px;margin-top:5px}
-.home-screen{background:linear-gradient(160deg,#9acbe1 0%,#c8d6df 43%,#e6c9ca 100%);color:#fff}
-.home-status{top:14px}
-.home-widget-row{position:absolute;left:28px;right:28px;top:70px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.home-widget{height:95px;border-radius:18px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.25);padding:12px 15px;backdrop-filter:blur(5px)}
-.calendar-widget span,.calendar-widget strong,.calendar-widget small{display:block}.calendar-widget strong{font-size:34px;font-weight:400}.calendar-widget small{font-size:13px}.weather-widget{display:flex;align-items:center;gap:8px}.weather-icon{font-size:31px}.weather-widget strong{font-size:28px;font-weight:400}.weather-widget small{display:block;font-size:12px}
-.app-grid{position:absolute;left:25px;right:25px;top:185px;display:grid;grid-template-columns:repeat(4,1fr);column-gap:10px;row-gap:17px}
-.app-icon{border:0;background:none;color:#fff;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;text-shadow:0 1px 2px rgba(0,0,0,.25)}
-.app-icon .icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;box-shadow:0 6px 12px rgba(0,0,0,.14);font-weight:600}
-.app-icon label{font-size:10px;font-weight:500}
-.icon.green,.dock-icon.green{background:linear-gradient(#5ef28a,#19d86b)}.icon.blue,.dock-icon.blue{background:linear-gradient(#58d7f1,#28b9ec)}.icon.pink,.dock-icon.pink{background:linear-gradient(#ff8da8,#f75c82)}.icon.gray{background:linear-gradient(#eef1f3,#aeb5bc);color:#3b4147}.icon.dark{background:linear-gradient(#60707b,#2d3941)}.icon.photos{background:linear-gradient(135deg,#ffb45c,#f36ca7,#6fc5ee)}.icon.navy{background:linear-gradient(#536d9a,#24395e)}
-.icon.clock{background:#f1f3f4;color:#333}
-.dock{position:absolute;left:23px;right:23px;bottom:16px;height:73px;border-radius:24px;background:rgba(255,255,255,.30);border:1px solid rgba(255,255,255,.35);display:grid;grid-template-columns:repeat(4,1fr);gap:13px;padding:10px 13px;backdrop-filter:blur(8px)}
-.dock-icon{border:0;border-radius:15px;color:#fff;font-size:25px;cursor:pointer;box-shadow:0 4px 9px rgba(0,0,0,.13)}
-.app-screen{background:#fff}.app-screen iframe{width:100%;height:100%;border:0;background:#fff}
-@media(max-height:760px){.phone-shell{height:92vh;width:auto}.app-grid{top:176px;row-gap:11px}.home-widget-row{top:68px}.unlock-card{bottom:72px}}
-@media(max-width:600px){.phone-shell{width:78vw}.phone-tab{right:0}.investigation-stage{min-height:100vh}}
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  width:100%;
+  height:100%;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Segoe UI",
+    sans-serif;
+  overflow:hidden;
+}
+
+body{
+  background:#050505;
+}
+
+button{
+  font:inherit;
+}
+
+
+/* =================================
+   OUTSIDE PHONE
+================================= */
+
+.investigation-stage{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:700px;
+
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      #fff 0,
+      #eceff2 35%,
+      #cdd1d6 100%
+    );
+
+  overflow:hidden;
+}
+
+
+/* =================================
+   PHONE TOGGLE
+================================= */
+
+.phone-tab{
+  position:absolute;
+  right:0;
+  top:45%;
+
+  z-index:100;
+
+  border:0;
+  border-radius:15px 0 0 15px;
+
+  background:#171717;
+  color:#fff;
+
+  padding:14px 10px;
+
+  font-weight:800;
+  letter-spacing:1.5px;
+
+  cursor:pointer;
+
+  writing-mode:vertical-rl;
+
+  box-shadow:0 8px 25px #0003;
+}
+
+
+/* =================================
+   PHONE BODY
+================================= */
+
+.phone-shell{
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
+  transform:
+    translate(-50%,-50%);
+
+  width:min(390px,38vw);
+
+  min-width:300px;
+
+  aspect-ratio:390/795;
+
+  transition:.25s;
+
+  z-index:20;
+}
+
+.phone-shell.hidden-phone{
+  opacity:0;
+
+  transform:
+    translate(-50%,-50%)
+    scale(.92);
+
+  pointer-events:none;
+}
+
+.phone-frame{
+  width:100%;
+  height:100%;
+
+  padding:5px;
+
+  border-radius:53px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #4a4a4d,
+      #080808 42%,
+      #27272a
+    );
+
+  box-shadow:
+    0 30px 70px #0007,
+    0 5px 15px #0005;
+}
+
+.phone-bezel{
+  position:relative;
+
+  width:100%;
+  height:100%;
+
+  border-radius:48px;
+
+  overflow:hidden;
+
+  background:#111;
+
+  border:3px solid #050505;
+}
+
+.dynamic-island{
+  position:absolute;
+
+  z-index:40;
+
+  left:50%;
+  top:10px;
+
+  transform:
+    translateX(-50%);
+
+  width:105px;
+  height:29px;
+
+  border-radius:20px;
+
+  background:#000;
+}
+
+
+/* =================================
+   GENERAL SCREEN
+================================= */
+
+.screen{
+  position:absolute;
+
+  inset:0;
+
+  overflow:hidden;
+}
+
+.hidden{
+  display:none!important;
+}
+
+
+/* =================================
+   LOCK SCREEN
+================================= */
+
+.lock-screen{
+
+  background:
+
+    radial-gradient(
+      ellipse at 48% 45%,
+      rgba(255,55,145,.82) 0 14%,
+      rgba(255,115,180,.45) 28%,
+      transparent 53%
+    ),
+
+    radial-gradient(
+      ellipse at 18% 58%,
+      rgba(244,74,160,.75),
+      transparent 44%
+    ),
+
+    linear-gradient(
+      145deg,
+      #e8b7bd,
+      #f7c9d1 50%,
+      #e9b7bd
+    );
+
+  color:#fff;
+}
+
+.lock-screen:after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    radial-gradient(
+      ellipse at 58% 56%,
+      rgba(255,255,255,.25),
+      transparent 40%
+    );
+
+  filter:blur(20px);
+
+  pointer-events:none;
+}
+
+
+/* STATUS BAR */
+
+.ios-status{
+
+  position:absolute;
+
+  left:25px;
+  right:25px;
+  top:15px;
+
+  height:24px;
+
+  display:flex;
+
+  justify-content:space-between;
+  align-items:center;
+
+  font-size:13px;
+
+  font-weight:700;
+
+  z-index:10;
+}
+
+.status-icons{
+  letter-spacing:2px;
+  font-size:11px;
+}
+
+
+/* LOCK DATE */
+
+.lock-date{
+
+  position:absolute;
+
+  top:67px;
+
+  left:0;
+  right:0;
+
+  text-align:center;
+
+  font-size:17px;
+
+  font-weight:600;
+
+  z-index:3;
+}
+
+
+/* LOCK TIME */
+
+.lock-time{
+
+  position:absolute;
+
+  top:88px;
+
+  left:0;
+  right:0;
+
+  text-align:center;
+
+  font-size:66px;
+
+  font-weight:300;
+
+  letter-spacing:-3px;
+
+  z-index:3;
+}
+
+
+/* BOTTOM BUTTONS */
+
+.lock-bottom-area{
+
+  position:absolute;
+
+  left:29px;
+  right:29px;
+
+  bottom:35px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  z-index:5;
+}
+
+.lock-shortcut{
+
+  width:43px;
+  height:43px;
+
+  border-radius:50%;
+
+  background:
+    rgba(45,45,45,.55);
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:20px;
+}
+
+
+/* PASSCODE TEXT */
+
+.lock-swipe-hint{
+
+  position:absolute;
+
+  left:0;
+  right:0;
+
+  bottom:185px;
+
+  text-align:center;
+
+  font-size:14px;
+
+  font-weight:500;
+
+  line-height:1.35;
+
+  z-index:5;
+}
+
+
+/* PASSCODE AREA */
+
+.passcode-area{
+
+  position:absolute;
+
+  inset:0;
+
+  z-index:20;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  padding-top:235px;
+}
+
+
+/* DOTS */
+
+.passcode-dots{
+
+  display:flex;
+
+  gap:11px;
+
+  height:18px;
+
+  margin-bottom:10px;
+}
+
+.passcode-dots span{
+
+  width:9px;
+  height:9px;
+
+  border:1.5px solid white;
+
+  border-radius:50%;
+
+  background:transparent;
+}
+
+.passcode-dots span.filled{
+  background:white;
+}
+
+
+/* ERROR */
+
+.passcode-error{
+
+  height:18px;
+
+  font-size:11px;
+
+  text-shadow:0 1px 3px #0005;
+}
+
+
+/* KEYPAD */
+
+.passcode-pad{
+
+  width:245px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:13px 17px;
+}
+
+.passcode-pad button{
+
+  width:67px;
+  height:67px;
+
+  margin:auto;
+
+  border:0;
+
+  border-radius:50%;
+
+  background:
+    rgba(75,75,78,.86);
+
+  color:#fff;
+
+  font-size:30px;
+
+  font-weight:300;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 1px 2px #0003;
+}
+
+.passcode-pad button small{
+
+  display:block;
+
+  font-size:8px;
+
+  letter-spacing:1px;
+
+  margin-top:-2px;
+}
+
+.passcode-pad button:active{
+
+  transform:scale(.94);
+
+  background:#999;
+}
+
+
+/* CANCEL */
+
+.cancel-passcode{
+
+  margin-top:12px;
+
+  background:none;
+
+  border:0;
+
+  color:#fff;
+
+  font-size:14px;
+
+  cursor:pointer;
+}
+
+
+/* =================================
+   HOME SCREEN
+================================= */
+
+.home-screen{
+
+  background:
+
+    linear-gradient(
+      180deg,
+      rgba(255,220,229,.75),
+      rgba(244,201,216,.86)
+    ),
+
+    radial-gradient(
+      circle at 28% 35%,
+      #ff5caa 0,
+      transparent 31%
+    ),
+
+    radial-gradient(
+      circle at 85% 72%,
+      #c9efff 0,
+      transparent 36%
+    );
+
+  color:#fff;
+}
+
+.home-screen:before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    radial-gradient(
+      ellipse at 25% 70%,
+      rgba(250,42,139,.6),
+      transparent 35%
+    );
+
+  filter:blur(20px);
+}
+
+
+/* HOME STATUS */
+
+.home-status{
+  color:#fff;
+}
+
+
+/* TOP WIDGET */
+
+.home-header-widget{
+
+  position:absolute;
+
+  top:56px;
+
+  left:43px;
+  right:43px;
+
+  height:105px;
+
+  border:
+    4px solid rgba(255,255,255,.82);
+
+  border-radius:24px;
+
+  padding:11px 17px;
+
+  background:
+    rgba(255,255,255,.08);
+
+  z-index:2;
+}
+
+.script-day{
+
+  font-family:cursive;
+
+  font-size:28px;
+
+  font-style:italic;
+
+  line-height:25px;
+}
+
+.big-widget-time{
+
+  position:absolute;
+
+  right:18px;
+  top:14px;
+
+  font-size:52px;
+
+  font-weight:200;
+
+  letter-spacing:-3px;
+}
+
+.widget-date{
+
+  font-size:13px;
+
+  font-weight:700;
+
+  margin-top:3px;
+}
+
+
+/* HOME CONTENT */
+
+.home-content{
+
+  position:absolute;
+
+  left:42px;
+  right:42px;
+
+  top:176px;
+  bottom:116px;
+
+  z-index:2;
+}
+
+
+/* =================================
+   BATTERY
+================================= */
+
+.battery-widget{
+
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:118px;
+  height:140px;
+
+  border-radius:24px;
+
+  background:
+    rgba(255,240,246,.52);
+
+  color:#171717;
+
+  padding:12px 14px;
+}
+
+.battery-ring{
+
+  width:62px;
+  height:62px;
+
+  border-radius:50%;
+
+  border:
+    5px solid rgba(160,140,150,.25);
+
+  border-top-color:#25d86a;
+  border-right-color:#25d86a;
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:24px;
+
+  margin-bottom:7px;
+}
+
+.battery-widget strong{
+
+  display:block;
+
+  font-size:28px;
+
+  font-weight:500;
+}
+
+.battery-widget small{
+
+  font-size:11px;
+}
+
+
+/* =================================
+   FOLDERS
+================================= */
+
+.folder-grid{
+
+  position:absolute;
+
+  right:0;
+  top:0;
+
+  width:168px;
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:15px 10px;
+}
+
+.folder{
+
+  border:0;
+
+  background:none;
+
+  color:#fff;
+
+  cursor:pointer;
+
+  text-align:center;
+
+  padding:0;
+
+  text-shadow:
+    0 1px 3px #0003;
+}
+
+.folder-icons{
+
+  width:58px;
+  height:58px;
+
+  margin:auto;
+
+  border-radius:16px;
+
+  background:
+    rgba(245,245,248,.65);
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:3px;
+
+  padding:7px;
+
+  box-shadow:
+    0 5px 10px #0002;
+}
+
+.folder-icons i{
+
+  background:#fff;
+
+  border-radius:6px;
+
+  color:#777;
+
+  font-style:normal;
+
+  font-size:13px;
+
+  display:grid;
+
+  place-items:center;
+}
+
+.folder b{
+
+  display:block;
+
+  font-size:9px;
+
+  margin-top:5px;
+
+  font-weight:500;
+
+  white-space:nowrap;
+}
+
+
+/* =================================
+   APP ICONS
+================================= */
+
+.standalone-grid{
+
+  position:absolute;
+
+  left:0;
+  top:157px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,62px);
+
+  gap:16px 19px;
+}
+
+.ios-app,
+.dock-app{
+
+  border:0;
+
+  background:none;
+
+  color:#fff;
+
+  cursor:pointer;
+
+  text-shadow:
+    0 1px 3px #0004;
+
+  text-align:center;
+}
+
+.real-icon{
+
+  width:55px;
+  height:55px;
+
+  border-radius:15px;
+
+  display:grid;
+
+  place-items:center;
+
+  margin:auto;
+
+  font-size:31px;
+
+  box-shadow:
+    0 6px 13px #0003;
+}
+
+.ios-app label{
+
+  display:block;
+
+  font-size:9px;
+
+  margin-top:5px;
+}
+
+
+/* INDIVIDUAL APP ICONS */
+
+.phone-icon{
+  background:
+    linear-gradient(#58ed82,#18cf61);
+}
+
+.whatsapp-icon{
+  background:
+    linear-gradient(#65ec88,#16c95d);
+}
+
+.mail-icon{
+  background:
+    linear-gradient(#61d8fa,#269fe9);
+}
+
+.life-icon{
+  background:
+    linear-gradient(#a77af7,#6b45cb);
+}
+
+
+/* =================================
+   MUSIC WIDGET
+================================= */
+
+.music-widget{
+
+  position:absolute;
+
+  right:0;
+  top:157px;
+
+  width:168px;
+  height:140px;
+
+  border:
+    4px solid rgba(255,255,255,.72);
+
+  border-radius:21px;
+
+  background:
+    rgba(255,255,255,.13);
+
+  padding:10px;
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+.music-title{
+
+  font-family:Georgia,serif;
+
+  font-size:13px;
+}
+
+.music-days{
+
+  font-size:7px;
+
+  margin-top:9px;
+
+  opacity:.9;
+}
+
+.music-track{
+
+  position:absolute;
+
+  left:10px;
+  right:10px;
+
+  bottom:11px;
+
+  height:55px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  font-family:Georgia,serif;
+
+  font-size:9px;
+}
+
+.album-art{
+
+  width:39px;
+  height:39px;
+
+  border-radius:5px;
+
+  background:
+    linear-gradient(135deg,#222,#aaa);
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:20px;
+}
+
+.music-track small{
+  font-size:7px;
+}
+
+.music-track b{
+  margin-left:auto;
+  font-size:12px;
+}
+
+
+/* =================================
+   SEARCH
+================================= */
+
+.search-pill{
+
+  position:absolute;
+
+  left:50%;
+
+  transform:
+    translateX(-50%);
+
+  bottom:88px;
+
+  width:100px;
+  height:29px;
+
+  border-radius:16px;
+
+  background:
+    rgba(255,255,255,.62);
+
+  color:#777;
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:11px;
+
+  z-index:3;
+}
+
+
+/* =================================
+   DOCK
+================================= */
+
+.dock{
+
+  position:absolute;
+
+  left:22px;
+  right:22px;
+
+  bottom:13px;
+
+  height:70px;
+
+  border-radius:24px;
+
+  background:
+    rgba(255,255,255,.34);
+
+  border:
+    1px solid rgba(255,255,255,.42);
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:10px;
+
+  padding:8px 12px;
+
+  backdrop-filter:blur(10px);
+
+  z-index:5;
+}
+
+.dock-app{
+  height:54px;
+}
+
+.dock-app .real-icon{
+
+  width:50px;
+  height:50px;
+}
+
+.messenger-app .real-icon{
+
+  background:
+    linear-gradient(#ba67ff,#7c3ef2);
+}
+
+.sms-app .real-icon{
+
+  background:
+    linear-gradient(#62ef83,#22cc63);
+}
+
+.music-app .real-icon{
+
+  background:
+    linear-gradient(#ff667d,#e91e3f);
+}
+
+.safari-app .real-icon{
+
+  background:
+    linear-gradient(#6bd9ff,#2b8cff);
+
+  color:#fff;
+}
+
+
+/* =================================
+   FOLDER SCREEN
+================================= */
+
+.folder-screen{
+
+  background:
+    rgba(25,25,25,.97);
+
+  color:#fff;
+}
+
+.folder-screen .ios-status{
+  color:#fff;
+}
+
+.folder-back{
+
+  position:absolute;
+
+  top:54px;
+  left:18px;
+
+  border:0;
+
+  background:none;
+
+  color:#fff;
+
+  font-size:38px;
+
+  cursor:pointer;
+}
+
+.folder-screen h2{
+
+  text-align:center;
+
+  margin:57px 0 28px;
+
+  font-size:18px;
+
+  font-weight:600;
+}
+
+.folder-apps{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:23px 10px;
+
+  padding:0 25px;
+}
+
+.folder-apps .ios-app{
+  color:#fff;
+}
+
+
+/* =================================
+   EXISTING APP PAGES
+================================= */
+
+.app-screen{
+  background:#fff;
+}
+
+.app-topbar{
+
+  height:58px;
+
+  background:#f7f7f7;
+
+  border-bottom:
+    1px solid #ddd;
+
+  display:grid;
+
+  grid-template-columns:
+    55px 1fr 55px;
+
+  align-items:end;
+
+  padding-bottom:7px;
+
+  position:absolute;
+
+  left:0;
+  right:0;
+  top:0;
+
+  z-index:5;
+}
+
+.app-topbar button{
+
+  border:0;
+
+  background:none;
+
+  font-size:31px;
+
+  cursor:pointer;
+
+  color:#111;
+}
+
+.app-topbar span{
+
+  text-align:center;
+
+  font-weight:700;
+
+  font-size:15px;
+
+  padding-bottom:7px;
+}
+
+.app-screen iframe{
+
+  position:absolute;
+
+  top:58px;
+  bottom:0;
+
+  left:0;
+
+  width:100%;
+  height:calc(100% - 58px);
+
+  border:0;
+
+  background:#fff;
+}
+
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media(max-height:760px){
+
+  .phone-shell{
+
+    height:92vh;
+
+    width:auto;
+  }
+
+  .passcode-area{
+    padding-top:220px;
+  }
+
+  .passcode-pad{
+    gap:8px 15px;
+  }
+
+  .passcode-pad button{
+
+    width:61px;
+    height:61px;
+  }
+
+  .home-header-widget{
+    top:52px;
+  }
+
+  .home-content{
+    top:164px;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .phone-shell{
+    width:78vw;
+  }
+
+  .phone-tab{
+    right:0;
+  }
+
+  .investigation-stage{
+    min-height:100vh;
+  }
+
+}
