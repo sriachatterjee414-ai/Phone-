@@ -5,6 +5,7 @@
 
 html,
 body{
+
     margin:0;
 
     width:100%;
@@ -25,7 +26,17 @@ button{
 }
 
 
+.hidden{
+    display:none!important;
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
 #investigation{
+
     position:relative;
 
     width:100vw;
@@ -42,13 +53,15 @@ button{
 ========================================= */
 
 #room{
+
     position:absolute;
 
     inset:0;
 
-    background:url("room.png")
-               center/cover
-               no-repeat;
+    background:
+        url("room.png")
+        center/cover
+        no-repeat;
 
     filter:brightness(.72);
 
@@ -61,6 +74,7 @@ button{
 ========================================= */
 
 .intro{
+
     position:absolute;
 
     inset:0;
@@ -76,8 +90,6 @@ button{
     align-items:center;
 
     justify-content:center;
-
-    gap:55px;
 }
 
 
@@ -98,7 +110,6 @@ button{
     transform:translateX(-50%);
 
     width:820px;
-
     height:820px;
 
     display:flex;
@@ -109,16 +120,16 @@ button{
 
     pointer-events:none;
 
-    animation:handRise 1.5s cubic-bezier(.2,.8,.2,1)
-               forwards;
-
+    animation:
+        handRise 1.5s
+        cubic-bezier(.2,.8,.2,1)
+        forwards;
 }
 
 
 .intro-hand img{
 
     width:100%;
-
     height:100%;
 
     object-fit:contain;
@@ -126,66 +137,46 @@ button{
     filter:
         drop-shadow(0 20px 35px #000)
         drop-shadow(0 5px 12px rgba(0,0,0,.8));
-
 }
 
-
-/*
-   Hand rises from below the screen.
-*/
 
 @keyframes handRise{
 
     from{
-
         bottom:-55%;
-
     }
 
     to{
-
         bottom:-15%;
-
     }
 
 }
 
 
-/*
-   After START SEARCH,
-   JavaScript adds .hand-leaving
-*/
-
-.intro.hand-leaving
-.intro-hand{
+.intro.hand-leaving .intro-hand{
 
     animation:
         handLeave .9s
         cubic-bezier(.7,0,.9,.3)
         forwards;
-
 }
 
 
 @keyframes handLeave{
 
     from{
-
         bottom:-15%;
-
     }
 
     to{
-
         bottom:-75%;
-
     }
 
 }
 
 
 /* =========================================
-   INTRO DIALOGUE
+   INTRO BOX
 ========================================= */
 
 .intro-box{
@@ -208,8 +199,7 @@ button{
 
     border:1px solid rgba(210,170,105,.7);
 
-    box-shadow:
-        0 15px 45px #000;
+    box-shadow:0 15px 45px #000;
 
     text-align:left;
 
@@ -217,7 +207,6 @@ button{
         dialogueAppear .7s
         ease-out .8s
         both;
-
 }
 
 
@@ -230,7 +219,6 @@ button{
         transform:
             translateX(-50%)
             translateY(25px);
-
     }
 
     to{
@@ -240,7 +228,6 @@ button{
         transform:
             translateX(-50%)
             translateY(0);
-
     }
 
 }
@@ -260,15 +247,13 @@ button{
 
 .intro-box p{
 
-    font:
-        23px Georgia,serif;
+    font:23px Georgia,serif;
 
     line-height:1.45;
 
     margin:0 0 24px;
 
     color:#eee2d2;
-
 }
 
 
@@ -287,7 +272,6 @@ button{
     font-weight:bold;
 
     transition:.2s;
-
 }
 
 
@@ -296,7 +280,6 @@ button{
     background:#e3c18b;
 
     transform:translateY(-2px);
-
 }
 
 
@@ -310,22 +293,17 @@ button{
         introFade .9s
         ease
         forwards;
-
 }
 
 
 @keyframes introFade{
 
     0%{
-
         background:rgba(0,0,0,.30);
-
     }
 
     70%{
-
         background:rgba(0,0,0,.30);
-
     }
 
     100%{
@@ -333,18 +311,8 @@ button{
         background:rgba(0,0,0,0);
 
         pointer-events:none;
-
     }
 
-}
-
-
-/* =========================================
-   HIDDEN
-========================================= */
-
-.hidden{
-    display:none!important;
 }
 
 
@@ -361,7 +329,6 @@ button{
     z-index:10;
 
     opacity:0;
-
 }
 
 
@@ -371,22 +338,17 @@ button{
         searchAppear .8s
         ease
         forwards;
-
 }
 
 
 @keyframes searchAppear{
 
     from{
-
         opacity:0;
-
     }
 
     to{
-
         opacity:1;
-
     }
 
 }
@@ -403,7 +365,6 @@ button{
     top:24px;
 
     left:30px;
-
     right:30px;
 
     display:flex;
@@ -411,7 +372,6 @@ button{
     justify-content:space-between;
 
     align-items:center;
-
 }
 
 
@@ -424,7 +384,6 @@ button{
     letter-spacing:3px;
 
     color:#c9a46b;
-
 }
 
 
@@ -433,7 +392,6 @@ button{
     font-size:19px;
 
     letter-spacing:4px;
-
 }
 
 
@@ -450,12 +408,11 @@ button{
     cursor:pointer;
 
     font-weight:bold;
-
 }
 
 
 /* =========================================
-   LOCATION OPTIONS
+   LOCATIONS
 ========================================= */
 
 .location-menu{
@@ -474,7 +431,6 @@ button{
         repeat(3,240px);
 
     gap:20px;
-
 }
 
 
@@ -495,11 +451,9 @@ button{
 
     cursor:pointer;
 
-    box-shadow:
-        0 8px 25px #000;
+    box-shadow:0 8px 25px #000;
 
     transition:.2s;
-
 }
 
 
@@ -507,9 +461,7 @@ button{
 
     transform:translateY(-4px);
 
-    background:
-        rgba(40,25,15,.95);
-
+    background:rgba(40,25,15,.95);
 }
 
 
@@ -522,7 +474,6 @@ button{
     letter-spacing:3px;
 
     margin-bottom:9px;
-
 }
 
 
@@ -533,7 +484,6 @@ button{
     line-height:1.4;
 
     color:#cdbfae;
-
 }
 
 
@@ -556,7 +506,6 @@ button{
     color:#e8cda3;
 
     text-align:center;
-
 }
 
 
@@ -569,15 +518,13 @@ button{
     position:absolute;
 
     left:30px;
-
     right:30px;
 
     bottom:18px;
 
-    height:120px;
+    height:125px;
 
-    background:
-        rgba(11,8,6,.94);
+    background:rgba(11,8,6,.96);
 
     border:
         1px solid
@@ -588,7 +535,18 @@ button{
     box-shadow:
         0 -10px 35px
         rgba(0,0,0,.7);
+}
 
+
+.inventory-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:7px;
 }
 
 
@@ -599,9 +557,16 @@ button{
     letter-spacing:3px;
 
     color:#c9a46b;
+}
 
-    margin-bottom:7px;
 
+.inventory-hint{
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    color:#756b60;
 }
 
 
@@ -612,14 +577,12 @@ button{
     gap:9px;
 
     height:78px;
-
 }
 
 
 .inventory-slot{
 
     width:74px;
-
     height:74px;
 
     border:
@@ -637,17 +600,47 @@ button{
 
     position:relative;
 
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+
+.inventory-slot:hover{
+
+    border-color:#e8cda3;
+
+    background:
+        rgba(201,164,107,.12);
+
+    transform:translateY(-3px);
+}
+
+
+.inventory-slot.empty{
+
+    cursor:default;
+}
+
+
+.inventory-slot.empty:hover{
+
+    transform:none;
+
+    border-color:
+        rgba(190,150,95,.45);
+
+    background:
+        rgba(255,255,255,.035);
 }
 
 
 .inventory-slot img{
 
     max-width:88%;
-
     max-height:88%;
 
     object-fit:contain;
-
 }
 
 
@@ -658,7 +651,6 @@ button{
     bottom:2px;
 
     left:3px;
-
     right:3px;
 
     font-size:8px;
@@ -668,8 +660,205 @@ button{
     color:#d8c6ae;
 
     background:
-        rgba(0,0,0,.55);
+        rgba(0,0,0,.65);
+}
 
+
+/* =========================================
+   INSPECT OVERLAY
+========================================= */
+
+.inspect-overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:100;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        rgba(0,0,0,.78);
+}
+
+
+.inspect-window{
+
+    position:relative;
+
+    width:500px;
+
+    min-height:460px;
+
+    padding:35px;
+
+    background:#100b08;
+
+    border:1px solid #c9a46b;
+
+    box-shadow:
+        0 0 45px #000;
+
+    text-align:center;
+
+    animation:
+        inspectAppear .25s ease;
+}
+
+
+@keyframes inspectAppear{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.94);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+    }
+
+}
+
+
+.close-inspect{
+
+    position:absolute;
+
+    top:10px;
+
+    right:14px;
+
+    width:32px;
+    height:32px;
+
+    border:0;
+
+    background:transparent;
+
+    color:#c9a46b;
+
+    font-size:26px;
+
+    cursor:pointer;
+}
+
+
+.inspect-label{
+
+    color:#806544;
+
+    letter-spacing:4px;
+
+    font-size:11px;
+
+    margin-bottom:20px;
+}
+
+
+.inspect-image{
+
+    width:170px;
+    height:150px;
+
+    object-fit:contain;
+
+    margin-bottom:12px;
+
+    filter:
+        drop-shadow(0 8px 15px #000);
+}
+
+
+.inspect-window h2{
+
+    margin:5px 0 12px;
+
+    color:#e8cda3;
+
+    letter-spacing:2px;
+
+    font-size:18px;
+}
+
+
+.inspect-window p{
+
+    min-height:55px;
+
+    margin:0 auto 25px;
+
+    max-width:390px;
+
+    color:#bdb0a0;
+
+    line-height:1.6;
+
+    font-size:12px;
+}
+
+
+.inspect-actions{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+}
+
+
+.repair-button,
+.secondary-button{
+
+    padding:11px 20px;
+
+    cursor:pointer;
+
+    letter-spacing:1px;
+}
+
+
+.repair-button{
+
+    background:#c9a46b;
+
+    color:#26170e;
+
+    border:1px solid #e3c18b;
+
+    font-weight:bold;
+}
+
+
+.repair-button:hover{
+
+    background:#e3c18b;
+}
+
+
+.secondary-button{
+
+    background:#120c08;
+
+    color:#e8cda3;
+
+    border:1px solid #806544;
+}
+
+
+.secondary-button:hover{
+
+    background:#26170f;
 }
 
 
@@ -687,7 +876,7 @@ button{
 
     transform:translateX(-50%);
 
-    z-index:50;
+    z-index:200;
 
     padding:12px 22px;
 
@@ -703,14 +892,12 @@ button{
     pointer-events:none;
 
     transition:.25s;
-
 }
 
 
 .toast.show{
 
     opacity:1;
-
 }
 
 
@@ -723,9 +910,7 @@ button{
     .intro-hand{
 
         width:650px;
-
         height:650px;
-
     }
 
 
@@ -736,7 +921,6 @@ button{
         width:320px;
 
         top:42%;
-
     }
 
 
@@ -745,7 +929,6 @@ button{
         width:430px;
 
         bottom:7%;
-
     }
 
 }
@@ -756,9 +939,7 @@ button{
     .intro-hand{
 
         width:560px;
-
         height:560px;
-
     }
 
 
@@ -767,7 +948,6 @@ button{
         bottom:4%;
 
         padding:20px 25px;
-
     }
 
 
@@ -776,7 +956,6 @@ button{
         font-size:19px;
 
         margin-bottom:15px;
-
     }
 
-}
+    }
