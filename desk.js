@@ -16,11 +16,34 @@ const DESK_OPEN_IMAGE =
 
 
 /* =========================================
-   STORAGE
+   INVENTORY STORAGE
 ========================================= */
 
-const DESK_UNLOCKED_KEY =
-    "brokenPhoneDeskUnlocked";
+/*
+   IMPORTANT:
+
+   The drawer unlock state is NOT stored
+   in localStorage anymore.
+
+   This means:
+
+   Enter desk
+        ↓
+   LOCKED
+
+   Solve puzzle
+        ↓
+   UNLOCKED
+
+   Collect items
+        ↓
+   BACK
+
+   Return later
+        ↓
+   LOCKED AGAIN
+*/
+
 
 const INVENTORY_KEY =
     "brokenPhoneInventory";
@@ -74,6 +97,20 @@ const unlockSound =
 
 const collectSound =
     document.getElementById("collectSound");
+
+
+/* =========================================
+   CURRENT VISIT STATE
+========================================= */
+
+/*
+   This resets every time desk.html is opened.
+
+   false = drawer locked
+   true  = drawer unlocked
+*/
+
+let deskUnlocked = false;
 
 
 /* =========================================
@@ -152,19 +189,6 @@ let matches = 0;
 let boardLocked = false;
 
 let puzzleWon = false;
-
-
-/* =========================================
-   TABLE STATE
-========================================= */
-
-function isDeskUnlocked() {
-
-    return localStorage.getItem(
-        DESK_UNLOCKED_KEY
-    ) === "true";
-
-}
 
 
 /* =========================================
@@ -265,7 +289,9 @@ function playSound(
 
     }
 
+
     audio.currentTime = 0;
+
 
     audio.play().catch(
         () => {}
@@ -339,8 +365,30 @@ function renderInventory() {
 
 
 /* =========================================
-   RESTORE ITEMS
+   RESTORE COLLECTED ITEMS
 ========================================= */
+
+/*
+   IMPORTANT:
+
+   Even though the drawer resets to locked,
+   collected items remain collected.
+
+   Example:
+
+   First visit:
+       Unlock
+       Collect screwdriver
+       Collect battery
+       BACK
+
+   Second visit:
+       Locked
+       Unlock again
+       Screwdriver = gone
+       Battery = gone
+       Key = still available
+*/
 
 function restoreCollectedItems() {
 
@@ -365,6 +413,14 @@ function restoreCollectedItems() {
 
                 }
 
+                else {
+
+                    item.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
             }
         );
 
@@ -378,8 +434,12 @@ function restoreCollectedItems() {
 function updateDesk() {
 
     if (
-        isDeskUnlocked()
+        deskUnlocked
     ) {
+
+        /*
+           Drawer is currently unlocked.
+        */
 
         deskScene.classList.remove(
             "locked"
@@ -400,11 +460,19 @@ function updateDesk() {
         );
 
 
+        /*
+           Hide items already collected.
+        */
+
         restoreCollectedItems();
 
     }
 
     else {
+
+        /*
+           Drawer is currently locked.
+        */
 
         deskScene.classList.remove(
             "open"
@@ -477,12 +545,21 @@ function collectItem(
     }
 
 
+    /*
+       Add item permanently
+       to inventory.
+    */
+
     inventory.push(id);
 
     saveInventory(
         inventory
     );
 
+
+    /*
+       Hide item from drawer.
+    */
 
     element.classList.add(
         "hidden"
@@ -518,10 +595,6 @@ function createBoard() {
         "";
 
 
-    /*
-       Create random board.
-    */
-
     for (
         let i = 0;
         i < TOTAL_TILES;
@@ -537,10 +610,6 @@ function createBoard() {
 
     }
 
-
-    /*
-       Render.
-    */
 
     renderBoard();
 
@@ -633,10 +702,6 @@ function tileClicked(
     }
 
 
-    /*
-       First selection.
-    */
-
     if (
         selectedTile === null
     ) {
@@ -651,10 +716,6 @@ function tileClicked(
     }
 
 
-    /*
-       Same tile.
-    */
-
     if (
         selectedTile === index
     ) {
@@ -668,15 +729,12 @@ function tileClicked(
     }
 
 
-    /*
-       Check adjacency.
-    */
-
     const firstRow =
         Math.floor(
             selectedTile /
             BOARD_SIZE
         );
+
 
     const firstCol =
         selectedTile %
@@ -688,6 +746,7 @@ function tileClicked(
             index /
             BOARD_SIZE
         );
+
 
     const secondCol =
         index %
@@ -705,10 +764,6 @@ function tileClicked(
         );
 
 
-    /*
-       Not adjacent.
-    */
-
     if (
         distance !== 1
     ) {
@@ -724,10 +779,6 @@ function tileClicked(
 
     }
 
-
-    /*
-       Swap.
-    */
 
     const first =
         selectedTile;
@@ -751,10 +802,6 @@ function tileClicked(
 
     renderBoard();
 
-
-    /*
-       Check for matches.
-    */
 
     resolveMatches();
 
@@ -944,10 +991,6 @@ function resolveMatches() {
         findMatches();
 
 
-    /*
-       No match.
-    */
-
     if (
         matched.size === 0
     ) {
@@ -959,11 +1002,6 @@ function resolveMatches() {
 
     }
 
-
-    /*
-       One successful match
-       counts as ONE.
-    */
 
     matches++;
 
@@ -981,12 +1019,6 @@ function resolveMatches() {
             : "Match found.";
 
 
-    /*
-       Remove matched symbols
-       and replace them with
-       new random symbols.
-    */
-
     matched.forEach(
         index => {
 
@@ -1003,10 +1035,6 @@ function resolveMatches() {
     renderBoard();
 
 
-    /*
-       WIN
-    */
-
     if (
         matches >= 10
     ) {
@@ -1017,12 +1045,6 @@ function resolveMatches() {
 
     }
 
-
-    /*
-       Automatically check whether
-       the new random symbols created
-       another match.
-    */
 
     setTimeout(
         () => {
@@ -1065,8 +1087,12 @@ function resolveMatches() {
 
 function openPuzzle() {
 
+    /*
+       Safety check.
+    */
+
     if (
-        isDeskUnlocked()
+        deskUnlocked
     ) {
 
         return;
@@ -1141,10 +1167,16 @@ function finishPuzzle() {
 
 function unlockDesk() {
 
-    localStorage.setItem(
-        DESK_UNLOCKED_KEY,
-        "true"
-    );
+    /*
+       IMPORTANT:
+
+       This is NOT saved to localStorage.
+
+       It only exists while this page
+       is open.
+    */
+
+    deskUnlocked = true;
 
 
     playSound(
@@ -1221,6 +1253,18 @@ document
         "click",
         () => {
 
+            /*
+               Reset drawer for the
+               next visit.
+
+               We don't actually need
+               to save anything because
+               deskUnlocked is temporary.
+            */
+
+            deskUnlocked = false;
+
+
             window.location.href =
                 "investigation.html";
 
@@ -1260,6 +1304,7 @@ document
 music.volume =
     0.18;
 
+
 music.play().catch(
     () => {}
 );
@@ -1268,6 +1313,18 @@ music.play().catch(
 /* =========================================
    INITIALIZE
 ========================================= */
+
+/*
+   Every time this page loads:
+
+       deskUnlocked = false
+
+   Therefore the drawer ALWAYS starts
+   locked.
+*/
+
+deskUnlocked = false;
+
 
 renderInventory();
 
