@@ -12,12 +12,24 @@ const INVENTORY_KEY =
     "brokenPhoneInventory";
 
 
+/* =========================================
+   REQUIRED REPAIR PARTS
+========================================= */
+
 const REQUIRED = [
+
     "precision_screwdriver",
+
     "replacement_battery",
+
     "screen_connector"
+
 ];
 
+
+/* =========================================
+   ITEM DATA
+========================================= */
 
 const ITEM_DATA = {
 
@@ -205,6 +217,16 @@ const useForRepair =
     );
 
 
+const deleteItem =
+    document.getElementById(
+        "deleteItem"
+    );
+
+
+/* =========================================
+   CURRENTLY INSPECTED ITEM
+========================================= */
+
 let inspectedItem = null;
 
 
@@ -217,18 +239,37 @@ function getInventory(){
     try{
 
         return JSON.parse(
+
             localStorage.getItem(
                 INVENTORY_KEY
             )
+
         ) || [];
 
     }
 
-    catch(e){
+    catch(error){
 
         return [];
 
     }
+
+}
+
+
+/* =========================================
+   SAVE INVENTORY
+========================================= */
+
+function saveInventory(inventory){
+
+    localStorage.setItem(
+
+        INVENTORY_KEY,
+
+        JSON.stringify(inventory)
+
+    );
 
 }
 
@@ -241,9 +282,14 @@ function renderInventory(){
 
     slots.innerHTML = "";
 
+
     const inventory =
         getInventory();
 
+
+    /*
+       Always create 8 inventory slots.
+    */
 
     for(
         let i = 0;
@@ -265,9 +311,16 @@ function renderInventory(){
             inventory[i];
 
 
+        /*
+           ITEM EXISTS
+        */
+
         if(
+
             id &&
+
             ITEM_DATA[id]
+
         ){
 
             slot.innerHTML = `
@@ -284,14 +337,28 @@ function renderInventory(){
             `;
 
 
+            /*
+               Click item → inspect.
+            */
+
             slot.addEventListener(
+
                 "click",
+
                 ()=>{
+
                     openInspect(id);
+
                 }
+
             );
 
         }
+
+
+        /*
+           EMPTY SLOT
+        */
 
         else{
 
@@ -309,21 +376,28 @@ function renderInventory(){
     }
 
 
+    /*
+       Count required parts.
+    */
+
     const found =
         REQUIRED.filter(
+
             id =>
                 inventory.includes(id)
+
         ).length;
 
 
     status.textContent =
+
         `Repair parts found: ${found}/${REQUIRED.length}`;
 
 }
 
 
 /* =========================================
-   OPEN INSPECT
+   OPEN INSPECTION
 ========================================= */
 
 function openInspect(id){
@@ -336,12 +410,24 @@ function openInspect(id){
         return;
 
 
+    /*
+       Remember item.
+    */
+
     inspectedItem =
         id;
 
 
+    /*
+       Fill inspection window.
+    */
+
     inspectImage.src =
         data.img;
+
+
+    inspectImage.alt =
+        data.name;
 
 
     inspectName.textContent =
@@ -351,6 +437,44 @@ function openInspect(id){
     inspectDescription.textContent =
         data.description;
 
+
+    /*
+       Required repair parts:
+       ENABLE USE FOR REPAIR.
+    */
+
+    if(data.required){
+
+        useForRepair.disabled =
+            false;
+
+
+        useForRepair.textContent =
+            "USE FOR REPAIR";
+
+    }
+
+
+    /*
+       Unneeded items:
+       DISABLE USE FOR REPAIR.
+    */
+
+    else{
+
+        useForRepair.disabled =
+            true;
+
+
+        useForRepair.textContent =
+            "NOT NEEDED";
+
+    }
+
+
+    /*
+       Open overlay.
+    */
 
     inspectOverlay.classList.remove(
         "hidden"
@@ -363,7 +487,7 @@ function openInspect(id){
 
 
 /* =========================================
-   CLOSE INSPECT
+   CLOSE INSPECTION
 ========================================= */
 
 function closeInspection(){
@@ -379,15 +503,138 @@ function closeInspection(){
 }
 
 
+/* =========================================
+   CLOSE BUTTON
+========================================= */
+
 closeInspect.addEventListener(
+
     "click",
-    closeInspection
+
+    ()=>{
+
+        closeInspection();
+
+    }
+
 );
 
 
+/* =========================================
+   CLOSE BUTTON 2
+========================================= */
+
 closeInspectButton.addEventListener(
+
     "click",
-    closeInspection
+
+    ()=>{
+
+        closeInspection();
+
+    }
+
+);
+
+
+/* =========================================
+   DELETE ITEM
+========================================= */
+
+deleteItem.addEventListener(
+
+    "click",
+
+    ()=>{
+
+        /*
+           Nothing selected.
+        */
+
+        if(!inspectedItem)
+            return;
+
+
+        const data =
+            ITEM_DATA[inspectedItem];
+
+
+        const inventory =
+            getInventory();
+
+
+        /*
+           Find item.
+        */
+
+        const index =
+            inventory.indexOf(
+                inspectedItem
+            );
+
+
+        /*
+           Item isn't in inventory.
+        */
+
+        if(index === -1){
+
+            closeInspection();
+
+            renderInventory();
+
+            return;
+
+        }
+
+
+        /*
+           Remove item.
+        */
+
+        inventory.splice(
+
+            index,
+
+            1
+
+        );
+
+
+        /*
+           Save updated inventory.
+        */
+
+        saveInventory(
+            inventory
+        );
+
+
+        /*
+           Close inspection.
+        */
+
+        closeInspection();
+
+
+        /*
+           Immediately update screen.
+        */
+
+        renderInventory();
+
+
+        play(clickSound);
+
+
+        showToast(
+
+            `${data.name} removed from inventory.`
+
+        );
+
+    }
+
 );
 
 
@@ -396,28 +643,67 @@ closeInspectButton.addEventListener(
 ========================================= */
 
 useForRepair.addEventListener(
+
     "click",
+
     ()=>{
+
+        /*
+           Nothing selected.
+        */
 
         if(!inspectedItem)
             return;
 
 
+        const data =
+            ITEM_DATA[inspectedItem];
+
+
         /*
-           Remember which item
-           the player inspected.
+           Only required parts
+           can be used.
+        */
+
+        if(
+
+            !data ||
+
+            !data.required
+
+        ){
+
+            showToast(
+                "This item is not needed for the repair."
+            );
+
+            return;
+
+        }
+
+
+        /*
+           Remember selected item.
         */
 
         localStorage.setItem(
+
             "brokenPhoneRepairSelectedItem",
+
             inspectedItem
+
         );
 
+
+        /*
+           Go to repair screen.
+        */
 
         window.location.href =
             "repair.html";
 
     }
+
 );
 
 
@@ -462,6 +748,7 @@ function showToast(text){
 
 
     setTimeout(
+
         ()=>{
 
             toast.classList.remove(
@@ -469,7 +756,9 @@ function showToast(text){
             );
 
         },
+
         1800
+
     );
 
 }
@@ -480,19 +769,34 @@ function showToast(text){
 ========================================= */
 
 startSearch.addEventListener(
+
     "click",
+
     ()=>{
+
+        /*
+           Prevent double clicking.
+        */
 
         startSearch.disabled =
             true;
 
+
+        /*
+           Hand leaves.
+        */
 
         intro.classList.add(
             "hand-leaving"
         );
 
 
+        /*
+           Begin intro fade.
+        */
+
         setTimeout(
+
             ()=>{
 
                 intro.classList.add(
@@ -500,11 +804,18 @@ startSearch.addEventListener(
                 );
 
             },
+
             150
+
         );
 
 
+        /*
+           Reveal search screen.
+        */
+
         setTimeout(
+
             ()=>{
 
                 intro.classList.add(
@@ -524,13 +835,17 @@ startSearch.addEventListener(
 
                 play(bgMusic);
 
+
                 renderInventory();
 
             },
+
             1000
+
         );
 
     }
+
 );
 
 
@@ -543,33 +858,52 @@ document
         ".location-choice"
     )
     .forEach(
+
         button => {
 
             button.addEventListener(
+
                 "click",
+
                 ()=>{
 
-                    play(clickSound);
-
-
-                    localStorage.setItem(
-                        "brokenPhoneReturnPage",
-                        "investigation.html"
+                    play(
+                        clickSound
                     );
 
+
+                    /*
+                       Tell location pages
+                       where to return.
+                    */
+
+                    localStorage.setItem(
+
+                        "brokenPhoneReturnPage",
+
+                        "investigation.html"
+
+                    );
+
+
+                    /*
+                       Open location.
+                    */
 
                     window.location.href =
                         button.dataset.page;
 
                 }
+
             );
 
         }
+
     );
 
 
 /* =========================================
-   DONE
+   DONE BUTTON
 ========================================= */
 
 document
@@ -577,24 +911,38 @@ document
         "doneButton"
     )
     .addEventListener(
+
         "click",
+
         ()=>{
 
             const inventory =
                 getInventory();
 
 
+            /*
+               Find missing repair parts.
+            */
+
             const missing =
                 REQUIRED.filter(
+
                     id =>
                         !inventory.includes(id)
+
                 );
 
+
+            /*
+               Still missing parts.
+            */
 
             if(missing.length){
 
                 showToast(
+
                     `You still need ${missing.length} repair part${missing.length > 1 ? "s" : ""}.`
+
                 );
 
                 return;
@@ -602,10 +950,16 @@ document
             }
 
 
+            /*
+               All parts collected.
+               Go to repair.
+            */
+
             window.location.href =
                 "repair.html";
 
         }
+
     );
 
 
@@ -614,12 +968,19 @@ document
 ========================================= */
 
 document.addEventListener(
+
     "keydown",
+
     event => {
 
         if(
+
             event.key === "Escape" &&
-            !inspectOverlay.classList.contains("hidden")
+
+            !inspectOverlay.classList.contains(
+                "hidden"
+            )
+
         ){
 
             closeInspection();
@@ -627,18 +988,22 @@ document.addEventListener(
         }
 
     }
+
 );
 
 
 /* =========================================
-   RESTORE
+   RESTORE INVENTORY
 ========================================= */
 
 window.addEventListener(
+
     "pageshow",
+
     ()=>{
 
         renderInventory();
 
     }
+
 );
