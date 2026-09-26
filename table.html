@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +6,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width,initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
 <title>Broken Phone — Work Table</title>
 
@@ -22,202 +21,235 @@
 <main id="tableGame">
 
 
-<!-- =========================================
-     TABLE BACKGROUND
-========================================= -->
+    <!-- =========================================
+         TABLE BACKGROUND
+    ========================================== -->
 
-<div id="tableScene"></div>
-
-
-<!-- =========================================
-     TOP UI
-========================================= -->
-
-<button id="backButton">
-    ← BACK
-</button>
-
-<div class="title">
-    WORK TABLE
-</div>
-
-<div class="hint">
-    Search the surface carefully.
-</div>
+    <div id="tableScene"></div>
 
 
-<!-- =========================================
-     COLLECTIBLE ITEMS
-========================================= -->
+    <!-- =========================================
+         TOP UI
+    ========================================== -->
 
-<button class="item tweezers"
-        data-item="screen_connector">
-
-    <img src="screen_connector.png"
-         alt="Screen connector">
-
-    <span>COLLECT</span>
-
-</button>
+    <button id="backButton">
+        ← BACK
+    </button>
 
 
-<button class="item tape"
-        data-item="cassette_tape">
-
-    <img src="cassette_tape.png"
-         alt="Cassette tape">
-
-    <span>COLLECT</span>
-
-</button>
-
-
-<!-- =========================================
-     HIDDEN LEAF PUZZLE AREA
-========================================= -->
-
-<button id="leafPuzzleTrigger"
-        aria-label="Inspect scattered objects">
-
-    <span>INSPECT</span>
-
-</button>
-
-
-<!-- =========================================
-     INVENTORY
-========================================= -->
-
-<section class="inventory-panel">
-
-    <div class="inventory-title">
-        INVENTORY
+    <div class="title">
+        WORK TABLE
     </div>
 
-    <div id="inventorySlots"
-         class="inventory-slots">
+
+    <div class="hint">
+        Search the surface carefully.
     </div>
 
-</section>
+
+    <!-- =========================================
+         LOCKED TABLE
+         BUTTON TO START UNLOCK MINI-GAME
+    ========================================== -->
+
+    <button id="unlockButton">
+
+        UNLOCK
+
+    </button>
 
 
-<div id="toast"
-     class="toast">
-</div>
+    <!-- =========================================
+         ITEMS
+         ONLY VISIBLE AFTER TABLE IS UNLOCKED
+    ========================================== -->
+
+    <div id="itemsLayer" class="hidden">
 
 
-<!-- =========================================
-     FLIP & MATCH MINI GAME
-========================================= -->
+        <button class="item tweezers"
+                data-item="screen_connector">
 
-<div id="puzzleOverlay"
-     class="hidden">
+            <img src="screen_connector.png"
+                 alt="Screen connector">
 
-    <div id="puzzleWindow">
+            <span>
+                COLLECT
+            </span>
 
-
-        <button id="closePuzzle"
-                aria-label="Close puzzle">
-            ×
         </button>
 
 
-        <div class="puzzleTitle">
-            FIND THE MATCH
-        </div>
+        <button class="item tape"
+                data-item="cassette_tape">
 
+            <img src="cassette_tape.png"
+                 alt="Cassette tape">
 
-        <div class="puzzleInstruction">
-
-            These objects look similar.
-            Find the two matching leaves.
-
-        </div>
-
-
-        <div id="leafGrid">
-        </div>
-
-
-        <div id="puzzleMessage">
-        </div>
-
-
-        <button id="continuePuzzle"
-                class="hidden">
-
-            CONTINUE
+            <span>
+                COLLECT
+            </span>
 
         </button>
 
-    </div>
 
-</div>
+        <!-- Optional hidden inspection area -->
 
+        <button id="leafPuzzleTrigger"
+                aria-label="Inspect scattered objects">
 
-<!-- =========================================
-     EVIDENCE FOUND
-========================================= -->
-
-<div id="clueOverlay"
-     class="hidden">
-
-    <div id="clueWindow">
-
-
-        <div class="clueTitle">
-            EVIDENCE FOUND
-        </div>
-
-
-        <div class="clueText">
-
-            A small leaf is caught beneath
-            the tape.
-
-            <br><br>
-
-            It isn't from any plant inside
-            the precinct.
-
-            <br><br>
-
-            <strong>
-                CLUE ADDED TO INVESTIGATION.
-            </strong>
-
-        </div>
-
-
-        <button id="closeClue">
-
-            CONTINUE
+            <span>
+                INSPECT
+            </span>
 
         </button>
 
+
     </div>
 
-</div>
+
+    <!-- =========================================
+         INVENTORY
+    ========================================== -->
+
+    <section class="inventory-panel">
+
+        <div class="inventory-title">
+            INVENTORY
+        </div>
 
 
-<!-- =========================================
-     AUDIO
-========================================= -->
+        <div id="inventorySlots"
+             class="inventory-slots">
+        </div>
 
-<audio id="music"
-       src="investigation_music.mp3"
-       loop>
-</audio>
+    </section>
 
 
-<audio id="collectSound"
-       src="item_collect.mp3">
-</audio>
+    <!-- =========================================
+         TOAST
+    ========================================== -->
+
+    <div id="toast"
+         class="toast">
+    </div>
 
 
-<audio id="flipSound"
-       src="item_collect.mp3">
-</audio>
+    <!-- =========================================
+         MINI-GAME
+    ========================================== -->
+
+    <div id="puzzleOverlay"
+         class="hidden">
+
+        <div id="puzzleWindow">
+
+
+            <button id="closePuzzle"
+                    aria-label="Close puzzle">
+
+                ×
+
+            </button>
+
+
+            <div class="puzzleTitle">
+                FIND THE MATCH
+            </div>
+
+
+            <div class="puzzleInstruction">
+
+                Some of these objects look similar.
+                Find the two matching leaves.
+
+            </div>
+
+
+            <div id="leafGrid">
+            </div>
+
+
+            <div id="puzzleMessage">
+            </div>
+
+
+            <button id="continuePuzzle"
+                    class="hidden">
+
+                UNLOCK TABLE
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         EVIDENCE WINDOW
+    ========================================== -->
+
+    <div id="clueOverlay"
+         class="hidden">
+
+        <div id="clueWindow">
+
+
+            <div class="clueTitle">
+                TABLE UNLOCKED
+            </div>
+
+
+            <div class="clueText">
+
+                The lock clicks open.
+
+                <br><br>
+
+                The inside of the table is now
+                accessible.
+
+                <br><br>
+
+                <strong>
+                    SEARCH THE TABLE.
+                </strong>
+
+            </div>
+
+
+            <button id="closeClue">
+
+                CONTINUE
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         AUDIO
+    ========================================== -->
+
+    <audio id="music"
+           src="investigation_music.mp3"
+           loop>
+    </audio>
+
+
+    <audio id="collectSound"
+           src="item_collect.mp3">
+    </audio>
+
+
+    <audio id="flipSound"
+           src="item_collect.mp3">
+    </audio>
 
 
 </main>
@@ -228,4 +260,3 @@
 </body>
 
 </html>
-```
