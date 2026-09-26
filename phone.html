@@ -1,110 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Victim Phone</title>
+    <meta charset="UTF-8">
 
-<link rel="stylesheet" href="phone.css">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Victim Phone</title>
+
+    <link
+        rel="stylesheet"
+        href="phone.css"
+    >
+
 </head>
+
 
 <body>
 
+
+<!-- =====================================================
+     GLOBAL VICTIM INFO BUTTON
+===================================================== -->
+
+<button
+    id="victimInfoButton"
+    class="victim-info-tab"
+>
+
+    <span class="victim-tab-icon">▣</span>
+
+    <span class="victim-tab-text">
+        VICTIM INFO
+    </span>
+
+</button>
+
+
+
 <div id="phoneGame">
 
-    <!-- =========================================
+
+    <!-- =================================================
          PHONE BODY
-    ========================================= -->
+    ================================================= -->
 
     <div class="phone-body">
 
+
         <div class="phone-side-button side-left"></div>
+
         <div class="phone-side-button side-right"></div>
+
+
 
         <div class="phone-screen">
 
-            <!-- =================================
+
+            <!-- =================================================
                  STATUS BAR
-            ================================== -->
+            ================================================= -->
 
             <div class="status-bar">
 
-                <span id="statusTime">10:42</span>
+                <span id="statusTime">
+                    10:42
+                </span>
+
 
                 <div class="status-icons">
+
                     <span>▮▮▮</span>
+
                     <span>Wi-Fi</span>
+
                     <span>▰</span>
+
                 </div>
 
             </div>
 
 
-            <!-- =================================
-                 LOCK SCREEN
-            ================================== -->
 
-            <section id="lockScreen" class="screen">
+            <!-- =================================================
+                 LOCK SCREEN
+            ================================================= -->
+
+            <section
+                id="lockScreen"
+                class="screen"
+            >
 
                 <div class="lock-wallpaper"></div>
 
+
                 <div class="lock-content">
 
-                    <div class="lock-time" id="lockTime">
+
+                    <div
+                        class="lock-time"
+                        id="lockTime"
+                    >
                         10:42
                     </div>
+
 
                     <div class="lock-date">
                         Tuesday, October 17
                     </div>
 
+
                     <div class="lock-icon">
                         🔒
                     </div>
+
 
                     <div class="lock-text">
                         Enter Passcode
                     </div>
 
+
                     <div
                         id="passwordDots"
                         class="password-dots"
                     >
+
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
+
                     </div>
+
 
                     <div
                         id="passwordError"
                         class="password-error"
                     ></div>
 
+
+                    <!-- =========================================
+                         KEYPAD
+                    ========================================== -->
+
                     <div class="keypad">
 
-                        <button data-key="1">1</button>
-                        <button data-key="2">2</button>
-                        <button data-key="3">3</button>
 
-                        <button data-key="4">4</button>
-                        <button data-key="5">5</button>
-                        <button data-key="6">6</button>
+                        <button data-key="1">
+                            1
+                        </button>
 
-                        <button data-key="7">7</button>
-                        <button data-key="8">8</button>
-                        <button data-key="9">9</button>
+                        <button data-key="2">
+                            2
+                        </button>
+
+                        <button data-key="3">
+                            3
+                        </button>
+
+
+                        <button data-key="4">
+                            4
+                        </button>
+
+                        <button data-key="5">
+                            5
+                        </button>
+
+                        <button data-key="6">
+                            6
+                        </button>
+
+
+                        <button data-key="7">
+                            7
+                        </button>
+
+                        <button data-key="8">
+                            8
+                        </button>
+
+                        <button data-key="9">
+                            9
+                        </button>
+
 
                         <button class="empty-key"></button>
 
-                        <button data-key="0">0</button>
+
+                        <button data-key="0">
+                            0
+                        </button>
+
 
                         <button id="deleteKey">
                             ←
                         </button>
 
+
                     </div>
+
+
 
                     <button
                         id="unlockButton"
@@ -113,14 +213,16 @@
                         UNLOCK
                     </button>
 
+
                 </div>
 
             </section>
 
 
-            <!-- =================================
+
+            <!-- =================================================
                  HOME SCREEN
-            ================================== -->
+            ================================================= -->
 
             <section
                 id="homeScreen"
@@ -129,77 +231,127 @@
 
                 <div class="wallpaper"></div>
 
+
                 <div class="home-content">
+
 
                     <div class="home-date">
                         Tuesday, October 17
                     </div>
 
-                    <div class="home-clock" id="homeClock">
+
+                    <div
+                        class="home-clock"
+                        id="homeClock"
+                    >
                         10:42
                     </div>
 
 
+
                     <div class="app-grid">
+
 
                         <button
                             class="app"
                             data-app="messages"
                         >
-                            <div class="app-icon messages-icon">
+
+                            <div
+                                class="app-icon messages-icon"
+                            >
                                 💬
                             </div>
-                            <span>Messages</span>
+
+                            <span>
+                                Messages
+                            </span>
+
                         </button>
+
 
 
                         <button
                             class="app"
                             data-app="gallery"
                         >
-                            <div class="app-icon gallery-icon">
+
+                            <div
+                                class="app-icon gallery-icon"
+                            >
                                 🖼
                             </div>
-                            <span>Gallery</span>
+
+                            <span>
+                                Gallery
+                            </span>
+
                         </button>
+
 
 
                         <button
                             class="app"
                             data-app="contacts"
                         >
-                            <div class="app-icon contacts-icon">
+
+                            <div
+                                class="app-icon contacts-icon"
+                            >
                                 👤
                             </div>
-                            <span>Contacts</span>
+
+                            <span>
+                                Contacts
+                            </span>
+
                         </button>
+
 
 
                         <button
                             class="app"
                             data-app="phone"
                         >
-                            <div class="app-icon phone-icon">
+
+                            <div
+                                class="app-icon phone-icon"
+                            >
                                 ☎
                             </div>
-                            <span>Phone</span>
+
+                            <span>
+                                Phone
+                            </span>
+
                         </button>
+
 
 
                         <button
                             class="app"
                             data-app="notes"
                         >
-                            <div class="app-icon notes-icon">
+
+                            <div
+                                class="app-icon notes-icon"
+                            >
                                 📝
                             </div>
-                            <span>Notes</span>
+
+                            <span>
+                                Notes
+                            </span>
+
                         </button>
+
 
                     </div>
 
 
+
                     <div class="dock">
+
 
                         <button
                             class="dock-app"
@@ -208,12 +360,14 @@
                             ☎
                         </button>
 
+
                         <button
                             class="dock-app"
                             data-app="messages"
                         >
                             💬
                         </button>
+
 
                         <button
                             class="dock-app"
@@ -222,25 +376,28 @@
                             🖼
                         </button>
 
+
                     </div>
+
 
                 </div>
 
             </section>
 
 
-            <!-- =================================
-                 APP CONTAINER
-            ================================== -->
+
+            <!-- =================================================
+                 APP SCREEN
+            ================================================= -->
 
             <section
                 id="appScreen"
                 class="screen hidden"
             >
 
-                <!-- APP HEADER -->
 
                 <div class="app-header">
+
 
                     <button
                         id="appBack"
@@ -249,18 +406,22 @@
                         ‹
                     </button>
 
+
                     <div id="appTitle">
                         App
                     </div>
 
+
                     <div class="header-space"></div>
+
 
                 </div>
 
 
-                <!-- =================================
+
+                <!-- =================================================
                      MESSAGES
-                ================================== -->
+                ================================================= -->
 
                 <div
                     id="messagesApp"
@@ -268,6 +429,7 @@
                 >
 
                     <div class="messages-list">
+
 
                         <div
                             class="message-row"
@@ -278,12 +440,21 @@
                                 ?
                             </div>
 
+
                             <div class="message-info">
 
                                 <div class="message-top">
-                                    <strong>Unknown Number</strong>
-                                    <span>2:50 PM</span>
+
+                                    <strong>
+                                        Unknown Number
+                                    </strong>
+
+                                    <span>
+                                        2:50 PM
+                                    </span>
+
                                 </div>
+
 
                                 <div class="message-preview">
                                     Are you still coming tonight?
@@ -292,6 +463,7 @@
                             </div>
 
                         </div>
+
 
 
                         <div
@@ -303,12 +475,21 @@
                                 E
                             </div>
 
+
                             <div class="message-info">
 
                                 <div class="message-top">
-                                    <strong>Emma</strong>
-                                    <span>9:54 AM</span>
+
+                                    <strong>
+                                        Emma
+                                    </strong>
+
+                                    <span>
+                                        9:54 AM
+                                    </span>
+
                                 </div>
+
 
                                 <div class="message-preview">
                                     Hehe
@@ -317,6 +498,7 @@
                             </div>
 
                         </div>
+
 
 
                         <div
@@ -328,12 +510,21 @@
                                 ?
                             </div>
 
+
                             <div class="message-info">
 
                                 <div class="message-top">
-                                    <strong>52927</strong>
-                                    <span>9:47 AM</span>
+
+                                    <strong>
+                                        52927
+                                    </strong>
+
+                                    <span>
+                                        9:47 AM
+                                    </span>
+
                                 </div>
+
 
                                 <div class="message-preview">
                                     Don't forget what we discussed.
@@ -342,6 +533,7 @@
                             </div>
 
                         </div>
+
 
 
                         <div
@@ -353,12 +545,21 @@
                                 E
                             </div>
 
+
                             <div class="message-info">
 
                                 <div class="message-top">
-                                    <strong>Evelyn</strong>
-                                    <span>Yesterday</span>
+
+                                    <strong>
+                                        Evelyn
+                                    </strong>
+
+                                    <span>
+                                        Yesterday
+                                    </span>
+
                                 </div>
+
 
                                 <div class="message-preview">
                                     Aaa
@@ -367,6 +568,7 @@
                             </div>
 
                         </div>
+
 
 
                         <div
@@ -378,12 +580,21 @@
                                 J
                             </div>
 
+
                             <div class="message-info">
 
                                 <div class="message-top">
-                                    <strong>Jenzia</strong>
-                                    <span>Yesterday</span>
+
+                                    <strong>
+                                        Jenzia
+                                    </strong>
+
+                                    <span>
+                                        Yesterday
+                                    </span>
+
                                 </div>
+
 
                                 <div class="message-preview">
                                     We need to talk.
@@ -392,6 +603,7 @@
                             </div>
 
                         </div>
+
 
 
                         <div
@@ -403,12 +615,21 @@
                                 M
                             </div>
 
+
                             <div class="message-info">
 
                                 <div class="message-top">
-                                    <strong>Mom</strong>
-                                    <span>Tuesday</span>
+
+                                    <strong>
+                                        Mom
+                                    </strong>
+
+                                    <span>
+                                        Tuesday
+                                    </span>
+
                                 </div>
+
 
                                 <div class="message-preview">
                                     Call me when you get home.
@@ -417,6 +638,7 @@
                             </div>
 
                         </div>
+
 
 
                         <div
@@ -428,12 +650,21 @@
                                 ?
                             </div>
 
+
                             <div class="message-info">
 
                                 <div class="message-top">
-                                    <strong>32665</strong>
-                                    <span>Saturday</span>
+
+                                    <strong>
+                                        32665
+                                    </strong>
+
+                                    <span>
+                                        Saturday
+                                    </span>
+
                                 </div>
+
 
                                 <div class="message-preview">
                                     Your verification code is...
@@ -442,6 +673,7 @@
                             </div>
 
                         </div>
+
 
 
                         <div
@@ -453,12 +685,21 @@
                                 ?
                             </div>
 
+
                             <div class="message-info">
 
                                 <div class="message-top">
-                                    <strong>28581</strong>
-                                    <span>6/2/23</span>
+
+                                    <strong>
+                                        28581
+                                    </strong>
+
+                                    <span>
+                                        6/2/23
+                                    </span>
+
                                 </div>
+
 
                                 <div class="message-preview">
                                     Your account notification...
@@ -468,14 +709,16 @@
 
                         </div>
 
+
                     </div>
 
                 </div>
 
 
-                <!-- =================================
+
+                <!-- =================================================
                      CHAT
-                ================================== -->
+                ================================================= -->
 
                 <div
                     id="chatApp"
@@ -490,14 +733,16 @@
                 </div>
 
 
-                <!-- =================================
+
+                <!-- =================================================
                      GALLERY
-                ================================== -->
+                ================================================= -->
 
                 <div
                     id="galleryApp"
                     class="app-page hidden"
                 >
+
 
                     <div class="gallery-tabs">
 
@@ -511,89 +756,187 @@
 
                     </div>
 
+
                     <div
                         id="galleryGrid"
                         class="gallery-grid"
                     ></div>
 
+
                 </div>
 
 
-                <!-- =================================
+
+                <!-- =================================================
                      CONTACTS
-                ================================== -->
+                ================================================= -->
 
                 <div
                     id="contactsApp"
                     class="app-page hidden"
                 >
 
+
                     <div class="contacts-search">
                         Search Contacts
                     </div>
 
+
                     <div class="contacts-list">
+
 
                         <div
                             class="contact"
                             data-contact="Emma"
                         >
-                            <div class="contact-avatar">E</div>
-                            <div>
-                                <strong>Emma</strong>
-                                <small>+1 555 0134</small>
+
+                            <div class="contact-avatar">
+                                E
                             </div>
+
+                            <div>
+
+                                <strong>
+                                    Emma
+                                </strong>
+
+                                <small>
+                                    +1 555 0134
+                                </small>
+
+                            </div>
+
                         </div>
+
 
 
                         <div
                             class="contact"
                             data-contact="Evelyn"
                         >
-                            <div class="contact-avatar">E</div>
-                            <div>
-                                <strong>Evelyn</strong>
-                                <small>+1 555 0198</small>
+
+                            <div class="contact-avatar">
+                                E
                             </div>
+
+                            <div>
+
+                                <strong>
+                                    Evelyn
+                                </strong>
+
+                                <small>
+                                    +1 555 0198
+                                </small>
+
+                            </div>
+
                         </div>
+
 
 
                         <div
                             class="contact"
                             data-contact="Jenzia"
                         >
-                            <div class="contact-avatar">J</div>
-                            <div>
-                                <strong>Jenzia</strong>
-                                <small>+1 555 0162</small>
+
+                            <div class="contact-avatar">
+                                J
                             </div>
+
+                            <div>
+
+                                <strong>
+                                    Jenzia
+                                </strong>
+
+                                <small>
+                                    +1 555 0162
+                                </small>
+
+                            </div>
+
                         </div>
+
 
 
                         <div
                             class="contact"
                             data-contact="Mom"
                         >
-                            <div class="contact-avatar">M</div>
-                            <div>
-                                <strong>Mom</strong>
-                                <small>+1 555 0117</small>
+
+                            <div class="contact-avatar">
+                                M
                             </div>
+
+                            <div>
+
+                                <strong>
+                                    Mom
+                                </strong>
+
+                                <small>
+                                    +1 555 0117
+                                </small>
+
+                            </div>
+
                         </div>
 
+
                     </div>
+
+
+                    <!-- CONTACT DETAIL -->
+
+                    <div
+                        id="contactView"
+                        class="contact-detail hidden"
+                    >
+
+                        <div
+                            id="contactDetailAvatar"
+                            class="large-avatar"
+                        >
+                            E
+                        </div>
+
+
+                        <h2 id="contactDetailName">
+                            Contact
+                        </h2>
+
+
+                        <p id="contactDetailNumber">
+                            Number
+                        </p>
+
+
+                        <button class="contact-action">
+                            Message
+                        </button>
+
+
+                        <button class="contact-action">
+                            Call
+                        </button>
+
+                    </div>
+
 
                 </div>
 
 
-                <!-- =================================
-                     PHONE
-                ================================== -->
+
+                <!-- =================================================
+                     PHONE APP
+                ================================================= -->
 
                 <div
                     id="phoneApp"
                     class="app-page hidden"
                 >
+
 
                     <div class="phone-tabs">
 
@@ -610,6 +953,7 @@
 
                     <div class="call-list">
 
+
                         <div class="call-row">
 
                             <div class="call-avatar">
@@ -618,7 +962,9 @@
 
                             <div class="call-info">
 
-                                <strong>Emma</strong>
+                                <strong>
+                                    Emma
+                                </strong>
 
                                 <span class="missed">
                                     Incoming • Yesterday
@@ -631,6 +977,7 @@
                         </div>
 
 
+
                         <div class="call-row">
 
                             <div class="call-avatar">
@@ -639,7 +986,9 @@
 
                             <div class="call-info">
 
-                                <strong>Unknown</strong>
+                                <strong>
+                                    Unknown
+                                </strong>
 
                                 <span>
                                     Outgoing • Monday
@@ -652,6 +1001,7 @@
                         </div>
 
 
+
                         <div class="call-row">
 
                             <div class="call-avatar">
@@ -660,7 +1010,9 @@
 
                             <div class="call-info">
 
-                                <strong>Evelyn</strong>
+                                <strong>
+                                    Evelyn
+                                </strong>
 
                                 <span class="missed">
                                     Missed • Sunday
@@ -672,28 +1024,35 @@
 
                         </div>
 
+
                     </div>
+
 
                 </div>
 
 
-                <!-- =================================
+
+                <!-- =================================================
                      NOTES
-                ================================== -->
+                ================================================= -->
 
                 <div
                     id="notesApp"
                     class="app-page hidden"
                 >
 
+
                     <div class="notes-list">
+
 
                         <div
                             class="note"
                             data-note="note1"
                         >
 
-                            <strong>Things to remember</strong>
+                            <strong>
+                                Things to remember
+                            </strong>
 
                             <span>
                                 Don't forget...
@@ -702,5 +1061,115 @@
                         </div>
 
 
+
                         <div
-     
+                            class="note"
+                            data-note="note2"
+                        >
+
+                            <strong>
+                                Meeting
+                            </strong>
+
+                            <span>
+                                Thursday • 8:30 PM
+                            </span>
+
+                        </div>
+
+
+
+                        <div
+                            class="note"
+                            data-note="note3"
+                        >
+
+                            <strong>
+                                Shopping
+                            </strong>
+
+                            <span>
+                                Milk • Batteries • Coffee
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div
+                        id="noteView"
+                        class="note-content hidden"
+                    >
+
+                        <div id="noteContent"></div>
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 IMAGE VIEWER
+            ================================================= -->
+
+            <div
+                id="imageViewer"
+                class="image-viewer hidden"
+            >
+
+                <button
+                    id="closeImage"
+                    class="viewer-close"
+                >
+                    ×
+                </button>
+
+
+                <img
+                    id="viewerImage"
+                    src=""
+                    alt="Gallery image"
+                >
+
+
+                <div
+                    id="clueText"
+                    class="clue-text"
+                ></div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 HOME BUTTON
+            ================================================= -->
+
+            <button
+                id="phoneHomeButton"
+                class="phone-home-button"
+            >
+                HOME
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script src="phone.js"></script>
+
+</body>
+
+</html>
