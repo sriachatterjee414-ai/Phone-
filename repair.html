@@ -3,19 +3,19 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>Broken Phone — Repair</title>
+    <title>Broken Phone — Repair</title>
 
-<link
-    rel="stylesheet"
-    href="repair.css"
->
+    <link
+        rel="stylesheet"
+        href="repair.css"
+    >
 
 </head>
 
@@ -53,7 +53,7 @@
 
 
     <!-- =====================================
-         INSPECT INVENTORY
+         TOP BUTTONS
     ====================================== -->
 
     <button
@@ -64,28 +64,57 @@
     </button>
 
 
+    <button
+        id="skipRepairButton"
+        type="button"
+        class="hidden"
+    >
+        SKIP REPAIR — ACCESS PHONE
+    </button>
+
+
     <!-- =====================================
          PHONE SCENE
     ====================================== -->
 
     <div id="repairScene">
 
-        <!-- BROKEN PHONE -->
 
-        <img
-            id="phoneImage"
-            src="broken_phone.png"
-            alt="Broken phone"
-        >
+        <div id="phoneDropZone">
 
 
-        <!-- REPAIRED PHONE -->
+            <!-- BROKEN PHONE -->
 
-        <img
-            id="goodPhoneImage"
-            src="good_phone.png"
-            alt="Repaired phone"
-        >
+            <img
+                id="phoneImage"
+                src="broken_phone.png"
+                alt="Broken phone"
+            >
+
+
+            <!-- REPAIRED PHONE -->
+
+            <img
+                id="goodPhoneImage"
+                src="good_phone.png"
+                alt="Repaired phone"
+            >
+
+
+            <!-- DROP MESSAGE -->
+
+            <div id="dropHint">
+                DRAG COMPONENT HERE
+            </div>
+
+
+            <!-- REPAIR FLASH -->
+
+            <div id="repairFlash"></div>
+
+
+        </div>
+
 
     </div>
 
@@ -98,6 +127,7 @@
         id="repairInventory"
         class="hidden"
     >
+
 
         <div class="inventoryHeader">
 
@@ -129,6 +159,7 @@
             NO REPAIR COMPONENTS AVAILABLE.
         </div>
 
+
     </section>
 
 
@@ -137,6 +168,7 @@
     ====================================== -->
 
     <section class="repairPanel">
+
 
         <div class="panelTitle">
             DEVICE CONDITION
@@ -176,6 +208,7 @@
             Inspect the inventory and select a component.
         </div>
 
+
     </section>
 
 
@@ -184,6 +217,7 @@
     ====================================== -->
 
     <section class="appliedPanel">
+
 
         <div class="appliedTitle">
             INSTALLED COMPONENTS
@@ -194,6 +228,7 @@
             id="appliedParts"
             class="appliedParts"
         ></div>
+
 
     </section>
 
@@ -233,6 +268,7 @@
         class="hidden"
     >
 
+
         <div class="completeTitle">
             PHONE RESTORED
         </div>
@@ -257,6 +293,7 @@
             ACCESS PHONE
         </button>
 
+
     </section>
 
 
@@ -267,18 +304,21 @@
     <audio
         id="repairSound"
         src="ui_click.mp3"
+        preload="auto"
     ></audio>
 
 
     <audio
         id="wrongSound"
         src="ui_click.mp3"
+        preload="auto"
     ></audio>
 
 
     <audio
         id="completeSound"
         src="item_collect.mp3"
+        preload="auto"
     ></audio>
 
 
