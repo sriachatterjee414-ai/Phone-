@@ -339,6 +339,11 @@ function loadRepairState() {
 
     catch (error) {
 
+        console.error(
+            "Could not load repair state:",
+            error
+        );
+
         return [];
 
     }
@@ -351,17 +356,6 @@ function loadRepairState() {
 ========================================= */
 
 function calculateCondition() {
-
-    /*
-       Three required components.
-
-       We calculate from installed components
-       instead of manually adding percentages.
-
-       1 part  = 33%
-       2 parts = 66%
-       3 parts = 100%
-    */
 
     if (usedParts.length === 0) {
 
@@ -399,10 +393,6 @@ function updateMeter() {
         calculateCondition();
 
 
-    /*
-       SAFETY LIMIT
-    */
-
     condition =
         Math.max(
             0,
@@ -420,10 +410,6 @@ function updateMeter() {
     conditionPercent.textContent =
         condition + "%";
 
-
-    /* =====================================
-       CONDITION TEXT
-    ===================================== */
 
     if (condition === 0) {
 
@@ -540,10 +526,6 @@ function renderRepairInventory() {
     );
 
 
-    /*
-       Only display recognized items.
-    */
-
     const available =
         inventory.filter(
             function(id) {
@@ -570,11 +552,6 @@ function renderRepairInventory() {
     );
 
 
-    /*
-       Remove duplicate IDs from
-       display.
-    */
-
     const uniqueItems =
         [...new Set(available)];
 
@@ -599,10 +576,6 @@ function renderRepairInventory() {
             button.className =
                 "repairItem";
 
-
-            /*
-               Correct part already installed.
-            */
 
             if (
                 usedParts.includes(id)
@@ -659,6 +632,13 @@ function renderRepairInventory() {
 
 inspectButton.onclick =
     function() {
+
+        if (repairFinished) {
+
+            return;
+
+        }
+
 
         renderRepairInventory();
 
@@ -774,27 +754,15 @@ function applyItem(
     );
 
 
-    /*
-       Mark button as used.
-    */
-
     button.classList.add(
         "used"
     );
 
 
-    /*
-       Add installed component.
-    */
-
     addAppliedPart(
         data.name
     );
 
-
-    /*
-       Update meter.
-    */
 
     updateMeter();
 
@@ -808,20 +776,10 @@ function applyItem(
     );
 
 
-    /*
-       Close inventory after
-       successfully installing part.
-    */
-
     repairInventory.classList.add(
         "hidden"
     );
 
-
-    /*
-       Check whether ALL THREE
-       required parts are installed.
-    */
 
     checkRepairCompletion();
 
@@ -835,10 +793,6 @@ function applyItem(
 function addAppliedPart(
     name
 ) {
-
-    /*
-       Prevent duplicate visual entries.
-    */
 
     const existing =
         [...appliedParts.children]
@@ -919,12 +873,6 @@ function restoreAppliedParts() {
 
 function checkRepairCompletion() {
 
-    /*
-       The phone is repaired ONLY when
-       all three required components
-       have been installed.
-    */
-
     const allPartsInstalled =
         REQUIRED_PARTS.every(
             function(part) {
@@ -965,19 +913,15 @@ function completeRepair() {
     repairFinished = true;
 
 
-    /*
-       THREE PARTS = 100%
-    */
-
     condition = 100;
 
 
     updateMeter();
 
 
-    /*
-       SAVE COMPLETION
-    */
+    /* =====================================
+       SAVE PHONE REPAIR COMPLETION
+    ===================================== */
 
     localStorage.setItem(
         REPAIR_COMPLETE_KEY,
@@ -985,9 +929,9 @@ function completeRepair() {
     );
 
 
-    /*
-       Disable inspect button.
-    */
+    /* =====================================
+       DISABLE INSPECT
+    ===================================== */
 
     inspectButton.disabled =
         true;
@@ -998,26 +942,26 @@ function completeRepair() {
     );
 
 
-    /*
-       Close inventory.
-    */
+    /* =====================================
+       CLOSE INVENTORY
+    ===================================== */
 
     repairInventory.classList.add(
         "hidden"
     );
 
 
-    /*
-       Update message.
-    */
+    /* =====================================
+       MESSAGE
+    ===================================== */
 
     repairMessage.textContent =
         "DEVICE RESTORED. SYSTEM REBOOTING...";
 
 
-    /*
-       Start blackout.
-    */
+    /* =====================================
+       BLACKOUT
+    ===================================== */
 
     setTimeout(
         function() {
@@ -1047,9 +991,9 @@ function startBlackout() {
     );
 
 
-    /*
-       Reveal good phone.
-    */
+    /* =====================================
+       REVEAL GOOD PHONE
+    ===================================== */
 
     setTimeout(
         function() {
@@ -1063,9 +1007,9 @@ function startBlackout() {
     );
 
 
-    /*
-       Show completion panel.
-    */
+    /* =====================================
+       SHOW COMPLETION PANEL
+    ===================================== */
 
     setTimeout(
         function() {
@@ -1090,28 +1034,59 @@ function startBlackout() {
    BACK BUTTON
 ========================================= */
 
-document
-    .getElementById("backButton")
-    .onclick =
-    function() {
+const backButton =
+    document.getElementById(
+        "backButton"
+    );
 
-        window.location.href =
-            "investigation.html";
 
-    };
+if (backButton) {
+
+    backButton.onclick =
+        function() {
+
+            window.location.href =
+                "investigation.html";
+
+        };
+
+}
 
 
 /* =========================================
    ACCESS PHONE
 ========================================= */
 
-continueButton.onclick =
-    function() {
+if (continueButton) {
 
-        window.location.href =
-            "phone.html";
+    continueButton.onclick =
+        function() {
 
-    };
+            /*
+               Safety check:
+               Only allow the player to enter
+               the phone if repair is complete.
+            */
+
+            const completed =
+                localStorage.getItem(
+                    REPAIR_COMPLETE_KEY
+                ) === "true";
+
+
+            if (!completed) {
+
+                return;
+
+            }
+
+
+            window.location.href =
+                "phone.html";
+
+        };
+
+}
 
 
 /* =========================================
@@ -1139,27 +1114,15 @@ function restoreCompletedRepair() {
     condition = 100;
 
 
-    /*
-       Show repaired phone.
-    */
-
     repair.classList.add(
         "restored"
     );
 
 
-    /*
-       Hide inspect.
-    */
-
     inspectButton.classList.add(
         "hidden"
     );
 
-
-    /*
-       Restore meter.
-    */
 
     conditionMeter.style.width =
         "100%";
@@ -1176,10 +1139,6 @@ function restoreCompletedRepair() {
     repairMessage.textContent =
         "DEVICE RESTORED.";
 
-
-    /*
-       Show completion panel.
-    */
 
     completePanel.classList.remove(
         "hidden"
