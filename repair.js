@@ -8,15 +8,18 @@
         ↓
    REPAIR.HTML
         ↓
+   BROKEN PHONE
+        ↓
    INSPECT INVENTORY
         ↓
-   SELECT COMPONENT
+   DRAG COMPONENT
         ↓
-   CORRECT PART
+   DROP ON PHONE
         ↓
-   REPAIR PROGRESS
+   CORRECT = +33%
+   WRONG   = -15%
         ↓
-   ALL 3 REQUIRED PARTS
+   ALL 3 CORRECT PARTS
         ↓
    100%
         ↓
@@ -27,20 +30,33 @@
    ACCESS PHONE
         ↓
    PHONE.HTML
+
+
+   IMPORTANT:
+
+   The fact that the phone was repaired before
+   is remembered.
+
+   However, every new visit to this page starts
+   a fresh repair attempt.
+
+   Therefore:
+
+   PREVIOUSLY REPAIRED
+        ↓
+   REPAIR AGAIN
+        OR
+   SKIP REPAIR
 ========================================= */
 
 
 /* =========================================
-   INVENTORY STORAGE
+   STORAGE KEYS
 ========================================= */
 
 const INVENTORY_KEY =
     "brokenPhoneInventory";
 
-
-/* =========================================
-   REPAIR COMPLETE STORAGE
-========================================= */
 
 const REPAIR_COMPLETE_KEY =
     "brokenPhoneRepairComplete";
@@ -67,68 +83,95 @@ const REQUIRED_PARTS = [
 
 const ITEM_DATA = {
 
+
+    /* =====================================
+       CORRECT ITEMS
+    ===================================== */
+
     precision_screwdriver: {
 
-        name: "Precision Screwdriver",
+        name:
+            "Precision Screwdriver",
 
-        img: "precision_screwdriver.png",
+        img:
+            "precision_screwdriver.png",
 
-        correct: true
+        correct:
+            true
 
     },
 
 
     replacement_battery: {
 
-        name: "Replacement Battery",
+        name:
+            "Replacement Battery",
 
-        img: "replacement_battery.png",
+        img:
+            "replacement_battery.png",
 
-        correct: true
+        correct:
+            true
 
     },
 
 
     screen_connector: {
 
-        name: "Screen Connector",
+        name:
+            "Screen Connector",
 
-        img: "screen_connector.png",
+        img:
+            "screen_connector.png",
 
-        correct: true
+        correct:
+            true
 
     },
 
 
+    /* =====================================
+       WRONG ITEMS
+    ===================================== */
+
     old_key: {
 
-        name: "Old Key",
+        name:
+            "Old Key",
 
-        img: "old_key.png",
+        img:
+            "old_key.png",
 
-        correct: false
+        correct:
+            false
 
     },
 
 
     cassette_tape: {
 
-        name: "Cassette Tape",
+        name:
+            "Cassette Tape",
 
-        img: "cassette_tape.png",
+        img:
+            "cassette_tape.png",
 
-        correct: false
+        correct:
+            false
 
     },
 
 
     paper_clip: {
 
-        name: "Paper Clip",
+        name:
+            "Paper Clip",
 
-        img: "paper_clip.png",
+        img:
+            "paper_clip.png",
 
-        correct: false
+        correct:
+            false
 
     }
 
@@ -140,87 +183,141 @@ const ITEM_DATA = {
 ========================================= */
 
 const repair =
-    document.getElementById("repair");
+    document.getElementById(
+        "repair"
+    );
+
+
+const phoneDropZone =
+    document.getElementById(
+        "phoneDropZone"
+    );
 
 
 const phoneImage =
-    document.getElementById("phoneImage");
+    document.getElementById(
+        "phoneImage"
+    );
 
 
 const goodPhoneImage =
-    document.getElementById("goodPhoneImage");
+    document.getElementById(
+        "goodPhoneImage"
+    );
 
 
 const inspectButton =
-    document.getElementById("inspectButton");
+    document.getElementById(
+        "inspectButton"
+    );
+
+
+const skipRepairButton =
+    document.getElementById(
+        "skipRepairButton"
+    );
 
 
 const repairInventory =
-    document.getElementById("repairInventory");
+    document.getElementById(
+        "repairInventory"
+    );
 
 
 const closeInventory =
-    document.getElementById("closeInventory");
+    document.getElementById(
+        "closeInventory"
+    );
 
 
 const repairItems =
-    document.getElementById("repairItems");
+    document.getElementById(
+        "repairItems"
+    );
 
 
 const inventoryEmpty =
-    document.getElementById("inventoryEmpty");
+    document.getElementById(
+        "inventoryEmpty"
+    );
 
 
 const conditionMeter =
-    document.getElementById("conditionMeter");
+    document.getElementById(
+        "conditionMeter"
+    );
 
 
 const conditionPercent =
-    document.getElementById("conditionPercent");
+    document.getElementById(
+        "conditionPercent"
+    );
 
 
 const conditionText =
-    document.getElementById("conditionText");
+    document.getElementById(
+        "conditionText"
+    );
 
 
 const repairMessage =
-    document.getElementById("repairMessage");
+    document.getElementById(
+        "repairMessage"
+    );
 
 
 const appliedParts =
-    document.getElementById("appliedParts");
+    document.getElementById(
+        "appliedParts"
+    );
 
 
 const toast =
-    document.getElementById("toast");
+    document.getElementById(
+        "toast"
+    );
 
 
 const blackout =
-    document.getElementById("blackout");
+    document.getElementById(
+        "blackout"
+    );
 
 
 const completePanel =
-    document.getElementById("completePanel");
+    document.getElementById(
+        "completePanel"
+    );
 
 
 const continueButton =
-    document.getElementById("continueButton");
+    document.getElementById(
+        "continueButton"
+    );
 
 
 const repairSound =
-    document.getElementById("repairSound");
+    document.getElementById(
+        "repairSound"
+    );
 
 
 const wrongSound =
-    document.getElementById("wrongSound");
+    document.getElementById(
+        "wrongSound"
+    );
 
 
 const completeSound =
-    document.getElementById("completeSound");
+    document.getElementById(
+        "completeSound"
+    );
 
 
 /* =========================================
    REPAIR STATE
+
+   These reset every time repair.html opens.
 ========================================= */
 
 let condition = 0;
@@ -243,20 +340,26 @@ function getInventory() {
                 INVENTORY_KEY
             );
 
+
         if (!saved) {
 
             return [];
 
         }
 
+
         const parsed =
-            JSON.parse(saved);
+            JSON.parse(
+                saved
+            );
+
 
         if (!Array.isArray(parsed)) {
 
             return [];
 
         }
+
 
         return parsed;
 
@@ -277,18 +380,21 @@ function getInventory() {
 
 
 /* =========================================
-   SAVE REPAIR STATE
+   SAVE PREVIOUS REPAIR
+
+   This does NOT save the individual parts.
+
+   It only remembers that the phone has
+   successfully been repaired at least once.
 ========================================= */
 
-function saveRepairState() {
+function saveRepairCompletion() {
 
     localStorage.setItem(
 
-        "brokenPhoneRepairUsedParts",
+        REPAIR_COMPLETE_KEY,
 
-        JSON.stringify(
-            usedParts
-        )
+        "true"
 
     );
 
@@ -296,89 +402,18 @@ function saveRepairState() {
 
 
 /* =========================================
-   LOAD REPAIR STATE
+   WAS PHONE REPAIRED BEFORE?
 ========================================= */
 
-function loadRepairState() {
+function wasPhoneRepairedBefore() {
 
-    try {
+    return (
 
-        const saved =
-            localStorage.getItem(
-                "brokenPhoneRepairUsedParts"
-            );
+        localStorage.getItem(
+            REPAIR_COMPLETE_KEY
+        ) === "true"
 
-
-        if (!saved) {
-
-            return [];
-
-        }
-
-
-        const parsed =
-            JSON.parse(saved);
-
-
-        if (!Array.isArray(parsed)) {
-
-            return [];
-
-        }
-
-
-        return parsed.filter(
-            function(id) {
-
-                return REQUIRED_PARTS.includes(id);
-
-            }
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Could not load repair state:",
-            error
-        );
-
-        return [];
-
-    }
-
-}
-
-
-/* =========================================
-   CALCULATE REPAIR PROGRESS
-========================================= */
-
-function calculateCondition() {
-
-    if (usedParts.length === 0) {
-
-        return 0;
-
-    }
-
-
-    if (usedParts.length === 1) {
-
-        return 33;
-
-    }
-
-
-    if (usedParts.length === 2) {
-
-        return 66;
-
-    }
-
-
-    return 100;
+    );
 
 }
 
@@ -388,9 +423,6 @@ function calculateCondition() {
 ========================================= */
 
 function updateMeter() {
-
-    condition =
-        calculateCondition();
 
 
     condition =
@@ -410,6 +442,10 @@ function updateMeter() {
     conditionPercent.textContent =
         condition + "%";
 
+
+    /* =====================================
+       STATUS TEXT
+    ===================================== */
 
     if (condition === 0) {
 
@@ -453,7 +489,10 @@ function updateMeter() {
    TOAST
 ========================================= */
 
-function showToast(message) {
+function showToast(
+    message
+) {
+
 
     toast.textContent =
         message;
@@ -488,7 +527,10 @@ function showToast(message) {
    PLAY SOUND
 ========================================= */
 
-function playSound(sound) {
+function playSound(
+    sound
+) {
+
 
     if (!sound) {
 
@@ -497,11 +539,48 @@ function playSound(sound) {
     }
 
 
-    sound.currentTime = 0;
+    sound.currentTime =
+        0;
 
 
     sound.play().catch(
-        function() {}
+        function() {
+
+            /*
+               Browser may block audio until
+               the player has interacted with
+               the page.
+
+               Nothing needs to happen here.
+            */
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   PHONE FLASH
+========================================= */
+
+function phoneFlash() {
+
+
+    phoneDropZone.classList.remove(
+        "flash"
+    );
+
+
+    /*
+       Force browser to restart animation.
+    */
+
+    void phoneDropZone.offsetWidth;
+
+
+    phoneDropZone.classList.add(
+        "flash"
     );
 
 }
@@ -513,7 +592,9 @@ function playSound(sound) {
 
 function renderRepairInventory() {
 
-    repairItems.innerHTML = "";
+
+    repairItems.innerHTML =
+        "";
 
 
     const inventory =
@@ -536,7 +617,13 @@ function renderRepairInventory() {
         );
 
 
-    if (available.length === 0) {
+    /* =====================================
+       NO ITEMS
+    ===================================== */
+
+    if (
+        available.length === 0
+    ) {
 
         inventoryEmpty.classList.remove(
             "hidden"
@@ -552,43 +639,70 @@ function renderRepairInventory() {
     );
 
 
+    /*
+       Remove duplicate inventory IDs.
+    */
+
     const uniqueItems =
-        [...new Set(available)];
+        [
+            ...new Set(
+                available
+            )
+        ];
 
 
     uniqueItems.forEach(
         function(id) {
 
+
             const data =
                 ITEM_DATA[id];
 
 
-            const button =
+            /* =================================
+               CREATE ITEM
+            ================================= */
+
+            const item =
                 document.createElement(
-                    "button"
+                    "div"
                 );
 
 
-            button.type =
-                "button";
-
-
-            button.className =
+            item.className =
                 "repairItem";
 
 
+            item.draggable =
+                true;
+
+
+            item.dataset.itemId =
+                id;
+
+
+            /* =================================
+               USED STATE
+            ================================= */
+
             if (
-                usedParts.includes(id)
+                usedParts.includes(
+                    id
+                )
             ) {
 
-                button.classList.add(
+                item.classList.add(
                     "used"
                 );
 
             }
 
 
-            button.innerHTML = `
+            /* =================================
+               HTML
+            ================================= */
+
+            item.innerHTML = `
 
                 <img
                     src="${data.img}"
@@ -605,19 +719,64 @@ function renderRepairInventory() {
             `;
 
 
-            button.onclick =
-                function() {
+            /* =================================
+               DRAG START
+            ================================= */
 
-                    applyItem(
-                        id,
-                        button
+            item.addEventListener(
+                "dragstart",
+                function(event) {
+
+
+                    if (
+                        usedParts.includes(
+                            id
+                        )
+                    ) {
+
+                        event.preventDefault();
+
+                        return;
+
+                    }
+
+
+                    event.dataTransfer.setData(
+                        "text/plain",
+                        id
                     );
 
-                };
+
+                    event.dataTransfer.effectAllowed =
+                        "move";
+
+
+                    item.classList.add(
+                        "dragging"
+                    );
+
+                }
+            );
+
+
+            /* =================================
+               DRAG END
+            ================================= */
+
+            item.addEventListener(
+                "dragend",
+                function() {
+
+                    item.classList.remove(
+                        "dragging"
+                    );
+
+                }
+            );
 
 
             repairItems.appendChild(
-                button
+                item
             );
 
         }
@@ -630,10 +789,14 @@ function renderRepairInventory() {
    OPEN INVENTORY
 ========================================= */
 
-inspectButton.onclick =
+inspectButton.addEventListener(
+    "click",
     function() {
 
-        if (repairFinished) {
+
+        if (
+            repairFinished
+        ) {
 
             return;
 
@@ -649,35 +812,154 @@ inspectButton.onclick =
 
 
         repairMessage.textContent =
-            "Select a component to use on the phone.";
+            "Drag a component onto the phone.";
 
-    };
+    }
+);
 
 
 /* =========================================
    CLOSE INVENTORY
 ========================================= */
 
-closeInventory.onclick =
+closeInventory.addEventListener(
+    "click",
     function() {
 
         repairInventory.classList.add(
             "hidden"
         );
 
-    };
+    }
+);
 
 
 /* =========================================
-   APPLY ITEM
+   DRAG OVER PHONE
 ========================================= */
 
-function applyItem(
-    id,
-    button
+phoneDropZone.addEventListener(
+    "dragover",
+    function(event) {
+
+
+        event.preventDefault();
+
+
+        if (
+            repairFinished
+        ) {
+
+            return;
+
+        }
+
+
+        event.dataTransfer.dropEffect =
+            "move";
+
+
+        phoneDropZone.classList.add(
+            "dragTarget"
+        );
+
+    }
+);
+
+
+/* =========================================
+   DRAG LEAVE PHONE
+========================================= */
+
+phoneDropZone.addEventListener(
+    "dragleave",
+    function(event) {
+
+
+        /*
+           Prevent flickering when moving
+           between children of the drop zone.
+        */
+
+        if (
+            event.relatedTarget &&
+            phoneDropZone.contains(
+                event.relatedTarget
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        phoneDropZone.classList.remove(
+            "dragTarget"
+        );
+
+    }
+);
+
+
+/* =========================================
+   DROP ON PHONE
+========================================= */
+
+phoneDropZone.addEventListener(
+    "drop",
+    function(event) {
+
+
+        event.preventDefault();
+
+
+        phoneDropZone.classList.remove(
+            "dragTarget"
+        );
+
+
+        if (
+            repairFinished
+        ) {
+
+            return;
+
+        }
+
+
+        const id =
+            event.dataTransfer.getData(
+                "text/plain"
+            );
+
+
+        if (!id) {
+
+            return;
+
+        }
+
+
+        applyDraggedItem(
+            id
+        );
+
+    }
+);
+
+
+/* =========================================
+   APPLY DRAGGED ITEM
+========================================= */
+
+function applyDraggedItem(
+    id
 ) {
 
-    if (repairFinished) {
+
+    if (
+        repairFinished
+    ) {
 
         return;
 
@@ -700,11 +982,13 @@ function applyItem(
     ===================================== */
 
     if (
-        usedParts.includes(id)
+        usedParts.includes(
+            id
+        )
     ) {
 
         showToast(
-            "This component has already been installed."
+            "This component has already been used."
         );
 
         return;
@@ -713,13 +997,83 @@ function applyItem(
 
 
     /* =====================================
-       WRONG ITEM
+       CONSUME COMPONENT
     ===================================== */
 
-    if (!data.correct) {
+    usedParts.push(
+        id
+    );
+
+
+    phoneFlash();
+
+
+    /* =====================================
+       CORRECT COMPONENT
+    ===================================== */
+
+    if (
+        data.correct
+    ) {
+
+
+        condition += 33;
+
+
+        condition =
+            Math.min(
+                condition,
+                100
+            );
+
+
+        playSound(
+            repairSound
+        );
+
+
+        addAppliedPart(
+            data.name,
+            true
+        );
+
+
+        repairMessage.textContent =
+            `${data.name} installed correctly.`;
+
+
+        showToast(
+            "+33% — CORRECT COMPONENT"
+        );
+
+    }
+
+
+    /* =====================================
+       WRONG COMPONENT
+    ===================================== */
+
+    else {
+
+
+        condition -= 15;
+
+
+        condition =
+            Math.max(
+                condition,
+                0
+            );
+
 
         playSound(
             wrongSound
+        );
+
+
+        addAppliedPart(
+            data.name,
+            false
         );
 
 
@@ -728,58 +1082,34 @@ function applyItem(
 
 
         showToast(
-            "Wrong component."
+            "-15% — WRONG COMPONENT"
         );
-
-
-        return;
 
     }
 
 
     /* =====================================
-       CORRECT ITEM
+       UPDATE
     ===================================== */
-
-    usedParts.push(
-        id
-    );
-
-
-    saveRepairState();
-
-
-    playSound(
-        repairSound
-    );
-
-
-    button.classList.add(
-        "used"
-    );
-
-
-    addAppliedPart(
-        data.name
-    );
-
 
     updateMeter();
 
 
-    repairMessage.textContent =
-        `${data.name} installed correctly.`;
+    renderRepairInventory();
 
 
-    showToast(
-        `${data.name} installed.`
-    );
-
+    /* =====================================
+       CLOSE INVENTORY
+    ===================================== */
 
     repairInventory.classList.add(
         "hidden"
     );
 
+
+    /* =====================================
+       CHECK COMPLETION
+    ===================================== */
 
     checkRepairCompletion();
 
@@ -791,21 +1121,29 @@ function applyItem(
 ========================================= */
 
 function addAppliedPart(
-    name
+    name,
+    correct
 ) {
 
+
     const existing =
-        [...appliedParts.children]
-        .some(
+        [
+            ...appliedParts.children
+        ].some(
             function(element) {
 
-                return element.dataset.name === name;
+                return (
+                    element.dataset.name ===
+                    name
+                );
 
             }
         );
 
 
-    if (existing) {
+    if (
+        existing
+    ) {
 
         return;
 
@@ -826,8 +1164,40 @@ function addAppliedPart(
         name;
 
 
-    element.textContent =
-        "✓ " + name;
+    /* =====================================
+       CORRECT
+    ===================================== */
+
+    if (
+        correct
+    ) {
+
+        element.classList.add(
+            "correctPart"
+        );
+
+
+        element.textContent =
+            "✓ " + name;
+
+    }
+
+
+    /* =====================================
+       WRONG
+    ===================================== */
+
+    else {
+
+        element.classList.add(
+            "wrongPart"
+        );
+
+
+        element.textContent =
+            "✕ " + name;
+
+    }
 
 
     appliedParts.appendChild(
@@ -838,40 +1208,20 @@ function addAppliedPart(
 
 
 /* =========================================
-   RESTORE INSTALLED PARTS
-========================================= */
-
-function restoreAppliedParts() {
-
-    usedParts.forEach(
-        function(id) {
-
-            const data =
-                ITEM_DATA[id];
-
-
-            if (!data) {
-
-                return;
-
-            }
-
-
-            addAppliedPart(
-                data.name
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   CHECK REPAIR COMPLETION
+   CHECK COMPLETION
 ========================================= */
 
 function checkRepairCompletion() {
+
+
+    /*
+       Completion is based ONLY on whether
+       all three required correct components
+       have been installed.
+
+       Wrong components do not prevent
+       completion.
+    */
 
     const allPartsInstalled =
         REQUIRED_PARTS.every(
@@ -885,11 +1235,26 @@ function checkRepairCompletion() {
         );
 
 
-    if (!allPartsInstalled) {
+    if (
+        !allPartsInstalled
+    ) {
 
         return;
 
     }
+
+
+    /*
+       Safety check:
+       all three correct components
+       should bring the meter to 100%.
+    */
+
+    condition =
+        100;
+
+
+    updateMeter();
 
 
     completeRepair();
@@ -903,34 +1268,36 @@ function checkRepairCompletion() {
 
 function completeRepair() {
 
-    if (repairFinished) {
+
+    if (
+        repairFinished
+    ) {
 
         return;
 
     }
 
 
-    repairFinished = true;
+    repairFinished =
+        true;
 
 
-    condition = 100;
+    condition =
+        100;
 
 
     updateMeter();
 
 
     /* =====================================
-       SAVE PHONE REPAIR COMPLETION
+       REMEMBER SUCCESS
     ===================================== */
 
-    localStorage.setItem(
-        REPAIR_COMPLETE_KEY,
-        "true"
-    );
+    saveRepairCompletion();
 
 
     /* =====================================
-       DISABLE INSPECT
+       DISABLE INTERACTION
     ===================================== */
 
     inspectButton.disabled =
@@ -942,9 +1309,10 @@ function completeRepair() {
     );
 
 
-    /* =====================================
-       CLOSE INVENTORY
-    ===================================== */
+    skipRepairButton.classList.add(
+        "hidden"
+    );
+
 
     repairInventory.classList.add(
         "hidden"
@@ -960,7 +1328,7 @@ function completeRepair() {
 
 
     /* =====================================
-       BLACKOUT
+       WAIT
     ===================================== */
 
     setTimeout(
@@ -980,6 +1348,7 @@ function completeRepair() {
 ========================================= */
 
 function startBlackout() {
+
 
     playSound(
         completeSound
@@ -1008,11 +1377,12 @@ function startBlackout() {
 
 
     /* =====================================
-       SHOW COMPLETION PANEL
+       SHOW COMPLETE PANEL
     ===================================== */
 
     setTimeout(
         function() {
+
 
             blackout.classList.add(
                 "hidden"
@@ -1023,11 +1393,42 @@ function startBlackout() {
                 "hidden"
             );
 
+
         },
         3000
     );
 
 }
+
+
+/* =========================================
+   SKIP REPAIR
+========================================= */
+
+skipRepairButton.addEventListener(
+    "click",
+    function() {
+
+
+        /*
+           Only allow skip if the phone
+           has genuinely been repaired before.
+        */
+
+        if (
+            !wasPhoneRepairedBefore()
+        ) {
+
+            return;
+
+        }
+
+
+        window.location.href =
+            "phone.html";
+
+    }
+);
 
 
 /* =========================================
@@ -1040,15 +1441,19 @@ const backButton =
     );
 
 
-if (backButton) {
+if (
+    backButton
+) {
 
-    backButton.onclick =
+    backButton.addEventListener(
+        "click",
         function() {
 
             window.location.href =
                 "investigation.html";
 
-        };
+        }
+    );
 
 }
 
@@ -1057,24 +1462,22 @@ if (backButton) {
    ACCESS PHONE
 ========================================= */
 
-if (continueButton) {
+if (
+    continueButton
+) {
 
-    continueButton.onclick =
+    continueButton.addEventListener(
+        "click",
         function() {
 
-            /*
-               Safety check:
-               Only allow the player to enter
-               the phone if repair is complete.
-            */
 
             const completed =
-                localStorage.getItem(
-                    REPAIR_COMPLETE_KEY
-                ) === "true";
+                wasPhoneRepairedBefore();
 
 
-            if (!completed) {
+            if (
+                !completed
+            ) {
 
                 return;
 
@@ -1084,65 +1487,117 @@ if (continueButton) {
             window.location.href =
                 "phone.html";
 
-        };
+        }
+    );
 
 }
 
 
 /* =========================================
-   RESTORE COMPLETED REPAIR
+   PREVIOUSLY REPAIRED PHONE
 ========================================= */
 
-function restoreCompletedRepair() {
-
-    const completed =
-        localStorage.getItem(
-            REPAIR_COMPLETE_KEY
-        ) === "true";
+function setupPreviousRepairState() {
 
 
-    if (!completed) {
+    if (
+        !wasPhoneRepairedBefore()
+    ) {
+
+        /*
+           First repair attempt.
+        */
 
         return;
 
     }
 
 
-    repairFinished = true;
+    /*
+       IMPORTANT:
+
+       Do NOT show good phone.
+
+       The player sees the broken phone
+       again and may repair it again.
+    */
+
+    skipRepairButton.classList.remove(
+        "hidden"
+    );
 
 
-    condition = 100;
+    repairMessage.textContent =
+        "PHONE PREVIOUSLY RESTORED. REPAIR AGAIN OR SKIP.";
 
 
-    repair.classList.add(
+    showToast(
+        "Previous repair detected."
+    );
+
+}
+
+
+/* =========================================
+   RESET VISUAL REPAIR STATE
+========================================= */
+
+function resetCurrentRepairAttempt() {
+
+
+    repair.classList.remove(
         "restored"
     );
 
 
-    inspectButton.classList.add(
+    completePanel.classList.add(
         "hidden"
     );
+
+
+    blackout.classList.add(
+        "hidden"
+    );
+
+
+    condition =
+        0;
+
+
+    usedParts =
+        [];
+
+
+    repairFinished =
+        false;
+
+
+    appliedParts.innerHTML =
+        "";
 
 
     conditionMeter.style.width =
-        "100%";
+        "0%";
 
 
     conditionPercent.textContent =
-        "100%";
+        "0%";
 
 
     conditionText.textContent =
-        "DEVICE RESTORED";
+        "PHONE DAMAGED";
 
 
-    repairMessage.textContent =
-        "DEVICE RESTORED.";
+    inspectButton.disabled =
+        false;
 
 
-    completePanel.classList.remove(
+    inspectButton.classList.remove(
         "hidden"
     );
+
+
+    updateMeter();
 
 }
 
@@ -1151,14 +1606,7 @@ function restoreCompletedRepair() {
    INITIALIZE
 ========================================= */
 
-usedParts =
-    loadRepairState();
+resetCurrentRepairAttempt();
 
 
-restoreAppliedParts();
-
-
-updateMeter();
-
-
-restoreCompletedRepair();
+setupPreviousRepairState();
