@@ -372,7 +372,7 @@ condition =
     Math.max(  
         0,  
         Math.min(  
-            100,  
+            50,  
             condition  
         )  
     );  
@@ -411,19 +411,14 @@ else if (condition < 50) {
 
 }  
 
-else if (condition < 75) {  
+else if (condition < 65) {  
 
     conditionText.textContent =  
         "REPAIR IN PROGRESS";  
 
 }  
 
-else if (condition < 100) {  
 
-    conditionText.textContent =  
-        "ALMOST RESTORED";  
-
-}  
 
 else {  
 
@@ -687,7 +682,7 @@ if (data.correct) {
     */  
 
     if (  
-        condition >= 100  
+        condition >= 70  
     ) {  
 
         completeRepair();  
@@ -771,7 +766,7 @@ if (repairFinished)
 repairFinished = true;  
 
 
-condition = 100;  
+condition = 75;  
 
 
 updateMeter();  
@@ -937,7 +932,7 @@ repairFinished =
 
 
 condition =  
-    100;  
+    75;  
 
 
 repair.classList.add(  
