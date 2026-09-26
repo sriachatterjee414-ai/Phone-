@@ -3,23 +3,21 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>Broken Phone — Work Table</title>
+    <title>Broken Phone — Work Table</title>
 
-<link rel="stylesheet"
-      href="table.css">
+    <link rel="stylesheet"
+          href="table.css">
 
 </head>
-
 
 <body>
 
 <main id="tableGame">
-
 
     <!-- =========================================
          TABLE BACKGROUND
@@ -36,11 +34,9 @@
         ← BACK
     </button>
 
-
     <div class="title">
         WORK TABLE
     </div>
-
 
     <div class="hint">
         Search the surface carefully.
@@ -48,43 +44,30 @@
 
 
     <!-- =========================================
-         LOCKED TABLE
-         BUTTON TO START UNLOCK MINI-GAME
+         UNLOCK BUTTON
     ========================================== -->
 
     <button id="unlockButton">
-
         UNLOCK
-
     </button>
 
 
     <!-- =========================================
-         ITEMS
-         ONLY VISIBLE AFTER TABLE IS UNLOCKED
+         COLLECTIBLE ITEMS
     ========================================== -->
 
     <div id="itemsLayer" class="hidden">
 
+        <button
+            class="item tweezers"
+            data-item="screen_connector"
+            type="button"
+        >
 
-        <button class="item tweezers"
-                data-item="screen_connector">
-
-            <img src="screen_connector.png"
-                 alt="Screen connector">
-
-            <span>
-                COLLECT
-            </span>
-
-        </button>
-
-
-        <button class="item tape"
-                data-item="cassette_tape">
-
-            <img src="cassette_tape.png"
-                 alt="Cassette tape">
+            <img
+                src="screen_connector.png"
+                alt="Screen connector"
+            >
 
             <span>
                 COLLECT
@@ -93,17 +76,22 @@
         </button>
 
 
-        <!-- Optional hidden inspection area -->
+        <button
+            class="item tape"
+            data-item="cassette_tape"
+            type="button"
+        >
 
-        <button id="leafPuzzleTrigger"
-                aria-label="Inspect scattered objects">
+            <img
+                src="cassette_tape.png"
+                alt="Cassette tape"
+            >
 
             <span>
-                INSPECT
+                COLLECT
             </span>
 
         </button>
-
 
     </div>
 
@@ -118,10 +106,10 @@
             INVENTORY
         </div>
 
-
-        <div id="inventorySlots"
-             class="inventory-slots">
-        </div>
+        <div
+            id="inventorySlots"
+            class="inventory-slots"
+        ></div>
 
     </section>
 
@@ -130,26 +118,29 @@
          TOAST
     ========================================== -->
 
-    <div id="toast"
-         class="toast">
-    </div>
+    <div
+        id="toast"
+        class="toast"
+    ></div>
 
 
     <!-- =========================================
-         MINI-GAME
+         MATCHING PUZZLE
     ========================================== -->
 
-    <div id="puzzleOverlay"
-         class="hidden">
+    <div
+        id="puzzleOverlay"
+        class="hidden"
+    >
 
         <div id="puzzleWindow">
 
-
-            <button id="closePuzzle"
-                    aria-label="Close puzzle">
-
+            <button
+                id="closePuzzle"
+                type="button"
+                aria-label="Close puzzle"
+            >
                 ×
-
             </button>
 
 
@@ -160,27 +151,26 @@
 
             <div class="puzzleInstruction">
 
-                Some of these objects look similar.
-                Find the two matching leaves.
+                Find the matching pairs.
+                <br>
+                The matching leaves reveal the lock mechanism.
 
             </div>
 
 
-            <div id="leafGrid">
-            </div>
+            <div id="leafGrid"></div>
 
 
-            <div id="puzzleMessage">
-            </div>
+            <div id="puzzleMessage"></div>
 
 
-            <button id="continuePuzzle"
-                    class="hidden">
-
+            <button
+                id="continuePuzzle"
+                class="hidden"
+                type="button"
+            >
                 UNLOCK TABLE
-
             </button>
-
 
         </div>
 
@@ -188,14 +178,15 @@
 
 
     <!-- =========================================
-         EVIDENCE WINDOW
+         UNLOCK MESSAGE
     ========================================== -->
 
-    <div id="clueOverlay"
-         class="hidden">
+    <div
+        id="clueOverlay"
+        class="hidden"
+    >
 
         <div id="clueWindow">
-
 
             <div class="clueTitle">
                 TABLE UNLOCKED
@@ -208,8 +199,7 @@
 
                 <br><br>
 
-                The inside of the table is now
-                accessible.
+                The inside of the table is now accessible.
 
                 <br><br>
 
@@ -220,12 +210,12 @@
             </div>
 
 
-            <button id="closeClue">
-
+            <button
+                id="closeClue"
+                type="button"
+            >
                 CONTINUE
-
             </button>
-
 
         </div>
 
@@ -236,21 +226,29 @@
          AUDIO
     ========================================== -->
 
-    <audio id="music"
-           src="investigation_music.mp3"
-           loop>
-    </audio>
+    <audio
+        id="music"
+        src="investigation_music.mp3"
+        loop
+    ></audio>
 
 
-    <audio id="collectSound"
-           src="item_collect.mp3">
-    </audio>
+    <audio
+        id="collectSound"
+        src="item_collect.mp3"
+    ></audio>
 
 
-    <audio id="flipSound"
-           src="item_collect.mp3">
-    </audio>
+    <audio
+        id="flipSound"
+        src="item_collect.mp3"
+    ></audio>
 
+
+    <audio
+        id="unlockSound"
+        src="drawer_unlock.mp3"
+    ></audio>
 
 </main>
 
