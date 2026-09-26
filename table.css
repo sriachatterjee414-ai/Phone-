@@ -1,11 +1,10 @@
-```css
 *{
     box-sizing:border-box;
 }
 
 
 .hidden{
-    display:none!important;
+    display:none !important;
 }
 
 
@@ -37,7 +36,7 @@ body{
 
 
 /* =========================================
-   BACKGROUND
+   TABLE BACKGROUND
 ========================================= */
 
 #tableScene{
@@ -45,11 +44,13 @@ body{
 
     inset:0;
 
-    background:url("table_search.png")
-               center/cover
-               no-repeat;
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
 
     filter:brightness(.78);
+
+    transition:opacity .3s ease;
 }
 
 
@@ -60,7 +61,7 @@ body{
 #backButton{
     position:absolute;
 
-    z-index:20;
+    z-index:30;
 
     top:22px;
     left:25px;
@@ -82,7 +83,7 @@ body{
 .title{
     position:absolute;
 
-    z-index:20;
+    z-index:30;
 
     top:25px;
     left:50%;
@@ -90,13 +91,15 @@ body{
     transform:translateX(-50%);
 
     letter-spacing:4px;
+
+    text-shadow:0 2px 8px #000;
 }
 
 
 .hint{
     position:absolute;
 
-    z-index:20;
+    z-index:30;
 
     top:62px;
     left:50%;
@@ -106,6 +109,66 @@ body{
     color:#cdbfae;
 
     font-size:12px;
+
+    text-shadow:0 2px 5px #000;
+}
+
+
+/* =========================================
+   UNLOCK BUTTON
+========================================= */
+
+#unlockButton{
+    position:absolute;
+
+    z-index:40;
+
+    left:50%;
+    top:55%;
+
+    transform:translate(-50%,-50%);
+
+    padding:15px 28px;
+
+    background:rgba(15,10,7,.94);
+
+    border:1px solid #c9a46b;
+
+    color:#e8cda3;
+
+    cursor:pointer;
+
+    font-family:"Courier New",monospace;
+
+    letter-spacing:2px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.6);
+
+    transition:.2s;
+}
+
+
+#unlockButton:hover{
+
+    background:#26170f;
+
+    transform:
+        translate(-50%,-50%)
+        scale(1.05);
+
+}
+
+
+/* =========================================
+   ITEMS LAYER
+========================================= */
+
+#itemsLayer{
+    position:absolute;
+
+    inset:0;
+
+    z-index:20;
 }
 
 
@@ -116,7 +179,7 @@ body{
 .item{
     position:absolute;
 
-    z-index:15;
+    z-index:25;
 
     border:0;
 
@@ -157,6 +220,10 @@ body{
     font-size:10px;
 
     opacity:0;
+
+    transition:.2s;
+
+    white-space:nowrap;
 }
 
 
@@ -164,6 +231,8 @@ body{
     opacity:1;
 }
 
+
+/* SCREEN CONNECTOR */
 
 .tweezers{
     left:58%;
@@ -173,6 +242,8 @@ body{
     height:80px;
 }
 
+
+/* CASSETTE TAPE */
 
 .tape{
     left:24%;
@@ -184,20 +255,13 @@ body{
 
 
 /* =========================================
-   PUZZLE TRIGGER
+   OPTIONAL INSPECTION BUTTON
 ========================================= */
 
 #leafPuzzleTrigger{
     position:absolute;
 
-    z-index:16;
-
-    /*
-       CHANGE THESE THREE VALUES
-       if your clickable area needs
-       to sit somewhere else on your
-       table image.
-    */
+    z-index:26;
 
     left:42%;
     top:60%;
@@ -259,7 +323,7 @@ body{
 
     border:1px solid rgba(190,150,95,.6);
 
-    z-index:30;
+    z-index:50;
 
     padding:8px 12px;
 }
@@ -292,9 +356,12 @@ body{
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     position:relative;
+
+    background:rgba(255,255,255,.03);
 }
 
 
@@ -334,7 +401,7 @@ body{
 
     transform:translateX(-50%);
 
-    z-index:50;
+    z-index:80;
 
     padding:10px 18px;
 
@@ -372,6 +439,10 @@ body{
     background:rgba(0,0,0,.80);
 }
 
+
+/* =========================================
+   PUZZLE WINDOW
+========================================= */
 
 #puzzleWindow{
     position:relative;
@@ -447,6 +518,10 @@ body{
     justify-content:center;
 }
 
+
+/* =========================================
+   CARDS
+========================================= */
 
 .leafCard{
     width:90px;
@@ -601,6 +676,7 @@ body{
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     background:rgba(0,0,0,.84);
@@ -661,5 +737,4 @@ body{
     cursor:pointer;
 
     font-family:"Courier New",monospace;
-}
-```
+    }
