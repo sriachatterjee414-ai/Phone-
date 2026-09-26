@@ -3,99 +3,456 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Broken Phone — Repaired Phone</title>
+<title>Repaired Phone</title>
 <link rel="stylesheet" href="phone.css">
 </head>
-<body>
-<div class="investigation-stage">
-  <button id="phoneToggle" class="phone-tab" type="button" aria-label="Show or hide phone">PHONE</button>
 
-  <section id="phoneShell" class="phone-shell" aria-label="Phone">
+<body>
+
+<div class="investigation-stage">
+
+  <button id="phoneToggle" class="phone-tab" type="button">
+    PHONE
+  </button>
+
+  <section id="phoneShell" class="phone-shell" aria-label="Repaired phone">
+
     <div class="side-button side-left top"></div>
     <div class="side-button side-left middle"></div>
     <div class="side-button side-right"></div>
 
     <div class="phone-frame">
       <div class="phone-bezel">
+
         <div class="dynamic-island"></div>
 
-        <div id="lockScreen" class="lock-screen screen">
-          <div class="status-bar">
-            <span id="lockStatusTime">10:47</span>
-            <span>⌁⌁⌁  ▰</span>
-          </div>
-          <div class="lock-date" id="lockDate">Tuesday, March 4</div>
-          <div class="lock-time" id="lockTime">10:47</div>
 
-          <div class="lock-weather">
-            <div><strong>Tue</strong><b>4</b><small>Calendar</small></div>
-            <div><span class="sun">☀</span><b>72°</b><small>Mostly Sunny</small></div>
-          </div>
+        <!-- =========================
+             LOCK SCREEN
+        ========================== -->
 
-          <div class="lock-bottom">
-            <div class="lock-shortcut">◉</div>
-            <div class="lock-shortcut">⌁</div>
+        <div id="lockScreen" class="screen lock-screen">
+
+          <div class="ios-status">
+            <span id="lockStatusTime">11:48</span>
+            <span class="status-icons">▮▮▮　◔　▰</span>
           </div>
 
-          <div class="unlock-card">
-            <div class="unlock-title">Phone repaired</div>
-            <div class="unlock-subtitle">Enter passcode</div>
+          <div class="lock-date" id="lockDate">
+            Tuesday, 11 March
+          </div>
+
+          <div class="lock-time" id="lockTime">
+            11:48
+          </div>
+
+          <div class="lock-wallpaper-glow"></div>
+
+          <div class="lock-bottom-area">
+            <div class="lock-shortcut">▣</div>
+            <div class="lock-shortcut">⌾</div>
+          </div>
+
+          <div class="lock-swipe-hint">
+            Swipe up for Face ID or<br>
+            Enter Passcode
+          </div>
+
+
+          <!-- PASSCODE -->
+
+          <div class="passcode-area">
+
             <div id="passcodeDots" class="passcode-dots">
-              <span></span><span></span><span></span><span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
-            <div id="passcodePad" class="passcode-pad"></div>
+
             <div id="passcodeError" class="passcode-error"></div>
+
+            <div id="passcodePad" class="passcode-pad"></div>
+
+            <button
+              id="cancelPasscode"
+              class="cancel-passcode"
+              type="button">
+              Cancel
+            </button>
+
           </div>
+
         </div>
 
-        <div id="homeScreen" class="home-screen screen hidden">
-          <div class="status-bar home-status">
-            <span id="homeTime">10:47</span>
-            <span>⌁⌁⌁  ▰</span>
+
+        <!-- =========================
+             HOME SCREEN
+        ========================== -->
+
+        <div id="homeScreen" class="screen home-screen hidden">
+
+          <div class="ios-status home-status">
+            <span id="homeTime">11:48</span>
+            <span class="status-icons">▮▮▮　◔　▰</span>
           </div>
 
-          <div class="home-widget-row">
-            <div class="home-widget calendar-widget">
-              <span>Tue</span><strong>4</strong><small>Calendar</small>
+
+          <!-- TOP CLOCK WIDGET -->
+
+          <div class="home-header-widget">
+
+            <div class="script-day" id="homeDay">
+              monday
             </div>
-            <div class="home-widget weather-widget">
-              <span class="weather-icon">☀️</span>
-              <div><strong>72°</strong><small>Mostly Sunny</small></div>
+
+            <div class="big-widget-time" id="homeBigTime">
+              11:48
             </div>
+
+            <div class="widget-date" id="homeWidgetDate">
+              11 MARCH
+            </div>
+
           </div>
 
-          <div class="app-grid">
-            <button class="app-icon" data-app="calls"><span class="icon green">☎</span><label>Phone</label></button>
-            <button class="app-icon" data-app="browser"><span class="icon blue">◉</span><label>Browser</label></button>
-            <button class="app-icon" data-app="messages"><span class="icon green">●</span><label>Messages</label></button>
-            <button class="app-icon" data-app="music"><span class="icon pink">♫</span><label>Music</label></button>
 
-            <button class="app-icon" data-app="notes"><span class="icon blue">✉</span><label>Notes</label></button>
-            <button class="app-icon" data-app="clock"><span class="icon clock">◷</span><label>Clock</label></button>
-            <button class="app-icon" data-app="camera"><span class="icon dark">◉</span><label>Camera</label></button>
-            <button class="app-icon" data-app="gallery"><span class="icon photos">✿</span><label>Gallery</label></button>
+          <div class="home-content">
 
-            <button class="app-icon" data-app="contacts"><span class="icon blue">♟</span><label>Contacts</label></button>
-            <button class="app-icon" data-app="bank"><span class="icon navy">$</span><label>Bank</label></button>
-            <button class="app-icon" data-app="settings"><span class="icon gray">⚙</span><label>Settings</label></button>
+
+            <!-- BATTERY -->
+
+            <div class="battery-widget">
+
+              <div class="battery-ring">
+                <span>▯</span>
+              </div>
+
+              <strong>39%</strong>
+
+              <small>Battery</small>
+
+            </div>
+
+
+            <!-- FOLDERS -->
+
+            <div class="folder-grid">
+
+              <button
+                class="folder"
+                type="button"
+                data-folder="school">
+
+                <span class="folder-icons">
+                  <i>▦</i>
+                  <i>▤</i>
+                  <i>▧</i>
+                  <i>◎</i>
+                </span>
+
+                <b>School</b>
+
+              </button>
+
+
+              <button
+                class="folder"
+                type="button"
+                data-folder="photo">
+
+                <span class="folder-icons">
+                  <i>✂</i>
+                  <i>◉</i>
+                  <i>▣</i>
+                  <i>⌁</i>
+                </span>
+
+                <b>Photo &amp; Video</b>
+
+              </button>
+
+
+              <button
+                class="folder"
+                type="button"
+                data-folder="lifestyle">
+
+                <span class="folder-icons">
+                  <i>☁</i>
+                  <i>✿</i>
+                  <i>♥</i>
+                  <i>⌂</i>
+                </span>
+
+                <b>Lifestyle</b>
+
+              </button>
+
+
+              <button
+                class="folder"
+                type="button"
+                data-folder="social">
+
+                <span class="folder-icons">
+                  <i>◎</i>
+                  <i>▶</i>
+                  <i>♟</i>
+                  <i>◌</i>
+                </span>
+
+                <b>Social media</b>
+
+              </button>
+
+            </div>
+
+
+            <!-- STANDALONE APPS -->
+
+            <div class="standalone-grid">
+
+              <button
+                class="ios-app phone-app"
+                data-app="calls">
+
+                <span class="real-icon phone-icon">
+                  ☎
+                </span>
+
+                <label>Phone</label>
+
+              </button>
+
+
+              <button
+                class="ios-app whatsapp-app"
+                data-app="messages">
+
+                <span class="real-icon whatsapp-icon">
+                  ◔
+                </span>
+
+                <label>WhatsApp</label>
+
+              </button>
+
+
+              <button
+                class="ios-app mail-app"
+                data-app="notes">
+
+                <span class="real-icon mail-icon">
+                  ✉
+                </span>
+
+                <label>Mail</label>
+
+              </button>
+
+
+              <button
+                class="ios-app life-app"
+                data-app="contacts">
+
+                <span class="real-icon life-icon">
+                  ◎
+                </span>
+
+                <label>Life360</label>
+
+              </button>
+
+            </div>
+
+
+            <!-- MUSIC WIDGET -->
+
+            <div
+              class="music-widget"
+              data-app="music">
+
+              <div class="music-title">
+                Good Evening
+              </div>
+
+              <div class="music-days">
+                M&nbsp;&nbsp; T&nbsp;&nbsp; W&nbsp;&nbsp; T&nbsp;&nbsp; F&nbsp;&nbsp; S&nbsp;&nbsp; S
+              </div>
+
+              <div class="music-track">
+
+                <span class="album-art">
+                  ♪
+                </span>
+
+                <span>
+                  Homicide<br>
+                  <small>
+                    Love · James Art...
+                  </small>
+                </span>
+
+                <b>▶Ⅱ</b>
+
+              </div>
+
+            </div>
+
           </div>
+
+
+          <!-- SEARCH -->
+
+          <div class="search-pill">
+            ⌕&nbsp; Search
+          </div>
+
+
+          <!-- DOCK -->
 
           <div class="dock">
-            <button class="dock-icon green" data-app="calls">☎</button>
-            <button class="dock-icon blue" data-app="browser">◉</button>
-            <button class="dock-icon green" data-app="messages">●</button>
-            <button class="dock-icon pink" data-app="music">♫</button>
+
+            <button
+              class="dock-app messenger-app"
+              data-app="messages">
+
+              <span class="real-icon">
+                ●
+              </span>
+
+            </button>
+
+
+            <button
+              class="dock-app sms-app"
+              data-app="notes">
+
+              <span class="real-icon">
+                ●
+              </span>
+
+            </button>
+
+
+            <button
+              class="dock-app music-app"
+              data-app="music">
+
+              <span class="real-icon">
+                ♫
+              </span>
+
+            </button>
+
+
+            <button
+              class="dock-app safari-app"
+              data-app="browser">
+
+              <span class="real-icon">
+                ◉
+              </span>
+
+            </button>
+
           </div>
+
         </div>
 
-        <div id="appScreen" class="app-screen screen hidden">
-          <iframe id="appFrame" title="Phone application"></iframe>
+
+        <!-- =========================
+             FOLDER SCREEN
+        ========================== -->
+
+        <div
+          id="folderScreen"
+          class="screen folder-screen hidden">
+
+          <div class="ios-status">
+
+            <span id="folderTime">
+              11:48
+            </span>
+
+            <span class="status-icons">
+              ▮▮▮　◔　▰
+            </span>
+
+          </div>
+
+          <button
+            id="folderBack"
+            class="folder-back">
+
+            ‹
+
+          </button>
+
+          <h2 id="folderTitle">
+            School
+          </h2>
+
+          <div
+            id="folderApps"
+            class="folder-apps">
+          </div>
+
         </div>
+
+
+        <!-- =========================
+             EXISTING APP SCREEN
+        ========================== -->
+
+        <div
+          id="appScreen"
+          class="screen app-screen hidden">
+
+          <div class="app-topbar">
+
+            <button
+              id="appBack"
+              type="button">
+
+              ‹
+
+            </button>
+
+            <span id="appTitle">
+              App
+            </span>
+
+            <button
+              id="appHome"
+              type="button">
+
+              ⌂
+
+            </button>
+
+          </div>
+
+
+          <iframe
+            id="appFrame"
+            title="Phone application">
+          </iframe>
+
+        </div>
+
 
       </div>
     </div>
+
   </section>
+
 </div>
+
 <script src="phone.js"></script>
+
 </body>
 </html>
