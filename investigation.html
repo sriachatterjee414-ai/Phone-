@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -15,6 +16,7 @@
         rel="stylesheet"
         href="investigation.css"
     >
+
 </head>
 
 
@@ -80,7 +82,9 @@
     >
 
 
-        <!-- TOP BAR -->
+        <!-- =====================================
+             TOP BAR
+        ====================================== -->
 
         <div class="topbar">
 
@@ -200,7 +204,7 @@
 
 
         <!-- =====================================
-             INSPECT OVERLAY
+             INSPECTION OVERLAY
         ====================================== -->
 
         <div
@@ -210,9 +214,13 @@
 
             <div class="inspect-window">
 
+
+                <!-- CLOSE X -->
+
                 <button
                     id="closeInspect"
                     class="close-inspect"
+                    aria-label="Close inspection"
                 >
                     ×
                 </button>
@@ -241,7 +249,12 @@
                 </p>
 
 
+                <!-- ACTION BUTTONS -->
+
                 <div class="inspect-actions">
+
+
+                    <!-- USE FOR REPAIR -->
 
                     <button
                         id="useForRepair"
@@ -250,12 +263,26 @@
                         USE FOR REPAIR
                     </button>
 
+
+                    <!-- DELETE -->
+
+                    <button
+                        id="deleteItem"
+                        class="delete-button"
+                    >
+                        DELETE ITEM
+                    </button>
+
+
+                    <!-- CLOSE -->
+
                     <button
                         id="closeInspectButton"
                         class="secondary-button"
                     >
                         CLOSE
                     </button>
+
 
                 </div>
 
