@@ -2,11 +2,17 @@
    BROKEN PHONE
    WORK TABLE
 
+   FLOW:
+
    LOCKED
       ↓
-   EMOJI MATCHING MINI-GAME
+   MATCHING PUZZLE
       ↓
-   UNLOCKED
+   FIND LEAF PAIR
+      ↓
+   UNLOCK TABLE
+      ↓
+   UNLOCKED IMAGE
       ↓
    COLLECT ITEMS
       ↓
@@ -25,6 +31,21 @@ const TABLE_UNLOCKED_IMAGE =
     "table_unlocked.png";
 
 
+/* =========================================
+   STORAGE KEYS
+========================================= */
+
+const TABLE_UNLOCKED_KEY =
+    "brokenPhone_tableUnlocked";
+
+const INVENTORY_KEY =
+    "brokenPhoneInventory";
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
 const tableScene =
     document.getElementById("tableScene");
 
@@ -34,447 +55,73 @@ const unlockButton =
 const itemsLayer =
     document.getElementById("itemsLayer");
 
+const puzzleOverlay =
+    document.getElementById("puzzleOverlay");
 
-/* =========================================
-   TABLE UNLOCK STORAGE
-========================================= */
+const closePuzzle =
+    document.getElementById("closePuzzle");
 
-const TABLE_UNLOCKED_KEY =
-    "brokenPhone_tableUnlocked";
+const leafGrid =
+    document.getElementById("leafGrid");
 
+const puzzleMessage =
+    document.getElementById("puzzleMessage");
 
-function isTableUnlocked(){
+const continuePuzzle =
+    document.getElementById("continuePuzzle");
 
-    return localStorage.getItem(
-        TABLE_UNLOCKED_KEY
-    ) === "true";
+const clueOverlay =
+    document.getElementById("clueOverlay");
 
-}
+const closeClue =
+    document.getElementById("closeClue");
 
+const inventorySlots =
+    document.getElementById("inventorySlots");
 
-/* =========================================
-   UPDATE TABLE IMAGE
-========================================= */
+const toast =
+    document.getElementById("toast");
 
-function updateTableImage(){
+const music =
+    document.getElementById("music");
 
-    if(isTableUnlocked()){
+const collectSound =
+    document.getElementById("collectSound");
 
-        tableScene.style.backgroundImage =
-            `url("${TABLE_UNLOCKED_IMAGE}")`;
+const flipSound =
+    document.getElementById("flipSound");
 
-        itemsLayer.classList.remove(
-            "hidden"
-        );
-
-        unlockButton.classList.add(
-            "hidden"
-        );
-
-    }
-
-    else{
-
-        tableScene.style.backgroundImage =
-            `url("${TABLE_LOCKED_IMAGE}")`;
-
-        itemsLayer.classList.add(
-            "hidden"
-        );
-
-        unlockButton.classList.remove(
-            "hidden"
-        );
-
-    }
-
-}
+const unlockSound =
+    document.getElementById("unlockSound");
 
 
 /* =========================================
-   INVENTORY
+   ITEM DATA
 ========================================= */
 
-const INVENTORY_KEY =
-    "brokenPhoneInventory";
+const ITEM_DATA = {
 
+    screen_connector: {
 
-const DATA = {
+        name:
+            "Screen Connector",
 
-    screen_connector:{
-        name:"Screen Connector",
-        img:"screen_connector.png"
+        img:
+            "screen_connector.png"
+
     },
 
-    cassette_tape:{
-        name:"Cassette Tape",
-        img:"cassette_tape.png"
+    cassette_tape: {
+
+        name:
+            "Cassette Tape",
+
+        img:
+            "cassette_tape.png"
+
     }
 
 };
-
-
-const slots =
-    document.getElementById(
-        "inventorySlots"
-    );
-
-
-const toast =
-    document.getElementById(
-        "toast"
-    );
-
-
-/* =========================================
-   GET INVENTORY
-========================================= */
-
-function getInventory(){
-
-    try{
-
-        return JSON.parse(
-            localStorage.getItem(
-                INVENTORY_KEY
-            )
-        ) || [];
-
-    }
-
-    catch(error){
-
-        return [];
-
-    }
-
-}
-
-
-/* =========================================
-   SAVE INVENTORY
-========================================= */
-
-function saveInventory(
-    inventory
-){
-
-    localStorage.setItem(
-        INVENTORY_KEY,
-        JSON.stringify(
-            inventory
-        )
-    );
-
-}
-
-
-/* =========================================
-   RENDER INVENTORY
-========================================= */
-
-function renderInventory(){
-
-    slots.innerHTML = "";
-
-    const inventory =
-        getInventory();
-
-
-    for(
-        let i = 0;
-        i < 8;
-        i++
-    ){
-
-        const slot =
-            document.createElement(
-                "div"
-            );
-
-        slot.className =
-            "inventory-slot";
-
-
-        if(
-            inventory[i] &&
-            DATA[inventory[i]]
-        ){
-
-            slot.innerHTML = `
-
-                <img
-                    src="${DATA[inventory[i]].img}"
-                    alt=""
-                >
-
-                <span>
-                    ${DATA[inventory[i]].name}
-                </span>
-
-            `;
-
-        }
-
-
-        slots.appendChild(
-            slot
-        );
-
-    }
-
-}
-
-
-/* =========================================
-   TOAST
-========================================= */
-
-function showToast(
-    message
-){
-
-    toast.textContent =
-        message;
-
-    toast.classList.add(
-        "show"
-    );
-
-
-    setTimeout(() => {
-
-        toast.classList.remove(
-            "show"
-        );
-
-    },1600);
-
-}
-
-
-/* =========================================
-   COLLECT ITEM
-========================================= */
-
-function collectItem(
-    id,
-    element
-){
-
-    let inventory =
-        getInventory();
-
-
-    /*
-       Already collected
-    */
-
-    if(
-        inventory.includes(id)
-    ){
-
-        showToast(
-            "Already collected."
-        );
-
-        return;
-
-    }
-
-
-    /*
-       Inventory full
-    */
-
-    if(
-        inventory.length >= 8
-    ){
-
-        showToast(
-            "Inventory full."
-        );
-
-        return;
-
-    }
-
-
-    /*
-       Add item
-    */
-
-    inventory.push(id);
-
-    saveInventory(
-        inventory
-    );
-
-
-    /*
-       Hide item from table
-    */
-
-    element.classList.add(
-        "hidden"
-    );
-
-
-    /*
-       Update inventory
-    */
-
-    renderInventory();
-
-
-    /*
-       Collection sound
-    */
-
-    document
-        .getElementById(
-            "collectSound"
-        )
-        .play()
-        .catch(() => {});
-
-
-    showToast(
-        `${DATA[id].name} added to inventory.`
-    );
-
-}
-
-
-/* =========================================
-   BACK BUTTON
-========================================= */
-
-document
-    .getElementById(
-        "backButton"
-    )
-    .onclick = () => {
-
-        window.location.href =
-            "investigation.html";
-
-    };
-
-
-/* =========================================
-   COLLECTIBLE EVENTS
-========================================= */
-
-document
-    .querySelectorAll(
-        ".item"
-    )
-    .forEach(
-        element => {
-
-            element.onclick = () => {
-
-                collectItem(
-                    element.dataset.item,
-                    element
-                );
-
-            };
-
-        }
-    );
-
-
-/* =========================================
-   RESTORE COLLECTED ITEMS
-========================================= */
-
-function restoreCollectedItems(){
-
-    const inventory =
-        getInventory();
-
-
-    document
-        .querySelectorAll(
-            ".item"
-        )
-        .forEach(
-            element => {
-
-                if(
-                    inventory.includes(
-                        element.dataset.item
-                    )
-                ){
-
-                    element.classList.add(
-                        "hidden"
-                    );
-
-                }
-
-            }
-        );
-
-}
-
-
-/* =========================================
-   MUSIC
-========================================= */
-
-const music =
-    document.getElementById(
-        "music"
-    );
-
-
-music.volume = 0.18;
-
-music.play()
-    .catch(() => {});
-
-
-/* =========================================
-   MINI-GAME ELEMENTS
-========================================= */
-
-const puzzleOverlay =
-    document.getElementById(
-        "puzzleOverlay"
-    );
-
-const closePuzzle =
-    document.getElementById(
-        "closePuzzle"
-    );
-
-const leafGrid =
-    document.getElementById(
-        "leafGrid"
-    );
-
-const puzzleMessage =
-    document.getElementById(
-        "puzzleMessage"
-    );
-
-const continuePuzzle =
-    document.getElementById(
-        "continuePuzzle"
-    );
-
-const clueOverlay =
-    document.getElementById(
-        "clueOverlay"
-    );
-
-const closeClue =
-    document.getElementById(
-        "closeClue"
-    );
 
 
 /* =========================================
@@ -487,40 +134,353 @@ let secondCard = null;
 
 let lockBoard = false;
 
+let puzzleComplete = false;
+
 
 /* =========================================
-   OPEN MINI-GAME
+   TABLE STATE
 ========================================= */
 
-unlockButton.onclick = () => {
+function isTableUnlocked() {
 
-    openPuzzle();
+    return localStorage.getItem(
+        TABLE_UNLOCKED_KEY
+    ) === "true";
 
-};
+}
+
+
+/* =========================================
+   INVENTORY
+========================================= */
+
+function getInventory() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                INVENTORY_KEY
+            );
+
+        if (!saved) {
+
+            return [];
+
+        }
+
+        const parsed =
+            JSON.parse(saved);
+
+        return Array.isArray(parsed)
+            ? parsed
+            : [];
+
+    }
+
+    catch (error) {
+
+        return [];
+
+    }
+
+}
+
+
+function saveInventory(
+    inventory
+) {
+
+    localStorage.setItem(
+        INVENTORY_KEY,
+        JSON.stringify(inventory)
+    );
+
+}
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+function showToast(
+    message
+) {
+
+    toast.textContent =
+        message;
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        1600
+    );
+
+}
+
+
+/* =========================================
+   AUDIO
+========================================= */
+
+function playSound(
+    audio
+) {
+
+    if (!audio) {
+
+        return;
+
+    }
+
+    audio.currentTime = 0;
+
+    audio.play().catch(
+        () => {}
+    );
+
+}
+
+
+/* =========================================
+   INVENTORY DISPLAY
+========================================= */
+
+function renderInventory() {
+
+    inventorySlots.innerHTML =
+        "";
+
+    const inventory =
+        getInventory();
+
+
+    for (
+        let i = 0;
+        i < 8;
+        i++
+    ) {
+
+        const slot =
+            document.createElement(
+                "div"
+            );
+
+        slot.className =
+            "inventory-slot";
+
+
+        const itemID =
+            inventory[i];
+
+
+        if (
+            itemID &&
+            ITEM_DATA[itemID]
+        ) {
+
+            slot.innerHTML = `
+
+                <img
+                    src="${ITEM_DATA[itemID].img}"
+                    alt="${ITEM_DATA[itemID].name}"
+                >
+
+                <span>
+                    ${ITEM_DATA[itemID].name}
+                </span>
+
+            `;
+
+        }
+
+
+        inventorySlots.appendChild(
+            slot
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   HIDE ALREADY COLLECTED ITEMS
+========================================= */
+
+function restoreCollectedItems() {
+
+    const inventory =
+        getInventory();
+
+
+    document
+        .querySelectorAll(".item")
+        .forEach(
+            item => {
+
+                const id =
+                    item.dataset.item;
+
+
+                if (
+                    inventory.includes(id)
+                ) {
+
+                    item.classList.add(
+                        "hidden"
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================
+   COLLECT ITEM
+========================================= */
+
+function collectItem(
+    id,
+    element
+) {
+
+    const inventory =
+        getInventory();
+
+
+    if (
+        inventory.includes(id)
+    ) {
+
+        showToast(
+            "Already collected."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        inventory.length >= 8
+    ) {
+
+        showToast(
+            "Inventory full."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !ITEM_DATA[id]
+    ) {
+
+        return;
+
+    }
+
+
+    inventory.push(id);
+
+    saveInventory(
+        inventory
+    );
+
+
+    element.classList.add(
+        "hidden"
+    );
+
+
+    renderInventory();
+
+
+    playSound(
+        collectSound
+    );
+
+
+    showToast(
+        `${ITEM_DATA[id].name} added to inventory.`
+    );
+
+}
+
+
+/* =========================================
+   TABLE IMAGE / STATE
+========================================= */
+
+function updateTable() {
+
+    if (
+        isTableUnlocked()
+    ) {
+
+        tableScene.style.backgroundImage =
+            `url("${TABLE_UNLOCKED_IMAGE}")`;
+
+
+        unlockButton.classList.add(
+            "hidden"
+        );
+
+
+        itemsLayer.classList.remove(
+            "hidden"
+        );
+
+
+        restoreCollectedItems();
+
+    }
+
+    else {
+
+        tableScene.style.backgroundImage =
+            `url("${TABLE_LOCKED_IMAGE}")`;
+
+
+        unlockButton.classList.remove(
+            "hidden"
+        );
+
+
+        itemsLayer.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
 
 
 /* =========================================
    OPEN PUZZLE
 ========================================= */
 
-function openPuzzle(){
+function openPuzzle() {
 
-    puzzleOverlay.classList.remove(
-        "hidden"
-    );
-
-
-    leafGrid.innerHTML = "";
-
-
-    puzzleMessage.textContent =
-        "";
-
-
-    continuePuzzle.classList.add(
-        "hidden"
-    );
-
+    /*
+       Reset puzzle state.
+    */
 
     firstCard = null;
 
@@ -528,85 +488,95 @@ function openPuzzle(){
 
     lockBoard = false;
 
+    puzzleComplete = false;
+
 
     /*
-       ======================================
-       EMOJI MATCHING CARDS
-       ======================================
+       Reset interface.
+    */
 
-       No image files are needed here.
+    puzzleMessage.textContent =
+        "Find the matching pairs.";
 
-       Every pair has its own emoji.
 
-       The cards are shuffled every time
-       the puzzle opens.
+    continuePuzzle.classList.add(
+        "hidden"
+    );
+
+
+    leafGrid.innerHTML =
+        "";
+
+
+    /*
+       Create cards.
     */
 
     const cards = [
 
         {
-            id:"leaf",
-            emoji:"🍃"
+            id: "leaf",
+            emoji: "🍃"
         },
 
         {
-            id:"leaf",
-            emoji:"🍃"
-        },
-
-
-        {
-            id:"gear",
-            emoji:"⚙️"
-        },
-
-        {
-            id:"gear",
-            emoji:"⚙️"
+            id: "leaf",
+            emoji: "🍃"
         },
 
 
         {
-            id:"key",
-            emoji:"🔑"
+            id: "gear",
+            emoji: "⚙️"
         },
 
         {
-            id:"key",
-            emoji:"🔑"
-        },
-
-
-        {
-            id:"phone",
-            emoji:"📱"
-        },
-
-        {
-            id:"phone",
-            emoji:"📱"
+            id: "gear",
+            emoji: "⚙️"
         },
 
 
         {
-            id:"battery",
-            emoji:"🔋"
+            id: "key",
+            emoji: "🔑"
         },
 
         {
-            id:"battery",
-            emoji:"🔋"
+            id: "key",
+            emoji: "🔑"
         },
 
 
         {
-            id:"lock",
-            emoji:"🔒"
+            id: "phone",
+            emoji: "📱"
         },
 
         {
-            id:"lock",
-            emoji:"🔒"
+            id: "phone",
+            emoji: "📱"
+        },
+
+
+        {
+            id: "battery",
+            emoji: "🔋"
+        },
+
+        {
+            id: "battery",
+            emoji: "🔋"
+        },
+
+
+        {
+            id: "lock",
+            emoji: "🔒"
+        },
+
+        {
+            id: "lock",
+            emoji: "🔒"
         }
 
     ];
@@ -625,6 +595,15 @@ function openPuzzle(){
         }
     );
 
+
+    /*
+       Show puzzle.
+    */
+
+    puzzleOverlay.classList.remove(
+        "hidden"
+    );
+
 }
 
 
@@ -634,13 +613,13 @@ function openPuzzle(){
 
 function shuffle(
     array
-){
+) {
 
-    for(
+    for (
         let i = array.length - 1;
         i > 0;
         i--
-    ){
+    ) {
 
         const j =
             Math.floor(
@@ -667,12 +646,12 @@ function shuffle(
 
 
 /* =========================================
-   CREATE EMOJI CARD
+   CREATE CARD
 ========================================= */
 
 function createCard(
     card
-){
+) {
 
     const element =
         document.createElement(
@@ -692,14 +671,9 @@ function createCard(
 
         <div class="cardInner">
 
-            <!-- CARD BACK -->
-
             <div class="cardBack">
                 ◆
             </div>
-
-
-            <!-- CARD FRONT -->
 
             <div class="cardFront">
 
@@ -714,13 +688,16 @@ function createCard(
     `;
 
 
-    element.onclick = () => {
+    element.addEventListener(
+        "click",
+        () => {
 
-        flipCard(
-            element
-        );
+            flipCard(
+                element
+            );
 
-    };
+        }
+    );
 
 
     leafGrid.appendChild(
@@ -736,39 +713,67 @@ function createCard(
 
 function flipCard(
     card
-){
+) {
 
     /*
-       Don't allow clicking while
-       two cards are being checked.
+       Don't interact while
+       checking two cards.
     */
 
-    if(lockBoard)
+    if (
+        lockBoard
+    ) {
+
         return;
 
+    }
+
 
     /*
-       Don't click the same card twice.
+       Puzzle already complete.
     */
 
-    if(card === firstCard)
+    if (
+        puzzleComplete
+    ) {
+
         return;
 
+    }
+
 
     /*
-       Don't click already matched cards.
+       Don't click an already
+       matched card.
     */
 
-    if(
+    if (
         card.classList.contains(
             "matched"
         )
-    )
+    ) {
+
         return;
+
+    }
 
 
     /*
-       Flip card
+       Don't click the same
+       card twice.
+    */
+
+    if (
+        card === firstCard
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       Flip card.
     */
 
     card.classList.add(
@@ -776,23 +781,18 @@ function flipCard(
     );
 
 
-    /*
-       Flip sound
-    */
-
-    document
-        .getElementById(
-            "flipSound"
-        )
-        .play()
-        .catch(() => {});
+    playSound(
+        flipSound
+    );
 
 
     /*
-       First card
+       First card.
     */
 
-    if(!firstCard){
+    if (
+        firstCard === null
+    ) {
 
         firstCard =
             card;
@@ -803,7 +803,7 @@ function flipCard(
 
 
     /*
-       Second card
+       Second card.
     */
 
     secondCard =
@@ -819,28 +819,36 @@ function flipCard(
    CHECK MATCH
 ========================================= */
 
-function checkMatch(){
+function checkMatch() {
+
+    if (
+        !firstCard ||
+        !secondCard
+    ) {
+
+        return;
+
+    }
+
 
     const firstID =
         firstCard.dataset.id;
-
 
     const secondID =
         secondCard.dataset.id;
 
 
-    /* ======================================
-       CORRECT MATCH
-    ====================================== */
+    /*
+       MATCH
+    */
 
-    if(
+    if (
         firstID === secondID
-    ){
+    ) {
 
         firstCard.classList.add(
             "matched"
         );
-
 
         secondCard.classList.add(
             "matched"
@@ -848,22 +856,15 @@ function checkMatch(){
 
 
         /*
-           The leaf pair is the important
-           evidence pair.
-
-           Finding it completes the puzzle.
+           LEAF PAIR
+           = puzzle solution
         */
 
-        if(
+        if (
             firstID === "leaf"
-        ){
-
-            puzzleMessage.textContent =
-                "The matching leaves reveal the lock mechanism.";
-
+        ) {
 
             finishPuzzle();
-
 
             return;
 
@@ -876,38 +877,47 @@ function checkMatch(){
 
         resetTurn();
 
-
         return;
 
     }
 
 
-    /* ======================================
+    /*
        WRONG MATCH
-    ====================================== */
+    */
 
     lockBoard = true;
 
-
     puzzleMessage.textContent =
-        "No match.";
+        "No match. Try again.";
 
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        firstCard.classList.remove(
-            "flipped"
-        );
+            if (firstCard) {
+
+                firstCard.classList.remove(
+                    "flipped"
+                );
+
+            }
 
 
-        secondCard.classList.remove(
-            "flipped"
-        );
+            if (secondCard) {
+
+                secondCard.classList.remove(
+                    "flipped"
+                );
+
+            }
 
 
-        resetTurn();
+            resetTurn();
 
-    },700);
+        },
+        700
+    );
 
 }
 
@@ -916,7 +926,7 @@ function checkMatch(){
    RESET TURN
 ========================================= */
 
-function resetTurn(){
+function resetTurn() {
 
     firstCard = null;
 
@@ -931,15 +941,15 @@ function resetTurn(){
    PUZZLE COMPLETE
 ========================================= */
 
-function finishPuzzle(){
+function finishPuzzle() {
+
+    puzzleComplete = true;
 
     lockBoard = true;
 
 
     document
-        .querySelectorAll(
-            ".leafCard"
-        )
+        .querySelectorAll(".leafCard")
         .forEach(
             card => {
 
@@ -952,7 +962,7 @@ function finishPuzzle(){
 
 
     puzzleMessage.textContent =
-        "Matching evidence found.";
+        "The matching leaves reveal the lock mechanism.";
 
 
     continuePuzzle.classList.remove(
@@ -966,11 +976,7 @@ function finishPuzzle(){
    UNLOCK TABLE
 ========================================= */
 
-continuePuzzle.onclick = () => {
-
-    /*
-       Save unlocked state
-    */
+function unlockTable() {
 
     localStorage.setItem(
         TABLE_UNLOCKED_KEY,
@@ -978,57 +984,142 @@ continuePuzzle.onclick = () => {
     );
 
 
-    /*
-       Change table image
-    */
+    playSound(
+        unlockSound
+    );
 
-    updateTableImage();
-
-
-    /*
-       Close mini-game
-    */
 
     puzzleOverlay.classList.add(
         "hidden"
     );
 
 
-    /*
-       Show unlocked message
-    */
+    updateTable();
+
 
     clueOverlay.classList.remove(
         "hidden"
     );
 
-};
+
+    showToast(
+        "Work table unlocked."
+    );
+
+}
+
+
+/* =========================================
+   UNLOCK BUTTON
+========================================= */
+
+unlockButton.addEventListener(
+    "click",
+    () => {
+
+        openPuzzle();
+
+    }
+);
+
+
+/* =========================================
+   CONTINUE / UNLOCK
+========================================= */
+
+continuePuzzle.addEventListener(
+    "click",
+    () => {
+
+        unlockTable();
+
+    }
+);
 
 
 /* =========================================
    CLOSE PUZZLE
 ========================================= */
 
-closePuzzle.onclick = () => {
+closePuzzle.addEventListener(
+    "click",
+    () => {
 
-    puzzleOverlay.classList.add(
-        "hidden"
-    );
+        puzzleOverlay.classList.add(
+            "hidden"
+        );
 
-};
+    }
+);
 
 
 /* =========================================
    CLOSE CLUE
 ========================================= */
 
-closeClue.onclick = () => {
+closeClue.addEventListener(
+    "click",
+    () => {
 
-    clueOverlay.classList.add(
-        "hidden"
+        clueOverlay.classList.add(
+            "hidden"
+        );
+
+    }
+);
+
+
+/* =========================================
+   BACK
+========================================= */
+
+document
+    .getElementById("backButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "investigation.html";
+
+        }
     );
 
-};
+
+/* =========================================
+   COLLECTIBLE EVENTS
+========================================= */
+
+document
+    .querySelectorAll(".item")
+    .forEach(
+        item => {
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    collectItem(
+                        item.dataset.item,
+                        item
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================
+   MUSIC
+========================================= */
+
+music.volume = 0.18;
+
+music.play().catch(
+    () => {}
+);
 
 
 /* =========================================
@@ -1037,6 +1128,6 @@ closeClue.onclick = () => {
 
 renderInventory();
 
-updateTableImage();
+updateTable();
 
 restoreCollectedItems();
