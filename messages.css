@@ -1,1 +1,1409 @@
-.message-list-item .avatar{background:linear-gradient(145deg,#cdeedb,#92d3b0)}.conversation{height:100%;display:flex;flex-direction:column;background:#fff}.conversation-header{height:59px;flex:0 0 59px;border-bottom:1px solid #e5e5e7;display:flex;align-items:center;padding:8px 12px;gap:7px}.conversation-header .back{font-size:28px}.person-head{display:flex;align-items:center;gap:8px;flex:1}.mini-avatar{width:35px;height:35px;border-radius:50%;background:#d8e5f1;display:grid;place-items:center;font-size:13px;font-weight:800}.person-head strong{display:block;font-size:15px}.person-head small{display:block;font-size:10px;color:#929298}.chat-scroll{flex:1;overflow:auto;padding:13px 12px 10px;display:flex;flex-direction:column;gap:2px;background:#fff}.day-divider{text-align:center;color:#999;font-size:10px;margin:9px 0 8px}.composer{flex:0 0 auto;border-top:1px solid #e5e5e7;background:#fafafa;padding:7px 8px calc(7px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:6px}.tool-btn{width:31px;height:31px;border:0;background:none;color:#7d7d84;font-size:20px}.message-input{flex:1;min-width:0;height:35px;border:1px solid #d7d7dc;border-radius:18px;background:#fff;padding:0 12px;outline:none;font-size:13px}.send-btn{width:34px;height:34px;border:0;border-radius:50%;background:#147ef5;color:#fff;font-weight:800}.attachment-preview{font-size:11px;color:#147ef5;position:absolute;bottom:52px;left:48px}.fake-keyboard{display:none}
+/* =========================================
+   BROKEN PHONE
+   VICTIM'S PHONE — MESSAGES
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    background: #f5f5f7;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    color: #111;
+}
+
+
+/* =========================================
+   MAIN APP
+========================================= */
+
+#messagesApp {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #fff;
+
+    position: relative;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.app-header {
+
+    height: 59px;
+
+    flex: 0 0 59px;
+
+    display: flex;
+    align-items: center;
+
+    padding:
+        8px
+        12px;
+
+    gap: 7px;
+
+    background: rgba(255,255,255,0.97);
+
+    border-bottom:
+        1px solid
+        #e5e5e7;
+
+    position: relative;
+
+    z-index: 10;
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.app-header .back {
+
+    width: 35px;
+    height: 35px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #147ef5;
+
+    font-size: 32px;
+
+    line-height: 30px;
+
+    padding: 0;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.app-header .back:hover {
+
+    opacity: 0.65;
+}
+
+
+/* =========================================
+   HEADER TITLE
+========================================= */
+
+.header-title {
+
+    flex: 1;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.2px;
+}
+
+
+/* =========================================
+   NEW MESSAGE
+========================================= */
+
+.header-action {
+
+    width: 35px;
+    height: 35px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #147ef5;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.header-action:hover {
+
+    opacity: 0.65;
+}
+
+
+/* =========================================
+   MESSAGE LIST
+========================================= */
+
+#messageList {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    background: #fff;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+#messageList::-webkit-scrollbar,
+.chat-scroll::-webkit-scrollbar {
+
+    width: 6px;
+}
+
+
+#messageList::-webkit-scrollbar-thumb,
+.chat-scroll::-webkit-scrollbar-thumb {
+
+    background: #c7c7cc;
+
+    border-radius: 10px;
+}
+
+
+/* =========================================
+   CONVERSATION SCREEN
+========================================= */
+
+.conversation {
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    background: #fff;
+}
+
+
+/* =========================================
+   CONVERSATION HEADER
+========================================= */
+
+.conversation-header {
+
+    height: 59px;
+
+    flex: 0 0 59px;
+
+    border-bottom:
+        1px solid
+        #e5e5e7;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        8px
+        12px;
+
+    gap: 7px;
+
+    background:
+        rgba(255,255,255,0.98);
+
+    z-index: 10;
+}
+
+
+/* =========================================
+   CONVERSATION BACK
+========================================= */
+
+.conversation-header .back {
+
+    width: 35px;
+    height: 35px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #147ef5;
+
+    font-size: 31px;
+
+    cursor: pointer;
+
+    padding: 0;
+}
+
+
+/* =========================================
+   PERSON HEADER
+========================================= */
+
+.person-head {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+/* =========================================
+   AVATAR
+========================================= */
+
+.mini-avatar {
+
+    width: 36px;
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #dcecff,
+            #b9d8f7
+        );
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #345;
+
+    overflow: hidden;
+}
+
+
+/* Avatar image */
+
+.mini-avatar img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+/* =========================================
+   PERSON NAME
+========================================= */
+
+.person-head strong {
+
+    display: block;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   PERSON STATUS
+========================================= */
+
+.person-head small {
+
+    display: block;
+
+    font-size: 10px;
+
+    color: #929298;
+
+    margin-top: 1px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   CHAT SCROLL
+========================================= */
+
+.chat-scroll {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    padding:
+        13px
+        12px
+        10px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    background: #fff;
+}
+
+
+/* =========================================
+   DATE DIVIDER
+========================================= */
+
+.day-divider {
+
+    text-align: center;
+
+    color: #999;
+
+    font-size: 10px;
+
+    margin:
+        10px
+        0
+        9px;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* =========================================
+   MESSAGE ROW
+========================================= */
+
+.message-row {
+
+    width: 100%;
+
+    display: flex;
+
+    margin:
+        1px
+        0;
+}
+
+
+/* =========================================
+   INCOMING MESSAGE
+========================================= */
+
+.message-row.received {
+
+    justify-content: flex-start;
+}
+
+
+/* =========================================
+   OUTGOING MESSAGE
+========================================= */
+
+.message-row.sent {
+
+    justify-content: flex-end;
+}
+
+
+/* =========================================
+   MESSAGE BUBBLE
+========================================= */
+
+.message-bubble {
+
+    max-width: min(
+        72%,
+        520px
+    );
+
+    padding:
+        8px
+        12px;
+
+    border-radius: 18px;
+
+    font-size: 14px;
+
+    line-height: 1.38;
+
+    word-wrap: break-word;
+
+    white-space: pre-wrap;
+
+    position: relative;
+}
+
+
+/* =========================================
+   VICTIM'S RECEIVED MESSAGES
+========================================= */
+
+.message-row.received .message-bubble {
+
+    background: #e9e9eb;
+
+    color: #111;
+
+    border-bottom-left-radius: 5px;
+}
+
+
+/* =========================================
+   VICTIM'S SENT MESSAGES
+========================================= */
+
+.message-row.sent .message-bubble {
+
+    background: #147ef5;
+
+    color: #fff;
+
+    border-bottom-right-radius: 5px;
+}
+
+
+/* =========================================
+   MESSAGE TIME
+========================================= */
+
+.message-time {
+
+    display: block;
+
+    font-size: 9px;
+
+    margin-top: 3px;
+
+    opacity: 0.55;
+
+    text-align: right;
+}
+
+
+/* =========================================
+   SUSPICIOUS MESSAGE
+========================================= */
+
+.message-bubble.suspicious {
+
+    background:
+        #f1e4d2;
+
+    color:
+        #3d2a18;
+
+    border:
+        1px solid
+        rgba(130,90,45,0.25);
+}
+
+
+/* =========================================
+   IMPORTANT MESSAGE
+========================================= */
+
+.message-bubble.important {
+
+    box-shadow:
+        0 0 0 1px
+        rgba(20,126,245,0.15);
+}
+
+
+/* =========================================
+   UNKNOWN NUMBER
+========================================= */
+
+.message-row.unknown .message-bubble {
+
+    background:
+        #ededf0;
+
+    color:
+        #222;
+}
+
+
+/* =========================================
+   UNKNOWN CONTACT LABEL
+========================================= */
+
+.unknown-label {
+
+    font-size: 9px;
+
+    color: #888;
+
+    margin-bottom: 3px;
+
+    padding-left: 4px;
+
+    letter-spacing: 0.3px;
+}
+
+
+/* =========================================
+   ARCHIVED CHAT MARKER
+========================================= */
+
+.archived-marker {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: 10px;
+
+    color: #888;
+
+    padding:
+        8px
+        12px;
+
+    background:
+        #f5f5f7;
+
+    border-bottom:
+        1px solid
+        #e5e5e7;
+}
+
+
+/* =========================================
+   MESSAGE LIST ITEM
+========================================= */
+
+.message-list-item {
+
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding:
+        8px
+        12px;
+
+    background: #fff;
+
+    border-bottom:
+        1px solid
+        #ededf0;
+
+    cursor: pointer;
+
+    transition:
+        background
+        0.15s ease;
+}
+
+
+.message-list-item:hover {
+
+    background:
+        #f5f5f7;
+}
+
+
+.message-list-item:active {
+
+    background:
+        #e9e9eb;
+}
+
+
+/* =========================================
+   CONTACT AVATAR
+========================================= */
+
+.message-list-item .avatar {
+
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 48px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #cdeedb,
+            #92d3b0
+        );
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #355;
+}
+
+
+/* =========================================
+   AVATAR VARIATIONS
+========================================= */
+
+.message-list-item .avatar.mom {
+
+    background:
+        linear-gradient(
+            145deg,
+            #f4d5df,
+            #e8aabd
+        );
+}
+
+
+.message-list-item .avatar.dad {
+
+    background:
+        linear-gradient(
+            145deg,
+            #d5e2f4,
+            #a8c4e8
+        );
+}
+
+
+.message-list-item .avatar.friend {
+
+    background:
+        linear-gradient(
+            145deg,
+            #e1d5f4,
+            #c2a9e8
+        );
+}
+
+
+.message-list-item .avatar.unknown {
+
+    background:
+        #d8d8dc;
+
+    color:
+        #666;
+}
+
+
+/* =========================================
+   CONTACT INFORMATION
+========================================= */
+
+.message-list-item .contact-info {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.message-list-item .contact-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.message-list-item .preview {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: #8b8b91;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   TIME ON LIST
+========================================= */
+
+.message-list-item .message-time {
+
+    flex: 0 0 auto;
+
+    align-self: flex-start;
+
+    margin-top: 5px;
+
+    font-size: 10px;
+
+    color: #999;
+
+    opacity: 1;
+}
+
+
+/* =========================================
+   UNREAD DOT
+========================================= */
+
+.unread-dot {
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #147ef5;
+
+    flex: 0 0 8px;
+}
+
+
+/* =========================================
+   ARCHIVE ICON
+========================================= */
+
+.archive-icon {
+
+    font-size: 13px;
+
+    color: #999;
+
+    margin-left: 3px;
+}
+
+
+/* =========================================
+   MESSAGE COMPOSER
+========================================= */
+
+.composer {
+
+    flex: 0 0 auto;
+
+    min-height: 50px;
+
+    border-top:
+        1px solid
+        #e5e5e7;
+
+    background:
+        #fafafa;
+
+    padding:
+        7px
+        8px
+        calc(
+            7px +
+            env(safe-area-inset-bottom)
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    position: relative;
+}
+
+
+/* =========================================
+   COMPOSER TOOL BUTTON
+========================================= */
+
+.tool-btn {
+
+    width: 31px;
+    height: 31px;
+
+    border: 0;
+
+    background: none;
+
+    color: #7d7d84;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.tool-btn:hover {
+
+    color: #147ef5;
+}
+
+
+/* =========================================
+   MESSAGE INPUT
+========================================= */
+
+.message-input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 35px;
+
+    border:
+        1px solid
+        #d7d7dc;
+
+    border-radius: 18px;
+
+    background:
+        #fff;
+
+    padding:
+        0
+        12px;
+
+    outline: none;
+
+    font-size: 13px;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+
+.message-input:focus {
+
+    border-color:
+        #147ef5;
+
+    box-shadow:
+        0 0 0 1px
+        rgba(20,126,245,0.12);
+}
+
+
+/* =========================================
+   SEND BUTTON
+========================================= */
+
+.send-btn {
+
+    width: 34px;
+    height: 34px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background:
+        #147ef5;
+
+    color:
+        #fff;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.send-btn:hover {
+
+    filter:
+        brightness(1.08);
+}
+
+
+.send-btn:active {
+
+    transform:
+        scale(0.94);
+}
+
+
+/* =========================================
+   ATTACHMENT PREVIEW
+========================================= */
+
+.attachment-preview {
+
+    font-size: 11px;
+
+    color:
+        #147ef5;
+
+    position: absolute;
+
+    bottom: 52px;
+
+    left: 48px;
+
+    max-width: 70%;
+
+    background:
+        rgba(255,255,255,0.95);
+
+    padding:
+        4px
+        8px;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.12);
+}
+
+
+/* =========================================
+   IMAGE MESSAGE
+========================================= */
+
+.message-image {
+
+    display: block;
+
+    max-width: 260px;
+
+    max-height: 260px;
+
+    border-radius: 12px;
+
+    object-fit: cover;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================
+   AUDIO MESSAGE
+========================================= */
+
+.message-audio {
+
+    width: 220px;
+
+    height: 35px;
+}
+
+
+/* =========================================
+   DOCUMENT / FILE MESSAGE
+========================================= */
+
+.file-message {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        4px
+        2px;
+}
+
+
+.file-icon {
+
+    font-size: 22px;
+}
+
+
+.file-name {
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   FAKE KEYBOARD
+========================================= */
+
+.fake-keyboard {
+
+    display: none;
+
+    position: absolute;
+
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 220px;
+
+    background:
+        #d1d5db;
+}
+
+
+/* =========================================
+   SUSPICIOUS CHAT INDICATOR
+========================================= */
+
+.suspicious-chat {
+
+    position: relative;
+}
+
+
+.suspicious-chat::after {
+
+    content:
+        "!";
+
+    position: absolute;
+
+    right: 13px;
+
+    top: 8px;
+
+    width: 16px;
+    height: 16px;
+
+    border-radius: 50%;
+
+    background:
+        #c8873a;
+
+    color:
+        #fff;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    display: grid;
+
+    place-items: center;
+}
+
+
+/* =========================================
+   RED CLUE TEXT
+========================================= */
+
+.red-clue {
+
+    color:
+        #a52b2b;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================
+   READ / UNREAD
+========================================= */
+
+.message-list-item.unread
+.contact-name {
+
+    font-weight:
+        750;
+}
+
+
+.message-list-item.unread
+.preview {
+
+    color:
+        #555;
+
+    font-weight:
+        500;
+}
+
+
+/* =========================================
+   MOBILE / SMALL SCREEN
+========================================= */
+
+@media (max-width: 700px) {
+
+    .message-bubble {
+
+        max-width: 82%;
+
+        font-size: 13px;
+    }
+
+
+    .message-list-item {
+
+        height: 66px;
+    }
+
+
+    .message-list-item .avatar {
+
+        width: 44px;
+        height: 44px;
+
+        flex-basis: 44px;
+    }
+
+
+    .message-list-item .contact-name {
+
+        font-size: 14px;
+    }
+
+
+    .message-list-item .preview {
+
+        font-size: 11px;
+    }
+}
+
+
+/* =========================================
+   LARGE 1920 × 1080 SCREEN
+========================================= */
+
+@media (min-width: 1400px) {
+
+    .conversation-header {
+
+        height: 68px;
+
+        flex-basis: 68px;
+
+        padding-left: 22px;
+
+        padding-right: 22px;
+    }
+
+
+    .chat-scroll {
+
+        padding:
+            18px
+            24px
+            16px;
+    }
+
+
+    .message-bubble {
+
+        font-size: 16px;
+
+        max-width: 620px;
+
+        padding:
+            10px
+            15px;
+    }
+
+
+    .message-list-item {
+
+        height: 82px;
+
+        padding:
+            10px
+            20px;
+    }
+
+
+    .message-list-item .avatar {
+
+        width: 54px;
+        height: 54px;
+
+        flex-basis: 54px;
+    }
+
+
+    .message-list-item .contact-name {
+
+        font-size: 17px;
+    }
+
+
+    .message-list-item .preview {
+
+        font-size: 13px;
+    }
+}
+
+
+/* =========================================
+   NO CONVERSATIONS
+========================================= */
+
+.empty-messages {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color:
+        #999;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   FADE ANIMATION
+========================================= */
+
+.message-row {
+
+    animation:
+        messageAppear
+        0.15s
+        ease-out;
+}
+
+
+@keyframes messageAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(3px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* =========================================
+   VICTIM PHONE FEEL
+========================================= */
+
+/*
+   Keep this subtle.
+   The phone should initially look
+   completely normal.
+
+   Suspicious details should come from
+   the actual messages, not from the UI.
+*/
+
+#messagesApp.suspicious-mode {
+
+    background:
+        #fff;
+}
+
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.hidden {
+
+    display: none !important;
+}
