@@ -1,57 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Broken Phone — Desk</title>
-<link rel="stylesheet" href="desk.css">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Broken Phone — Desk Drawer</title>
+
+    <link
+        rel="stylesheet"
+        href="desk.css"
+    >
+
 </head>
+
+
 <body>
+
 <main id="deskGame">
-    <div id="deskScene" class="locked"></div>
 
-    <button id="backButton" class="back">← BACK</button>
-    <div class="place-title">DESK DRAWER</div>
+    <!-- =========================================
+         DESK BACKGROUND
+    ========================================== -->
 
-    <button id="unlockButton" class="unlock-button">EXAMINE LOCK</button>
+    <div
+        id="deskScene"
+        class="locked"
+    ></div>
 
-    <div id="drawerPuzzle" class="modal hidden">
+
+    <!-- =========================================
+         TOP UI
+    ========================================== -->
+
+    <button
+        id="backButton"
+        class="back"
+        type="button"
+    >
+        ← BACK
+    </button>
+
+
+    <div class="place-title">
+        DESK DRAWER
+    </div>
+
+
+    <!-- =========================================
+         UNLOCK
+    ========================================== -->
+
+    <button
+        id="unlockButton"
+        class="unlock-button"
+        type="button"
+    >
+        EXAMINE LOCK
+    </button>
+
+
+    <!-- =========================================
+         MATCH PUZZLE
+    ========================================== -->
+
+    <div
+        id="drawerPuzzle"
+        class="modal hidden"
+    >
+
         <div class="puzzle-box">
-            <button id="closePuzzle" class="close">×</button>
-            <div class="puzzle-title">DRAWER LOCK</div>
-            <p>Match three or more identical symbols. Reach 10 matches to release the lock.</p>
-            <div id="matchGrid" class="match-grid"></div>
-            <div class="progress"><span id="matchCount">0</span> / 10</div>
+
+            <button
+                id="closePuzzle"
+                class="close"
+                type="button"
+                aria-label="Close puzzle"
+            >
+                ×
+            </button>
+
+
+            <div class="puzzle-title">
+                DRAWER LOCK
+            </div>
+
+
+            <p>
+                Match three or more identical symbols.
+                <br>
+                Reach 10 matches to release the lock.
+            </p>
+
+
+            <div
+                id="matchGrid"
+                class="match-grid"
+            ></div>
+
+
+            <div class="progress">
+
+                MATCHES:
+
+                <span id="matchCount">
+                    0
+                </span>
+
+                / 10
+
+            </div>
+
+
+            <div
+                id="deskPuzzleMessage"
+                class="puzzle-message"
+            >
+                Swap adjacent symbols to make matches.
+            </div>
+
+
+            <button
+                id="continuePuzzle"
+                class="continue-button hidden"
+                type="button"
+            >
+                UNLOCK DRAWER
+            </button>
+
         </div>
+
     </div>
 
-    <div id="itemsLayer" class="items-layer hidden">
-        <button class="item hotspot screwdriver" data-item="precision_screwdriver" title="Collect">
-            <img src="precision_screwdriver.png" alt="Precision screwdriver">
-            <span>COLLECT</span>
+
+    <!-- =========================================
+         COLLECTIBLE ITEMS
+    ========================================== -->
+
+    <div
+        id="itemsLayer"
+        class="items-layer hidden"
+    >
+
+        <button
+            class="item screwdriver"
+            data-item="precision_screwdriver"
+            type="button"
+        >
+
+            <img
+                src="precision_screwdriver.png"
+                alt="Precision screwdriver"
+            >
+
+            <span>
+                COLLECT
+            </span>
+
         </button>
-        <button class="item hotspot battery" data-item="replacement_battery" title="Collect">
-            <img src="replacement_battery.png" alt="Replacement battery">
-            <span>COLLECT</span>
+
+
+        <button
+            class="item battery"
+            data-item="replacement_battery"
+            type="button"
+        >
+
+            <img
+                src="replacement_battery.png"
+                alt="Replacement battery"
+            >
+
+            <span>
+                COLLECT
+            </span>
+
         </button>
-        <button class="item hotspot key" data-item="old_key" title="Collect">
-            <img src="old_key.png" alt="Old key">
-            <span>COLLECT</span>
+
+
+        <button
+            class="item key"
+            data-item="old_key"
+            type="button"
+        >
+
+            <img
+                src="old_key.png"
+                alt="Old key"
+            >
+
+            <span>
+                COLLECT
+            </span>
+
         </button>
+
     </div>
+
+
+    <!-- =========================================
+         INVENTORY
+    ========================================== -->
 
     <section class="inventory-panel">
-        <div class="inventory-title">INVENTORY</div>
-        <div id="inventorySlots" class="inventory-slots"></div>
+
+        <div class="inventory-title">
+            INVENTORY
+        </div>
+
+
+        <div
+            id="inventorySlots"
+            class="inventory-slots"
+        ></div>
+
     </section>
 
-    <div id="toast" class="toast"></div>
 
-    <audio id="music" src="investigation_music.mp3" loop></audio>
-    <audio id="clickSound" src="ui_click.mp3"></audio>
-    <audio id="unlockSound" src="drawer_unlock.mp3"></audio>
-    <audio id="collectSound" src="item_collect.mp3"></audio>
+    <!-- =========================================
+         TOAST
+    ========================================== -->
+
+    <div
+        id="toast"
+        class="toast"
+    ></div>
+
+
+    <!-- =========================================
+         AUDIO
+    ========================================== -->
+
+    <audio
+        id="music"
+        src="investigation_music.mp3"
+        loop
+    ></audio>
+
+
+    <audio
+        id="clickSound"
+        src="ui_click.mp3"
+    ></audio>
+
+
+    <audio
+        id="unlockSound"
+        src="drawer_unlock.mp3"
+    ></audio>
+
+
+    <audio
+        id="collectSound"
+        src="item_collect.mp3"
+    ></audio>
+
 </main>
+
+
 <script src="desk.js"></script>
+
 </body>
+
 </html>
