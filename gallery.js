@@ -1,0 +1,1 @@
+const PASSWORD='2142';open.onclick=()=>{if(pass.value===PASSWORD){gate.style.display='none';gallery.style.display='grid';for(let i=1;i<=18;i++){let d=document.createElement('div');let img=document.createElement('img');img.src='photo'+i+'.png';img.onerror=()=>d.textContent='PHOTO '+i;d.append(img);gallery.append(d)}}else err.textContent='Incorrect password.'};
