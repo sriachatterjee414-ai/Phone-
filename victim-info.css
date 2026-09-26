@@ -1,0 +1,886 @@
+*{
+    box-sizing:border-box;
+}
+
+
+html,
+body{
+
+    margin:0;
+
+    width:100%;
+    min-height:100%;
+
+    background:#0b0b0b;
+
+    color:#e8e3d9;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+}
+
+
+body{
+
+    overflow-x:hidden;
+
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+#victimInfoPage{
+
+    min-height:100vh;
+
+    padding-left:75px;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 10%,
+            #292721 0%,
+            #11100e 35%,
+            #070707 100%
+        );
+
+}
+
+
+/* =========================================
+   PERMANENT LEFT TAB
+========================================= */
+
+.case-tab{
+
+    position:fixed;
+
+    left:0;
+    top:50%;
+
+    transform:
+        translateY(-50%);
+
+    z-index:1000;
+
+    width:65px;
+    min-height:145px;
+
+    border:1px solid #75684f;
+
+    border-left:0;
+
+    border-radius:
+        0 12px 12px 0;
+
+    background:#171612;
+
+    color:#d9cba9;
+
+    cursor:pointer;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:9px;
+
+    box-shadow:
+        5px 5px 20px rgba(0,0,0,.5);
+
+}
+
+
+.case-tab:hover{
+
+    background:#26231c;
+
+}
+
+
+.case-tab span{
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    writing-mode:
+        vertical-rl;
+
+    transform:
+        rotate(180deg);
+
+}
+
+
+.case-tab strong{
+
+    font-size:10px;
+
+    line-height:1.3;
+
+    text-align:center;
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.case-header{
+
+    max-width:1050px;
+
+    margin:auto;
+
+    padding:55px 45px 30px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:space-between;
+
+    gap:30px;
+
+    border-bottom:
+        1px solid #4a4438;
+
+}
+
+
+.case-label{
+
+    font-size:10px;
+
+    letter-spacing:3px;
+
+    color:#91866e;
+
+}
+
+
+.case-header h1{
+
+    margin:8px 0 4px;
+
+    font-size:31px;
+
+    letter-spacing:2px;
+
+    font-weight:500;
+
+}
+
+
+.case-number{
+
+    font-size:11px;
+
+    color:#777267;
+
+    letter-spacing:1px;
+
+}
+
+
+.case-status{
+
+    padding:8px 12px;
+
+    border:1px solid #75684f;
+
+    color:#c8b98e;
+
+    font-size:10px;
+
+    letter-spacing:1px;
+
+}
+
+
+/* =========================================
+   DOSSIER
+========================================= */
+
+.dossier{
+
+    width:100%;
+
+    max-width:1050px;
+
+    margin:auto;
+
+    padding:25px 45px 70px;
+
+}
+
+
+.dossier-section{
+
+    margin-bottom:25px;
+
+    padding:22px;
+
+    border:1px solid #37342d;
+
+    background:
+        rgba(24,23,20,.72);
+
+}
+
+
+.section-title{
+
+    margin-bottom:20px;
+
+    padding-bottom:10px;
+
+    border-bottom:
+        1px solid #3e3a31;
+
+    color:#a99b78;
+
+    font-size:11px;
+
+    letter-spacing:3px;
+
+}
+
+
+/* =========================================
+   VICTIM
+========================================= */
+
+.victim-layout{
+
+    display:grid;
+
+    grid-template-columns:
+        230px 1fr;
+
+    gap:35px;
+
+}
+
+
+.victim-photo{
+
+    border:1px solid #554d3e;
+
+    background:#111;
+
+    padding:10px;
+
+}
+
+
+.victim-photo img{
+
+    display:block;
+
+    width:100%;
+
+    aspect-ratio:3 / 4;
+
+    object-fit:cover;
+
+    background:#222;
+
+}
+
+
+.photo-label{
+
+    padding-top:9px;
+
+    text-align:center;
+
+    color:#777;
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+}
+
+
+/* =========================================
+   INFO ROWS
+========================================= */
+
+.victim-details{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+.info-row{
+
+    min-height:43px;
+
+    display:grid;
+
+    grid-template-columns:
+        180px 1fr;
+
+    align-items:center;
+
+    border-bottom:
+        1px solid #302e29;
+
+}
+
+
+.info-row .label{
+
+    color:#777267;
+
+    font-size:10px;
+
+    letter-spacing:1.5px;
+
+}
+
+
+.info-row .value{
+
+    color:#e3ded2;
+
+    font-size:14px;
+
+}
+
+
+.info-row .birthday{
+
+    color:#e5ca82;
+
+    font-weight:bold;
+
+}
+
+
+/* =========================================
+   BIRTHDAY HINT
+========================================= */
+
+.birthday-hint{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    border:
+        1px solid #4a4335;
+
+    background:
+        rgba(100,82,44,.08);
+
+}
+
+
+.hint-icon{
+
+    width:34px;
+    height:34px;
+
+    border:1px solid #8a7955;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    color:#d8bf87;
+
+    font-weight:bold;
+
+}
+
+
+.birthday-hint strong{
+
+    display:block;
+
+    color:#d0c09c;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+
+}
+
+
+.birthday-hint p{
+
+    margin:5px 0 0;
+
+    color:#858076;
+
+    font-size:12px;
+
+}
+
+
+/* =========================================
+   BUTTON
+========================================= */
+
+.file-button,
+.back-button{
+
+    border:1px solid #645a46;
+
+    background:#1b1915;
+
+    color:#d7c79d;
+
+    padding:11px 18px;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    letter-spacing:1.5px;
+
+}
+
+
+.file-button:hover,
+.back-button:hover{
+
+    background:#2a261e;
+
+}
+
+
+/* =========================================
+   BIRTHDAY FILE
+========================================= */
+
+.birthday-file{
+
+    margin-top:18px;
+
+    border:1px solid #71664f;
+
+    background:#171611;
+
+}
+
+
+.hidden{
+
+    display:none!important;
+
+}
+
+
+.file-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:10px 14px;
+
+    border-bottom:
+        1px solid #464033;
+
+    color:#958969;
+
+    font-size:9px;
+
+    letter-spacing:1.5px;
+
+}
+
+
+.file-body{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:30px;
+
+    padding:25px;
+
+}
+
+
+.file-stamp{
+
+    width:70px;
+    height:70px;
+
+    border:
+        2px solid #795f45;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    color:#927052;
+
+    font-size:9px;
+
+    line-height:1.3;
+
+    transform:
+        rotate(-10deg);
+
+}
+
+
+.file-information{
+
+    flex:1;
+
+    display:grid;
+
+    gap:15px;
+
+}
+
+
+.file-information span{
+
+    display:block;
+
+    margin-bottom:4px;
+
+    color:#6f6a5e;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+
+}
+
+
+.file-information strong{
+
+    color:#ded7c5;
+
+    font-size:15px;
+
+}
+
+
+.file-information .password-reveal{
+
+    color:#d9bb70;
+
+    letter-spacing:4px;
+
+}
+
+
+.file-warning{
+
+    padding:12px 18px;
+
+    border-top:
+        1px solid #3c382f;
+
+    color:#817b70;
+
+    font-size:10px;
+
+    line-height:1.5;
+
+}
+
+
+/* =========================================
+   CASE INFORMATION
+========================================= */
+
+.case-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:1px;
+
+    background:#37342d;
+
+}
+
+
+.case-grid > div{
+
+    padding:16px;
+
+    background:#161512;
+
+}
+
+
+.case-grid span{
+
+    display:block;
+
+    margin-bottom:7px;
+
+    color:#706b60;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+
+}
+
+
+.case-grid strong{
+
+    color:#d8d2c4;
+
+    font-size:12px;
+
+}
+
+
+/* =========================================
+   SUSPECT
+========================================= */
+
+.suspect-card{
+
+    display:grid;
+
+    grid-template-columns:
+        150px 1fr;
+
+    gap:25px;
+
+    padding:20px;
+
+    border:1px solid #39362f;
+
+    background:#11100e;
+
+}
+
+
+.suspect-photo{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-height:170px;
+
+    background:#191817;
+
+    border:1px solid #37332c;
+
+}
+
+
+.unknown-silhouette{
+
+    width:80px;
+    height:80px;
+
+    border-radius:50%;
+
+    background:#34312d;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    color:#777;
+
+    font-size:30px;
+
+}
+
+
+.suspect-status{
+
+    display:inline-block;
+
+    padding:5px 9px;
+
+    margin-bottom:8px;
+
+    border:1px solid #514b3e;
+
+    color:#9a9079;
+
+    font-size:9px;
+
+    letter-spacing:1.5px;
+
+}
+
+
+.suspect-information h2{
+
+    margin:5px 0 20px;
+
+    font-size:22px;
+
+    font-weight:normal;
+
+}
+
+
+.suspect-row{
+
+    display:grid;
+
+    grid-template-columns:
+        140px 1fr;
+
+    padding:9px 0;
+
+    border-bottom:
+        1px solid #2d2b27;
+
+}
+
+
+.suspect-row span{
+
+    color:#6e6a61;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+
+}
+
+
+.suspect-row strong{
+
+    color:#c9c2b2;
+
+    font-size:11px;
+
+}
+
+
+/* =========================================
+   BACK
+========================================= */
+
+.back-button{
+
+    display:block;
+
+    margin-left:auto;
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:700px){
+
+    #victimInfoPage{
+
+        padding-left:55px;
+
+    }
+
+
+    .case-header{
+
+        padding:35px 20px 25px;
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+
+    .case-header h1{
+
+        font-size:23px;
+
+    }
+
+
+    .dossier{
+
+        padding:20px 15px 50px;
+
+    }
+
+
+    .victim-layout{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .victim-photo{
+
+        max-width:220px;
+
+    }
+
+
+    .info-row{
+
+        grid-template-columns:
+            130px 1fr;
+
+    }
+
+
+    .case-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+
+    .suspect-card{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
