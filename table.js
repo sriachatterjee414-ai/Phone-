@@ -1,8 +1,16 @@
 /* =========================================
    BROKEN PHONE
    WORK TABLE
-   LOCKED → MINI-GAME → UNLOCKED
-   → COLLECT ITEMS → INVENTORY
+
+   LOCKED
+      ↓
+   EMOJI MATCHING MINI-GAME
+      ↓
+   UNLOCKED
+      ↓
+   COLLECT ITEMS
+      ↓
+   INVENTORY
 ========================================= */
 
 
@@ -13,31 +21,22 @@
 const TABLE_LOCKED_IMAGE =
     "table_locked.png";
 
-
 const TABLE_UNLOCKED_IMAGE =
     "table_unlocked.png";
 
 
 const tableScene =
-    document.getElementById(
-        "tableScene"
-    );
-
+    document.getElementById("tableScene");
 
 const unlockButton =
-    document.getElementById(
-        "unlockButton"
-    );
-
+    document.getElementById("unlockButton");
 
 const itemsLayer =
-    document.getElementById(
-        "itemsLayer"
-    );
+    document.getElementById("itemsLayer");
 
 
 /* =========================================
-   CHECK IF TABLE IS ALREADY UNLOCKED
+   TABLE UNLOCK STORAGE
 ========================================= */
 
 const TABLE_UNLOCKED_KEY =
@@ -64,41 +63,24 @@ function updateTableImage(){
         tableScene.style.backgroundImage =
             `url("${TABLE_UNLOCKED_IMAGE}")`;
 
-        /*
-           Show collectible items.
-        */
-
         itemsLayer.classList.remove(
             "hidden"
         );
-
-
-        /*
-           Hide unlock button.
-        */
 
         unlockButton.classList.add(
             "hidden"
         );
 
     }
+
     else{
 
         tableScene.style.backgroundImage =
             `url("${TABLE_LOCKED_IMAGE}")`;
 
-        /*
-           Hide items while locked.
-        */
-
         itemsLayer.classList.add(
             "hidden"
         );
-
-
-        /*
-           Show unlock button.
-        */
 
         unlockButton.classList.remove(
             "hidden"
@@ -123,7 +105,6 @@ const DATA = {
         name:"Screen Connector",
         img:"screen_connector.png"
     },
-
 
     cassette_tape:{
         name:"Cassette Tape",
@@ -160,6 +141,7 @@ function getInventory(){
         ) || [];
 
     }
+
     catch(error){
 
         return [];
@@ -210,7 +192,6 @@ function renderInventory(){
                 "div"
             );
 
-
         slot.className =
             "inventory-slot";
 
@@ -256,7 +237,6 @@ function showToast(
     toast.textContent =
         message;
 
-
     toast.classList.add(
         "show"
     );
@@ -287,7 +267,7 @@ function collectItem(
 
 
     /*
-       Already collected.
+       Already collected
     */
 
     if(
@@ -304,7 +284,7 @@ function collectItem(
 
 
     /*
-       Inventory full.
+       Inventory full
     */
 
     if(
@@ -321,11 +301,10 @@ function collectItem(
 
 
     /*
-       Add item.
+       Add item
     */
 
     inventory.push(id);
-
 
     saveInventory(
         inventory
@@ -333,7 +312,7 @@ function collectItem(
 
 
     /*
-       Hide item from table.
+       Hide item from table
     */
 
     element.classList.add(
@@ -342,14 +321,14 @@ function collectItem(
 
 
     /*
-       Update inventory UI.
+       Update inventory
     */
 
     renderInventory();
 
 
     /*
-       Sound.
+       Collection sound
     */
 
     document
@@ -454,7 +433,6 @@ const music =
 
 music.volume = 0.18;
 
-
 music.play()
     .catch(() => {});
 
@@ -468,36 +446,30 @@ const puzzleOverlay =
         "puzzleOverlay"
     );
 
-
 const closePuzzle =
     document.getElementById(
         "closePuzzle"
     );
-
 
 const leafGrid =
     document.getElementById(
         "leafGrid"
     );
 
-
 const puzzleMessage =
     document.getElementById(
         "puzzleMessage"
     );
-
 
 const continuePuzzle =
     document.getElementById(
         "continuePuzzle"
     );
 
-
 const clueOverlay =
     document.getElementById(
         "clueOverlay"
     );
-
 
 const closeClue =
     document.getElementById(
@@ -558,78 +530,83 @@ function openPuzzle(){
 
 
     /*
-       12 cards.
+       ======================================
+       EMOJI MATCHING CARDS
+       ======================================
 
-       One important leaf pair.
+       No image files are needed here.
 
-       Other pairs are decoys.
+       Every pair has its own emoji.
+
+       The cards are shuffled every time
+       the puzzle opens.
     */
 
     const cards = [
 
         {
             id:"leaf",
-            image:"leaf.png"
+            emoji:"🍃"
         },
 
         {
             id:"leaf",
-            image:"leaf.png"
+            emoji:"🍃"
         },
 
 
         {
-            id:"clip",
-            image:"paper_clip.png"
+            id:"gear",
+            emoji:"⚙️"
         },
 
         {
-            id:"clip",
-            image:"paper_clip.png"
+            id:"gear",
+            emoji:"⚙️"
+        },
+
+
+        {
+            id:"key",
+            emoji:"🔑"
+        },
+
+        {
+            id:"key",
+            emoji:"🔑"
+        },
+
+
+        {
+            id:"phone",
+            emoji:"📱"
+        },
+
+        {
+            id:"phone",
+            emoji:"📱"
         },
 
 
         {
             id:"battery",
-            image:"replacement_battery.png"
+            emoji:"🔋"
         },
 
         {
             id:"battery",
-            image:"replacement_battery.png"
+            emoji:"🔋"
         },
 
 
         {
-            id:"connector",
-            image:"screen_connector.png"
+            id:"lock",
+            emoji:"🔒"
         },
 
         {
-            id:"connector",
-            image:"screen_connector.png"
-        },
-
-
-        {
-            id:"tape",
-            image:"cassette_tape.png"
-        },
-
-        {
-            id:"tape",
-            image:"cassette_tape.png"
-        },
-
-
-        {
-            id:"paper",
-            image:"paper_clip.png"
-        },
-
-        {
-            id:"paper",
-            image:"paper_clip.png"
+            id:"lock",
+            emoji:"🔒"
         }
 
     ];
@@ -690,7 +667,7 @@ function shuffle(
 
 
 /* =========================================
-   CREATE CARD
+   CREATE EMOJI CARD
 ========================================= */
 
 function createCard(
@@ -715,16 +692,20 @@ function createCard(
 
         <div class="cardInner">
 
+            <!-- CARD BACK -->
+
             <div class="cardBack">
-                ?
+                ◆
             </div>
+
+
+            <!-- CARD FRONT -->
 
             <div class="cardFront">
 
-                <img
-                    src="${card.image}"
-                    alt=""
-                >
+                <span class="cardEmoji">
+                    ${card.emoji}
+                </span>
 
             </div>
 
@@ -757,13 +738,26 @@ function flipCard(
     card
 ){
 
+    /*
+       Don't allow clicking while
+       two cards are being checked.
+    */
+
     if(lockBoard)
         return;
 
 
+    /*
+       Don't click the same card twice.
+    */
+
     if(card === firstCard)
         return;
 
+
+    /*
+       Don't click already matched cards.
+    */
 
     if(
         card.classList.contains(
@@ -773,10 +767,18 @@ function flipCard(
         return;
 
 
+    /*
+       Flip card
+    */
+
     card.classList.add(
         "flipped"
     );
 
+
+    /*
+       Flip sound
+    */
 
     document
         .getElementById(
@@ -785,6 +787,10 @@ function flipCard(
         .play()
         .catch(() => {});
 
+
+    /*
+       First card
+    */
 
     if(!firstCard){
 
@@ -795,6 +801,10 @@ function flipCard(
 
     }
 
+
+    /*
+       Second card
+    */
 
     secondCard =
         card;
@@ -819,9 +829,9 @@ function checkMatch(){
         secondCard.dataset.id;
 
 
-    /*
-       MATCH
-    */
+    /* ======================================
+       CORRECT MATCH
+    ====================================== */
 
     if(
         firstID === secondID
@@ -838,9 +848,10 @@ function checkMatch(){
 
 
         /*
-           IMPORTANT:
-           Finding the leaf pair
-           finishes the game.
+           The leaf pair is the important
+           evidence pair.
+
+           Finding it completes the puzzle.
         */
 
         if(
@@ -848,7 +859,7 @@ function checkMatch(){
         ){
 
             puzzleMessage.textContent =
-                "The leaves match.";
+                "The matching leaves reveal the lock mechanism.";
 
 
             finishPuzzle();
@@ -871,9 +882,9 @@ function checkMatch(){
     }
 
 
-    /*
+    /* ======================================
        WRONG MATCH
-    */
+    ====================================== */
 
     lockBoard = true;
 
@@ -958,7 +969,7 @@ function finishPuzzle(){
 continuePuzzle.onclick = () => {
 
     /*
-       Save table as unlocked.
+       Save unlocked state
     */
 
     localStorage.setItem(
@@ -968,18 +979,14 @@ continuePuzzle.onclick = () => {
 
 
     /*
-       Change:
-
-       table_locked.png
-              ↓
-       table_unlocked.png
+       Change table image
     */
 
     updateTableImage();
 
 
     /*
-       Close mini-game.
+       Close mini-game
     */
 
     puzzleOverlay.classList.add(
@@ -988,7 +995,7 @@ continuePuzzle.onclick = () => {
 
 
     /*
-       Show information window.
+       Show unlocked message
     */
 
     clueOverlay.classList.remove(
