@@ -232,7 +232,9 @@ body{
 }
 
 
-/* SCREEN CONNECTOR */
+/* =========================================
+   SCREEN CONNECTOR
+========================================= */
 
 .tweezers{
     left:58%;
@@ -243,7 +245,9 @@ body{
 }
 
 
-/* CASSETTE TAPE */
+/* =========================================
+   CASSETTE TAPE
+========================================= */
 
 .tape{
     left:24%;
@@ -362,6 +366,19 @@ body{
     position:relative;
 
     background:rgba(255,255,255,.03);
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+
+.inventory-slot:hover{
+    background:rgba(201,164,107,.10);
+
+    border-color:#c9a46b;
+
+    transform:translateY(-2px);
 }
 
 
@@ -397,6 +414,7 @@ body{
     position:absolute;
 
     left:50%;
+
     bottom:125px;
 
     transform:translateX(-50%);
@@ -434,6 +452,7 @@ body{
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     background:rgba(0,0,0,.80);
@@ -463,6 +482,10 @@ body{
 }
 
 
+/* =========================================
+   CLOSE BUTTON
+========================================= */
+
 #closePuzzle{
     position:absolute;
 
@@ -480,6 +503,10 @@ body{
     cursor:pointer;
 }
 
+
+/* =========================================
+   PUZZLE TITLE
+========================================= */
 
 .puzzleTitle{
     font-size:20px;
@@ -504,7 +531,7 @@ body{
 
 
 /* =========================================
-   CARD GRID
+   EMOJI CARD GRID
 ========================================= */
 
 #leafGrid{
@@ -534,8 +561,21 @@ body{
     cursor:pointer;
 
     perspective:700px;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
 }
 
+
+.leafCard:hover{
+    border-color:#c9a46b;
+}
+
+
+/* =========================================
+   CARD INNER
+========================================= */
 
 .cardInner{
     position:relative;
@@ -544,7 +584,7 @@ body{
     height:100%;
 
     transition:
-        transform .35s;
+        transform .35s ease;
 
     transform-style:preserve-3d;
 }
@@ -555,6 +595,10 @@ body{
 }
 
 
+/* =========================================
+   CARD FRONT + BACK
+========================================= */
+
 .cardFront,
 .cardBack{
     position:absolute;
@@ -564,6 +608,7 @@ body{
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     backface-visibility:hidden;
@@ -572,39 +617,72 @@ body{
 }
 
 
+/* =========================================
+   CARD BACK
+========================================= */
+
 .cardBack{
     background:
         repeating-linear-gradient(
             45deg,
+
             #17100c,
             #17100c 5px,
+
             #211710 5px,
             #211710 10px
         );
 
     color:#806544;
 
-    font-size:24px;
-}
+    font-size:25px;
 
+    font-weight:bold;
 
-.cardFront{
-    transform:rotateY(180deg);
-
-    background:#261a12;
-}
-
-
-.cardFront img{
-    width:65px;
-    height:65px;
-
-    object-fit:contain;
+    text-shadow:
+        0 2px 5px #000;
 }
 
 
 /* =========================================
-   MATCHED
+   CARD FRONT
+========================================= */
+
+.cardFront{
+    transform:rotateY(180deg);
+
+    background:
+        radial-gradient(
+            circle at center,
+            #302016 0%,
+            #261a12 55%,
+            #17100c 100%
+        );
+
+    border:1px solid rgba(201,164,107,.35);
+}
+
+
+/* =========================================
+   EMOJI
+========================================= */
+
+.cardEmoji{
+    font-size:42px;
+
+    line-height:1;
+
+    user-select:none;
+
+    filter:
+        drop-shadow(
+            0 3px 3px rgba(0,0,0,.6)
+        );
+}
+
+
+/* =========================================
+   MATCHED CARDS
 ========================================= */
 
 .leafCard.matched{
@@ -613,6 +691,16 @@ body{
     box-shadow:
         0 0 12px
         rgba(201,164,107,.35);
+}
+
+
+.leafCard.matched .cardFront{
+    background:
+        radial-gradient(
+            circle at center,
+            #3a2818 0%,
+            #261a12 70%
+        );
 }
 
 
@@ -654,11 +742,15 @@ body{
     font-family:"Courier New",monospace;
 
     letter-spacing:1px;
+
+    transition:.2s;
 }
 
 
 #continuePuzzle:hover{
     background:#26170f;
+
+    transform:scale(1.03);
 }
 
 
@@ -737,4 +829,59 @@ body{
     cursor:pointer;
 
     font-family:"Courier New",monospace;
+
+    transition:.2s;
+}
+
+
+#closeClue:hover{
+    background:#26170f;
+}
+
+
+/* =========================================
+   SMALL SCREEN SUPPORT
+========================================= */
+
+@media(max-width:700px){
+
+    #puzzleWindow{
+        width:92vw;
+
+        min-height:auto;
+
+        padding:30px 20px 25px;
     }
+
+
+    #leafGrid{
+        grid-template-columns:
+            repeat(4,65px);
+
+        gap:9px;
+    }
+
+
+    .leafCard{
+        width:65px;
+        height:65px;
+    }
+
+
+    .cardEmoji{
+        font-size:30px;
+    }
+
+
+    .cardBack{
+        font-size:20px;
+    }
+
+
+    #clueWindow{
+        width:88vw;
+
+        padding:30px 20px;
+    }
+
+}
