@@ -16,7 +16,15 @@
       ↓
    COLLECT ITEMS
       ↓
-   INVENTORY
+   BACK
+      ↓
+   LOCKED AGAIN
+
+   IMPORTANT:
+
+   The TABLE UNLOCK state is temporary.
+
+   The INVENTORY is permanent.
 ========================================= */
 
 
@@ -32,11 +40,8 @@ const TABLE_UNLOCKED_IMAGE =
 
 
 /* =========================================
-   STORAGE KEYS
+   INVENTORY STORAGE
 ========================================= */
-
-const TABLE_UNLOCKED_KEY =
-    "brokenPhone_tableUnlocked";
 
 const INVENTORY_KEY =
     "brokenPhoneInventory";
@@ -96,6 +101,27 @@ const unlockSound =
 
 
 /* =========================================
+   CURRENT VISIT TABLE STATE
+========================================= */
+
+/*
+   IMPORTANT:
+
+   This variable is NOT saved.
+
+   Every time table.html is opened,
+   JavaScript starts again and this becomes:
+
+       false
+
+   Therefore the table is always locked
+   when you enter the page.
+*/
+
+let tableUnlocked = false;
+
+
+/* =========================================
    ITEM DATA
 ========================================= */
 
@@ -110,6 +136,7 @@ const ITEM_DATA = {
             "screen_connector.png"
 
     },
+
 
     cassette_tape: {
 
@@ -138,19 +165,6 @@ let puzzleComplete = false;
 
 
 /* =========================================
-   TABLE STATE
-========================================= */
-
-function isTableUnlocked() {
-
-    return localStorage.getItem(
-        TABLE_UNLOCKED_KEY
-    ) === "true";
-
-}
-
-
-/* =========================================
    INVENTORY
 ========================================= */
 
@@ -163,14 +177,17 @@ function getInventory() {
                 INVENTORY_KEY
             );
 
+
         if (!saved) {
 
             return [];
 
         }
 
+
         const parsed =
             JSON.parse(saved);
+
 
         return Array.isArray(parsed)
             ? parsed
@@ -193,7 +210,9 @@ function saveInventory(
 
     localStorage.setItem(
         INVENTORY_KEY,
-        JSON.stringify(inventory)
+        JSON.stringify(
+            inventory
+        )
     );
 
 }
@@ -209,6 +228,7 @@ function showToast(
 
     toast.textContent =
         message;
+
 
     toast.classList.add(
         "show"
@@ -243,7 +263,9 @@ function playSound(
 
     }
 
+
     audio.currentTime = 0;
+
 
     audio.play().catch(
         () => {}
@@ -261,6 +283,7 @@ function renderInventory() {
     inventorySlots.innerHTML =
         "";
 
+
     const inventory =
         getInventory();
 
@@ -275,6 +298,7 @@ function renderInventory() {
             document.createElement(
                 "div"
             );
+
 
         slot.className =
             "inventory-slot";
@@ -315,7 +339,7 @@ function renderInventory() {
 
 
 /* =========================================
-   HIDE ALREADY COLLECTED ITEMS
+   RESTORE COLLECTED ITEMS
 ========================================= */
 
 function restoreCollectedItems() {
@@ -343,6 +367,14 @@ function restoreCollectedItems() {
 
                 }
 
+                else {
+
+                    item.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
             }
         );
 
@@ -362,6 +394,10 @@ function collectItem(
         getInventory();
 
 
+    /*
+       Already collected.
+    */
+
     if (
         inventory.includes(id)
     ) {
@@ -374,6 +410,10 @@ function collectItem(
 
     }
 
+
+    /*
+       Inventory limit.
+    */
 
     if (
         inventory.length >= 8
@@ -388,6 +428,10 @@ function collectItem(
     }
 
 
+    /*
+       Invalid item.
+    */
+
     if (
         !ITEM_DATA[id]
     ) {
@@ -397,12 +441,22 @@ function collectItem(
     }
 
 
+    /*
+       Permanently save item
+       to the shared inventory.
+    */
+
     inventory.push(id);
+
 
     saveInventory(
         inventory
     );
 
+
+    /*
+       Hide item from table.
+    */
 
     element.classList.add(
         "hidden"
@@ -425,13 +479,17 @@ function collectItem(
 
 
 /* =========================================
-   TABLE IMAGE / STATE
+   UPDATE TABLE
 ========================================= */
 
 function updateTable() {
 
+    /*
+       TABLE IS CURRENTLY UNLOCKED
+    */
+
     if (
-        isTableUnlocked()
+        tableUnlocked
     ) {
 
         tableScene.style.backgroundImage =
@@ -448,9 +506,19 @@ function updateTable() {
         );
 
 
+        /*
+           Items that were already
+           collected remain hidden.
+        */
+
         restoreCollectedItems();
 
     }
+
+
+    /*
+       TABLE IS CURRENTLY LOCKED
+    */
 
     else {
 
@@ -477,6 +545,20 @@ function updateTable() {
 ========================================= */
 
 function openPuzzle() {
+
+    /*
+       The table should only open
+       the puzzle when currently locked.
+    */
+
+    if (
+        tableUnlocked
+    ) {
+
+        return;
+
+    }
+
 
     /*
        Reset puzzle state.
@@ -509,7 +591,7 @@ function openPuzzle() {
 
 
     /*
-       Create cards.
+       Card pairs.
     */
 
     const cards = [
@@ -582,7 +664,9 @@ function openPuzzle() {
     ];
 
 
-    shuffle(cards);
+    shuffle(
+        cards
+    );
 
 
     cards.forEach(
@@ -595,10 +679,6 @@ function openPuzzle() {
         }
     );
 
-
-    /*
-       Show puzzle.
-    */
 
     puzzleOverlay.classList.remove(
         "hidden"
@@ -715,11 +795,6 @@ function flipCard(
     card
 ) {
 
-    /*
-       Don't interact while
-       checking two cards.
-    */
-
     if (
         lockBoard
     ) {
@@ -729,10 +804,6 @@ function flipCard(
     }
 
 
-    /*
-       Puzzle already complete.
-    */
-
     if (
         puzzleComplete
     ) {
@@ -741,11 +812,6 @@ function flipCard(
 
     }
 
-
-    /*
-       Don't click an already
-       matched card.
-    */
 
     if (
         card.classList.contains(
@@ -758,11 +824,6 @@ function flipCard(
     }
 
 
-    /*
-       Don't click the same
-       card twice.
-    */
-
     if (
         card === firstCard
     ) {
@@ -771,10 +832,6 @@ function flipCard(
 
     }
 
-
-    /*
-       Flip card.
-    */
 
     card.classList.add(
         "flipped"
@@ -785,10 +842,6 @@ function flipCard(
         flipSound
     );
 
-
-    /*
-       First card.
-    */
 
     if (
         firstCard === null
@@ -801,10 +854,6 @@ function flipCard(
 
     }
 
-
-    /*
-       Second card.
-    */
 
     secondCard =
         card;
@@ -834,6 +883,7 @@ function checkMatch() {
     const firstID =
         firstCard.dataset.id;
 
+
     const secondID =
         secondCard.dataset.id;
 
@@ -850,14 +900,14 @@ function checkMatch() {
             "matched"
         );
 
+
         secondCard.classList.add(
             "matched"
         );
 
 
         /*
-           LEAF PAIR
-           = puzzle solution
+           LEAF PAIR SOLVES PUZZLE.
         */
 
         if (
@@ -877,6 +927,7 @@ function checkMatch() {
 
         resetTurn();
 
+
         return;
 
     }
@@ -887,6 +938,7 @@ function checkMatch() {
     */
 
     lockBoard = true;
+
 
     puzzleMessage.textContent =
         "No match. Try again.";
@@ -978,10 +1030,16 @@ function finishPuzzle() {
 
 function unlockTable() {
 
-    localStorage.setItem(
-        TABLE_UNLOCKED_KEY,
-        "true"
-    );
+    /*
+       IMPORTANT:
+
+       We DO NOT use localStorage here.
+
+       The unlock exists only for this
+       visit to table.html.
+    */
+
+    tableUnlocked = true;
 
 
     playSound(
@@ -996,6 +1054,10 @@ function unlockTable() {
 
     updateTable();
 
+
+    /*
+       Show the unlock message.
+    */
 
     clueOverlay.classList.remove(
         "hidden"
@@ -1079,6 +1141,37 @@ document
         "click",
         () => {
 
+            /*
+               Explicitly lock the table
+               before leaving.
+
+               This is technically unnecessary
+               because tableUnlocked is temporary,
+               but it makes the intended behavior
+               completely clear.
+            */
+
+            tableUnlocked = false;
+
+
+            /*
+               Close any open overlays.
+            */
+
+            puzzleOverlay.classList.add(
+                "hidden"
+            );
+
+
+            clueOverlay.classList.add(
+                "hidden"
+            );
+
+
+            /*
+               Return to investigation.
+            */
+
             window.location.href =
                 "investigation.html";
 
@@ -1115,7 +1208,9 @@ document
    MUSIC
 ========================================= */
 
-music.volume = 0.18;
+music.volume =
+    0.18;
+
 
 music.play().catch(
     () => {}
@@ -1125,6 +1220,23 @@ music.play().catch(
 /* =========================================
    INITIALIZE
 ========================================= */
+
+/*
+   Every new visit starts here:
+
+       tableUnlocked = false
+
+   Therefore:
+
+       LOCKED IMAGE
+       +
+       UNLOCK BUTTON
+       +
+       ITEMS HIDDEN
+*/
+
+tableUnlocked = false;
+
 
 renderInventory();
 
