@@ -1,1280 +1,1404 @@
-*{
-  box-sizing:border-box;
+* {
+    box-sizing: border-box;
 }
 
 html,
-body{
-  margin:0;
-  width:100%;
-  height:100%;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "Segoe UI",
-    sans-serif;
-  overflow:hidden;
-}
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 
-body{
-  background:#050505;
-}
-
-button{
-  font:inherit;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Segoe UI",
+        sans-serif;
 }
 
 
-/* =================================
+/* =========================================================
    OUTSIDE PHONE
-================================= */
+========================================================= */
 
-.investigation-stage{
-  position:relative;
-  width:100%;
-  height:100%;
-  min-height:700px;
-
-  background:
-    radial-gradient(
-      circle at 50% 20%,
-      #fff 0,
-      #eceff2 35%,
-      #cdd1d6 100%
-    );
-
-  overflow:hidden;
+body {
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            #ffffff 0%,
+            #eef1f3 45%,
+            #d8dce0 100%
+        );
 }
 
 
-/* =================================
-   PHONE TOGGLE
-================================= */
-
-.phone-tab{
-  position:absolute;
-  right:0;
-  top:45%;
-
-  z-index:100;
-
-  border:0;
-  border-radius:15px 0 0 15px;
-
-  background:#171717;
-  color:#fff;
-
-  padding:14px 10px;
-
-  font-weight:800;
-  letter-spacing:1.5px;
-
-  cursor:pointer;
-
-  writing-mode:vertical-rl;
-
-  box-shadow:0 8px 25px #0003;
+button {
+    font: inherit;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
-/* =================================
-   PHONE BODY
-================================= */
+.investigation-stage {
+    width: 100%;
+    height: 100vh;
 
-.phone-shell{
-  position:absolute;
+    position: relative;
 
-  left:50%;
-  top:50%;
-
-  transform:
-    translate(-50%,-50%);
-
-  width:min(390px,38vw);
-
-  min-width:300px;
-
-  aspect-ratio:390/795;
-
-  transition:.25s;
-
-  z-index:20;
-}
-
-.phone-shell.hidden-phone{
-  opacity:0;
-
-  transform:
-    translate(-50%,-50%)
-    scale(.92);
-
-  pointer-events:none;
-}
-
-.phone-frame{
-  width:100%;
-  height:100%;
-
-  padding:5px;
-
-  border-radius:53px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #4a4a4d,
-      #080808 42%,
-      #27272a
-    );
-
-  box-shadow:
-    0 30px 70px #0007,
-    0 5px 15px #0005;
-}
-
-.phone-bezel{
-  position:relative;
-
-  width:100%;
-  height:100%;
-
-  border-radius:48px;
-
-  overflow:hidden;
-
-  background:#111;
-
-  border:3px solid #050505;
-}
-
-.dynamic-island{
-  position:absolute;
-
-  z-index:40;
-
-  left:50%;
-  top:10px;
-
-  transform:
-    translateX(-50%);
-
-  width:105px;
-  height:29px;
-
-  border-radius:20px;
-
-  background:#000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
-/* =================================
+/* =========================================================
+   PHONE SIDE TAB
+========================================================= */
+
+.phone-tab {
+    position: fixed;
+
+    right: 0;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 58px;
+    height: 112px;
+
+    border: 0;
+
+    border-radius: 22px 0 0 22px;
+
+    background: #111;
+    color: white;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    z-index: 100;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   PHONE
+========================================================= */
+
+.phone-shell {
+
+    position: relative;
+
+    width: 390px;
+    height: 795px;
+
+    max-width: 88vw;
+    max-height: 91vh;
+
+    aspect-ratio: 390 / 795;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+}
+
+
+.phone-shell.hidden-phone {
+
+    opacity: 0;
+
+    transform:
+        scale(.9);
+
+    pointer-events: none;
+}
+
+
+.phone-frame {
+
+    width: 100%;
+    height: 100%;
+
+    padding: 6px;
+
+    border-radius: 55px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #202022,
+            #050505 50%,
+            #363638
+        );
+
+    box-shadow:
+        0 35px 65px rgba(0,0,0,.30),
+        0 8px 15px rgba(0,0,0,.25);
+}
+
+
+.phone-bezel {
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    border-radius: 49px;
+
+    border: 3px solid #111;
+
+    background: #f3b5c7;
+}
+
+
+/* =========================================================
+   SIDE BUTTONS
+========================================================= */
+
+.side-button {
+
+    position: absolute;
+
+    background: #111;
+
+    z-index: -1;
+
+    border-radius: 5px;
+}
+
+
+.side-left {
+    left: -5px;
+    width: 6px;
+}
+
+
+.side-left.top {
+    top: 20%;
+    height: 45px;
+}
+
+
+.side-left.middle {
+    top: 29%;
+    height: 65px;
+}
+
+
+.side-right {
+    right: -5px;
+    top: 25%;
+    width: 6px;
+    height: 100px;
+}
+
+
+/* =========================================================
+   DYNAMIC ISLAND
+========================================================= */
+
+.dynamic-island {
+
+    position: absolute;
+
+    z-index: 50;
+
+    left: 50%;
+    top: 12px;
+
+    transform: translateX(-50%);
+
+    width: 105px;
+    height: 30px;
+
+    border-radius: 20px;
+
+    background: #050505;
+}
+
+
+/* =========================================================
    GENERAL SCREEN
-================================= */
+========================================================= */
 
-.screen{
-  position:absolute;
+.screen {
 
-  inset:0;
+    position: absolute;
 
-  overflow:hidden;
-}
+    inset: 0;
 
-.hidden{
-  display:none!important;
+    overflow: hidden;
 }
 
 
-/* =================================
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   STATUS BAR
+========================================================= */
+
+.status-bar {
+
+    position: absolute;
+
+    left: 25px;
+    right: 25px;
+    top: 27px;
+
+    height: 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    z-index: 40;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.status-icons {
+
+    display: flex;
+
+    gap: 8px;
+
+    align-items: center;
+}
+
+
+/* =========================================================
    LOCK SCREEN
-================================= */
+========================================================= */
 
-.lock-screen{
+.lock-screen {
 
-  background:
+    color: white;
 
-    radial-gradient(
-      ellipse at 48% 45%,
-      rgba(255,55,145,.82) 0 14%,
-      rgba(255,115,180,.45) 28%,
-      transparent 53%
-    ),
+    background:
 
-    radial-gradient(
-      ellipse at 18% 58%,
-      rgba(244,74,160,.75),
-      transparent 44%
-    ),
+        radial-gradient(
+            circle at 48% 53%,
+            rgba(255, 30, 135, .75),
+            transparent 28%
+        ),
 
-    linear-gradient(
-      145deg,
-      #e8b7bd,
-      #f7c9d1 50%,
-      #e9b7bd
-    );
+        radial-gradient(
+            circle at 20% 80%,
+            rgba(255, 255, 255, .35),
+            transparent 35%
+        ),
 
-  color:#fff;
-}
+        linear-gradient(
+            160deg,
+            #d9aeb9,
+            #f2bdc8 48%,
+            #efc8cc
+        );
 
-.lock-screen:after{
-
-  content:"";
-
-  position:absolute;
-
-  inset:0;
-
-  background:
-    radial-gradient(
-      ellipse at 58% 56%,
-      rgba(255,255,255,.25),
-      transparent 40%
-    );
-
-  filter:blur(20px);
-
-  pointer-events:none;
+    transition:
+        transform .45s ease,
+        opacity .45s ease;
 }
 
 
-/* STATUS BAR */
+/* DATE */
 
-.ios-status{
+.lock-date {
 
-  position:absolute;
+    position: absolute;
 
-  left:25px;
-  right:25px;
-  top:15px;
+    top: 105px;
 
-  height:24px;
+    left: 20px;
+    right: 20px;
 
-  display:flex;
+    text-align: center;
 
-  justify-content:space-between;
-  align-items:center;
+    font-size: 18px;
 
-  font-size:13px;
-
-  font-weight:700;
-
-  z-index:10;
-}
-
-.status-icons{
-  letter-spacing:2px;
-  font-size:11px;
+    font-weight: 700;
 }
 
 
-/* LOCK DATE */
+.lock-time {
 
-.lock-date{
+    position: absolute;
 
-  position:absolute;
+    top: 140px;
 
-  top:67px;
+    left: 0;
+    right: 0;
 
-  left:0;
-  right:0;
+    text-align: center;
 
-  text-align:center;
+    font-size: 64px;
 
-  font-size:17px;
+    font-weight: 300;
 
-  font-weight:600;
-
-  z-index:3;
+    letter-spacing: -3px;
 }
 
 
-/* LOCK TIME */
+/* WEATHER */
 
-.lock-time{
+.lock-info {
 
-  position:absolute;
+    position: absolute;
 
-  top:88px;
+    left: 32px;
+    right: 32px;
 
-  left:0;
-  right:0;
+    top: 245px;
 
-  text-align:center;
+    display: grid;
 
-  font-size:66px;
+    grid-template-columns: 1fr 1fr;
 
-  font-weight:300;
-
-  letter-spacing:-3px;
-
-  z-index:3;
+    gap: 12px;
 }
 
 
-/* BOTTOM BUTTONS */
+.lock-info-card {
 
-.lock-bottom-area{
+    height: 78px;
 
-  position:absolute;
+    padding: 12px;
 
-  left:29px;
-  right:29px;
+    border-radius: 20px;
 
-  bottom:35px;
+    background:
+        rgba(255,255,255,.18);
 
-  display:flex;
+    border:
+        1px solid rgba(255,255,255,.25);
 
-  justify-content:space-between;
+    backdrop-filter: blur(10px);
 
-  z-index:5;
-}
+    display: flex;
 
-.lock-shortcut{
+    align-items: center;
 
-  width:43px;
-  height:43px;
-
-  border-radius:50%;
-
-  background:
-    rgba(45,45,45,.55);
-
-  display:grid;
-
-  place-items:center;
-
-  font-size:20px;
+    gap: 8px;
 }
 
 
-/* PASSCODE TEXT */
+.lock-info-card strong,
+.lock-info-card small {
 
-.lock-swipe-hint{
-
-  position:absolute;
-
-  left:0;
-  right:0;
-
-  bottom:185px;
-
-  text-align:center;
-
-  font-size:14px;
-
-  font-weight:500;
-
-  line-height:1.35;
-
-  z-index:5;
+    display: block;
 }
 
 
-/* PASSCODE AREA */
+.lock-info-card strong {
 
-.passcode-area{
+    font-size: 20px;
 
-  position:absolute;
+    font-weight: 600;
+}
 
-  inset:0;
 
-  z-index:20;
+.lock-info-card small {
 
-  display:flex;
+    margin-top: 3px;
 
-  flex-direction:column;
+    font-size: 10px;
 
-  align-items:center;
+    opacity: .85;
+}
 
-  padding-top:235px;
+
+.info-icon {
+
+    font-size: 25px;
+}
+
+
+/* BOTTOM */
+
+.lock-bottom {
+
+    position: absolute;
+
+    left: 30px;
+    right: 30px;
+
+    bottom: 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+
+.lock-shortcut {
+
+    width: 47px;
+    height: 47px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    color: white;
+
+    background:
+        rgba(50,50,50,.45);
+
+    font-size: 19px;
+}
+
+
+.swipe-hint {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: 11px;
+
+    opacity: .9;
+}
+
+
+.swipe-arrow {
+
+    font-size: 22px;
+
+    animation: swipeArrow 1.5s infinite;
+}
+
+
+@keyframes swipeArrow {
+
+    0%,100% {
+        transform: translateY(3px);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+
+/* =========================================================
+   PASSCODE
+========================================================= */
+
+.passcode-screen {
+
+    color: white;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 42%,
+            rgba(255, 30, 135, .85),
+            transparent 30%
+        ),
+
+        linear-gradient(
+            160deg,
+            #d9aeb9,
+            #f2bdc8 48%,
+            #efc8cc
+        );
+
+    touch-action: pan-y;
+}
+
+
+.passcode-title {
+
+    position: absolute;
+
+    top: 105px;
+
+    left: 20px;
+    right: 20px;
+
+    text-align: center;
+}
+
+
+.passcode-lock-icon {
+
+    font-size: 25px;
+
+    margin-bottom: 8px;
+}
+
+
+.passcode-title h2 {
+
+    margin: 0;
+
+    font-size: 20px;
+
+    font-weight: 600;
+}
+
+
+.passcode-title p {
+
+    margin: 7px 0 0;
+
+    font-size: 11px;
+
+    opacity: .75;
 }
 
 
 /* DOTS */
 
-.passcode-dots{
+.passcode-dots {
 
-  display:flex;
+    position: absolute;
 
-  gap:11px;
+    top: 215px;
 
-  height:18px;
+    left: 0;
+    right: 0;
 
-  margin-bottom:10px;
-}
+    display: flex;
 
-.passcode-dots span{
+    justify-content: center;
 
-  width:9px;
-  height:9px;
-
-  border:1.5px solid white;
-
-  border-radius:50%;
-
-  background:transparent;
-}
-
-.passcode-dots span.filled{
-  background:white;
+    gap: 12px;
 }
 
 
-/* ERROR */
+.passcode-dots span {
 
-.passcode-error{
+    width: 9px;
+    height: 9px;
 
-  height:18px;
+    border-radius: 50%;
 
-  font-size:11px;
+    border: 1.5px solid white;
 
-  text-shadow:0 1px 3px #0005;
+    transition: .15s;
+}
+
+
+.passcode-dots span.filled {
+
+    background: white;
 }
 
 
 /* KEYPAD */
 
-.passcode-pad{
+.passcode-pad {
 
-  width:245px;
+    position: absolute;
 
-  display:grid;
+    left: 38px;
+    right: 38px;
 
-  grid-template-columns:
-    repeat(3,1fr);
+    top: 260px;
 
-  gap:13px 17px;
-}
+    display: grid;
 
-.passcode-pad button{
+    grid-template-columns:
+        repeat(3, 1fr);
 
-  width:67px;
-  height:67px;
-
-  margin:auto;
-
-  border:0;
-
-  border-radius:50%;
-
-  background:
-    rgba(75,75,78,.86);
-
-  color:#fff;
-
-  font-size:30px;
-
-  font-weight:300;
-
-  cursor:pointer;
-
-  box-shadow:
-    0 1px 2px #0003;
-}
-
-.passcode-pad button small{
-
-  display:block;
-
-  font-size:8px;
-
-  letter-spacing:1px;
-
-  margin-top:-2px;
-}
-
-.passcode-pad button:active{
-
-  transform:scale(.94);
-
-  background:#999;
+    gap: 13px 16px;
 }
 
 
-/* CANCEL */
+.passcode-pad button {
 
-.cancel-passcode{
+    width: 75px;
+    height: 75px;
 
-  margin-top:12px;
+    justify-self: center;
 
-  background:none;
+    border: 0;
 
-  border:0;
+    border-radius: 50%;
 
-  color:#fff;
+    background:
+        rgba(55,48,54,.68);
 
-  font-size:14px;
+    color: white;
 
-  cursor:pointer;
+    font-size: 28px;
+
+    font-weight: 300;
+
+    cursor: pointer;
+
+    transition:
+        transform .1s,
+        background .1s;
 }
 
 
-/* =================================
+.passcode-pad button small {
+
+    display: block;
+
+    font-size: 8px;
+}
+
+
+.passcode-pad button:active {
+
+    transform: scale(.91);
+
+    background:
+        rgba(30,30,30,.8);
+}
+
+
+.passcode-error {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: 690px;
+
+    text-align: center;
+
+    height: 20px;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
    HOME SCREEN
-================================= */
+========================================================= */
 
-.home-screen{
+.home-screen {
 
-  background:
+    color: white;
 
-    linear-gradient(
-      180deg,
-      rgba(255,220,229,.75),
-      rgba(244,201,216,.86)
-    ),
+    background:
 
-    radial-gradient(
-      circle at 28% 35%,
-      #ff5caa 0,
-      transparent 31%
-    ),
+        radial-gradient(
+            circle at 48% 48%,
+            rgba(255, 20, 130, .65),
+            transparent 32%
+        ),
 
-    radial-gradient(
-      circle at 85% 72%,
-      #c9efff 0,
-      transparent 36%
-    );
+        linear-gradient(
+            160deg,
+            #c9aeb7,
+            #efb8c5 50%,
+            #ecc5ca
+        );
 
-  color:#fff;
-}
-
-.home-screen:before{
-
-  content:"";
-
-  position:absolute;
-
-  inset:0;
-
-  background:
-    radial-gradient(
-      ellipse at 25% 70%,
-      rgba(250,42,139,.6),
-      transparent 35%
-    );
-
-  filter:blur(20px);
+    touch-action: pan-y;
 }
 
 
-/* HOME STATUS */
+/* =========================================================
+   HOME PAGE SLIDER
+========================================================= */
 
-.home-status{
-  color:#fff;
+.home-pages {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    width: 300%;
+
+    transition:
+        transform .35s cubic-bezier(.2,.8,.2,1);
+
+    will-change: transform;
 }
 
 
-/* TOP WIDGET */
+.home-page {
 
-.home-header-widget{
+    position: relative;
 
-  position:absolute;
+    width: 33.333333%;
 
-  top:56px;
+    flex-shrink: 0;
 
-  left:43px;
-  right:43px;
-
-  height:105px;
-
-  border:
-    4px solid rgba(255,255,255,.82);
-
-  border-radius:24px;
-
-  padding:11px 17px;
-
-  background:
-    rgba(255,255,255,.08);
-
-  z-index:2;
-}
-
-.script-day{
-
-  font-family:cursive;
-
-  font-size:28px;
-
-  font-style:italic;
-
-  line-height:25px;
-}
-
-.big-widget-time{
-
-  position:absolute;
-
-  right:18px;
-  top:14px;
-
-  font-size:52px;
-
-  font-weight:200;
-
-  letter-spacing:-3px;
-}
-
-.widget-date{
-
-  font-size:13px;
-
-  font-weight:700;
-
-  margin-top:3px;
+    height: 100%;
 }
 
 
-/* HOME CONTENT */
+/* =========================================================
+   DATE WIDGET
+========================================================= */
 
-.home-content{
+.date-widget {
 
-  position:absolute;
+    position: absolute;
 
-  left:42px;
-  right:42px;
+    top: 85px;
 
-  top:176px;
-  bottom:116px;
+    left: 35px;
+    right: 35px;
 
-  z-index:2;
+    height: 145px;
+
+    padding: 20px;
+
+    border-radius: 27px;
+
+    border:
+        2px solid rgba(255,255,255,.8);
+
+    background:
+        rgba(255,255,255,.08);
+
+    backdrop-filter: blur(9px);
 }
 
 
-/* =================================
-   BATTERY
-================================= */
+.date-script {
 
-.battery-widget{
+    font-family:
+        "Brush Script MT",
+        cursive;
 
-  position:absolute;
+    font-size: 29px;
 
-  left:0;
-  top:0;
-
-  width:118px;
-  height:140px;
-
-  border-radius:24px;
-
-  background:
-    rgba(255,240,246,.52);
-
-  color:#171717;
-
-  padding:12px 14px;
-}
-
-.battery-ring{
-
-  width:62px;
-  height:62px;
-
-  border-radius:50%;
-
-  border:
-    5px solid rgba(160,140,150,.25);
-
-  border-top-color:#25d86a;
-  border-right-color:#25d86a;
-
-  display:grid;
-
-  place-items:center;
-
-  font-size:24px;
-
-  margin-bottom:7px;
-}
-
-.battery-widget strong{
-
-  display:block;
-
-  font-size:28px;
-
-  font-weight:500;
-}
-
-.battery-widget small{
-
-  font-size:11px;
+    line-height: 1;
 }
 
 
-/* =================================
-   FOLDERS
-================================= */
+.date-number {
 
-.folder-grid{
+    margin-top: 4px;
 
-  position:absolute;
+    display: flex;
 
-  right:0;
-  top:0;
+    align-items: baseline;
 
-  width:168px;
-
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:15px 10px;
-}
-
-.folder{
-
-  border:0;
-
-  background:none;
-
-  color:#fff;
-
-  cursor:pointer;
-
-  text-align:center;
-
-  padding:0;
-
-  text-shadow:
-    0 1px 3px #0003;
-}
-
-.folder-icons{
-
-  width:58px;
-  height:58px;
-
-  margin:auto;
-
-  border-radius:16px;
-
-  background:
-    rgba(245,245,248,.65);
-
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:3px;
-
-  padding:7px;
-
-  box-shadow:
-    0 5px 10px #0002;
-}
-
-.folder-icons i{
-
-  background:#fff;
-
-  border-radius:6px;
-
-  color:#777;
-
-  font-style:normal;
-
-  font-size:13px;
-
-  display:grid;
-
-  place-items:center;
-}
-
-.folder b{
-
-  display:block;
-
-  font-size:9px;
-
-  margin-top:5px;
-
-  font-weight:500;
-
-  white-space:nowrap;
+    gap: 8px;
 }
 
 
-/* =================================
-   APP ICONS
-================================= */
+.date-number span {
 
-.standalone-grid{
+    font-size: 11px;
 
-  position:absolute;
+    font-weight: 700;
 
-  left:0;
-  top:157px;
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(2,62px);
-
-  gap:16px 19px;
-}
-
-.ios-app,
-.dock-app{
-
-  border:0;
-
-  background:none;
-
-  color:#fff;
-
-  cursor:pointer;
-
-  text-shadow:
-    0 1px 3px #0004;
-
-  text-align:center;
-}
-
-.real-icon{
-
-  width:55px;
-  height:55px;
-
-  border-radius:15px;
-
-  display:grid;
-
-  place-items:center;
-
-  margin:auto;
-
-  font-size:31px;
-
-  box-shadow:
-    0 6px 13px #0003;
-}
-
-.ios-app label{
-
-  display:block;
-
-  font-size:9px;
-
-  margin-top:5px;
+    letter-spacing: 1px;
 }
 
 
-/* INDIVIDUAL APP ICONS */
+.date-number strong {
 
-.phone-icon{
-  background:
-    linear-gradient(#58ed82,#18cf61);
-}
-
-.whatsapp-icon{
-  background:
-    linear-gradient(#65ec88,#16c95d);
-}
-
-.mail-icon{
-  background:
-    linear-gradient(#61d8fa,#269fe9);
-}
-
-.life-icon{
-  background:
-    linear-gradient(#a77af7,#6b45cb);
+    font-size: 20px;
 }
 
 
-/* =================================
-   MUSIC WIDGET
-================================= */
+.date-time {
 
-.music-widget{
+    position: absolute;
 
-  position:absolute;
+    right: 18px;
 
-  right:0;
-  top:157px;
+    top: 49px;
 
-  width:168px;
-  height:140px;
+    font-size: 42px;
 
-  border:
-    4px solid rgba(255,255,255,.72);
-
-  border-radius:21px;
-
-  background:
-    rgba(255,255,255,.13);
-
-  padding:10px;
-
-  color:#fff;
-
-  cursor:pointer;
-}
-
-.music-title{
-
-  font-family:Georgia,serif;
-
-  font-size:13px;
-}
-
-.music-days{
-
-  font-size:7px;
-
-  margin-top:9px;
-
-  opacity:.9;
-}
-
-.music-track{
-
-  position:absolute;
-
-  left:10px;
-  right:10px;
-
-  bottom:11px;
-
-  height:55px;
-
-  display:flex;
-
-  align-items:center;
-
-  gap:7px;
-
-  font-family:Georgia,serif;
-
-  font-size:9px;
-}
-
-.album-art{
-
-  width:39px;
-  height:39px;
-
-  border-radius:5px;
-
-  background:
-    linear-gradient(135deg,#222,#aaa);
-
-  display:grid;
-
-  place-items:center;
-
-  font-size:20px;
-}
-
-.music-track small{
-  font-size:7px;
-}
-
-.music-track b{
-  margin-left:auto;
-  font-size:12px;
+    font-weight: 300;
 }
 
 
-/* =================================
+/* =========================================================
+   PAGE TITLES
+========================================================= */
+
+.page-title {
+
+    position: absolute;
+
+    top: 255px;
+
+    left: 0;
+    right: 0;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    opacity: .85;
+}
+
+
+.page-heading {
+
+    position: absolute;
+
+    top: 90px;
+
+    left: 28px;
+
+    font-size: 24px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   APP GRID
+========================================================= */
+
+.app-grid {
+
+    position: absolute;
+
+    left: 38px;
+    right: 38px;
+
+    display: grid;
+
+    justify-items: center;
+}
+
+
+.three-apps {
+
+    top: 300px;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 28px;
+}
+
+
+.five-apps {
+
+    top: 170px;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 35px 25px;
+}
+
+
+/* =========================================================
+   APP ICON
+========================================================= */
+
+.app-icon {
+
+    width: 75px;
+
+    border: 0;
+
+    padding: 0;
+
+    background: none;
+
+    color: white;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+    cursor: pointer;
+}
+
+
+.app-icon > span:last-child {
+
+    font-size: 11px;
+
+    font-weight: 500;
+
+    text-shadow:
+        0 1px 3px rgba(0,0,0,.3);
+}
+
+
+.real-icon {
+
+    width: 64px;
+    height: 64px;
+
+    border-radius: 17px;
+
+    display: grid;
+
+    place-items: center;
+
+    color: white;
+
+    font-size: 31px;
+
+    box-shadow:
+        0 7px 15px rgba(0,0,0,.17);
+
+    transition:
+        transform .15s;
+}
+
+
+.app-icon:active .real-icon {
+
+    transform: scale(.9);
+}
+
+
+/* =========================================================
+   APP ICON COLORS
+========================================================= */
+
+.phone-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #69f28d,
+            #16d967
+        );
+}
+
+
+.messages-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #55e87b,
+            #1acb63
+        );
+}
+
+
+.music-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #ff7897,
+            #ee456e
+        );
+}
+
+
+.gallery-icon {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffbd62,
+            #ee62a2 50%,
+            #64c6ec
+        );
+}
+
+
+.notes-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #67d9f4,
+            #269ee4
+        );
+}
+
+
+.contacts-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #7bb7ff,
+            #3979e9
+        );
+}
+
+
+.browser-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #4ca8f5,
+            #1765cf
+        );
+}
+
+
+.camera-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #58646d,
+            #22282d
+        );
+}
+
+
+.bank-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #5d719e,
+            #26395d
+        );
+}
+
+
+.settings-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #eef1f4,
+            #9ca6ae
+        );
+
+    color: #34383c;
+}
+
+
+.clock-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            #f5f5f5,
+            #c9ced2
+        );
+
+    color: #333;
+}
+
+
+/* =========================================================
    SEARCH
-================================= */
+========================================================= */
 
-.search-pill{
+.search-pill {
 
-  position:absolute;
+    position: absolute;
 
-  left:50%;
+    left: 50%;
 
-  transform:
-    translateX(-50%);
+    transform: translateX(-50%);
 
-  bottom:88px;
+    bottom: 105px;
 
-  width:100px;
-  height:29px;
+    width: 115px;
 
-  border-radius:16px;
+    height: 34px;
 
-  background:
-    rgba(255,255,255,.62);
+    border-radius: 20px;
 
-  color:#777;
+    background:
+        rgba(255,255,255,.5);
 
-  display:grid;
+    color: rgba(50,50,50,.7);
 
-  place-items:center;
+    display: flex;
 
-  font-size:11px;
+    justify-content: center;
 
-  z-index:3;
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: 12px;
 }
 
 
-/* =================================
+/* =========================================================
    DOCK
-================================= */
+========================================================= */
 
-.dock{
+.dock {
 
-  position:absolute;
+    position: absolute;
 
-  left:22px;
-  right:22px;
+    left: 25px;
+    right: 25px;
 
-  bottom:13px;
+    bottom: 17px;
 
-  height:70px;
+    height: 73px;
 
-  border-radius:24px;
+    padding: 9px 14px;
 
-  background:
-    rgba(255,255,255,.34);
+    border-radius: 25px;
 
-  border:
-    1px solid rgba(255,255,255,.42);
+    background:
+        rgba(255,255,255,.27);
 
-  display:grid;
+    border:
+        1px solid rgba(255,255,255,.35);
 
-  grid-template-columns:
-    repeat(4,1fr);
+    backdrop-filter: blur(10px);
 
-  gap:10px;
+    display: grid;
 
-  padding:8px 12px;
+    grid-template-columns:
+        repeat(4,1fr);
 
-  backdrop-filter:blur(10px);
-
-  z-index:5;
-}
-
-.dock-app{
-  height:54px;
-}
-
-.dock-app .real-icon{
-
-  width:50px;
-  height:50px;
-}
-
-.messenger-app .real-icon{
-
-  background:
-    linear-gradient(#ba67ff,#7c3ef2);
-}
-
-.sms-app .real-icon{
-
-  background:
-    linear-gradient(#62ef83,#22cc63);
-}
-
-.music-app .real-icon{
-
-  background:
-    linear-gradient(#ff667d,#e91e3f);
-}
-
-.safari-app .real-icon{
-
-  background:
-    linear-gradient(#6bd9ff,#2b8cff);
-
-  color:#fff;
+    gap: 12px;
 }
 
 
-/* =================================
-   FOLDER SCREEN
-================================= */
+.dock-icon {
 
-.folder-screen{
+    width: 54px;
+    height: 54px;
 
-  background:
-    rgba(25,25,25,.97);
+    justify-self: center;
 
-  color:#fff;
-}
+    border: 0;
 
-.folder-screen .ios-status{
-  color:#fff;
-}
+    border-radius: 15px;
 
-.folder-back{
+    color: white;
 
-  position:absolute;
+    font-size: 26px;
 
-  top:54px;
-  left:18px;
+    box-shadow:
+        0 5px 10px rgba(0,0,0,.15);
 
-  border:0;
-
-  background:none;
-
-  color:#fff;
-
-  font-size:38px;
-
-  cursor:pointer;
-}
-
-.folder-screen h2{
-
-  text-align:center;
-
-  margin:57px 0 28px;
-
-  font-size:18px;
-
-  font-weight:600;
-}
-
-.folder-apps{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:23px 10px;
-
-  padding:0 25px;
-}
-
-.folder-apps .ios-app{
-  color:#fff;
+    cursor: pointer;
 }
 
 
-/* =================================
-   EXISTING APP PAGES
-================================= */
+/* =========================================================
+   PAGE DOTS
+========================================================= */
 
-.app-screen{
-  background:#fff;
-}
+.page-dots {
 
-.app-topbar{
+    position: absolute;
 
-  height:58px;
+    left: 0;
+    right: 0;
 
-  background:#f7f7f7;
+    bottom: 87px;
 
-  border-bottom:
-    1px solid #ddd;
+    display: flex;
 
-  display:grid;
+    justify-content: center;
 
-  grid-template-columns:
-    55px 1fr 55px;
+    gap: 7px;
 
-  align-items:end;
-
-  padding-bottom:7px;
-
-  position:absolute;
-
-  left:0;
-  right:0;
-  top:0;
-
-  z-index:5;
-}
-
-.app-topbar button{
-
-  border:0;
-
-  background:none;
-
-  font-size:31px;
-
-  cursor:pointer;
-
-  color:#111;
-}
-
-.app-topbar span{
-
-  text-align:center;
-
-  font-weight:700;
-
-  font-size:15px;
-
-  padding-bottom:7px;
-}
-
-.app-screen iframe{
-
-  position:absolute;
-
-  top:58px;
-  bottom:0;
-
-  left:0;
-
-  width:100%;
-  height:calc(100% - 58px);
-
-  border:0;
-
-  background:#fff;
+    z-index: 20;
 }
 
 
-/* =================================
-   RESPONSIVE
-================================= */
+.page-dots span {
 
-@media(max-height:760px){
+    width: 6px;
+    height: 6px;
 
-  .phone-shell{
+    border-radius: 50%;
 
-    height:92vh;
+    background:
+        rgba(255,255,255,.5);
+}
 
-    width:auto;
+
+.page-dots span.active {
+
+    width: 18px;
+
+    border-radius: 8px;
+
+    background: white;
+}
+
+
+/* =========================================================
+   APP SCREEN
+========================================================= */
+
+.app-screen {
+
+    background: white;
+
+    z-index: 60;
+}
+
+
+.app-header {
+
+    position: absolute;
+
+    z-index: 10;
+
+    top: 0;
+
+    left: 0;
+    right: 0;
+
+    height: 68px;
+
+    padding:
+        25px 18px 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    background:
+        rgba(255,255,255,.94);
+
+    border-bottom:
+        1px solid #e8e8e8;
+
+    backdrop-filter: blur(12px);
+}
+
+
+.app-back {
+
+    width: 35px;
+    height: 35px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #007aff;
+
+    font-size: 35px;
+
+    line-height: 25px;
+
+    cursor: pointer;
+}
+
+
+.app-header-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    color: #222;
+}
+
+
+.header-app-icon {
+
+    width: 28px;
+    height: 28px;
+
+    border-radius: 7px;
+
+    display: grid;
+
+    place-items: center;
+
+    color: white;
+
+    font-size: 14px;
+}
+
+
+.app-screen iframe {
+
+    position: absolute;
+
+    top: 68px;
+
+    left: 0;
+
+    width: 100%;
+
+    height: calc(100% - 68px);
+
+    border: 0;
+
+    background: white;
+}
+
+
+/* =========================================================
+   MOBILE / SMALL SCREEN
+========================================================= */
+
+@media(max-height:760px) {
+
+    .phone-shell {
+
+        height: 94vh;
+
+        width: auto;
+    }
+
+    .date-widget {
+
+        top: 75px;
+    }
+
+    .three-apps {
+
+        top: 285px;
+    }
+
+    .five-apps {
+
+        top: 155px;
+    }
+}
+
+
+@media(max-width:600px) {
+
+    .phone-shell {
+
+        width: 84vw;
+
+        height: auto;
+    }
+
+    .phone-tab {
+
+        width: 50px;
+    }
   }
-
-  .passcode-area{
-    padding-top:220px;
-  }
-
-  .passcode-pad{
-    gap:8px 15px;
-  }
-
-  .passcode-pad button{
-
-    width:61px;
-    height:61px;
-  }
-
-  .home-header-widget{
-    top:52px;
-  }
-
-  .home-content{
-    top:164px;
-  }
-
-}
-
-@media(max-width:600px){
-
-  .phone-shell{
-    width:78vw;
-  }
-
-  .phone-tab{
-    right:0;
-  }
-
-  .investigation-stage{
-    min-height:100vh;
-  }
-
-}
