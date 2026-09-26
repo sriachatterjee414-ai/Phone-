@@ -1,34 +1,259 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Broken Phone — Repair</title>
-<style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#070504;color:#eee2d2;font-family:"Courier New",monospace}
-#repair{width:100vw;height:100vh;position:relative;background:url("repair_background.png") center/cover no-repeat}
-.panel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:850px;padding:30px;background:rgba(15,10,7,.94);border:1px solid #c9a46b;text-align:center}
-h1{letter-spacing:4px;color:#e8cda3}p{font:18px Georgia,serif}.parts{display:flex;justify-content:center;gap:18px;margin:25px}.part{width:130px;height:100px;border:1px solid #8d704d;background:#20150e;display:flex;align-items:center;justify-content:center}.part img{max-width:90%;max-height:90%}
-button{padding:13px 24px;background:#c9a46b;border:1px solid #e3c18b;color:#26170e;cursor:pointer}
-#message{margin-top:18px;color:#e8cda3}
-</style>
-</head>
-<body>
-<main id="repair">
-<div class="panel">
-<h1>REPAIR BENCH</h1>
-<p>The necessary parts are ready. This screen will become the final assembly puzzle.</p>
-<div id="parts" class="parts"></div>
-<button id="startRepair">ASSEMBLE PHONE</button>
-<div id="message"></div>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+«»
+
+<title>Broken Phone — Repair</title><link
+    rel="stylesheet"
+    href="repair.css"
+></head><body><main id="repair"><!-- =========================================
+     BROKEN PHONE BACKGROUND / WORK AREA
+========================================== -->
+
+<div id="repairScene">
+
+    <img
+        id="phoneImage"
+        src="broken_phone.png"
+        alt="Broken phone"
+    >
+
+    <!-- Repaired phone is hidden initially -->
+
+    <img
+        id="goodPhoneImage"
+        src="good_phone.png"
+        alt="Repaired phone"
+    >
+
 </div>
-</main>
-<script>
-const data={precision_screwdriver:["Precision Screwdriver","precision_screwdriver.png"],replacement_battery:["Replacement Battery","replacement_battery.png"],screen_connector:["Screen Connector","screen_connector.png"]};
-const parts=document.getElementById("parts");
-let inv=[];try{inv=JSON.parse(localStorage.getItem("brokenPhoneInventory"))||[]}catch(e){}
-Object.keys(data).forEach(id=>{if(inv.includes(id)){const d=data[id],el=document.createElement("div");el.className="part";el.innerHTML=`<img src="${d[1]}" title="${d[0]}">`;parts.appendChild(el)}});
-document.getElementById("startRepair").onclick=()=>document.getElementById("message").textContent="Assembly puzzle ready — next we can add the correct-part selection and phone unlock sequence.";
-</script>
-</body>
-</html>
+
+
+<!-- =========================================
+     TOP UI
+========================================== -->
+
+<button
+    id="backButton"
+    type="button"
+>
+    ← BACK
+</button>
+
+
+<div class="repairTitle">
+    PHONE REPAIR
+</div>
+
+
+<div class="repairSubtitle">
+    DIGITAL FORENSICS — DEVICE RECOVERY
+</div>
+
+
+<!-- =========================================
+     INSPECT BUTTON
+========================================== -->
+
+<button
+    id="inspectButton"
+    type="button"
+>
+    INSPECT INVENTORY
+</button>
+
+
+<!-- =========================================
+     INVENTORY / REPAIR ITEMS
+========================================== -->
+
+<section
+    id="repairInventory"
+    class="hidden"
+>
+
+    <div class="inventoryHeader">
+
+        <span>
+            AVAILABLE COMPONENTS
+        </span>
+
+        <button
+            id="closeInventory"
+            type="button"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div
+        id="repairItems"
+        class="repairItems"
+    ></div>
+
+
+    <div
+        id="inventoryEmpty"
+        class="hidden inventoryEmpty"
+    >
+        No usable repair items available.
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     REPAIR INFORMATION
+========================================== -->
+
+<section class="repairPanel">
+
+
+    <div class="panelTitle">
+        DEVICE CONDITION
+    </div>
+
+
+    <div
+        id="conditionText"
+        class="conditionText"
+    >
+        PHONE DAMAGED
+    </div>
+
+
+    <!-- =====================================
+         CONDITION METER
+    ====================================== -->
+
+    <div class="meterOuter">
+
+        <div
+            id="conditionMeter"
+            class="meterInner"
+        ></div>
+
+    </div>
+
+
+    <div
+        id="conditionPercent"
+        class="conditionPercent"
+    >
+        0%
+    </div>
+
+
+    <div
+        id="repairMessage"
+        class="repairMessage"
+    >
+        Inspect the inventory to begin.
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     APPLIED PARTS
+========================================== -->
+
+<section class="appliedPanel">
+
+    <div class="appliedTitle">
+        ASSEMBLY STATUS
+    </div>
+
+
+    <div
+        id="appliedParts"
+        class="appliedParts"
+    ></div>
+
+</section>
+
+
+<!-- =========================================
+     BLACKOUT / FINAL REVEAL
+========================================== -->
+
+<div
+    id="blackout"
+    class="hidden"
+>
+
+    <div class="blackoutText">
+        <span id="revealText">
+            DEVICE RESTORED
+        </span>
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     FINAL MESSAGE
+========================================== -->
+
+<div
+    id="completePanel"
+    class="hidden"
+>
+
+    <div class="completeTitle">
+        PHONE RESTORED
+    </div>
+
+
+    <div class="completeText">
+        The device is operational again.
+        <br>
+        The damaged components have been replaced.
+    </div>
+
+
+    <button
+        id="continueButton"
+        type="button"
+    >
+        CONTINUE
+    </button>
+
+</div>
+
+
+<!-- =========================================
+     TOAST
+========================================== -->
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<!-- =========================================
+     AUDIO
+========================================== -->
+
+<audio
+    id="repairSound"
+    src="item_collect.mp3"
+></audio>
+
+
+<audio
+    id="wrongSound"
+    src="ui_click.mp3"
+></audio>
+
+
+<audio
+    id="completeSound"
+    src="item_collect.mp3"
+></audio>
+
+</main><script src="repair.js"></script></body></html>
