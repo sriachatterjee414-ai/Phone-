@@ -24,7 +24,7 @@
 
 
     <!-- =========================================
-         ROOM BACKGROUND
+         ROOM
     ========================================= -->
 
     <div id="room"></div>
@@ -32,7 +32,6 @@
 
     <!-- =========================================
          INTRO
-         HAND + BROKEN PHONE
     ========================================= -->
 
     <section
@@ -163,7 +162,9 @@
         </div>
 
 
-        <!-- STATUS -->
+        <!-- =====================================
+             STATUS
+        ====================================== -->
 
         <div
             id="statusMessage"
@@ -177,8 +178,16 @@
 
         <section class="inventory-panel">
 
-            <div class="inventory-title">
-                INVENTORY
+            <div class="inventory-header">
+
+                <div class="inventory-title">
+                    INVENTORY
+                </div>
+
+                <div class="inventory-hint">
+                    CLICK AN ITEM TO INSPECT
+                </div>
+
             </div>
 
 
@@ -188,6 +197,71 @@
             ></div>
 
         </section>
+
+
+        <!-- =====================================
+             INSPECT OVERLAY
+        ====================================== -->
+
+        <div
+            id="inspectOverlay"
+            class="inspect-overlay hidden"
+        >
+
+            <div class="inspect-window">
+
+                <button
+                    id="closeInspect"
+                    class="close-inspect"
+                >
+                    ×
+                </button>
+
+
+                <div class="inspect-label">
+                    ITEM INSPECTION
+                </div>
+
+
+                <img
+                    id="inspectImage"
+                    class="inspect-image"
+                    src=""
+                    alt=""
+                >
+
+
+                <h2 id="inspectName">
+                    ITEM
+                </h2>
+
+
+                <p id="inspectDescription">
+                    Description
+                </p>
+
+
+                <div class="inspect-actions">
+
+                    <button
+                        id="useForRepair"
+                        class="repair-button"
+                    >
+                        USE FOR REPAIR
+                    </button>
+
+                    <button
+                        id="closeInspectButton"
+                        class="secondary-button"
+                    >
+                        CLOSE
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
 
     </section>
