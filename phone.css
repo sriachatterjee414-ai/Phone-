@@ -1,0 +1,50 @@
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;overflow:hidden}
+body{background:linear-gradient(135deg,#d9dde2,#f5f6f8 48%,#d5d8dc)}
+button{font:inherit}
+.investigation-stage{position:relative;width:100%;height:100%;min-height:700px;background:
+radial-gradient(circle at 72% 20%,rgba(255,255,255,.95),transparent 30%),
+linear-gradient(135deg,#e5e8eb 0%,#f9fafb 48%,#d7dadd 100%);}
+.phone-tab{position:absolute;right:28px;top:45%;z-index:50;border:0;border-radius:16px 0 0 16px;background:#222;color:#fff;padding:14px 12px;font-weight:800;letter-spacing:1.5px;box-shadow:0 8px 24px rgba(0,0,0,.18);cursor:pointer;writing-mode:vertical-rl}
+.phone-tab:hover{background:#333}
+.phone-shell{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(390px,38vw);min-width:300px;aspect-ratio:390/795;transition:opacity .25s,transform .25s;z-index:20}
+.phone-shell.hidden-phone{opacity:0;transform:translate(-50%,-50%) scale(.92);pointer-events:none}
+.phone-frame{width:100%;height:100%;padding:5px;border-radius:53px;background:linear-gradient(145deg,#1b1b1d,#050505 48%,#38383a);box-shadow:0 25px 55px rgba(0,0,0,.35),0 4px 10px rgba(0,0,0,.35)}
+.phone-bezel{position:relative;width:100%;height:100%;border-radius:48px;overflow:hidden;background:#c9ddec;border:3px solid #101010}
+.dynamic-island{position:absolute;z-index:30;left:50%;top:10px;transform:translateX(-50%);width:105px;height:28px;border-radius:20px;background:#050505}
+.screen{position:absolute;inset:0;overflow:hidden}
+.hidden{display:none!important}
+.side-button{position:absolute;background:#111;z-index:-1;border-radius:4px}
+.side-left{left:-5px;width:5px}
+.side-left.top{top:20%;height:42px}.side-left.middle{top:29%;height:62px}.side-right{right:-5px;top:24%;height:95px;width:5px}
+.lock-screen{background:linear-gradient(160deg,#8fc5df 0%,#c5d6df 43%,#e8c9c7 100%);color:#fff}
+.status-bar{position:absolute;left:24px;right:24px;top:15px;height:28px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:650;z-index:4}
+.lock-date{position:absolute;top:112px;left:0;right:0;text-align:center;font-size:17px;font-weight:500}
+.lock-time{position:absolute;top:65px;left:0;right:0;text-align:center;font-size:60px;font-weight:300;letter-spacing:-2px}
+.lock-weather{position:absolute;left:34px;right:34px;top:185px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lock-weather>div{height:99px;border-radius:19px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.25);padding:14px 16px;position:relative}
+.lock-weather span,.lock-weather strong,.lock-weather b,.lock-weather small{display:block}
+.lock-weather b{font-size:31px;font-weight:400;margin-top:4px}.lock-weather small{font-size:14px;margin-top:3px;opacity:.92}.sun{position:absolute!important;right:14px;top:21px;font-size:31px}
+.lock-bottom{position:absolute;left:32px;right:32px;bottom:28px;display:flex;justify-content:space-between}
+.lock-shortcut{width:45px;height:45px;border-radius:50%;background:rgba(40,40,40,.35);display:grid;place-items:center;font-size:20px}
+.unlock-card{position:absolute;left:22px;right:22px;bottom:90px;background:rgba(255,255,255,.94);color:#30343a;border-radius:24px;padding:14px 14px 16px;box-shadow:0 14px 35px rgba(0,0,0,.18)}
+.unlock-title{text-align:center;font-size:15px;font-weight:800}.unlock-subtitle{text-align:center;font-size:12px;color:#777;margin:2px 0 9px}
+.passcode-dots{display:flex;justify-content:center;gap:8px;margin-bottom:10px}.passcode-dots span{width:8px;height:8px;border:1px solid #555;border-radius:50%}.passcode-dots span.filled{background:#222}
+.passcode-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.passcode-pad button{height:38px;border:0;border-radius:12px;background:#eef0f2;color:#222;font-weight:700;cursor:pointer}.passcode-pad button:active{transform:scale(.97)}
+.passcode-error{height:14px;text-align:center;color:#c33;font-size:11px;margin-top:5px}
+.home-screen{background:linear-gradient(160deg,#9acbe1 0%,#c8d6df 43%,#e6c9ca 100%);color:#fff}
+.home-status{top:14px}
+.home-widget-row{position:absolute;left:28px;right:28px;top:70px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.home-widget{height:95px;border-radius:18px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.25);padding:12px 15px;backdrop-filter:blur(5px)}
+.calendar-widget span,.calendar-widget strong,.calendar-widget small{display:block}.calendar-widget strong{font-size:34px;font-weight:400}.calendar-widget small{font-size:13px}.weather-widget{display:flex;align-items:center;gap:8px}.weather-icon{font-size:31px}.weather-widget strong{font-size:28px;font-weight:400}.weather-widget small{display:block;font-size:12px}
+.app-grid{position:absolute;left:25px;right:25px;top:185px;display:grid;grid-template-columns:repeat(4,1fr);column-gap:10px;row-gap:17px}
+.app-icon{border:0;background:none;color:#fff;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.app-icon .icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;box-shadow:0 6px 12px rgba(0,0,0,.14);font-weight:600}
+.app-icon label{font-size:10px;font-weight:500}
+.icon.green,.dock-icon.green{background:linear-gradient(#5ef28a,#19d86b)}.icon.blue,.dock-icon.blue{background:linear-gradient(#58d7f1,#28b9ec)}.icon.pink,.dock-icon.pink{background:linear-gradient(#ff8da8,#f75c82)}.icon.gray{background:linear-gradient(#eef1f3,#aeb5bc);color:#3b4147}.icon.dark{background:linear-gradient(#60707b,#2d3941)}.icon.photos{background:linear-gradient(135deg,#ffb45c,#f36ca7,#6fc5ee)}.icon.navy{background:linear-gradient(#536d9a,#24395e)}
+.icon.clock{background:#f1f3f4;color:#333}
+.dock{position:absolute;left:23px;right:23px;bottom:16px;height:73px;border-radius:24px;background:rgba(255,255,255,.30);border:1px solid rgba(255,255,255,.35);display:grid;grid-template-columns:repeat(4,1fr);gap:13px;padding:10px 13px;backdrop-filter:blur(8px)}
+.dock-icon{border:0;border-radius:15px;color:#fff;font-size:25px;cursor:pointer;box-shadow:0 4px 9px rgba(0,0,0,.13)}
+.app-screen{background:#fff}.app-screen iframe{width:100%;height:100%;border:0;background:#fff}
+@media(max-height:760px){.phone-shell{height:92vh;width:auto}.app-grid{top:176px;row-gap:11px}.home-widget-row{top:68px}.unlock-card{bottom:72px}}
+@media(max-width:600px){.phone-shell{width:78vw}.phone-tab{right:0}.investigation-stage{min-height:100vh}}

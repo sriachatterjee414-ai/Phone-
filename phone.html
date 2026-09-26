@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Broken Phone — Repaired Phone</title>
+<link rel="stylesheet" href="phone.css">
+</head>
+<body>
+<div class="investigation-stage">
+  <button id="phoneToggle" class="phone-tab" type="button" aria-label="Show or hide phone">PHONE</button>
+
+  <section id="phoneShell" class="phone-shell" aria-label="Phone">
+    <div class="side-button side-left top"></div>
+    <div class="side-button side-left middle"></div>
+    <div class="side-button side-right"></div>
+
+    <div class="phone-frame">
+      <div class="phone-bezel">
+        <div class="dynamic-island"></div>
+
+        <div id="lockScreen" class="lock-screen screen">
+          <div class="status-bar">
+            <span id="lockStatusTime">10:47</span>
+            <span>⌁⌁⌁  ▰</span>
+          </div>
+          <div class="lock-date" id="lockDate">Tuesday, March 4</div>
+          <div class="lock-time" id="lockTime">10:47</div>
+
+          <div class="lock-weather">
+            <div><strong>Tue</strong><b>4</b><small>Calendar</small></div>
+            <div><span class="sun">☀</span><b>72°</b><small>Mostly Sunny</small></div>
+          </div>
+
+          <div class="lock-bottom">
+            <div class="lock-shortcut">◉</div>
+            <div class="lock-shortcut">⌁</div>
+          </div>
+
+          <div class="unlock-card">
+            <div class="unlock-title">Phone repaired</div>
+            <div class="unlock-subtitle">Enter passcode</div>
+            <div id="passcodeDots" class="passcode-dots">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div id="passcodePad" class="passcode-pad"></div>
+            <div id="passcodeError" class="passcode-error"></div>
+          </div>
+        </div>
+
+        <div id="homeScreen" class="home-screen screen hidden">
+          <div class="status-bar home-status">
+            <span id="homeTime">10:47</span>
+            <span>⌁⌁⌁  ▰</span>
+          </div>
+
+          <div class="home-widget-row">
+            <div class="home-widget calendar-widget">
+              <span>Tue</span><strong>4</strong><small>Calendar</small>
+            </div>
+            <div class="home-widget weather-widget">
+              <span class="weather-icon">☀️</span>
+              <div><strong>72°</strong><small>Mostly Sunny</small></div>
+            </div>
+          </div>
+
+          <div class="app-grid">
+            <button class="app-icon" data-app="calls"><span class="icon green">☎</span><label>Phone</label></button>
+            <button class="app-icon" data-app="browser"><span class="icon blue">◉</span><label>Browser</label></button>
+            <button class="app-icon" data-app="messages"><span class="icon green">●</span><label>Messages</label></button>
+            <button class="app-icon" data-app="music"><span class="icon pink">♫</span><label>Music</label></button>
+
+            <button class="app-icon" data-app="notes"><span class="icon blue">✉</span><label>Notes</label></button>
+            <button class="app-icon" data-app="clock"><span class="icon clock">◷</span><label>Clock</label></button>
+            <button class="app-icon" data-app="camera"><span class="icon dark">◉</span><label>Camera</label></button>
+            <button class="app-icon" data-app="gallery"><span class="icon photos">✿</span><label>Gallery</label></button>
+
+            <button class="app-icon" data-app="contacts"><span class="icon blue">♟</span><label>Contacts</label></button>
+            <button class="app-icon" data-app="bank"><span class="icon navy">$</span><label>Bank</label></button>
+            <button class="app-icon" data-app="settings"><span class="icon gray">⚙</span><label>Settings</label></button>
+          </div>
+
+          <div class="dock">
+            <button class="dock-icon green" data-app="calls">☎</button>
+            <button class="dock-icon blue" data-app="browser">◉</button>
+            <button class="dock-icon green" data-app="messages">●</button>
+            <button class="dock-icon pink" data-app="music">♫</button>
+          </div>
+        </div>
+
+        <div id="appScreen" class="app-screen screen hidden">
+          <iframe id="appFrame" title="Phone application"></iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+<script src="phone.js"></script>
+</body>
+</html>
