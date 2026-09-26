@@ -1,259 +1,1705 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
+<!DOCTYPE html>
+<html lang="en">
 
-«»
+<head>
 
-<title>Broken Phone — Repair</title><link
-    rel="stylesheet"
-    href="repair.css"
-></head><body><main id="repair"><!-- =========================================
-     BROKEN PHONE BACKGROUND / WORK AREA
-========================================== -->
+<meta charset="UTF-8">
 
-<div id="repairScene">
-
-    <img
-        id="phoneImage"
-        src="broken_phone.png"
-        alt="Broken phone"
-    >
-
-    <!-- Repaired phone is hidden initially -->
-
-    <img
-        id="goodPhoneImage"
-        src="good_phone.png"
-        alt="Repaired phone"
-    >
-
-</div>
-
-
-<!-- =========================================
-     TOP UI
-========================================== -->
-
-<button
-    id="backButton"
-    type="button"
->
-    ← BACK
-</button>
-
-
-<div class="repairTitle">
-    PHONE REPAIR
-</div>
-
-
-<div class="repairSubtitle">
-    DIGITAL FORENSICS — DEVICE RECOVERY
-</div>
-
-
-<!-- =========================================
-     INSPECT BUTTON
-========================================== -->
-
-<button
-    id="inspectButton"
-    type="button"
->
-    INSPECT INVENTORY
-</button>
-
-
-<!-- =========================================
-     INVENTORY / REPAIR ITEMS
-========================================== -->
-
-<section
-    id="repairInventory"
-    class="hidden"
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0"
 >
 
-    <div class="inventoryHeader">
+<title>Broken Phone — Repair</title>
 
-        <span>
-            AVAILABLE COMPONENTS
-        </span>
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+
+html,
+body{
+
+    margin:0;
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    background:#070504;
+
+    color:#eee2d2;
+
+    font-family:"Courier New",monospace;
+}
+
+
+button{
+    font:inherit;
+}
+
+
+.hidden{
+    display:none!important;
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
+#repair{
+
+    position:relative;
+
+    width:100vw;
+    height:100vh;
+
+    overflow:hidden;
+
+    background:
+        url("repair_background.png")
+        center/cover
+        no-repeat;
+}
+
+
+/* =========================================
+   DARK OVERLAY
+========================================= */
+
+#repair::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.28);
+
+    pointer-events:none;
+
+    z-index:1;
+}
+
+
+/* =========================================
+   TOP BAR
+========================================= */
+
+.repair-top{
+
+    position:absolute;
+
+    z-index:20;
+
+    top:25px;
+
+    left:30px;
+    right:30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+
+.repair-title{
+
+    color:#e8cda3;
+
+    letter-spacing:4px;
+
+    font-size:18px;
+}
+
+
+.back-button{
+
+    padding:10px 18px;
+
+    background:
+        rgba(10,7,5,.92);
+
+    border:1px solid #c9a46b;
+
+    color:#eee2d2;
+
+    cursor:pointer;
+}
+
+
+.back-button:hover{
+
+    background:#e8cda3;
+
+    color:#120e0c;
+}
+
+
+/* =========================================
+   PHONE AREA
+========================================= */
+
+.phone-area{
+
+    position:absolute;
+
+    z-index:5;
+
+    left:50%;
+
+    top:47%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width:72vw;
+
+    height:72vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    pointer-events:none;
+}
+
+
+.phone-image{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:contain;
+
+    filter:
+        drop-shadow(
+            0 20px 35px
+            rgba(0,0,0,.85)
+        );
+
+    transition:
+        opacity .25s,
+        transform .25s;
+}
+
+
+/* =========================================
+   PART AREA
+========================================= */
+
+.parts-area{
+
+    position:absolute;
+
+    z-index:30;
+
+    left:25px;
+
+    top:110px;
+
+    width:190px;
+
+    padding:15px;
+
+    background:
+        rgba(10,7,5,.94);
+
+    border:1px solid
+        rgba(201,164,107,.65);
+
+    box-shadow:
+        0 10px 30px #000;
+}
+
+
+.parts-title{
+
+    font-size:10px;
+
+    letter-spacing:2px;
+
+    color:#c9a46b;
+
+    margin-bottom:12px;
+
+    text-align:center;
+}
+
+
+.repair-part{
+
+    width:100%;
+
+    height:78px;
+
+    margin-bottom:9px;
+
+    padding:5px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:1px solid
+        rgba(190,150,95,.45);
+
+    cursor:pointer;
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:.2s;
+}
+
+
+.repair-part:last-child{
+
+    margin-bottom:0;
+}
+
+
+.repair-part:hover{
+
+    transform:
+        translateX(4px);
+
+    border-color:#e8cda3;
+
+    background:
+        rgba(201,164,107,.12);
+}
+
+
+.repair-part img{
+
+    max-width:70px;
+
+    max-height:55px;
+
+    object-fit:contain;
+}
+
+
+.repair-part-name{
+
+    position:absolute;
+
+    bottom:2px;
+
+    left:2px;
+    right:2px;
+
+    padding:3px;
+
+    font-size:7px;
+
+    text-align:center;
+
+    color:#e8cda3;
+
+    background:
+        rgba(0,0,0,.65);
+}
+
+
+/* =========================================
+   PART SELECTED
+========================================= */
+
+.repair-part.selected{
+
+    border-color:#e8cda3;
+
+    box-shadow:
+        0 0 14px
+        rgba(201,164,107,.35);
+}
+
+
+/* =========================================
+   INSTRUCTION
+========================================= */
+
+.repair-instruction{
+
+    position:absolute;
+
+    z-index:20;
+
+    top:100px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    padding:10px 20px;
+
+    background:
+        rgba(10,7,5,.85);
+
+    border:1px solid
+        rgba(190,150,95,.4);
+
+    color:#cdbfae;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+
+    text-align:center;
+}
+
+
+/* =========================================
+   DAMAGE METER
+========================================= */
+
+.meter-panel{
+
+    position:absolute;
+
+    z-index:30;
+
+    left:50%;
+
+    bottom:145px;
+
+    transform:
+        translateX(-50%);
+
+    width:520px;
+
+    padding:12px 18px;
+
+    background:
+        rgba(10,7,5,.94);
+
+    border:1px solid
+        rgba(201,164,107,.65);
+
+    box-shadow:
+        0 8px 25px #000;
+}
+
+
+.meter-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:7px;
+
+    font-size:11px;
+
+    letter-spacing:2px;
+}
+
+
+.meter-label{
+
+    color:#c9a46b;
+}
+
+
+.meter-value{
+
+    color:#e8cda3;
+}
+
+
+.meter-track{
+
+    width:100%;
+
+    height:18px;
+
+    background:#21150f;
+
+    border:1px solid #5f4a35;
+
+    overflow:hidden;
+}
+
+
+.meter-fill{
+
+    width:0%;
+
+    height:100%;
+
+    background:#c9a46b;
+
+    transition:
+        width .5s ease;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+#message{
+
+    position:absolute;
+
+    z-index:30;
+
+    left:50%;
+
+    bottom:105px;
+
+    transform:
+        translateX(-50%);
+
+    min-height:20px;
+
+    color:#e8cda3;
+
+    font-size:12px;
+
+    letter-spacing:1px;
+
+    text-align:center;
+}
+
+
+/* =========================================
+   INVENTORY REPAIR AREA
+========================================= */
+
+.repair-inventory{
+
+    position:absolute;
+
+    z-index:30;
+
+    left:50%;
+
+    bottom:18px;
+
+    transform:
+        translateX(-50%);
+
+    width:700px;
+
+    min-height:78px;
+
+    padding:8px 12px;
+
+    background:
+        rgba(10,7,5,.96);
+
+    border:1px solid
+        rgba(190,150,95,.6);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+
+.repair-inventory-title{
+
+    color:#c9a46b;
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    width:75px;
+}
+
+
+.repair-inventory-items{
+
+    display:flex;
+
+    gap:8px;
+
+    flex:1;
+}
+
+
+.inventory-part{
+
+    width:65px;
+
+    height:60px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:1px solid
+        rgba(190,150,95,.45);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    position:relative;
+
+    transition:.2s;
+}
+
+
+.inventory-part:hover{
+
+    border-color:#e8cda3;
+
+    transform:
+        translateY(-2px);
+}
+
+
+.inventory-part img{
+
+    max-width:80%;
+
+    max-height:75%;
+
+    object-fit:contain;
+}
+
+
+.inventory-part span{
+
+    position:absolute;
+
+    left:1px;
+    right:1px;
+
+    bottom:1px;
+
+    font-size:6px;
+
+    text-align:center;
+
+    background:
+        rgba(0,0,0,.7);
+}
+
+
+/* =========================================
+   BLACKOUT
+========================================= */
+
+#blackout{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:100;
+
+    background:#000;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:
+        opacity .8s ease;
+}
+
+
+#blackout.active{
+
+    opacity:1;
+
+    pointer-events:auto;
+}
+
+
+.blackout-text{
+
+    color:#e8cda3;
+
+    letter-spacing:5px;
+
+    font-size:14px;
+
+    opacity:0;
+
+    transition:
+        opacity .5s;
+}
+
+
+#blackout.active .blackout-text{
+
+    opacity:1;
+}
+
+
+/* =========================================
+   GOOD PHONE REVEAL
+========================================= */
+
+#goodPhone{
+
+    position:absolute;
+
+    z-index:110;
+
+    left:50%;
+
+    top:50%;
+
+    transform:
+        translate(-50%,-50%)
+        scale(.85);
+
+    width:72vw;
+
+    height:72vh;
+
+    object-fit:contain;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    filter:
+        drop-shadow(
+            0 20px 40px
+            rgba(0,0,0,.9)
+        );
+
+    transition:
+        opacity .9s ease,
+        transform .9s ease;
+}
+
+
+#goodPhone.revealed{
+
+    opacity:1;
+
+    transform:
+        translate(-50%,-50%)
+        scale(1);
+}
+
+
+/* =========================================
+   COMPLETE TEXT
+========================================= */
+
+#completeMessage{
+
+    position:absolute;
+
+    z-index:120;
+
+    left:50%;
+
+    bottom:90px;
+
+    transform:
+        translateX(-50%);
+
+    color:#e8cda3;
+
+    font-size:14px;
+
+    letter-spacing:3px;
+
+    opacity:0;
+
+    transition:
+        opacity .8s;
+
+    text-align:center;
+}
+
+
+#completeMessage.show{
+
+    opacity:1;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:900px){
+
+    .parts-area{
+
+        left:10px;
+
+        top:80px;
+
+        width:140px;
+    }
+
+
+    .repair-instruction{
+
+        top:70px;
+
+        width:70%;
+
+        font-size:9px;
+    }
+
+
+    .phone-area{
+
+        width:80vw;
+
+        height:65vh;
+    }
+
+
+    .meter-panel{
+
+        width:60vw;
+
+        bottom:145px;
+    }
+
+
+    .repair-inventory{
+
+        width:90vw;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<main id="repair">
+
+
+    <!-- =====================================
+         TOP
+    ====================================== -->
+
+    <div class="repair-top">
+
+        <div class="repair-title">
+            PHONE REPAIR
+        </div>
+
 
         <button
-            id="closeInventory"
-            type="button"
+            class="back-button"
+            id="backButton"
         >
-            ×
+            ← INVESTIGATION
         </button>
 
     </div>
 
 
-    <div
-        id="repairItems"
-        class="repairItems"
-    ></div>
+    <!-- =====================================
+         INSTRUCTION
+    ====================================== -->
 
+    <div class="repair-instruction">
 
-    <div
-        id="inventoryEmpty"
-        class="hidden inventoryEmpty"
-    >
-        No usable repair items available.
-    </div>
+        SELECT A PART FROM THE INVENTORY
+        AND USE IT ON THE PHONE
 
-</section>
-
-
-<!-- =========================================
-     REPAIR INFORMATION
-========================================== -->
-
-<section class="repairPanel">
-
-
-    <div class="panelTitle">
-        DEVICE CONDITION
-    </div>
-
-
-    <div
-        id="conditionText"
-        class="conditionText"
-    >
-        PHONE DAMAGED
     </div>
 
 
     <!-- =====================================
-         CONDITION METER
+         PHONE
     ====================================== -->
 
-    <div class="meterOuter">
+    <div class="phone-area">
+
+        <img
+            id="brokenPhone"
+            class="phone-image"
+            src="broken_phone.png"
+            alt="Broken phone"
+        >
+
+    </div>
+
+
+    <!-- =====================================
+         AVAILABLE PARTS
+    ====================================== -->
+
+    <section class="parts-area">
+
+        <div class="parts-title">
+            REPAIR PARTS
+        </div>
+
 
         <div
-            id="conditionMeter"
-            class="meterInner"
+            id="partsContainer"
         ></div>
 
+    </section>
+
+
+    <!-- =====================================
+         DAMAGE / REPAIR METER
+    ====================================== -->
+
+    <div class="meter-panel">
+
+        <div class="meter-header">
+
+            <span class="meter-label">
+                PHONE CONDITION
+            </span>
+
+            <span
+                id="meterValue"
+                class="meter-value"
+            >
+                0%
+            </span>
+
+        </div>
+
+
+        <div class="meter-track">
+
+            <div
+                id="meterFill"
+                class="meter-fill"
+            ></div>
+
+        </div>
+
     </div>
 
 
-    <div
-        id="conditionPercent"
-        class="conditionPercent"
+    <!-- =====================================
+         MESSAGE
+    ====================================== -->
+
+    <div id="message"></div>
+
+
+    <!-- =====================================
+         INVENTORY
+    ====================================== -->
+
+    <section class="repair-inventory">
+
+        <div class="repair-inventory-title">
+            INVENTORY
+        </div>
+
+
+        <div
+            id="repairInventory"
+            class="repair-inventory-items"
+        ></div>
+
+    </section>
+
+
+    <!-- =====================================
+         BLACKOUT
+    ====================================== -->
+
+    <div id="blackout">
+
+        <div class="blackout-text">
+            REPAIR COMPLETE
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         GOOD PHONE
+    ====================================== -->
+
+    <img
+        id="goodPhone"
+        src="good_phone.png"
+        alt="Repaired phone"
     >
-        0%
+
+
+    <div id="completeMessage">
+        THE PHONE IS WORKING AGAIN.
     </div>
 
 
-    <div
-        id="repairMessage"
-        class="repairMessage"
-    >
-        Inspect the inventory to begin.
-    </div>
+    <!-- =====================================
+         AUDIO
+    ====================================== -->
 
-</section>
-
-
-<!-- =========================================
-     APPLIED PARTS
-========================================== -->
-
-<section class="appliedPanel">
-
-    <div class="appliedTitle">
-        ASSEMBLY STATUS
-    </div>
+    <audio
+        id="repairSound"
+        src="ui_click.mp3"
+    ></audio>
 
 
-    <div
-        id="appliedParts"
-        class="appliedParts"
-    ></div>
-
-</section>
+    <audio
+        id="completeSound"
+        src="item_collect.mp3"
+    ></audio>
 
 
-<!-- =========================================
-     BLACKOUT / FINAL REVEAL
-========================================== -->
-
-<div
-    id="blackout"
-    class="hidden"
->
-
-    <div class="blackoutText">
-        <span id="revealText">
-            DEVICE RESTORED
-        </span>
-    </div>
-
-</div>
+</main>
 
 
-<!-- =========================================
-     FINAL MESSAGE
-========================================== -->
+<script>
 
-<div
-    id="completePanel"
-    class="hidden"
->
+/* =========================================
+   INVENTORY
+========================================= */
 
-    <div class="completeTitle">
-        PHONE RESTORED
-    </div>
+const INVENTORY_KEY =
+    "brokenPhoneInventory";
 
 
-    <div class="completeText">
-        The device is operational again.
-        <br>
-        The damaged components have been replaced.
-    </div>
+const REQUIRED_PARTS = {
+
+    precision_screwdriver:{
+        name:"Precision Screwdriver",
+        img:"precision_screwdriver.png",
+        repair:25
+    },
+
+    replacement_battery:{
+        name:"Replacement Battery",
+        img:"replacement_battery.png",
+        repair:25
+    },
+
+    screen_connector:{
+        name:"Screen Connector",
+        img:"screen_connector.png",
+        repair:25
+    }
+
+};
 
 
-    <button
-        id="continueButton"
-        type="button"
-    >
-        CONTINUE
-    </button>
+/* =========================================
+   EXTRA ITEMS
+========================================= */
 
-</div>
+const ALL_ITEMS = {
+
+    precision_screwdriver:{
+        name:"Precision Screwdriver",
+        img:"precision_screwdriver.png"
+    },
+
+    replacement_battery:{
+        name:"Replacement Battery",
+        img:"replacement_battery.png"
+    },
+
+    screen_connector:{
+        name:"Screen Connector",
+        img:"screen_connector.png"
+    },
+
+    old_key:{
+        name:"Old Key",
+        img:"old_key.png"
+    },
+
+    cassette_tape:{
+        name:"Cassette Tape",
+        img:"cassette_tape.png"
+    },
+
+    paper_clip:{
+        name:"Paper Clip",
+        img:"paper_clip.png"
+    }
+
+};
 
 
-<!-- =========================================
-     TOAST
-========================================== -->
+/* =========================================
+   ELEMENTS
+========================================= */
 
-<div
-    id="toast"
-    class="toast"
-></div>
-
-
-<!-- =========================================
-     AUDIO
-========================================== -->
-
-<audio
-    id="repairSound"
-    src="item_collect.mp3"
-></audio>
+const partsContainer =
+    document.getElementById(
+        "partsContainer"
+    );
 
 
-<audio
-    id="wrongSound"
-    src="ui_click.mp3"
-></audio>
+const repairInventory =
+    document.getElementById(
+        "repairInventory"
+    );
 
 
-<audio
-    id="completeSound"
-    src="item_collect.mp3"
-></audio>
+const meterFill =
+    document.getElementById(
+        "meterFill"
+    );
 
-</main><script src="repair.js"></script></body></html>
+
+const meterValue =
+    document.getElementById(
+        "meterValue"
+    );
+
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+const brokenPhone =
+    document.getElementById(
+        "brokenPhone"
+    );
+
+
+const blackout =
+    document.getElementById(
+        "blackout"
+    );
+
+
+const goodPhone =
+    document.getElementById(
+        "goodPhone"
+    );
+
+
+const completeMessage =
+    document.getElementById(
+        "completeMessage"
+    );
+
+
+const repairSound =
+    document.getElementById(
+        "repairSound"
+    );
+
+
+const completeSound =
+    document.getElementById(
+        "completeSound"
+    );
+
+
+/* =========================================
+   STATE
+========================================= */
+
+let repairPercent = 0;
+
+let usedParts = [];
+
+let inventory = [];
+
+
+/* =========================================
+   LOAD INVENTORY
+========================================= */
+
+function getInventory(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                INVENTORY_KEY
+            )
+        ) || [];
+
+    }
+
+    catch(e){
+
+        return [];
+
+    }
+
+}
+
+
+inventory =
+    getInventory();
+
+
+/* =========================================
+   RENDER AVAILABLE REPAIR PARTS
+========================================= */
+
+function renderParts(){
+
+    partsContainer.innerHTML = "";
+
+
+    inventory.forEach(
+        id => {
+
+            if(
+                !ALL_ITEMS[id]
+            )
+                return;
+
+
+            const data =
+                ALL_ITEMS[id];
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "repair-part";
+
+
+            button.dataset.id =
+                id;
+
+
+            button.innerHTML = `
+
+                <img
+                    src="${data.img}"
+                    alt="${data.name}"
+                >
+
+                <span
+                    class="repair-part-name"
+                >
+                    ${data.name}
+                </span>
+
+            `;
+
+
+            button.addEventListener(
+                "click",
+                ()=>{
+
+                    usePart(
+                        id,
+                        button
+                    );
+
+                }
+            );
+
+
+            partsContainer.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   RENDER BOTTOM INVENTORY
+========================================= */
+
+function renderInventory(){
+
+    repairInventory.innerHTML = "";
+
+
+    inventory.forEach(
+        id => {
+
+            if(
+                !ALL_ITEMS[id]
+            )
+                return;
+
+
+            const data =
+                ALL_ITEMS[id];
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "inventory-part";
+
+
+            item.innerHTML = `
+
+                <img
+                    src="${data.img}"
+                    alt="${data.name}"
+                >
+
+                <span>
+                    ${data.name}
+                </span>
+
+            `;
+
+
+            item.addEventListener(
+                "click",
+                ()=>{
+
+                    usePart(
+                        id,
+                        item
+                    );
+
+                }
+            );
+
+
+            repairInventory.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   USE PART
+========================================= */
+
+function usePart(
+    id,
+    element
+){
+
+    /*
+       Don't allow the same
+       part to be used twice.
+    */
+
+    if(
+        usedParts.includes(id)
+    ){
+
+        showMessage(
+            "That part has already been installed."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       CORRECT PART
+    */
+
+    if(
+        REQUIRED_PARTS[id]
+    ){
+
+        const amount =
+            REQUIRED_PARTS[id].repair;
+
+
+        repairPercent +=
+            amount;
+
+
+        if(
+            repairPercent > 100
+        ){
+
+            repairPercent =
+                100;
+
+        }
+
+
+        usedParts.push(id);
+
+
+        element.classList.add(
+            "selected"
+        );
+
+
+        updateMeter();
+
+
+        showMessage(
+            `${REQUIRED_PARTS[id].name} installed.`
+        );
+
+
+        play(repairSound);
+
+
+        if(
+            repairPercent >= 100
+        ){
+
+            completeRepair();
+
+        }
+
+
+        return;
+
+    }
+
+
+    /*
+       WRONG ITEM
+    */
+
+    repairPercent -= 15;
+
+
+    if(
+        repairPercent < 0
+    ){
+
+        repairPercent =
+            0;
+
+    }
+
+
+    updateMeter();
+
+
+    showMessage(
+        "That item does not belong inside the phone."
+    );
+
+
+    play(repairSound);
+
+}
+
+
+/* =========================================
+   UPDATE METER
+========================================= */
+
+function updateMeter(){
+
+    meterFill.style.width =
+        repairPercent + "%";
+
+
+    meterValue.textContent =
+        repairPercent + "%";
+
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+let messageTimer;
+
+
+function showMessage(text){
+
+    message.textContent =
+        text;
+
+
+    clearTimeout(
+        messageTimer
+    );
+
+
+    messageTimer =
+        setTimeout(
+            ()=>{
+
+                message.textContent =
+                    "";
+
+            },
+            1800
+        );
+
+}
+
+
+/* =========================================
+   SOUND
+========================================= */
+
+function play(sound){
+
+    if(!sound)
+        return;
+
+
+    sound.currentTime =
+        0;
+
+
+    sound.volume =
+        .45;
+
+
+    sound.play().catch(
+        ()=>{}
+    );
+
+}
+
+
+/* =========================================
+   COMPLETE REPAIR
+========================================= */
+
+function completeRepair(){
+
+    /*
+       Prevent repeated completion.
+    */
+
+    if(
+        localStorage.getItem(
+            "brokenPhoneRepairComplete"
+        ) === "true"
+    ){
+
+        showCompletedPhone();
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "brokenPhoneRepairComplete",
+        "true"
+    );
+
+
+    /*
+       Disable interaction.
+    */
+
+    document
+        .querySelectorAll(
+            ".repair-part, .inventory-part"
+        )
+        .forEach(
+            item => {
+
+                item.style.pointerEvents =
+                    "none";
+
+            }
+        );
+
+
+    showMessage(
+        "All necessary components installed."
+    );
+
+
+    /*
+       Short pause before blackout.
+    */
+
+    setTimeout(
+        ()=>{
+
+            blackout.classList.add(
+                "active"
+            );
+
+
+            play(
+                completeSound
+            );
+
+
+        },
+        700
+    );
+
+
+    /*
+       Reveal repaired phone.
+    */
+
+    setTimeout(
+        ()=>{
+
+            brokenPhone.style.opacity =
+                "0";
+
+
+            goodPhone.classList.add(
+                "revealed"
+            );
+
+
+        },
+        1700
+    );
+
+
+    /*
+       Reveal final message.
+    */
+
+    setTimeout(
+        ()=>{
+
+            completeMessage.classList.add(
+                "show"
+            );
+
+
+        },
+        2500
+    );
+
+}
+
+
+/* =========================================
+   RESTORE COMPLETED PHONE
+========================================= */
+
+function showCompletedPhone(){
+
+    repairPercent =
+        100;
+
+
+    updateMeter();
+
+
+    brokenPhone.style.opacity =
+        "0";
+
+
+    goodPhone.classList.add(
+        "revealed"
+    );
+
+
+    blackout.classList.add(
+        "active"
+    );
+
+
+    completeMessage.classList.add(
+        "show"
+    );
+
+
+    document
+        .querySelectorAll(
+            ".repair-part, .inventory-part"
+        )
+        .forEach(
+            item => {
+
+                item.style.pointerEvents =
+                    "none";
+
+            }
+        );
+
+}
+
+
+/* =========================================
+   BACK
+========================================= */
+
+document
+    .getElementById(
+        "backButton"
+    )
+    .addEventListener(
+        "click",
+        ()=>{
+
+            window.location.href =
+                "investigation.html";
+
+        }
+    );
+
+
+/* =========================================
+   INITIALIZE
+========================================= */
+
+renderParts();
+
+renderInventory();
+
+
+if(
+    localStorage.getItem(
+        "brokenPhoneRepairComplete"
+    ) === "true"
+){
+
+    showCompletedPhone();
+
+}
+
+</script>
+
+</body>
+
+</html>
