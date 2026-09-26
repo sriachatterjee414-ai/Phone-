@@ -1,40 +1,16 @@
-/* =========================================
+/* =========================================================
    BROKEN PHONE
    VICTIM PHONE SYSTEM
-========================================= */
+========================================================= */
 
 
-/* =========================================
-   REPAIR COMPLETION
-========================================= */
+/* =========================================================
+   STORAGE KEYS
+========================================================= */
 
 const REPAIR_COMPLETE_KEY =
     "brokenPhoneRepairComplete";
 
-
-/* =========================================
-   PASSWORD
-========================================= */
-
-/*
-   Victim birthday.
-
-   Example:
-
-   May 21
-
-   Password:
-
-   0521
-*/
-
-const VICTIM_BIRTHDAY =
-    "0521";
-
-
-/* =========================================
-   STORAGE
-========================================= */
 
 const PHONE_UNLOCKED_KEY =
     "brokenPhoneUnlocked";
@@ -44,9 +20,58 @@ const PHONE_CLUES_KEY =
     "brokenPhoneClues";
 
 
-/* =========================================
-   REPAIR COMPLETION CHECK
-========================================= */
+const VICTIM_FILE_VIEWED_KEY =
+    "victimFileViewed";
+
+
+const FIRST_PASSWORD_ATTEMPT_KEY =
+    "phoneFirstAttemptMade";
+
+
+/* =========================================================
+   VICTIM BIRTHDAY
+========================================================= */
+
+/*
+    Victim:
+
+    Evelyn Carter
+
+    Birthday:
+
+    May 21
+
+    Actual phone passcode:
+
+    0521
+*/
+
+const VICTIM_BIRTHDAY =
+    "0521";
+
+
+/* =========================================================
+   FIRST AUTOMATIC ATTEMPT
+========================================================= */
+
+/*
+    Ryan initially guesses incorrectly.
+
+    This is NOT the real password.
+
+    The player will later manually enter
+    the real birthday after checking the
+    victim information.
+*/
+
+const FIRST_AUTOMATIC_PASSWORD =
+    "0520";
+
+
+
+/* =========================================================
+   REPAIR CHECK
+========================================================= */
 
 function checkRepairCompleted(){
 
@@ -57,15 +82,6 @@ function checkRepairCompleted(){
 
 
     if(!repaired){
-
-        /*
-           Player has not repaired the phone.
-
-           Do NOT allow direct access
-           to the phone.
-
-           Send player back to repair.
-        */
 
         window.location.href =
             "repair.html";
@@ -80,9 +96,10 @@ function checkRepairCompleted(){
 }
 
 
-/* =========================================
+
+/* =========================================================
    ELEMENTS
-========================================= */
+========================================================= */
 
 const lockScreen =
     document.getElementById(
@@ -156,9 +173,16 @@ const homeClock =
     );
 
 
-/* =========================================
+const victimInfoButton =
+    document.getElementById(
+        "victimInfoButton"
+    );
+
+
+
+/* =========================================================
    APP ELEMENTS
-========================================= */
+========================================================= */
 
 const messagesApp =
     document.getElementById(
@@ -214,9 +238,10 @@ const chatMessages =
     );
 
 
-/* =========================================
+
+/* =========================================================
    IMAGE VIEWER
-========================================= */
+========================================================= */
 
 const imageViewer =
     document.getElementById(
@@ -242,16 +267,53 @@ const clueText =
     );
 
 
-/* =========================================
-   PASSWORD INPUT
-========================================= */
+
+/* =========================================================
+   PASSWORD STATE
+========================================================= */
 
 let enteredPassword = "";
 
 
-/* =========================================
-   KEYPAD
-========================================= */
+
+/* =========================================================
+   VICTIM INFO BUTTON
+========================================================= */
+
+/*
+    This button is permanently available.
+
+    It does NOT depend on the phone being unlocked.
+
+    The player can use it while looking at
+    the locked phone.
+*/
+
+if(victimInfoButton){
+
+    victimInfoButton.addEventListener(
+        "click",
+        () => {
+
+            localStorage.setItem(
+                VICTIM_FILE_VIEWED_KEY,
+                "true"
+            );
+
+
+            window.location.href =
+                "victim-info.html";
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   PASSWORD KEYPAD
+========================================================= */
 
 document
     .querySelectorAll(
@@ -264,9 +326,13 @@ document
                 "click",
                 () => {
 
+
+                    /*
+                        Maximum four digits.
+                    */
+
                     if(
-                        enteredPassword.length >=
-                        VICTIM_BIRTHDAY.length
+                        enteredPassword.length >= 4
                     ){
 
                         return;
@@ -280,6 +346,7 @@ document
 
                     updatePasswordDots();
 
+
                 }
             );
 
@@ -287,15 +354,20 @@ document
     );
 
 
-/* =========================================
-   DELETE PASSWORD
-========================================= */
 
-document
-    .getElementById(
+/* =========================================================
+   DELETE PASSWORD
+========================================================= */
+
+const deleteKey =
+    document.getElementById(
         "deleteKey"
-    )
-    .addEventListener(
+    );
+
+
+if(deleteKey){
+
+    deleteKey.addEventListener(
         "click",
         () => {
 
@@ -311,10 +383,13 @@ document
         }
     );
 
+}
 
-/* =========================================
+
+
+/* =========================================================
    PASSWORD DOTS
-========================================= */
+========================================================= */
 
 function updatePasswordDots(){
 
@@ -333,22 +408,88 @@ function updatePasswordDots(){
 }
 
 
-/* =========================================
-   UNLOCK
-========================================= */
 
-unlockButton.addEventListener(
-    "click",
-    checkPassword
-);
+/* =========================================================
+   UNLOCK BUTTON
+========================================================= */
 
+if(unlockButton){
+
+    unlockButton.addEventListener(
+        "click",
+        checkPassword
+    );
+
+}
+
+
+
+/* =========================================================
+   PASSWORD CHECK
+========================================================= */
 
 function checkPassword(){
+
+
+    /*
+        Nothing entered.
+    */
+
+    if(
+        enteredPassword.length === 0
+    ){
+
+        passwordError.textContent =
+            "Enter a passcode.";
+
+        return;
+
+    }
+
+
+
+    /*
+        Correct birthday.
+
+        IMPORTANT:
+
+        The birthday has to have been
+        discovered first.
+    */
 
     if(
         enteredPassword ===
         VICTIM_BIRTHDAY
     ){
+
+        const victimFileViewed =
+            localStorage.getItem(
+                VICTIM_FILE_VIEWED_KEY
+            ) === "true";
+
+
+        if(!victimFileViewed){
+
+            passwordError.textContent =
+                "Ryan hesitates. He should check the victim file first.";
+
+
+            enteredPassword =
+                "";
+
+
+            updatePasswordDots();
+
+
+            return;
+
+        }
+
+
+
+        /*
+            Correct password.
+        */
 
         localStorage.setItem(
             PHONE_UNLOCKED_KEY,
@@ -369,28 +510,151 @@ function checkPassword(){
 
         unlockPhone();
 
-    }
 
-    else{
-
-        passwordError.textContent =
-            "Incorrect passcode.";
-
-
-        enteredPassword =
-            "";
-
-
-        updatePasswordDots();
+        return;
 
     }
+
+
+
+    /*
+        WRONG PASSWORD
+    */
+
+    passwordError.textContent =
+        "Incorrect passcode.";
+
+
+    enteredPassword =
+        "";
+
+
+    updatePasswordDots();
 
 }
 
 
-/* =========================================
+
+/* =========================================================
+   AUTOMATIC FIRST ATTEMPT
+========================================================= */
+
+/*
+    Ryan automatically tries a password
+    when the repaired phone is first opened.
+
+    It happens only once.
+
+    After this, the player controls
+    the keypad manually.
+*/
+
+function runFirstAutomaticAttempt(){
+
+    const alreadyAttempted =
+        localStorage.getItem(
+            FIRST_PASSWORD_ATTEMPT_KEY
+        ) === "true";
+
+
+    if(alreadyAttempted){
+
+        return;
+
+    }
+
+
+    /*
+        Mark as attempted immediately
+        so refreshing the page doesn't
+        repeat the sequence.
+    */
+
+    localStorage.setItem(
+        FIRST_PASSWORD_ATTEMPT_KEY,
+        "true"
+    );
+
+
+    /*
+        Short delay so the player can
+        actually see the phone.
+    */
+
+    setTimeout(
+        () => {
+
+            autoTypePassword(
+                FIRST_AUTOMATIC_PASSWORD
+            );
+
+        },
+        900
+    );
+
+}
+
+
+
+/* =========================================================
+   AUTOMATIC PASSWORD TYPING
+========================================================= */
+
+function autoTypePassword(password){
+
+    let index = 0;
+
+
+    const typingInterval =
+        setInterval(
+            () => {
+
+
+                if(
+                    index >= password.length
+                ){
+
+                    clearInterval(
+                        typingInterval
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            checkPassword();
+
+                        },
+                        350
+                    );
+
+
+                    return;
+
+                }
+
+
+                enteredPassword +=
+                    password[index];
+
+
+                updatePasswordDots();
+
+
+                index++;
+
+
+            },
+            250
+        );
+
+}
+
+
+
+/* =========================================================
    UNLOCK PHONE
-========================================= */
+========================================================= */
 
 function unlockPhone(){
 
@@ -406,9 +670,10 @@ function unlockPhone(){
 }
 
 
-/* =========================================
+
+/* =========================================================
    CHECK SAVED UNLOCK
-========================================= */
+========================================================= */
 
 function checkSavedUnlock(){
 
@@ -434,9 +699,10 @@ function checkSavedUnlock(){
 }
 
 
-/* =========================================
+
+/* =========================================================
    CLOCK
-========================================= */
+========================================================= */
 
 function updateClock(){
 
@@ -465,16 +731,28 @@ function updateClock(){
         `${hours}:${minutes}`;
 
 
-    statusTime.textContent =
-        time;
+    if(statusTime){
+
+        statusTime.textContent =
+            time;
+
+    }
 
 
-    lockTime.textContent =
-        time;
+    if(lockTime){
+
+        lockTime.textContent =
+            time;
+
+    }
 
 
-    homeClock.textContent =
-        time;
+    if(homeClock){
+
+        homeClock.textContent =
+            time;
+
+    }
 
 }
 
@@ -488,9 +766,10 @@ setInterval(
 );
 
 
-/* =========================================
+
+/* =========================================================
    OPEN APP
-========================================= */
+========================================================= */
 
 document
     .querySelectorAll(
@@ -514,9 +793,10 @@ document
     );
 
 
-/* =========================================
+
+/* =========================================================
    OPEN APP
-========================================= */
+========================================================= */
 
 function openApp(app){
 
@@ -535,6 +815,7 @@ function openApp(app){
 
     switch(app){
 
+
         case "messages":
 
             appTitle.textContent =
@@ -545,6 +826,7 @@ function openApp(app){
             );
 
             break;
+
 
 
         case "gallery":
@@ -561,6 +843,7 @@ function openApp(app){
             break;
 
 
+
         case "contacts":
 
             appTitle.textContent =
@@ -573,6 +856,7 @@ function openApp(app){
             break;
 
 
+
         case "phone":
 
             appTitle.textContent =
@@ -583,6 +867,7 @@ function openApp(app){
             );
 
             break;
+
 
 
         case "notes":
@@ -601,9 +886,10 @@ function openApp(app){
 }
 
 
-/* =========================================
+
+/* =========================================================
    HIDE ALL APPS
-========================================= */
+========================================================= */
 
 function hideAllApps(){
 
@@ -657,106 +943,104 @@ function hideAllApps(){
 }
 
 
-/* =========================================
+
+/* =========================================================
    BACK BUTTON
-========================================= */
+========================================================= */
 
-appBack.addEventListener(
-    "click",
-    () => {
+if(appBack){
 
-        /*
-           Inside message conversation
-        */
-
-        if(
-            !chatApp.classList.contains(
-                "hidden"
-            )
-        ){
-
-            hideAllApps();
+    appBack.addEventListener(
+        "click",
+        () => {
 
 
-            messagesApp.classList.remove(
-                "hidden"
-            );
+            if(
+                !chatApp.classList.contains(
+                    "hidden"
+                )
+            ){
+
+                hideAllApps();
 
 
-            appTitle.textContent =
-                "Messages";
+                messagesApp.classList.remove(
+                    "hidden"
+                );
 
 
-            return;
+                appTitle.textContent =
+                    "Messages";
+
+
+                return;
+
+            }
+
+
+
+            if(
+                noteView &&
+                !noteView.classList.contains(
+                    "hidden"
+                )
+            ){
+
+                hideAllApps();
+
+
+                notesApp.classList.remove(
+                    "hidden"
+                );
+
+
+                appTitle.textContent =
+                    "Notes";
+
+
+                return;
+
+            }
+
+
+
+            if(
+                contactView &&
+                !contactView.classList.contains(
+                    "hidden"
+                )
+            ){
+
+                hideAllApps();
+
+
+                contactsApp.classList.remove(
+                    "hidden"
+                );
+
+
+                appTitle.textContent =
+                    "Contacts";
+
+
+                return;
+
+            }
+
+
+
+            closeApp();
 
         }
+    );
+
+}
 
 
-        /*
-           Inside note
-        */
 
-        if(
-            noteView &&
-            !noteView.classList.contains(
-                "hidden"
-            )
-        ){
-
-            hideAllApps();
-
-
-            notesApp.classList.remove(
-                "hidden"
-            );
-
-
-            appTitle.textContent =
-                "Notes";
-
-
-            return;
-
-        }
-
-
-        /*
-           Inside contact
-        */
-
-        if(
-            contactView &&
-            !contactView.classList.contains(
-                "hidden"
-            )
-        ){
-
-            hideAllApps();
-
-
-            contactsApp.classList.remove(
-                "hidden"
-            );
-
-
-            appTitle.textContent =
-                "Contacts";
-
-
-            return;
-
-        }
-
-
-        closeApp();
-
-    }
-);
-
-
-/* =========================================
+/* =========================================================
    CLOSE APP
-========================================= */
+========================================================= */
 
 function closeApp(){
 
@@ -775,9 +1059,10 @@ function closeApp(){
 }
 
 
-/* =========================================
+
+/* =========================================================
    HOME BUTTON
-========================================= */
+========================================================= */
 
 if(phoneHomeButton){
 
@@ -789,202 +1074,257 @@ if(phoneHomeButton){
 }
 
 
-/* =========================================
+
+/* =========================================================
    MESSAGES
-========================================= */
+========================================================= */
 
 const conversations = {
 
+
     unknown:{
 
-        name:"Unknown Number",
+        name:
+            "Unknown Number",
 
         messages:[
 
             {
                 type:"them",
-                text:"Are you still coming tonight?",
-                time:"2:31 PM"
+                text:
+                    "Are you still coming tonight?",
+                time:
+                    "2:31 PM"
             },
 
             {
                 type:"me",
-                text:"I don't know yet.",
-                time:"2:34 PM"
+                text:
+                    "I don't know yet.",
+                time:
+                    "2:34 PM"
             },
 
             {
                 type:"them",
-                text:"You need to decide.",
-                time:"2:35 PM"
+                text:
+                    "You need to decide.",
+                time:
+                    "2:35 PM"
             },
 
             {
                 type:"them",
-                text:"And don't tell anyone about this.",
-                time:"2:36 PM"
+                text:
+                    "And don't tell anyone about this.",
+                time:
+                    "2:36 PM"
             }
 
         ]
 
     },
+
 
 
     emma:{
 
-        name:"Emma",
+        name:
+            "Emma",
 
         messages:[
 
             {
                 type:"them",
-                text:"Hehe",
-                time:"9:54 AM"
+                text:
+                    "Hehe",
+                time:
+                    "9:54 AM"
             },
 
             {
                 type:"me",
-                text:"What?",
-                time:"9:55 AM"
+                text:
+                    "What?",
+                time:
+                    "9:55 AM"
             },
 
             {
                 type:"them",
-                text:"Nothing 😂",
-                time:"9:55 AM"
+                text:
+                    "Nothing 😂",
+                time:
+                    "9:55 AM"
             },
 
             {
                 type:"them",
-                text:"You seemed really nervous yesterday.",
-                time:"9:56 AM"
+                text:
+                    "You seemed really nervous yesterday.",
+                time:
+                    "9:56 AM"
             }
 
         ]
 
     },
+
 
 
     unknown2:{
 
-        name:"52927",
+        name:
+            "52927",
 
         messages:[
 
             {
                 type:"them",
-                text:"Don't forget what we discussed.",
-                time:"9:47 AM"
+                text:
+                    "Don't forget what we discussed.",
+                time:
+                    "9:47 AM"
             },
 
             {
                 type:"me",
-                text:"I haven't forgotten.",
-                time:"9:48 AM"
+                text:
+                    "I haven't forgotten.",
+                time:
+                    "9:48 AM"
             },
 
             {
                 type:"them",
-                text:"Good.",
-                time:"9:48 AM"
+                text:
+                    "Good.",
+                time:
+                    "9:48 AM"
             }
 
         ]
 
     },
+
 
 
     eve:{
 
-        name:"Evelyn",
+        name:
+            "Evelyn",
 
         messages:[
 
             {
                 type:"them",
-                text:"Aaa",
-                time:"Yesterday"
+                text:
+                    "Aaa",
+                time:
+                    "Yesterday"
             },
 
             {
                 type:"me",
-                text:"What happened?",
-                time:"Yesterday"
+                text:
+                    "What happened?",
+                time:
+                    "Yesterday"
             },
 
             {
                 type:"them",
-                text:"Can we talk somewhere private?",
-                time:"Yesterday"
+                text:
+                    "Can we talk somewhere private?",
+                time:
+                    "Yesterday"
             }
 
         ]
 
     },
+
 
 
     jane:{
 
-        name:"Jenzia",
+        name:
+            "Jenzia",
 
         messages:[
 
             {
                 type:"them",
-                text:"We need to talk.",
-                time:"Yesterday"
+                text:
+                    "We need to talk.",
+                time:
+                    "Yesterday"
             },
 
             {
                 type:"me",
-                text:"About what?",
-                time:"Yesterday"
+                text:
+                    "About what?",
+                time:
+                    "Yesterday"
             },
 
             {
                 type:"them",
-                text:"About what you saw.",
-                time:"Yesterday"
+                text:
+                    "About what you saw.",
+                time:
+                    "Yesterday"
             }
 
         ]
 
     },
+
 
 
     mother:{
 
-        name:"Mom",
+        name:
+            "Mom",
 
         messages:[
 
             {
                 type:"them",
-                text:"Call me when you get home.",
-                time:"Tuesday"
+                text:
+                    "Call me when you get home.",
+                time:
+                    "Tuesday"
             },
 
             {
                 type:"me",
-                text:"I will.",
-                time:"Tuesday"
+                text:
+                    "I will.",
+                time:
+                    "Tuesday"
             }
 
         ]
 
     },
+
 
 
     unknown3:{
 
-        name:"32665",
+        name:
+            "32665",
 
         messages:[
 
             {
                 type:"them",
-                text:"Your verification code is 397275.",
-                time:"Saturday"
+                text:
+                    "Your verification code is 397275.",
+                time:
+                    "Saturday"
             }
 
         ]
@@ -992,16 +1332,20 @@ const conversations = {
     },
 
 
+
     unknown4:{
 
-        name:"28581",
+        name:
+            "28581",
 
         messages:[
 
             {
                 type:"them",
-                text:"Your account notification is available.",
-                time:"6/2/23"
+                text:
+                    "Your account notification is available.",
+                time:
+                    "6/2/23"
             }
 
         ]
@@ -1011,9 +1355,10 @@ const conversations = {
 };
 
 
-/* =========================================
+
+/* =========================================================
    OPEN CONVERSATION
-========================================= */
+========================================================= */
 
 document
     .querySelectorAll(
@@ -1026,11 +1371,9 @@ document
                 "click",
                 () => {
 
-                    const id =
-                        row.dataset.chat;
-
-
-                    openConversation(id);
+                    openConversation(
+                        row.dataset.chat
+                    );
 
                 }
             );
@@ -1039,9 +1382,10 @@ document
     );
 
 
-/* =========================================
+
+/* =========================================================
    RENDER CONVERSATION
-========================================= */
+========================================================= */
 
 function openConversation(id){
 
@@ -1110,95 +1454,98 @@ function openConversation(id){
         }
     );
 
-
-    requestAnimationFrame(
-        () => {
-
-            chatApp.scrollTop =
-                chatApp.scrollHeight;
-
-        }
-    );
-
 }
 
 
-/* =========================================
+
+/* =========================================================
    GALLERY DATA
-========================================= */
+========================================================= */
 
 const galleryImages = [
 
     {
-        file:"gallery/photo1.png",
+        file:
+            "gallery/photo1.png",
         clue:false,
         text:""
     },
 
     {
-        file:"gallery/photo2.png",
+        file:
+            "gallery/photo2.png",
         clue:false,
         text:""
     },
 
     {
-        file:"gallery/photo3.png",
+        file:
+            "gallery/photo3.png",
         clue:false,
         text:""
     },
 
     {
-        file:"gallery/photo4.png",
+        file:
+            "gallery/photo4.png",
         clue:false,
         text:""
     },
 
     {
-        file:"gallery/photo5.png",
+        file:
+            "gallery/photo5.png",
         clue:true,
         text:
             "Something is wrong with this photograph. Look closely."
     },
 
     {
-        file:"gallery/photo6.png",
+        file:
+            "gallery/photo6.png",
         clue:false,
         text:""
     },
 
     {
-        file:"gallery/photo7.png",
+        file:
+            "gallery/photo7.png",
         clue:false,
         text:""
     },
 
     {
-        file:"gallery/photo8.png",
+        file:
+            "gallery/photo8.png",
         clue:false,
         text:""
     },
 
     {
-        file:"gallery/photo9.png",
+        file:
+            "gallery/photo9.png",
         clue:true,
         text:
             "A detail in the background may be important."
     },
 
     {
-        file:"gallery/photo10.png",
+        file:
+            "gallery/photo10.png",
         clue:false,
         text:""
     },
 
     {
-        file:"gallery/photo11.png",
+        file:
+            "gallery/photo11.png",
         clue:false,
         text:""
     },
 
     {
-        file:"gallery/photo12.png",
+        file:
+            "gallery/photo12.png",
         clue:false,
         text:""
     }
@@ -1206,9 +1553,10 @@ const galleryImages = [
 ];
 
 
-/* =========================================
+
+/* =========================================================
    RENDER GALLERY
-========================================= */
+========================================================= */
 
 function renderGallery(){
 
@@ -1225,7 +1573,8 @@ function renderGallery(){
     }
 
 
-    grid.innerHTML = "";
+    grid.innerHTML =
+        "";
 
 
     galleryImages.forEach(
@@ -1304,9 +1653,10 @@ function renderGallery(){
 }
 
 
-/* =========================================
+
+/* =========================================================
    OPEN GALLERY IMAGE
-========================================= */
+========================================================= */
 
 function openGalleryImage(image){
 
@@ -1321,6 +1671,10 @@ function openGalleryImage(image){
         image.file;
 
 
+    viewerImage.style.display =
+        "block";
+
+
     viewerImage.onerror =
         () => {
 
@@ -1328,10 +1682,6 @@ function openGalleryImage(image){
                 "none";
 
         };
-
-
-    viewerImage.style.display =
-        "block";
 
 
     if(image.clue){
@@ -1354,9 +1704,6 @@ function openGalleryImage(image){
     );
 
 
-    /* =====================================
-       SAVE CLUE DISCOVERY
-    ===================================== */
 
     if(image.clue){
 
@@ -1406,9 +1753,10 @@ function openGalleryImage(image){
 }
 
 
-/* =========================================
+
+/* =========================================================
    CLOSE IMAGE
-========================================= */
+========================================================= */
 
 if(closeImage){
 
@@ -1434,9 +1782,10 @@ if(closeImage){
 }
 
 
-/* =========================================
+
+/* =========================================================
    ESCAPE IMAGE
-========================================= */
+========================================================= */
 
 document.addEventListener(
     "keydown",
@@ -1460,9 +1809,10 @@ document.addEventListener(
 );
 
 
-/* =========================================
+
+/* =========================================================
    CONTACTS
-========================================= */
+========================================================= */
 
 const contacts = {
 
@@ -1489,9 +1839,10 @@ const contacts = {
 };
 
 
-/* =========================================
+
+/* =========================================================
    CONTACT CLICK
-========================================= */
+========================================================= */
 
 document
     .querySelectorAll(
@@ -1504,12 +1855,8 @@ document
                 "click",
                 () => {
 
-                    const name =
-                        contact.dataset.contact;
-
-
                     openContact(
-                        name
+                        contact.dataset.contact
                     );
 
                 }
@@ -1519,9 +1866,10 @@ document
     );
 
 
-/* =========================================
+
+/* =========================================================
    OPEN CONTACT
-========================================= */
+========================================================= */
 
 function openContact(name){
 
@@ -1601,9 +1949,10 @@ function openContact(name){
 }
 
 
-/* =========================================
+
+/* =========================================================
    NOTES
-========================================= */
+========================================================= */
 
 const notes = {
 
@@ -1617,6 +1966,7 @@ Do not write the address anywhere.
 Call E after 8 PM.`,
 
 
+
     note2:
 `Meeting
 
@@ -1626,6 +1976,7 @@ Thursday
 Same place as before.
 
 Come alone.`,
+
 
 
     note3:
@@ -1638,9 +1989,10 @@ Coffee`
 };
 
 
-/* =========================================
+
+/* =========================================================
    NOTE CLICK
-========================================= */
+========================================================= */
 
 document
     .querySelectorAll(
@@ -1664,9 +2016,10 @@ document
     );
 
 
-/* =========================================
+
+/* =========================================================
    OPEN NOTE
-========================================= */
+========================================================= */
 
 function openNote(id){
 
@@ -1708,27 +2061,34 @@ function openNote(id){
 }
 
 
-/* =========================================
+
+/* =========================================================
    INITIALIZE
-========================================= */
-
-/*
-   IMPORTANT:
-
-   The phone can ONLY initialize if
-   the repair has been completed.
-
-   If repair is incomplete:
-       phone.html → repair.html
-
-   If repair is complete:
-       continue normally.
-*/
+========================================================= */
 
 if(
     checkRepairCompleted()
 ){
 
     checkSavedUnlock();
+
+
+    /*
+        Only run the automatic
+        first attempt if the phone
+        hasn't already been unlocked.
+    */
+
+    const unlocked =
+        localStorage.getItem(
+            PHONE_UNLOCKED_KEY
+        ) === "true";
+
+
+    if(!unlocked){
+
+        runFirstAutomaticAttempt();
+
+    }
 
 }
