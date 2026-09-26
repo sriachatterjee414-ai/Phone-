@@ -1,38 +1,108 @@
 /* =========================================
    BROKEN PHONE
    WORK TABLE
-   INVENTORY + FLIP/MATCH MINI-GAME
-   + LOCKED / UNLOCKED TABLE
+   LOCKED → MINI-GAME → UNLOCKED
+   → COLLECT ITEMS → INVENTORY
 ========================================= */
 
 
 /* =========================================
-   TABLE LOCK / UNLOCK
+   TABLE IMAGES
 ========================================= */
 
-const TABLE_LOCKED_IMAGE = "table_locked.png";
-const TABLE_UNLOCKED_IMAGE = "table_unlocked.png";
+const TABLE_LOCKED_IMAGE =
+    "table_locked.png";
+
+
+const TABLE_UNLOCKED_IMAGE =
+    "table_unlocked.png";
+
 
 const tableScene =
-    document.getElementById("tableScene");
+    document.getElementById(
+        "tableScene"
+    );
 
+
+const unlockButton =
+    document.getElementById(
+        "unlockButton"
+    );
+
+
+const itemsLayer =
+    document.getElementById(
+        "itemsLayer"
+    );
+
+
+/* =========================================
+   CHECK IF TABLE IS ALREADY UNLOCKED
+========================================= */
+
+const TABLE_UNLOCKED_KEY =
+    "brokenPhone_tableUnlocked";
+
+
+function isTableUnlocked(){
+
+    return localStorage.getItem(
+        TABLE_UNLOCKED_KEY
+    ) === "true";
+
+}
+
+
+/* =========================================
+   UPDATE TABLE IMAGE
+========================================= */
 
 function updateTableImage(){
 
-    if(
-        localStorage.getItem(
-            "brokenPhone_leafPuzzleSolved"
-        ) === "true"
-    ){
+    if(isTableUnlocked()){
 
         tableScene.style.backgroundImage =
             `url("${TABLE_UNLOCKED_IMAGE}")`;
+
+        /*
+           Show collectible items.
+        */
+
+        itemsLayer.classList.remove(
+            "hidden"
+        );
+
+
+        /*
+           Hide unlock button.
+        */
+
+        unlockButton.classList.add(
+            "hidden"
+        );
 
     }
     else{
 
         tableScene.style.backgroundImage =
             `url("${TABLE_LOCKED_IMAGE}")`;
+
+        /*
+           Hide items while locked.
+        */
+
+        itemsLayer.classList.add(
+            "hidden"
+        );
+
+
+        /*
+           Show unlock button.
+        */
+
+        unlockButton.classList.remove(
+            "hidden"
+        );
 
     }
 
@@ -43,7 +113,8 @@ function updateTableImage(){
    INVENTORY
 ========================================= */
 
-const KEY = "brokenPhoneInventory";
+const INVENTORY_KEY =
+    "brokenPhoneInventory";
 
 
 const DATA = {
@@ -52,6 +123,7 @@ const DATA = {
         name:"Screen Connector",
         img:"screen_connector.png"
     },
+
 
     cassette_tape:{
         name:"Cassette Tape",
@@ -73,17 +145,22 @@ const toast =
     );
 
 
-function inv(){
+/* =========================================
+   GET INVENTORY
+========================================= */
+
+function getInventory(){
 
     try{
 
         return JSON.parse(
-            localStorage.getItem(KEY)
+            localStorage.getItem(
+                INVENTORY_KEY
+            )
         ) || [];
 
     }
-
-    catch(e){
+    catch(error){
 
         return [];
 
@@ -92,51 +169,66 @@ function inv(){
 }
 
 
-function save(a){
+/* =========================================
+   SAVE INVENTORY
+========================================= */
+
+function saveInventory(
+    inventory
+){
 
     localStorage.setItem(
-        KEY,
-        JSON.stringify(a)
+        INVENTORY_KEY,
+        JSON.stringify(
+            inventory
+        )
     );
 
 }
 
 
 /* =========================================
-   INVENTORY RENDER
+   RENDER INVENTORY
 ========================================= */
 
-function render(){
+function renderInventory(){
 
     slots.innerHTML = "";
 
-    const a = inv();
+    const inventory =
+        getInventory();
 
 
-    for(let i = 0; i < 8; i++){
+    for(
+        let i = 0;
+        i < 8;
+        i++
+    ){
 
-        const s =
-            document.createElement("div");
+        const slot =
+            document.createElement(
+                "div"
+            );
 
 
-        s.className =
+        slot.className =
             "inventory-slot";
 
 
         if(
-            a[i] &&
-            DATA[a[i]]
+            inventory[i] &&
+            DATA[inventory[i]]
         ){
 
-            s.innerHTML = `
+            slot.innerHTML = `
 
                 <img
-                    src="${DATA[a[i]].img}"
+                    src="${DATA[inventory[i]].img}"
                     alt=""
                 >
 
                 <span>
-                    ${DATA[a[i]].name}
+                    ${DATA[inventory[i]].name}
                 </span>
 
             `;
@@ -144,7 +236,9 @@ function render(){
         }
 
 
-        slots.appendChild(s);
+        slots.appendChild(
+            slot
+        );
 
     }
 
@@ -155,7 +249,9 @@ function render(){
    TOAST
 ========================================= */
 
-function showToast(message){
+function showToast(
+    message
+){
 
     toast.textContent =
         message;
@@ -166,7 +262,7 @@ function showToast(message){
     );
 
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
         toast.classList.remove(
             "show"
@@ -178,15 +274,25 @@ function showToast(message){
 
 
 /* =========================================
-   COLLECT
+   COLLECT ITEM
 ========================================= */
 
-function collect(id,el){
+function collectItem(
+    id,
+    element
+){
 
-    let a = inv();
+    let inventory =
+        getInventory();
 
 
-    if(a.includes(id)){
+    /*
+       Already collected.
+    */
+
+    if(
+        inventory.includes(id)
+    ){
 
         showToast(
             "Already collected."
@@ -197,7 +303,13 @@ function collect(id,el){
     }
 
 
-    if(a.length >= 8){
+    /*
+       Inventory full.
+    */
+
+    if(
+        inventory.length >= 8
+    ){
 
         showToast(
             "Inventory full."
@@ -208,25 +320,44 @@ function collect(id,el){
     }
 
 
-    a.push(id);
+    /*
+       Add item.
+    */
 
-    save(a);
+    inventory.push(id);
 
 
-    el.classList.add(
+    saveInventory(
+        inventory
+    );
+
+
+    /*
+       Hide item from table.
+    */
+
+    element.classList.add(
         "hidden"
     );
 
 
-    render();
+    /*
+       Update inventory UI.
+    */
 
+    renderInventory();
+
+
+    /*
+       Sound.
+    */
 
     document
         .getElementById(
             "collectSound"
         )
         .play()
-        .catch(()=>{});
+        .catch(() => {});
 
 
     showToast(
@@ -237,14 +368,16 @@ function collect(id,el){
 
 
 /* =========================================
-   BACK
+   BACK BUTTON
 ========================================= */
 
 document
-    .getElementById("backButton")
+    .getElementById(
+        "backButton"
+    )
     .onclick = () => {
 
-        location.href =
+        window.location.href =
             "investigation.html";
 
     };
@@ -255,19 +388,58 @@ document
 ========================================= */
 
 document
-    .querySelectorAll(".item")
-    .forEach(el => {
+    .querySelectorAll(
+        ".item"
+    )
+    .forEach(
+        element => {
 
-        el.onclick = () => {
+            element.onclick = () => {
 
-            collect(
-                el.dataset.item,
-                el
-            );
+                collectItem(
+                    element.dataset.item,
+                    element
+                );
 
-        };
+            };
 
-    });
+        }
+    );
+
+
+/* =========================================
+   RESTORE COLLECTED ITEMS
+========================================= */
+
+function restoreCollectedItems(){
+
+    const inventory =
+        getInventory();
+
+
+    document
+        .querySelectorAll(
+            ".item"
+        )
+        .forEach(
+            element => {
+
+                if(
+                    inventory.includes(
+                        element.dataset.item
+                    )
+                ){
+
+                    element.classList.add(
+                        "hidden"
+                    );
+
+                }
+
+            }
+        );
+
+}
 
 
 /* =========================================
@@ -280,58 +452,16 @@ const music =
     );
 
 
-music.volume = .18;
-
-music.play().catch(()=>{});
+music.volume = 0.18;
 
 
-/* =========================================
-   RESTORE INVENTORY
-========================================= */
-
-render();
-
-
-inv().forEach(id => {
-
-    const element =
-        document.querySelector(
-            `[data-item="${id}"]`
-        );
-
-
-    if(element){
-
-        element.classList.add(
-            "hidden"
-        );
-
-    }
-
-});
+music.play()
+    .catch(() => {});
 
 
 /* =========================================
-   INITIAL TABLE IMAGE
+   MINI-GAME ELEMENTS
 ========================================= */
-
-updateTableImage();
-
-
-/* =====================================================
-   FLIP & MATCH MINI-GAME
-===================================================== */
-
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
-const puzzleTrigger =
-    document.getElementById(
-        "leafPuzzleTrigger"
-    );
-
 
 const puzzleOverlay =
     document.getElementById(
@@ -387,18 +517,10 @@ let lockBoard = false;
 
 
 /* =========================================
-   PUZZLE IMAGE
+   OPEN MINI-GAME
 ========================================= */
 
-const LEAF_IMAGE =
-    "leaf.png";
-
-
-/* =========================================
-   OPEN PUZZLE
-========================================= */
-
-puzzleTrigger.onclick = () => {
+unlockButton.onclick = () => {
 
     openPuzzle();
 
@@ -406,7 +528,7 @@ puzzleTrigger.onclick = () => {
 
 
 /* =========================================
-   CREATE PUZZLE
+   OPEN PUZZLE
 ========================================= */
 
 function openPuzzle(){
@@ -417,6 +539,7 @@ function openPuzzle(){
 
 
     leafGrid.innerHTML = "";
+
 
     puzzleMessage.textContent =
         "";
@@ -435,11 +558,11 @@ function openPuzzle(){
 
 
     /*
-       12 cards total.
+       12 cards.
 
-       ONE important leaf pair.
+       One important leaf pair.
 
-       Five other pairs are decoys.
+       Other pairs are decoys.
     */
 
     const cards = [
@@ -515,11 +638,15 @@ function openPuzzle(){
     shuffle(cards);
 
 
-    cards.forEach(card => {
+    cards.forEach(
+        card => {
 
-        createCard(card);
+            createCard(
+                card
+            );
 
-    });
+        }
+    );
 
 }
 
@@ -528,7 +655,9 @@ function openPuzzle(){
    SHUFFLE
 ========================================= */
 
-function shuffle(array){
+function shuffle(
+    array
+){
 
     for(
         let i = array.length - 1;
@@ -554,6 +683,9 @@ function shuffle(array){
 
     }
 
+
+    return array;
+
 }
 
 
@@ -561,7 +693,9 @@ function shuffle(array){
    CREATE CARD
 ========================================= */
 
-function createCard(card){
+function createCard(
+    card
+){
 
     const element =
         document.createElement(
@@ -585,7 +719,6 @@ function createCard(card){
                 ?
             </div>
 
-
             <div class="cardFront">
 
                 <img
@@ -602,7 +735,9 @@ function createCard(card){
 
     element.onclick = () => {
 
-        flipCard(element);
+        flipCard(
+            element
+        );
 
     };
 
@@ -618,7 +753,9 @@ function createCard(card){
    FLIP CARD
 ========================================= */
 
-function flipCard(card){
+function flipCard(
+    card
+){
 
     if(lockBoard)
         return;
@@ -646,19 +783,21 @@ function flipCard(card){
             "flipSound"
         )
         .play()
-        .catch(()=>{});
+        .catch(() => {});
 
 
     if(!firstCard){
 
-        firstCard = card;
+        firstCard =
+            card;
 
         return;
 
     }
 
 
-    secondCard = card;
+    secondCard =
+        card;
 
 
     checkMatch();
@@ -672,23 +811,26 @@ function flipCard(card){
 
 function checkMatch(){
 
-    const first =
+    const firstID =
         firstCard.dataset.id;
 
 
-    const second =
+    const secondID =
         secondCard.dataset.id;
 
 
-    /* =====================================
-       CORRECT MATCH
-    ===================================== */
+    /*
+       MATCH
+    */
 
-    if(first === second){
+    if(
+        firstID === secondID
+    ){
 
         firstCard.classList.add(
             "matched"
         );
+
 
         secondCard.classList.add(
             "matched"
@@ -696,16 +838,21 @@ function checkMatch(){
 
 
         /*
-           Only the LEAF pair completes
-           the investigation puzzle.
+           IMPORTANT:
+           Finding the leaf pair
+           finishes the game.
         */
 
-        if(first === "leaf"){
+        if(
+            firstID === "leaf"
+        ){
 
             puzzleMessage.textContent =
                 "The leaves match.";
 
+
             finishPuzzle();
+
 
             return;
 
@@ -715,16 +862,18 @@ function checkMatch(){
         puzzleMessage.textContent =
             "Match found.";
 
+
         resetTurn();
+
 
         return;
 
     }
 
 
-    /* =====================================
+    /*
        WRONG MATCH
-    ===================================== */
+    */
 
     lockBoard = true;
 
@@ -733,11 +882,12 @@ function checkMatch(){
         "No match.";
 
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
         firstCard.classList.remove(
             "flipped"
         );
+
 
         secondCard.classList.remove(
             "flipped"
@@ -767,7 +917,7 @@ function resetTurn(){
 
 
 /* =========================================
-   FINISH PUZZLE
+   PUZZLE COMPLETE
 ========================================= */
 
 function finishPuzzle(){
@@ -779,13 +929,15 @@ function finishPuzzle(){
         .querySelectorAll(
             ".leafCard"
         )
-        .forEach(card => {
+        .forEach(
+            card => {
 
-            card.classList.add(
-                "disabled"
-            );
+                card.classList.add(
+                    "disabled"
+                );
 
-        });
+            }
+        );
 
 
     puzzleMessage.textContent =
@@ -796,37 +948,48 @@ function finishPuzzle(){
         "hidden"
     );
 
+}
+
+
+/* =========================================
+   UNLOCK TABLE
+========================================= */
+
+continuePuzzle.onclick = () => {
 
     /*
-       Save puzzle completion.
+       Save table as unlocked.
     */
 
     localStorage.setItem(
-        "brokenPhone_leafPuzzleSolved",
+        TABLE_UNLOCKED_KEY,
         "true"
     );
 
 
     /*
-       CHANGE TABLE IMAGE:
-       LOCKED → UNLOCKED
+       Change:
+
+       table_locked.png
+              ↓
+       table_unlocked.png
     */
 
     updateTableImage();
 
-}
 
-
-/* =========================================
-   CONTINUE
-========================================= */
-
-continuePuzzle.onclick = () => {
+    /*
+       Close mini-game.
+    */
 
     puzzleOverlay.classList.add(
         "hidden"
     );
 
+
+    /*
+       Show information window.
+    */
 
     clueOverlay.classList.remove(
         "hidden"
@@ -859,3 +1022,14 @@ closeClue.onclick = () => {
     );
 
 };
+
+
+/* =========================================
+   INITIALIZE
+========================================= */
+
+renderInventory();
+
+updateTableImage();
+
+restoreCollectedItems();
