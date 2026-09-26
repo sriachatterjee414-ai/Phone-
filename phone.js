@@ -5,29 +5,31 @@
 
 
 /* =========================================
+   REPAIR COMPLETION
+========================================= */
+
+const REPAIR_COMPLETE_KEY =
+    "brokenPhoneRepairComplete";
+
+
+/* =========================================
    PASSWORD
 ========================================= */
 
 /*
-   CHANGE THIS TO THE VICTIM'S REAL BIRTHDAY.
+   Victim birthday.
 
    Example:
 
-   Victim birthday = May 21
+   May 21
 
    Password:
-   "0521"
 
-   You can also use:
-   "2105"
-
-   or:
-   "05212003"
-
-   depending on your story.
+   0521
 */
 
-const VICTIM_BIRTHDAY = "0521";
+const VICTIM_BIRTHDAY =
+    "0521";
 
 
 /* =========================================
@@ -43,31 +45,79 @@ const PHONE_CLUES_KEY =
 
 
 /* =========================================
+   REPAIR COMPLETION CHECK
+========================================= */
+
+function checkRepairCompleted(){
+
+    const repaired =
+        localStorage.getItem(
+            REPAIR_COMPLETE_KEY
+        ) === "true";
+
+
+    if(!repaired){
+
+        /*
+           Player has not repaired the phone.
+
+           Do NOT allow direct access
+           to the phone.
+
+           Send player back to repair.
+        */
+
+        window.location.href =
+            "repair.html";
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================
    ELEMENTS
 ========================================= */
 
 const lockScreen =
-    document.getElementById("lockScreen");
+    document.getElementById(
+        "lockScreen"
+    );
 
 
 const homeScreen =
-    document.getElementById("homeScreen");
+    document.getElementById(
+        "homeScreen"
+    );
 
 
 const appScreen =
-    document.getElementById("appScreen");
+    document.getElementById(
+        "appScreen"
+    );
 
 
 const appTitle =
-    document.getElementById("appTitle");
+    document.getElementById(
+        "appTitle"
+    );
 
 
 const appBack =
-    document.getElementById("appBack");
+    document.getElementById(
+        "appBack"
+    );
 
 
 const phoneHomeButton =
-    document.getElementById("phoneHomeButton");
+    document.getElementById(
+        "phoneHomeButton"
+    );
 
 
 const passwordDots =
@@ -207,32 +257,34 @@ document
     .querySelectorAll(
         ".keypad button[data-key]"
     )
-    .forEach(button => {
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                if(
-                    enteredPassword.length >=
-                    VICTIM_BIRTHDAY.length
-                ){
+                    if(
+                        enteredPassword.length >=
+                        VICTIM_BIRTHDAY.length
+                    ){
 
-                    return;
+                        return;
+
+                    }
+
+
+                    enteredPassword +=
+                        button.dataset.key;
+
+
+                    updatePasswordDots();
 
                 }
+            );
 
-
-                enteredPassword +=
-                    button.dataset.key;
-
-
-                updatePasswordDots();
-
-            }
-        );
-
-    });
+        }
+    );
 
 
 /* =========================================
@@ -240,7 +292,9 @@ document
 ========================================= */
 
 document
-    .getElementById("deleteKey")
+    .getElementById(
+        "deleteKey"
+    )
     .addEventListener(
         "click",
         () => {
@@ -353,7 +407,7 @@ function unlockPhone(){
 
 
 /* =========================================
-   CHECK SAVED STATE
+   CHECK SAVED UNLOCK
 ========================================= */
 
 function checkSavedUnlock(){
@@ -401,12 +455,6 @@ function updateClock(){
             2,
             "0"
         );
-
-
-    const ampm =
-        hours >= 12
-            ? "PM"
-            : "AM";
 
 
     hours =
@@ -467,7 +515,7 @@ document
 
 
 /* =========================================
-   OPEN APP FUNCTION
+   OPEN APP
 ========================================= */
 
 function openApp(app){
@@ -563,33 +611,48 @@ function hideAllApps(){
         "hidden"
     );
 
+
     chatApp.classList.add(
         "hidden"
     );
+
 
     galleryApp.classList.add(
         "hidden"
     );
 
+
     contactsApp.classList.add(
         "hidden"
     );
+
 
     phoneApp.classList.add(
         "hidden"
     );
 
+
     notesApp.classList.add(
         "hidden"
     );
 
-    noteView.classList.add(
-        "hidden"
-    );
 
-    contactView.classList.add(
-        "hidden"
-    );
+    if(noteView){
+
+        noteView.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if(contactView){
+
+        contactView.classList.add(
+            "hidden"
+        );
+
+    }
 
 }
 
@@ -603,9 +666,7 @@ appBack.addEventListener(
     () => {
 
         /*
-           If the player is inside
-           a message conversation,
-           return to Messages.
+           Inside message conversation
         */
 
         if(
@@ -616,12 +677,15 @@ appBack.addEventListener(
 
             hideAllApps();
 
+
             messagesApp.classList.remove(
                 "hidden"
             );
 
+
             appTitle.textContent =
                 "Messages";
+
 
             return;
 
@@ -629,10 +693,11 @@ appBack.addEventListener(
 
 
         /*
-           If inside a note.
+           Inside note
         */
 
         if(
+            noteView &&
             !noteView.classList.contains(
                 "hidden"
             )
@@ -640,12 +705,15 @@ appBack.addEventListener(
 
             hideAllApps();
 
+
             notesApp.classList.remove(
                 "hidden"
             );
 
+
             appTitle.textContent =
                 "Notes";
+
 
             return;
 
@@ -653,10 +721,11 @@ appBack.addEventListener(
 
 
         /*
-           If inside contact.
+           Inside contact
         */
 
         if(
+            contactView &&
             !contactView.classList.contains(
                 "hidden"
             )
@@ -664,12 +733,15 @@ appBack.addEventListener(
 
             hideAllApps();
 
+
             contactsApp.classList.remove(
                 "hidden"
             );
 
+
             appTitle.textContent =
                 "Contacts";
+
 
             return;
 
@@ -707,10 +779,14 @@ function closeApp(){
    HOME BUTTON
 ========================================= */
 
-phoneHomeButton.addEventListener(
-    "click",
-    closeApp
-);
+if(phoneHomeButton){
+
+    phoneHomeButton.addEventListener(
+        "click",
+        closeApp
+    );
+
+}
 
 
 /* =========================================
@@ -943,22 +1019,24 @@ document
     .querySelectorAll(
         ".message-row"
     )
-    .forEach(row => {
+    .forEach(
+        row => {
 
-        row.addEventListener(
-            "click",
-            () => {
+            row.addEventListener(
+                "click",
+                () => {
 
-                const id =
-                    row.dataset.chat;
+                    const id =
+                        row.dataset.chat;
 
 
-                openConversation(id);
+                    openConversation(id);
 
-            }
-        );
+                }
+            );
 
-    });
+        }
+    );
 
 
 /* =========================================
@@ -971,8 +1049,11 @@ function openConversation(id){
         conversations[id];
 
 
-    if(!conversation)
+    if(!conversation){
+
         return;
+
+    }
 
 
     messagesApp.classList.add(
@@ -1029,11 +1110,6 @@ function openConversation(id){
         }
     );
 
-
-    /*
-       Start at the bottom
-       like a real messaging app.
-    */
 
     requestAnimationFrame(
         () => {
@@ -1142,6 +1218,13 @@ function renderGallery(){
         );
 
 
+    if(!grid){
+
+        return;
+
+    }
+
+
     grid.innerHTML = "";
 
 
@@ -1180,13 +1263,6 @@ function renderGallery(){
             img.alt =
                 `Gallery image ${index + 1}`;
 
-
-            /*
-               If you haven't drawn the
-               image yet, show a temporary
-               placeholder instead of a
-               broken-image icon.
-            */
 
             img.onerror =
                 () => {
@@ -1234,6 +1310,13 @@ function renderGallery(){
 
 function openGalleryImage(image){
 
+    if(!imageViewer){
+
+        return;
+
+    }
+
+
     viewerImage.src =
         image.file;
 
@@ -1271,13 +1354,14 @@ function openGalleryImage(image){
     );
 
 
-    /*
-       Remember clue discovery.
-    */
+    /* =====================================
+       SAVE CLUE DISCOVERY
+    ===================================== */
 
     if(image.clue){
 
         let clues = [];
+
 
         try{
 
@@ -1290,7 +1374,7 @@ function openGalleryImage(image){
 
         }
 
-        catch(e){
+        catch(error){
 
             clues = [];
 
@@ -1312,35 +1396,42 @@ function openGalleryImage(image){
 
         localStorage.setItem(
             PHONE_CLUES_KEY,
-            JSON.stringify(clues)
+            JSON.stringify(
+                clues
+            )
         );
 
     }
 
 }
 
+
 /* =========================================
    CLOSE IMAGE
 ========================================= */
 
-closeImage.addEventListener(
-    "click",
-    () => {
+if(closeImage){
 
-        imageViewer.classList.add(
-            "hidden"
-        );
+    closeImage.addEventListener(
+        "click",
+        () => {
 
-
-        viewerImage.src =
-            "";
+            imageViewer.classList.add(
+                "hidden"
+            );
 
 
-        clueText.textContent =
-            "";
+            viewerImage.src =
+                "";
 
-    }
-);
+
+            clueText.textContent =
+                "";
+
+        }
+    );
+
+}
 
 
 /* =========================================
@@ -1353,6 +1444,7 @@ document.addEventListener(
 
         if(
             event.key === "Escape" &&
+            imageViewer &&
             !imageViewer.classList.contains(
                 "hidden"
             )
@@ -1397,28 +1489,34 @@ const contacts = {
 };
 
 
+/* =========================================
+   CONTACT CLICK
+========================================= */
+
 document
     .querySelectorAll(
         ".contact"
     )
-    .forEach(contact => {
+    .forEach(
+        contact => {
 
-        contact.addEventListener(
-            "click",
-            () => {
+            contact.addEventListener(
+                "click",
+                () => {
 
-                const name =
-                    contact.dataset.contact;
+                    const name =
+                        contact.dataset.contact;
 
 
-                openContact(
-                    name
-                );
+                    openContact(
+                        name
+                    );
 
-            }
-        );
+                }
+            );
 
-    });
+        }
+    );
 
 
 /* =========================================
@@ -1431,13 +1529,23 @@ function openContact(name){
         contacts[name];
 
 
-    if(!contact)
+    if(!contact){
+
         return;
+
+    }
 
 
     contactsApp.classList.add(
         "hidden"
     );
+
+
+    if(!contactView){
+
+        return;
+
+    }
 
 
     contactView.classList.remove(
@@ -1449,22 +1557,46 @@ function openContact(name){
         name;
 
 
-    document.getElementById(
-        "contactDetailAvatar"
-    ).textContent =
-        contact.letter;
+    const avatar =
+        document.getElementById(
+            "contactDetailAvatar"
+        );
 
 
-    document.getElementById(
-        "contactDetailName"
-    ).textContent =
-        name;
+    const detailName =
+        document.getElementById(
+            "contactDetailName"
+        );
 
 
-    document.getElementById(
-        "contactDetailNumber"
-    ).textContent =
-        contact.number;
+    const detailNumber =
+        document.getElementById(
+            "contactDetailNumber"
+        );
+
+
+    if(avatar){
+
+        avatar.textContent =
+            contact.letter;
+
+    }
+
+
+    if(detailName){
+
+        detailName.textContent =
+            name;
+
+    }
+
+
+    if(detailNumber){
+
+        detailNumber.textContent =
+            contact.number;
+
+    }
 
 }
 
@@ -1484,6 +1616,7 @@ Do not write the address anywhere.
 
 Call E after 8 PM.`,
 
+
     note2:
 `Meeting
 
@@ -1493,6 +1626,7 @@ Thursday
 Same place as before.
 
 Come alone.`,
+
 
     note3:
 `Shopping
@@ -1504,24 +1638,30 @@ Coffee`
 };
 
 
+/* =========================================
+   NOTE CLICK
+========================================= */
+
 document
     .querySelectorAll(
         ".note"
     )
-    .forEach(note => {
+    .forEach(
+        note => {
 
-        note.addEventListener(
-            "click",
-            () => {
+            note.addEventListener(
+                "click",
+                () => {
 
-                openNote(
-                    note.dataset.note
-                );
+                    openNote(
+                        note.dataset.note
+                    );
 
-            }
-        );
+                }
+            );
 
-    });
+        }
+    );
 
 
 /* =========================================
@@ -1529,6 +1669,13 @@ document
 ========================================= */
 
 function openNote(id){
+
+    if(!noteView){
+
+        return;
+
+    }
+
 
     notesApp.classList.add(
         "hidden"
@@ -1544,10 +1691,19 @@ function openNote(id){
         "Note";
 
 
-    document.getElementById(
-        "noteContent"
-    ).textContent =
-        notes[id] || "Empty note.";
+    const noteContent =
+        document.getElementById(
+            "noteContent"
+        );
+
+
+    if(noteContent){
+
+        noteContent.textContent =
+            notes[id] ||
+            "Empty note.";
+
+    }
 
 }
 
@@ -1556,4 +1712,23 @@ function openNote(id){
    INITIALIZE
 ========================================= */
 
-checkSavedUnlock();
+/*
+   IMPORTANT:
+
+   The phone can ONLY initialize if
+   the repair has been completed.
+
+   If repair is incomplete:
+       phone.html → repair.html
+
+   If repair is complete:
+       continue normally.
+*/
+
+if(
+    checkRepairCompleted()
+){
+
+    checkSavedUnlock();
+
+}
