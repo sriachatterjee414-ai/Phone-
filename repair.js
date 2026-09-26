@@ -1,52 +1,55 @@
+
 /* =========================================
-BROKEN PHONE
-PHONE REPAIR SYSTEM
+   BROKEN PHONE
+   PHONE REPAIR SYSTEM
 
-FLOW:
+   FLOW:
 
-INVESTIGATION
-↓
-REPAIR.HTML
-↓
-INSPECT INVENTORY
-↓
-SELECT ITEM
-↓
-APPLY ITEM
-↓
-CORRECT = +25%
-WRONG   = -10%
-↓
-100%
-↓
-BLACKOUT
-↓
-GOOD PHONE
-↓
-ACCESS PHONE
-↓
-PHONE.HTML
+   INVESTIGATION
+   ↓
+   REPAIR.HTML
+   ↓
+   INSPECT INVENTORY
+   ↓
+   SELECT ITEM
+   ↓
+   APPLY ITEM
+   ↓
+   CORRECT = +25%
+   WRONG   = -10%
+   ↓
+   ALL 3 CORRECT PARTS
+   ↓
+   100%
+   ↓
+   BLACKOUT
+   ↓
+   GOOD PHONE
+   ↓
+   ACCESS PHONE
+   ↓
+   PHONE.HTML
 ========================================= */
 
 
 /* =========================================
-INVENTORY
+   INVENTORY
 ========================================= */
 
 const INVENTORY_KEY =
-"brokenPhoneInventory";
+    "brokenPhoneInventory";
 
 
 /* =========================================
-REPAIR SAVE
+   REPAIR SAVE
 ========================================= */
 
 const REPAIR_COMPLETE_KEY =
-"brokenPhoneRepairComplete";
+    "brokenPhoneRepairComplete";
 
 
 /* =========================================
-ITEMS
+   ITEMS
 ========================================= */
 
 const ITEM_DATA = {
@@ -156,7 +159,7 @@ const ITEM_DATA = {
 
 
 /* =========================================
-REQUIRED REPAIR PARTS
+   REQUIRED REPAIR PARTS
 ========================================= */
 
 const REQUIRED_PARTS = [
@@ -171,131 +174,131 @@ const REQUIRED_PARTS = [
 
 
 /* =========================================
-ELEMENTS
+   ELEMENTS
 ========================================= */
 
 const repair =
-document.getElementById(
-    "repair"
-);
+    document.getElementById(
+        "repair"
+    );
 
 
 const phoneImage =
-document.getElementById(
-    "phoneImage"
-);
+    document.getElementById(
+        "phoneImage"
+    );
 
 
 const goodPhoneImage =
-document.getElementById(
-    "goodPhoneImage"
-);
+    document.getElementById(
+        "goodPhoneImage"
+    );
 
 
 const inspectButton =
-document.getElementById(
-    "inspectButton"
-);
+    document.getElementById(
+        "inspectButton"
+    );
 
 
 const repairInventory =
-document.getElementById(
-    "repairInventory"
-);
+    document.getElementById(
+        "repairInventory"
+    );
 
 
 const closeInventory =
-document.getElementById(
-    "closeInventory"
-);
+    document.getElementById(
+        "closeInventory"
+    );
 
 
 const repairItems =
-document.getElementById(
-    "repairItems"
-);
+    document.getElementById(
+        "repairItems"
+    );
 
 
 const inventoryEmpty =
-document.getElementById(
-    "inventoryEmpty"
-);
+    document.getElementById(
+        "inventoryEmpty"
+    );
 
 
 const conditionMeter =
-document.getElementById(
-    "conditionMeter"
-);
+    document.getElementById(
+        "conditionMeter"
+    );
 
 
 const conditionPercent =
-document.getElementById(
-    "conditionPercent"
-);
+    document.getElementById(
+        "conditionPercent"
+    );
 
 
 const conditionText =
-document.getElementById(
-    "conditionText"
-);
+    document.getElementById(
+        "conditionText"
+    );
 
 
 const repairMessage =
-document.getElementById(
-    "repairMessage"
-);
+    document.getElementById(
+        "repairMessage"
+    );
 
 
 const appliedParts =
-document.getElementById(
-    "appliedParts"
-);
+    document.getElementById(
+        "appliedParts"
+    );
 
 
 const toast =
-document.getElementById(
-    "toast"
-);
+    document.getElementById(
+        "toast"
+    );
 
 
 const blackout =
-document.getElementById(
-    "blackout"
-);
+    document.getElementById(
+        "blackout"
+    );
 
 
 const completePanel =
-document.getElementById(
-    "completePanel"
-);
+    document.getElementById(
+        "completePanel"
+    );
 
 
 const continueButton =
-document.getElementById(
-    "continueButton"
-);
+    document.getElementById(
+        "continueButton"
+    );
 
 
 const repairSound =
-document.getElementById(
-    "repairSound"
-);
+    document.getElementById(
+        "repairSound"
+    );
 
 
 const wrongSound =
-document.getElementById(
-    "wrongSound"
-);
+    document.getElementById(
+        "wrongSound"
+    );
 
 
 const completeSound =
-document.getElementById(
-    "completeSound"
-);
+    document.getElementById(
+        "completeSound"
+    );
 
 
 /* =========================================
-REPAIR STATE
+   REPAIR STATE
 ========================================= */
 
 let condition = 0;
@@ -306,7 +309,7 @@ let repairFinished = false;
 
 
 /* =========================================
-GET INVENTORY
+   GET INVENTORY
 ========================================= */
 
 function getInventory() {
@@ -331,7 +334,7 @@ function getInventory() {
 
 
 /* =========================================
-TOAST
+   TOAST
 ========================================= */
 
 function showToast(message) {
@@ -366,7 +369,7 @@ function showToast(message) {
 
 
 /* =========================================
-PLAY SOUND
+   PLAY SOUND
 ========================================= */
 
 function playSound(sound) {
@@ -387,7 +390,7 @@ function playSound(sound) {
 
 
 /* =========================================
-UPDATE METER
+   UPDATE METER
 ========================================= */
 
 function updateMeter() {
@@ -465,7 +468,26 @@ function updateMeter() {
 
 
 /* =========================================
-RENDER INVENTORY
+   CHECK ALL REQUIRED PARTS
+========================================= */
+
+function allRequiredPartsInstalled() {
+
+    return REQUIRED_PARTS.every(
+        function(part) {
+
+            return usedParts.includes(
+                part
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   RENDER INVENTORY
 ========================================= */
 
 function renderRepairInventory() {
@@ -584,7 +606,7 @@ function renderRepairInventory() {
 
 
 /* =========================================
-OPEN INVENTORY
+   OPEN INVENTORY
 ========================================= */
 
 inspectButton.onclick =
@@ -605,7 +627,7 @@ function() {
 
 
 /* =========================================
-CLOSE INVENTORY
+   CLOSE INVENTORY
 ========================================= */
 
 closeInventory.onclick =
@@ -619,7 +641,7 @@ function() {
 
 
 /* =========================================
-APPLY ITEM
+   APPLY ITEM
 ========================================= */
 
 function applyItem(
@@ -644,7 +666,7 @@ function applyItem(
 
 
     /*
-       Don't allow same correct
+       Don't allow the same correct
        component twice.
     */
 
@@ -667,25 +689,12 @@ function applyItem(
 
     if (data.correct) {
 
-        condition +=
-            data.value;
-
-
         /*
-           Remember component.
+           Remember the installed part.
         */
 
         usedParts.push(
             id
-        );
-
-
-        /*
-           Disable inventory button.
-        */
-
-        button.classList.add(
-            "used"
         );
 
 
@@ -698,6 +707,15 @@ function applyItem(
         );
 
 
+        /*
+           Disable this item.
+        */
+
+        button.classList.add(
+            "used"
+        );
+
+
         playSound(
             repairSound
         );
@@ -707,23 +725,52 @@ function applyItem(
             `${data.name} installed correctly.`;
 
 
-        showToast(
-            `${data.name} installed. +${data.value}%`
-        );
-
-
-        updateMeter();
-
-
         /*
-           Check completion.
+           Check whether ALL THREE
+           required parts are installed.
         */
 
         if (
-            condition >= 100
+            allRequiredPartsInstalled()
         ) {
 
+            /*
+               The three correct parts
+               completely repair the phone.
+            */
+
+            condition = 100;
+
+
+            showToast(
+                "All required components installed. Phone restored!"
+            );
+
+
+            updateMeter();
+
+
             completeRepair();
+
+        }
+
+        else {
+
+            /*
+               First and second correct
+               components give +25%.
+            */
+
+            condition +=
+                data.value;
+
+
+            showToast(
+                `${data.name} installed. +${data.value}%`
+            );
+
+
+            updateMeter();
 
         }
 
@@ -736,14 +783,14 @@ function applyItem(
 
     else {
 
-        condition +=
-            data.value;
-
-
         /*
            Wrong components are NOT
            permanently consumed.
         */
+
+        condition +=
+            data.value;
+
 
         playSound(
             wrongSound
@@ -767,7 +814,7 @@ function applyItem(
 
 
 /* =========================================
-ADD APPLIED PART
+   ADD APPLIED PART
 ========================================= */
 
 function addAppliedPart(name) {
@@ -794,7 +841,7 @@ function addAppliedPart(name) {
 
 
 /* =========================================
-COMPLETE REPAIR
+   COMPLETE REPAIR
 ========================================= */
 
 function completeRepair() {
@@ -815,7 +862,7 @@ function completeRepair() {
     /*
        SAVE COMPLETION.
 
-       This means if the player leaves
+       If the player leaves
        repair.html and comes back later,
        the phone is still repaired.
     */
@@ -865,7 +912,7 @@ function completeRepair() {
 
 
 /* =========================================
-BLACKOUT / REVEAL
+   BLACKOUT / REVEAL
 ========================================= */
 
 function startBlackout() {
@@ -921,24 +968,24 @@ function startBlackout() {
 
 
 /* =========================================
-BACK BUTTON
+   BACK BUTTON
 ========================================= */
 
 document
-.getElementById(
-    "backButton"
-)
-.onclick =
-function() {
+    .getElementById(
+        "backButton"
+    )
+    .onclick =
+    function() {
 
-    window.location.href =
-        "investigation.html";
+        window.location.href =
+            "investigation.html";
 
-};
+    };
 
 
 /* =========================================
-ACCESS PHONE
+   ACCESS PHONE
 ========================================= */
 
 continueButton.onclick =
@@ -956,7 +1003,7 @@ function() {
 
 
 /* =========================================
-RESTORE COMPLETED PHONE
+   RESTORE COMPLETED PHONE
 ========================================= */
 
 function restoreCompletedRepair() {
@@ -1019,10 +1066,22 @@ function restoreCompletedRepair() {
 
 
 /* =========================================
-INITIALIZE
+   INITIALIZE
 ========================================= */
 
 updateMeter();
 
 
 restoreCompletedRepair();
+
+What happens now
+
+Action| Condition
+Start| 0%
+Correct screwdriver| 25%
+Correct battery| 50%
+Correct screen connector| 100%
+Wrong item| -10%
+All 3 correct parts| Repair complete → blackout
+
+One important detail: if the player uses a wrong item before repairing, the condition can go negative, but your "updateMeter()" safely clamps it to 0%. The wrong item is also not consumed, so they can still use the correct parts afterward.
