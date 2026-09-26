@@ -1,197 +1,203 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<head>
+«»
 
-<meta charset="UTF-8">
+<title>Broken Phone — File Cabinet</title><link rel="stylesheet" href="cabinet.css"></head><body><main id="cabinetGame"><!-- =================================
+     CABINET BACKGROUND
+================================== -->
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Broken Phone — File Cabinet</title>
-
-<link rel="stylesheet" href="cabinet.css">
-
-</head>
+<div id="cabinetScene"></div>
 
 
-<body>
+<!-- =================================
+     TOP UI
+================================== -->
 
-<main id="cabinetGame">
+<button id="backButton">
+    ← BACK
+</button>
 
-    <!-- =================================
-         CABINET BACKGROUND
-    ================================== -->
-
-    <div id="cabinetScene"></div>
-
-
-    <!-- =================================
-         TOP UI
-    ================================== -->
-
-    <button id="backButton">
-        ← BACK
-    </button>
-
-    <div class="title">
-        FILE CABINET
-    </div>
+<div class="title">
+    FILE CABINET
+</div>
 
 
-    <!-- =================================
-         UNLOCK BUTTON
-    ================================== -->
+<!-- =================================
+     UNLOCK BUTTON
+================================== -->
 
-    <button id="unlockButton">
-        UNLOCK
-    </button>
-
-
-    <!-- =================================
-         COLLECTIBLE ITEMS
-         HIDDEN UNTIL CABINET IS UNLOCKED
-    ================================== -->
-
-    <div id="itemsLayer" class="hidden">
-
-        <button
-            class="item connector"
-            data-item="replacement_battery"
-        >
-
-            <img
-                src="replacement_battery.png"
-                alt="Replacement battery"
-            >
-
-            <span>COLLECT</span>
-
-        </button>
+<button id="unlockButton">
+    UNLOCK
+</button>
 
 
-        <button
-            class="item clip"
-            data-item="paper_clip"
-        >
+<!-- =================================
+     COLLECTIBLE ITEMS
+     ONLY VISIBLE AFTER UNLOCK
+================================== -->
 
-            <img
-                src="paper_clip.png"
-                alt="Paper clip"
-            >
+<div id="itemsLayer" class="hidden">
 
-            <span>COLLECT</span>
-
-        </button>
-
-    </div>
-
-
-    <!-- =================================
-         INVENTORY
-    ================================== -->
-
-    <section class="inventory-panel">
-
-        <div class="inventory-title">
-            INVENTORY
-        </div>
-
-        <div
-            id="inventorySlots"
-            class="inventory-slots"
-        ></div>
-
-    </section>
-
-
-    <!-- =================================
-         TOAST
-    ================================== -->
-
-    <div
-        id="toast"
-        class="toast"
-    ></div>
-
-
-    <!-- =================================
-         LEAF PUZZLE
-    ================================== -->
-
-    <div
-        id="puzzleOverlay"
-        class="hidden"
+    <button
+        class="item connector"
+        data-item="replacement_battery"
     >
 
-        <div id="puzzleWindow">
+        <img
+            src="replacement_battery.png"
+            alt="Replacement battery"
+        >
 
-            <button
-                id="closePuzzle"
-                class="closeButton"
-            >
-                ×
-            </button>
+        <span>COLLECT</span>
 
-
-            <div class="puzzleTitle">
-                MATCH THE EVIDENCE
-            </div>
+    </button>
 
 
-            <div class="puzzleInstruction">
+    <button
+        class="item clip"
+        data-item="paper_clip"
+    >
 
-                Find the two matching leaves.
+        <img
+            src="paper_clip.png"
+            alt="Paper clip"
+        >
 
-            </div>
+        <span>COLLECT</span>
+
+    </button>
+
+</div>
 
 
-            <div id="leafGrid"></div>
+<!-- =================================
+     INVENTORY
+================================== -->
+
+<section class="inventory-panel">
+
+    <div class="inventory-title">
+        INVENTORY
+    </div>
+
+    <div
+        id="inventorySlots"
+        class="inventory-slots"
+    ></div>
+
+</section>
 
 
-            <div id="puzzleMessage"></div>
+<!-- =================================
+     TOAST
+================================== -->
+
+<div
+    id="toast"
+    class="toast"
+></div>
 
 
-            <button
-                id="continuePuzzle"
-                class="hidden"
-            >
-                UNLOCK CABINET
-            </button>
+<!-- =================================
+     WORDLE PUZZLE
+================================== -->
 
+<div
+    id="puzzleOverlay"
+    class="hidden"
+>
+
+    <div id="puzzleWindow">
+
+        <button
+            id="closePuzzle"
+            class="closeButton"
+        >
+            ×
+        </button>
+
+
+        <div class="puzzleTitle">
+            CABINET LOCK
         </div>
+
+
+        <div class="puzzleInstruction">
+            Enter the five-letter word to release the lock.
+        </div>
+
+
+        <!-- WORDLE BOARD -->
+
+        <div id="wordleBoard"></div>
+
+
+        <!-- CURRENT GUESS -->
+
+        <input
+            id="guessInput"
+            type="text"
+            maxlength="5"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="ENTER WORD"
+        >
+
+
+        <button
+            id="submitGuess"
+        >
+            CHECK
+        </button>
+
+
+        <!-- HINT -->
+
+        <button
+            id="hintButton"
+        >
+            HINT
+        </button>
+
+
+        <div id="puzzleMessage"></div>
+
+
+        <!-- UNLOCK -->
+
+        <button
+            id="continuePuzzle"
+            class="hidden"
+        >
+            UNLOCK CABINET
+        </button>
 
     </div>
 
-
-    <!-- =================================
-         AUDIO
-    ================================== -->
-
-    <audio
-        id="music"
-        src="investigation_music.mp3"
-        loop
-    ></audio>
-
-    <audio
-        id="collectSound"
-        src="item_collect.mp3"
-    ></audio>
-
-    <audio
-        id="flipSound"
-        src="item_collect.mp3"
-    ></audio>
+</div>
 
 
-</main>
+<!-- =================================
+     AUDIO
+================================== -->
 
+<audio
+    id="music"
+    src="investigation_music.mp3"
+    loop
+></audio>
 
-<script src="cabinet.js"></script>
+<audio
+    id="collectSound"
+    src="item_collect.mp3"
+></audio>
 
-</body>
+<audio
+    id="flipSound"
+    src="item_collect.mp3"
+></audio>
 
-</html>
+</main><script src="cabinet.js"></script></body></html>
