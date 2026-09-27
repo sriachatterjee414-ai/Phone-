@@ -1,1982 +1,1376 @@
 /* =========================================================
    BROKEN PHONE
-   PHONE SYSTEM
-   ========================================================= */
-
-const PHONE_KEY = "brokenPhoneStateV6";
-const PHONE_REPAIRED_KEY = "brokenPhoneRepaired";
-const VICTIM_INFO_KEY = "brokenPhoneVictimInfo";
-
-const PASSCODE = "0521";
-
-
-/* =========================================================
-   APP FILES
-   All files are directly in the GitHub root.
-   ========================================================= */
-
-const appFiles = {
-
-    calls: "calls.html",
-
-    messages: "messages.html",
-
-    gallery: "gallery.html",
-
-    notes: "notes.html",
-
-    contacts: "contacts.html",
-
-    browser: "browser.html",
-
-    camera: "camera.html",
-
-    bank: "bank.html",
-
-    settings: "settings.html",
-
-    music: "music.html",
-
-    clock: "clock.html"
-
-};
-
-
-/* =========================================================
-   APP INFORMATION
-   ========================================================= */
-
-const appInfo = {
-
-    calls: {
-        name: "Phone",
-        icon: "☎",
-        className: "phone-icon"
-    },
-
-    messages: {
-        name: "Messages",
-        icon: "▢",
-        className: "messages-icon"
-    },
-
-    gallery: {
-        name: "Gallery",
-        icon: "◇",
-        className: "gallery-icon"
-    },
-
-    notes: {
-        name: "Notes",
-        icon: "▤",
-        className: "notes-icon"
-    },
-
-    contacts: {
-        name: "Contacts",
-        icon: "○",
-        className: "contacts-icon"
-    },
-
-    browser: {
-        name: "Browser",
-        icon: "⌕",
-        className: "browser-icon"
-    },
-
-    camera: {
-        name: "Camera",
-        icon: "▣",
-        className: "camera-icon"
-    },
-
-    bank: {
-        name: "Bank",
-        icon: "▤",
-        className: "bank-icon"
-    },
-
-    settings: {
-        name: "Settings",
-        icon: "⚙",
-        className: "settings-icon"
-    },
-
-    music: {
-        name: "Music",
-        icon: "♪",
-        className: "music-icon"
-    },
-
-    clock: {
-        name: "Clock",
-        icon: "◷",
-        className: "clock-icon"
-    }
-
-};
-
-
-/* =========================================================
-   DEFAULT STATE
-   ========================================================= */
-
-const defaultState = {
-
-    hidden: false,
-
-    /*
-       Phone starts LOCKED when phone.html loads.
-       Repair completion only makes the phone visible.
-    */
-
-    unlocked: false,
-
-    currentApp: "home",
-
-    homePage: 0,
-
-    history: []
-
-};
-
-
-/* =========================================================
-   CHECK REPAIR STATUS
-   ========================================================= */
-
-function isPhoneRepaired() {
-
-    return localStorage.getItem(
-        PHONE_REPAIRED_KEY
-    ) === "true";
-
-}
-
-
-/* =========================================================
-   LOAD STATE
-   ========================================================= */
-
-function loadState() {
-
-    try {
-
-        const saved =
-            localStorage.getItem(PHONE_KEY);
-
-
-        if (!saved) {
-
-            return {
-                ...defaultState
-            };
-
-        }
-
-
-        const parsed =
-            JSON.parse(saved);
-
-
-        return {
-
-            ...defaultState,
-
-            /*
-               NEVER restore unlocked state.
-               Opening phone.html requires passcode.
-            */
-
-            unlocked: false,
-
-            hidden:
-                Boolean(parsed.hidden),
-
-            currentApp: "home",
-
-            homePage: 0,
-
-            history: []
-
-        };
-
-
-    } catch (error) {
-
-        console.error(
-            "Could not load phone state:",
-            error
-        );
-
-
-        return {
-            ...defaultState
-        };
-
-    }
-
-}
-
-
-let state = loadState();
+   PHONE.JS
+   =========================================================
+
+   IMPORTANT STATE
+
+   brokenPhoneRepaired
+   -------------------
+   false / missing = phone has not been repaired
+   true            = phone permanently available
+
+   brokenPhonePhoneVisible
+   -----------------------
+   true  = phone currently visible
+   false = phone currently hidden
+
+   The repaired state NEVER gets removed here.
+========================================================= */
 
 
 /* =========================================================
    DOM
-   ========================================================= */
+========================================================= */
 
-const shell =
-    document.getElementById("phoneShell");
+const phoneShell = document.getElementById("phoneShell");
 
+const victimInfoButton = document.getElementById("victimInfoButton");
 
-const lockScreen =
-    document.getElementById("lockScreen");
+const phoneToggle = document.getElementById("phoneToggle");
+const toggleText = document.getElementById("toggleText");
 
+const lockScreen = document.getElementById("lockScreen");
+const passcodeScreen = document.getElementById("passcodeScreen");
+const homeScreen = document.getElementById("homeScreen");
+const appScreen = document.getElementById("appScreen");
 
-const passcodeScreen =
-    document.getElementById("passcodeScreen");
+const lockTime = document.getElementById("lockTime");
+const lockStatusTime = document.getElementById("lockStatusTime");
 
+const passcodeTime = document.getElementById("passcodeTime");
+const homeStatusTime = document.getElementById("homeStatusTime");
+const homeBigTime = document.getElementById("homeBigTime");
+const homeDate = document.getElementById("homeDate");
 
-const homeScreen =
-    document.getElementById("homeScreen");
+const passcodePad = document.getElementById("passcodePad");
+const passcodeDots = document.getElementById("passcodeDots");
+const passcodeError = document.getElementById("passcodeError");
 
+const appFrame = document.getElementById("appFrame");
+const appBack = document.getElementById("appBack");
+const appHeaderName = document.getElementById("appHeaderName");
+const appHeaderIcon = document.getElementById("appHeaderIcon");
 
-const appScreen =
-    document.getElementById("appScreen");
+const homePages = document.getElementById("homePages");
+const pageDots = document.querySelectorAll("#pageDots span");
 
+const searchInput = document.getElementById("appSearch");
+const clearSearch = document.getElementById("clearSearch");
+const searchResults = document.getElementById("searchResults");
 
-const appFrame =
-    document.getElementById("appFrame");
+const navBack = document.getElementById("navBack");
+const navHome = document.getElementById("navHome");
+const navRecent = document.getElementById("navRecent");
 
-
-const toggle =
-    document.getElementById("phoneToggle");
-
-
-const homePages =
-    document.getElementById("homePages");
-
-
-const pageDots =
-    [...document.querySelectorAll(".page-dots span")];
-
-
-const appBack =
-    document.getElementById("appBack");
-
-
-const navBack =
-    document.getElementById("navBack");
-
-
-const navHome =
-    document.getElementById("navHome");
-
-
-const navRecent =
-    document.getElementById("navRecent");
-
-
-const androidNav =
-    document.getElementById("androidNav");
-
-
-const recentPanel =
-    document.getElementById("recentPanel");
-
-
-const recentList =
-    document.getElementById("recentList");
-
-
-const closeRecent =
-    document.getElementById("closeRecent");
-
-
-const appSearch =
-    document.getElementById("appSearch");
-
-
-const clearSearch =
-    document.getElementById("clearSearch");
-
-
-const searchResults =
-    document.getElementById("searchResults");
+const recentPanel = document.getElementById("recentPanel");
+const recentList = document.getElementById("recentList");
+const closeRecent = document.getElementById("closeRecent");
 
 
 /* =========================================================
-   SAVE
-   ========================================================= */
+   STORAGE KEYS
+========================================================= */
 
-function saveState() {
-
-    try {
-
-        localStorage.setItem(
-            PHONE_KEY,
-            JSON.stringify({
-                hidden: state.hidden
-            })
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Could not save phone state:",
-            error
-        );
-
-    }
-
-}
+const REPAIRED_KEY = "brokenPhoneRepaired";
+const PHONE_VISIBLE_KEY = "brokenPhonePhoneVisible";
 
 
 /* =========================================================
-   SHOW ONE SCREEN
-   ========================================================= */
+   BASIC STATE
+========================================================= */
 
-function showOnly(element) {
+let phoneRepaired =
+    localStorage.getItem(REPAIRED_KEY) === "true";
 
-    [
+let phoneVisible =
+    localStorage.getItem(PHONE_VISIBLE_KEY) !== "false";
 
-        lockScreen,
-
-        passcodeScreen,
-
-        homeScreen,
-
-        appScreen
-
-    ].forEach(screen => {
-
-        if (screen) {
-
-            screen.classList.add(
-                "hidden"
-            );
-
-        }
-
-    });
-
-
-    if (element) {
-
-        element.classList.remove(
-            "hidden"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   UPDATE EXTERNAL VICTIM FILE
-   ========================================================= */
 
 /*
-   Victim File is OUTSIDE the phone.
+    Before repair:
+    --------------------------------
+    phone is hidden.
 
-   Expected HTML:
+    After repair:
+    --------------------------------
+    phone automatically appears.
 
-   <div id="externalVictimInfo">
-
-       <span data-victim="name"></span>
-       <span data-victim="age"></span>
-       <span data-victim="occupation"></span>
-       <span data-victim="location"></span>
-       <span data-victim="status"></span>
-
-   </div>
+    We do NOT create another button.
 */
 
-function updateExternalVictimInfo() {
+if (!phoneRepaired) {
 
-    const panel =
-        document.getElementById(
-            "externalVictimInfo"
-        );
+    phoneVisible = false;
 
-
-    if (!panel) {
-
-        return;
-
-    }
-
-
-    /*
-       Victim File should only appear
-       after the phone has been repaired.
-    */
-
-    if (!isPhoneRepaired()) {
-
-        panel.classList.add(
-            "hidden"
-        );
-
-        return;
-
-    }
-
-
-    panel.classList.remove(
-        "hidden"
-    );
-
-
-    let victimInfo = {};
-
-
-    try {
-
-        victimInfo =
-            JSON.parse(
-                localStorage.getItem(
-                    VICTIM_INFO_KEY
-                )
-            ) || {};
-
-    } catch (error) {
-
-        console.error(
-            "Could not load victim information:",
-            error
-        );
-
-    }
-
-
-    const fields = {
-
-        name:
-            victimInfo.name ||
-            "Unknown",
-
-        age:
-            victimInfo.age ||
-            "Unknown",
-
-        occupation:
-            victimInfo.occupation ||
-            "Unknown",
-
-        location:
-            victimInfo.location ||
-            "Unknown",
-
-        status:
-            victimInfo.status ||
-            "Deceased"
-
-    };
-
-
-    Object.entries(fields)
-        .forEach(
-            ([key, value]) => {
-
-                const element =
-                    panel.querySelector(
-                        `[data-victim="${key}"]`
-                    );
-
-
-                if (element) {
-
-                    element.textContent =
-                        value;
-
-                }
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   RENDER
-   ========================================================= */
-
-function render() {
-
-    if (!shell) {
-
-        updateExternalVictimInfo();
-
-        return;
-
-    }
-
-
-    shell.classList.toggle(
-        "hidden-phone",
-        state.hidden
-    );
-
-
-    updateExternalVictimInfo();
-
-
-    /* -----------------------------------------------------
-       PHONE HIDDEN
-    ----------------------------------------------------- */
-
-    if (state.hidden) {
-
-        if (toggle) {
-
-            toggle.textContent =
-                "SHOW PHONE";
-
-        }
-
-        return;
-
-    }
-
-
-    if (toggle) {
-
-        toggle.textContent =
-            "HIDE PHONE";
-
-    }
-
-
-    /* -----------------------------------------------------
-       LOCKED
-    ----------------------------------------------------- */
-
-    if (!state.unlocked) {
-
-        showOnly(lockScreen);
-
-
-        if (androidNav) {
-
-            androidNav.classList.add(
-                "hidden"
-            );
-
-        }
-
-        return;
-
-    }
-
-
-    /* -----------------------------------------------------
-       HOME
-    ----------------------------------------------------- */
-
-    if (
-        state.currentApp === "home"
-    ) {
-
-        showOnly(homeScreen);
-
-
-        updateHomePage();
-
-
-        if (androidNav) {
-
-            androidNav.classList.remove(
-                "hidden"
-            );
-
-        }
-
-        return;
-
-    }
-
-
-    /* -----------------------------------------------------
-       APP
-    ----------------------------------------------------- */
-
-    showOnly(appScreen);
-
-
-    if (androidNav) {
-
-        androidNav.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    loadApp(
-        state.currentApp
+    localStorage.setItem(
+        PHONE_VISIBLE_KEY,
+        "false"
     );
 
 }
 
 
 /* =========================================================
-   LOAD APP
-   ========================================================= */
+   PHONE STATE
+========================================================= */
 
-function loadApp(app) {
+function savePhoneVisibility() {
 
-    if (!appFrame) {
-
-        return;
-
-    }
-
-
-    const file =
-        appFiles[app];
-
-
-    if (!file) {
-
-        console.error(
-            "Unknown app:",
-            app
-        );
-
-
-        appFrame.removeAttribute(
-            "src"
-        );
-
-
-        return;
-
-    }
-
-
-    const info =
-        appInfo[app];
-
-
-    /* -----------------------------------------------------
-       UPDATE PHONE APP HEADER
-    ----------------------------------------------------- */
-
-    if (info) {
-
-        const icon =
-            document.getElementById(
-                "appHeaderIcon"
-            );
-
-
-        const name =
-            document.getElementById(
-                "appHeaderName"
-            );
-
-
-        if (icon) {
-
-            icon.textContent =
-                info.icon;
-
-
-            icon.className =
-                "header-app-icon " +
-                info.className;
-
-        }
-
-
-        if (name) {
-
-            name.textContent =
-                info.name;
-
-        }
-
-    }
-
-
-    /* -----------------------------------------------------
-       LOAD IFRAME
-
-       Don't reload the same app unnecessarily.
-    ----------------------------------------------------- */
-
-    const current =
-        appFrame.getAttribute(
-            "src"
-        ) || "";
-
-
-    if (
-        !current.endsWith(file)
-    ) {
-
-        appFrame.src =
-            file;
-
-    }
-
-}
-
-
-/* =========================================================
-   PASSCODE
-   ========================================================= */
-
-function showPasscode() {
-
-    if (state.unlocked) {
-
-        return;
-
-    }
-
-
-    showOnly(
-        passcodeScreen
+    localStorage.setItem(
+        PHONE_VISIBLE_KEY,
+        phoneVisible ? "true" : "false"
     );
-
-
-    if (
-        typeof window.clearPasscode ===
-        "function"
-    ) {
-
-        window.clearPasscode();
-
-    }
-
-}
-
-
-function returnToLock() {
-
-    if (state.unlocked) {
-
-        return;
-
-    }
-
-
-    showOnly(
-        lockScreen
-    );
-
-}
-
-
-/* =========================================================
-   PASSCODE PAD
-   ========================================================= */
-
-function setupPasscode() {
-
-    const pad =
-        document.getElementById(
-            "passcodePad"
-        );
-
-
-    const dots =
-        [
-            ...document.querySelectorAll(
-                "#passcodeDots span"
-            )
-        ];
-
-
-    const error =
-        document.getElementById(
-            "passcodeError"
-        );
-
-
-    if (!pad) {
-
-        return;
-
-    }
-
-
-    let entered = "";
-
-
-    pad.innerHTML = "";
-
-
-    const keys = [
-
-        "1",
-
-        "2",
-
-        "3",
-
-        "4",
-
-        "5",
-
-        "6",
-
-        "7",
-
-        "8",
-
-        "9",
-
-        "0"
-
-    ];
-
-
-    const letters = {
-
-        "2": "ABC",
-
-        "3": "DEF",
-
-        "4": "GHI",
-
-        "5": "JKL",
-
-        "6": "MNO",
-
-        "7": "PQRS",
-
-        "8": "TUV",
-
-        "9": "WXYZ"
-
-    };
-
-
-    keys.forEach(
-        value => {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            if (letters[value]) {
-
-                button.innerHTML =
-                    `
-                    ${value}
-                    <small>
-                        ${letters[value]}
-                    </small>
-                    `;
-
-            } else {
-
-                button.textContent =
-                    value;
-
-            }
-
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    if (
-                        entered.length >=
-                        PASSCODE.length
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    entered += value;
-
-
-                    updateDots();
-
-
-                    if (
-                        entered.length !==
-                        PASSCODE.length
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    /* ---------------------------------
-                       CORRECT PASSWORD
-                    --------------------------------- */
-
-                    if (
-                        entered ===
-                        PASSCODE
-                    ) {
-
-                        state.unlocked =
-                            true;
-
-
-                        state.currentApp =
-                            "home";
-
-
-                        state.homePage =
-                            0;
-
-
-                        state.history =
-                            [];
-
-
-                        entered = "";
-
-
-                        updateDots();
-
-
-                        if (error) {
-
-                            error.textContent =
-                                "";
-
-                        }
-
-
-                        /*
-                           Do NOT save unlocked=true.
-                        */
-
-                        saveState();
-
-
-                        render();
-
-
-                    } else {
-
-                        if (error) {
-
-                            error.textContent =
-                                "Incorrect passcode";
-
-                        }
-
-
-                        setTimeout(
-                            () => {
-
-                                entered = "";
-
-
-                                updateDots();
-
-
-                                if (error) {
-
-                                    error.textContent =
-                                        "";
-
-                                }
-
-                            },
-                            700
-                        );
-
-                    }
-
-                }
-            );
-
-
-            pad.appendChild(
-                button
-            );
-
-        }
-    );
-
-
-    function updateDots() {
-
-        dots.forEach(
-            (dot, index) => {
-
-                dot.classList.toggle(
-                    "filled",
-                    index < entered.length
-                );
-
-            }
-        );
-
-    }
-
-
-    window.clearPasscode =
-        () => {
-
-            entered = "";
-
-
-            updateDots();
-
-
-            if (error) {
-
-                error.textContent =
-                    "";
-
-            }
-
-        };
-
-}
-
-
-/* =========================================================
-   HOME PAGE
-   ========================================================= */
-
-function updateHomePage() {
-
-    if (!homePages) {
-
-        return;
-
-    }
-
-
-    const page =
-        Math.max(
-            0,
-            Math.min(
-                2,
-                Number(state.homePage) || 0
-            )
-        );
-
-
-    state.homePage =
-        page;
-
-
-    homePages.style.transform =
-        `translateX(-${page * 33.333333}%)`;
-
-
-    pageDots.forEach(
-        (dot, index) => {
-
-            dot.classList.toggle(
-                "active",
-                index === page
-            );
-
-        }
-    );
-
-}
-
-
-function nextHomePage() {
-
-    if (
-        state.homePage >= 2
-    ) {
-
-        return;
-
-    }
-
-
-    state.homePage++;
-
-
-    updateHomePage();
-
-}
-
-
-function previousHomePage() {
-
-    if (
-        state.homePage <= 0
-    ) {
-
-        return;
-
-    }
-
-
-    state.homePage--;
-
-
-    updateHomePage();
-
-}
-
-
-/* =========================================================
-   TOUCH / SWIPE
-   ========================================================= */
-
-let touchStartX = 0;
-
-let touchStartY = 0;
-
-let touchEndX = 0;
-
-let touchEndY = 0;
-
-
-function startTouch(event) {
-
-    if (
-        !event.touches?.[0]
-    ) {
-
-        return;
-
-    }
-
-
-    touchStartX =
-        event.touches[0].clientX;
-
-
-    touchStartY =
-        event.touches[0].clientY;
-
-}
-
-
-function endTouch(event) {
-
-    if (
-        !event.changedTouches?.[0]
-    ) {
-
-        return;
-
-    }
-
-
-    touchEndX =
-        event.changedTouches[0].clientX;
-
-
-    touchEndY =
-        event.changedTouches[0].clientY;
-
-
-    handleSwipe();
-
-}
-
-
-function handleSwipe() {
-
-    const deltaX =
-        touchEndX -
-        touchStartX;
-
-
-    const deltaY =
-        touchEndY -
-        touchStartY;
-
-
-    const absX =
-        Math.abs(deltaX);
-
-
-    const absY =
-        Math.abs(deltaY);
-
-
-    /* -----------------------------------------------------
-       LOCK SCREEN
-    ----------------------------------------------------- */
-
-    if (
-        !state.unlocked &&
-        !lockScreen.classList.contains(
-            "hidden"
-        )
-    ) {
-
-        if (
-            deltaY < -60 &&
-            absY > absX
-        ) {
-
-            showPasscode();
-
-        }
-
-
-        return;
-
-    }
-
-
-    /* -----------------------------------------------------
-       PASSCODE SCREEN
-    ----------------------------------------------------- */
-
-    if (
-        !state.unlocked &&
-        !passcodeScreen.classList.contains(
-            "hidden"
-        )
-    ) {
-
-        if (
-            deltaY > 60 &&
-            absY > absX
-        ) {
-
-            returnToLock();
-
-        }
-
-
-        return;
-
-    }
-
-
-    /* -----------------------------------------------------
-       HOME SCREEN
-    ----------------------------------------------------- */
-
-    if (
-        state.unlocked &&
-        state.currentApp === "home" &&
-        absX > 60 &&
-        absX > absY
-    ) {
-
-        if (
-            deltaX < 0
-        ) {
-
-            nextHomePage();
-
-        } else {
-
-            previousHomePage();
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   TOUCH EVENTS
-   ========================================================= */
-
-[
-
-    lockScreen,
-
-    passcodeScreen,
-
-    homeScreen
-
-].forEach(
-    screen => {
-
-        if (!screen) {
-
-            return;
-
-        }
-
-
-        screen.addEventListener(
-            "touchstart",
-            startTouch,
-            {
-                passive: true
-            }
-        );
-
-
-        screen.addEventListener(
-            "touchend",
-            endTouch,
-            {
-                passive: true
-            }
-        );
-
-    }
-);
-
-
-/* =========================================================
-   MOUSE SWIPE
-   ========================================================= */
-
-let mouseDown = false;
-
-
-function mouseStart(event) {
-
-    mouseDown = true;
-
-
-    touchStartX =
-        event.clientX;
-
-
-    touchStartY =
-        event.clientY;
-
-}
-
-
-function mouseEnd(event) {
-
-    if (!mouseDown) {
-
-        return;
-
-    }
-
-
-    mouseDown = false;
-
-
-    touchEndX =
-        event.clientX;
-
-
-    touchEndY =
-        event.clientY;
-
-
-    handleSwipe();
-
-}
-
-
-[
-
-    homeScreen,
-
-    lockScreen,
-
-    passcodeScreen
-
-].forEach(
-    screen => {
-
-        if (!screen) {
-
-            return;
-
-        }
-
-
-        screen.addEventListener(
-            "mousedown",
-            mouseStart
-        );
-
-
-        screen.addEventListener(
-            "mouseup",
-            mouseEnd
-        );
-
-    }
-);
-
-
-/* =========================================================
-   OPEN APP
-   ========================================================= */
-
-function openApp(app) {
-
-    if (!state.unlocked) {
-
-        return;
-
-    }
-
-
-    if (!appFiles[app]) {
-
-        console.error(
-            "Unknown app:",
-            app
-        );
-
-
-        return;
-
-    }
-
-
-    /*
-       If opening an app from another app,
-       remember the current app.
-
-       Example:
-
-       Messages
-          ↓
-       Gallery
-
-       Back → Messages
-    */
-
-    if (
-        state.currentApp !== app &&
-        state.currentApp !== "home"
-    ) {
-
-        state.history.push(
-            state.currentApp
-        );
-
-    }
-
-
-    state.currentApp =
-        app;
-
-
-    closeRecentPanel();
-
-    clearSearchResults();
-
-
-    render();
-
-}
-
-
-/* =========================================================
-   BACK INSIDE PHONE
-   ========================================================= */
-
-function goBack() {
-
-    /*
-       NEVER lock the phone here.
-    */
-
-    if (!state.unlocked) {
-
-        return;
-
-    }
-
-
-    /*
-       Currently inside an app.
-    */
-
-    if (
-        state.currentApp !== "home"
-    ) {
-
-        const previous =
-            state.history.pop();
-
-
-        state.currentApp =
-            previous ||
-            "home";
-
-
-        closeRecentPanel();
-
-        clearSearchResults();
-
-
-        render();
-
-
-        return;
-
-    }
-
-
-    /*
-       Already on home.
-    */
-
-    previousHomePage();
-
-}
-
-
-/* =========================================================
-   HOME BUTTON
-   ========================================================= */
-
-function goHome() {
-
-    if (!state.unlocked) {
-
-        return;
-
-    }
-
-
-    state.currentApp =
-        "home";
-
-
-    state.history =
-        [];
-
-
-    state.homePage =
-        0;
-
-
-    closeRecentPanel();
-
-    clearSearchResults();
-
-
-    render();
-
-}
-
-
-/* =========================================================
-   EXPLICITLY CLOSE PHONE
-   ========================================================= */
-
-function closePhone() {
-
-    /*
-       This is one of the ONLY places
-       that actually locks the phone.
-    */
-
-    state.hidden =
-        true;
-
-
-    state.unlocked =
-        false;
-
-
-    state.currentApp =
-        "home";
-
-
-    state.homePage =
-        0;
-
-
-    state.history =
-        [];
-
-
-    closeRecentPanel();
-
-    clearSearchResults();
-
-
-    saveState();
-
-
-    render();
 
 }
 
 
 /* =========================================================
    SHOW PHONE
-   ========================================================= */
+========================================================= */
 
-function showPhone() {
+function showPhone(autoOpen = false) {
 
-    state.hidden =
-        false;
+    phoneVisible = true;
+
+    savePhoneVisibility();
+
+    phoneShell.classList.remove("hidden-phone");
+
+    updatePhoneToggle();
 
 
     /*
-       ALWAYS start locked after closing.
+        If this is the first automatic opening after repair,
+        keep the phone in its normal initial state.
     */
 
-    state.unlocked =
-        false;
+    if (autoOpen) {
 
+        showScreen("lock");
 
-    state.currentApp =
-        "home";
-
-
-    state.homePage =
-        0;
-
-
-    state.history =
-        [];
-
-
-    saveState();
-
-
-    render();
+    }
 
 }
 
 
 /* =========================================================
-   SHOW PHONE AFTER REPAIR
-   ========================================================= */
+   HIDE PHONE
+========================================================= */
 
-function showPhoneAfterRepair() {
+function hidePhone() {
+
+    phoneVisible = false;
+
+    savePhoneVisibility();
+
+    phoneShell.classList.add("hidden-phone");
+
+    updatePhoneToggle();
+
+}
+
+
+/* =========================================================
+   PHONE TOGGLE
+========================================================= */
+
+function updatePhoneToggle() {
+
+    if (!phoneToggle) return;
+
+    if (phoneVisible) {
+
+        toggleText.textContent = "CLOSE PHONE";
+
+    } else {
+
+        toggleText.textContent = "OPEN PHONE";
+
+    }
+
+}
+
+
+/* =========================================================
+   PHONE TOGGLE BUTTON
+========================================================= */
+
+phoneToggle.addEventListener("click", () => {
 
     /*
-       Repair has finished.
-
-       The phone becomes visible automatically,
-       but remains locked until the player
-       enters the passcode.
+        Phone cannot be manually opened before repair.
+        There is deliberately no separate "repair/open" button.
     */
 
-    localStorage.setItem(
-        PHONE_REPAIRED_KEY,
-        "true"
-    );
-
-
-    state.hidden =
-        false;
-
-
-    state.unlocked =
-        false;
-
-
-    state.currentApp =
-        "home";
-
-
-    state.homePage =
-        0;
-
-
-    state.history =
-        [];
-
-
-    saveState();
-
-
-    updateExternalVictimInfo();
-
-    render();
-
-}
-
-
-/* =========================================================
-   OUTSIDE PHONE BUTTON
-   ========================================================= */
-
-if (toggle) {
-
-    toggle.addEventListener(
-        "click",
-        () => {
-
-            if (state.hidden) {
-
-                showPhone();
-
-            } else {
-
-                closePhone();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   APP BACK BUTTON
-   ========================================================= */
-
-if (appBack) {
-
-    appBack.addEventListener(
-        "click",
-        goBack
-    );
-
-}
-
-
-/* =========================================================
-   ANDROID NAVIGATION
-   ========================================================= */
-
-if (navBack) {
-
-    navBack.addEventListener(
-        "click",
-        () => {
-
-            /*
-               Android Back does NOT lock
-               the phone.
-            */
-
-            goBack();
-
-        }
-    );
-
-}
-
-
-if (navHome) {
-
-    navHome.addEventListener(
-        "click",
-        () => {
-
-            /*
-               Android Home does NOT lock
-               the phone.
-            */
-
-            goHome();
-
-        }
-    );
-
-}
-
-
-if (navRecent) {
-
-    navRecent.addEventListener(
-        "click",
-        openRecentPanel
-    );
-
-}
-
-
-/* =========================================================
-   RECENT APPS
-   ========================================================= */
-
-function openRecentPanel() {
-
-    if (
-        !state.unlocked ||
-        !recentPanel
-    ) {
+    if (!phoneRepaired) {
 
         return;
 
     }
 
 
-    buildRecentApps();
+    if (phoneVisible) {
+
+        hidePhone();
+
+    } else {
+
+        showPhone(false);
+
+    }
+
+});
 
 
-    recentPanel.classList.remove(
-        "hidden"
+/* =========================================================
+   REPAIR COMPLETED
+   repair.html can trigger this in two ways:
+
+   1. localStorage:
+      brokenPhoneRepaired = true
+
+   2. postMessage:
+      { type: "PHONE_REPAIRED" }
+========================================================= */
+
+function completePhoneRepair() {
+
+    phoneRepaired = true;
+
+    localStorage.setItem(
+        REPAIRED_KEY,
+        "true"
     );
+
+
+    /*
+        IMPORTANT:
+
+        The phone becomes visible automatically.
+        No extra button is created.
+    */
+
+    showPhone(true);
 
 }
 
 
-function closeRecentPanel() {
+/* =========================================================
+   LISTEN FOR REPAIR PAGE
+========================================================= */
 
-    if (recentPanel) {
+window.addEventListener("message", event => {
+
+    if (!event.data) return;
+
+
+    if (event.data.type === "PHONE_REPAIRED") {
+
+        completePhoneRepair();
+
+    }
+
+});
+
+
+/* =========================================================
+   ALSO CHECK LOCAL STORAGE
+   Useful when repair.html navigates directly back
+========================================================= */
+
+function checkRepairState() {
+
+    const repairedNow =
+        localStorage.getItem(REPAIRED_KEY) === "true";
+
+
+    if (repairedNow && !phoneRepaired) {
+
+        phoneRepaired = true;
+
+        showPhone(true);
+
+    }
+
+}
+
+
+/* =========================================================
+   VICTIM FILE
+========================================================= */
+
+function createVictimFile() {
+
+    /*
+        Do not use the phone iframe for Victim File.
+
+        This is an OUTSIDE-THE-PHONE investigation control.
+    */
+
+    let existing =
+        document.getElementById("victimFileOverlay");
+
+    if (existing) {
+
+        existing.classList.remove("hidden");
+
+        return;
+
+    }
+
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.id = "victimFileOverlay";
+
+    overlay.innerHTML = `
+
+        <div class="victim-file-backdrop"></div>
+
+        <section class="victim-file-panel">
+
+            <button
+                type="button"
+                class="victim-file-close"
+                id="victimFileClose">
+                ×
+            </button>
+
+
+            <div class="victim-file-header">
+
+                <div class="victim-file-kicker">
+                    POLICE INVESTIGATION DEPARTMENT
+                </div>
+
+                <h1>
+                    VICTIM FILE
+                </h1>
+
+                <div class="victim-file-case">
+                    CASE #1996-549764
+                </div>
+
+            </div>
+
+
+            <div class="victim-file-content">
+
+                <div class="victim-profile">
+
+                    <div class="victim-photo">
+
+                        <div class="victim-photo-placeholder">
+                            NO PHOTO
+                        </div>
+
+                    </div>
+
+
+                    <div class="victim-basic">
+
+                        <h2>
+                            Evelyn Carter
+                        </h2>
+
+                        <p>
+                            HOMICIDE VICTIM
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="victim-info-grid">
+
+                    <div class="victim-field">
+
+                        <span>
+                            FULL NAME
+                        </span>
+
+                        <strong>
+                            Evelyn Carter
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field">
+
+                        <span>
+                            DATE OF BIRTH
+                        </span>
+
+                        <strong>
+                            May 21, 2002
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field">
+
+                        <span>
+                            AGE
+                        </span>
+
+                        <strong>
+                            24
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field">
+
+                        <span>
+                            SEX
+                        </span>
+
+                        <strong>
+                            Female
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field">
+
+                        <span>
+                            OCCUPATION
+                        </span>
+
+                        <strong>
+                            Unknown
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field">
+
+                        <span>
+                            ADDRESS
+                        </span>
+
+                        <strong>
+                            Unknown
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field">
+
+                        <span>
+                            CASE TYPE
+                        </span>
+
+                        <strong>
+                            Homicide
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field">
+
+                        <span>
+                            STATUS
+                        </span>
+
+                        <strong>
+                            Active Investigation
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field">
+
+                        <span>
+                            EMERGENCY CONTACT
+                        </span>
+
+                        <strong>
+                            Unknown
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field">
+
+                        <span>
+                            CAUSE
+                        </span>
+
+                        <strong>
+                            Stabbing
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field victim-wide">
+
+                        <span>
+                            LOCATION
+                        </span>
+
+                        <strong>
+                            Woodland / Forest Area
+                        </strong>
+
+                    </div>
+
+
+                    <div class="victim-field victim-wide">
+
+                        <span>
+                            DISCOVERY
+                        </span>
+
+                        <strong>
+                            Victim was found restrained to a tree
+                            in a wooded area.
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="victim-notes">
+
+                    <div class="victim-section-title">
+                        INVESTIGATION NOTES
+                    </div>
+
+                    <p>
+                        Victim was discovered deceased at the
+                        scene. The case remains under active
+                        investigation.
+                    </p>
+
+                    <p>
+                        The recovered mobile phone is being
+                        examined as a potential source of
+                        digital evidence.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+    `;
+
+
+    document.body.appendChild(overlay);
+
+
+    /*
+        CLOSE
+    */
+
+    const closeButton =
+        document.getElementById("victimFileClose");
+
+    const backdrop =
+        overlay.querySelector(
+            ".victim-file-backdrop"
+        );
+
+
+    closeButton.addEventListener(
+        "click",
+        closeVictimFile
+    );
+
+
+    backdrop.addEventListener(
+        "click",
+        closeVictimFile
+    );
+
+
+    function closeVictimFile() {
+
+        overlay.classList.add("hidden");
+
+    }
+
+}
+
+
+/* =========================================================
+   VICTIM BUTTON
+========================================================= */
+
+victimInfoButton.addEventListener(
+    "click",
+    () => {
+
+        createVictimFile();
+
+    }
+);
+
+
+/* =========================================================
+   SCREEN MANAGEMENT
+========================================================= */
+
+function showScreen(screenName) {
+
+    lockScreen.classList.add("hidden");
+    passcodeScreen.classList.add("hidden");
+    homeScreen.classList.add("hidden");
+    appScreen.classList.add("hidden");
+
+
+    if (screenName === "lock") {
+
+        lockScreen.classList.remove("hidden");
+
+    }
+
+
+    if (screenName === "passcode") {
+
+        passcodeScreen.classList.remove("hidden");
+
+    }
+
+
+    if (screenName === "home") {
+
+        homeScreen.classList.remove("hidden");
+
+    }
+
+
+    if (screenName === "app") {
+
+        appScreen.classList.remove("hidden");
+
+    }
+
+}
+
+
+/* =========================================================
+   LOCK SCREEN
+========================================================= */
+
+let unlockStartY = null;
+let unlockEndY = null;
+
+lockScreen.addEventListener(
+    "pointerdown",
+    event => {
+
+        unlockStartY = event.clientY;
+
+    }
+);
+
+
+lockScreen.addEventListener(
+    "pointerup",
+    event => {
+
+        if (unlockStartY === null) return;
+
+        unlockEndY = event.clientY;
+
+        const distance =
+            unlockStartY - unlockEndY;
+
+
+        if (distance > 70) {
+
+            showScreen("passcode");
+
+        }
+
+
+        unlockStartY = null;
+
+    }
+);
+
+
+/*
+    Also allow clicking the lock screen
+    for desktop testing.
+*/
+
+lockScreen.addEventListener(
+    "dblclick",
+    () => {
+
+        showScreen("passcode");
+
+    }
+);
+
+
+/* =========================================================
+   PASSCODE
+========================================================= */
+
+const PHONE_PASSCODE = "0521";
+
+let enteredPasscode = "";
+
+
+function updatePasscodeDots() {
+
+    const dots =
+        passcodeDots.querySelectorAll("span");
+
+
+    dots.forEach((dot, index) => {
+
+        if (index < enteredPasscode.length) {
+
+            dot.classList.add("filled");
+
+        } else {
+
+            dot.classList.remove("filled");
+
+        }
+
+    });
+
+}
+
+
+function clearPasscode() {
+
+    enteredPasscode = "";
+
+    updatePasscodeDots();
+
+    passcodeError.textContent = "";
+
+}
+
+
+function checkPasscode() {
+
+    if (
+        enteredPasscode ===
+        PHONE_PASSCODE
+    ) {
+
+        passcodeError.textContent = "";
+
+        showScreen("home");
+
+        clearPasscode();
+
+        return;
+
+    }
+
+
+    passcodeError.textContent =
+        "Incorrect passcode";
+
+    enteredPasscode = "";
+
+    updatePasscodeDots();
+
+}
+
+
+function addPasscodeDigit(digit) {
+
+    if (enteredPasscode.length >= 4) {
+
+        return;
+
+    }
+
+
+    enteredPasscode += digit;
+
+    updatePasscodeDots();
+
+
+    if (enteredPasscode.length === 4) {
+
+        setTimeout(
+            checkPasscode,
+            180
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BUILD PASSCODE PAD
+========================================================= */
+
+const passcodeNumbers = [
+    "1","2","3",
+    "4","5","6",
+    "7","8","9",
+    "⌫","0","✓"
+];
+
+
+passcodeNumbers.forEach(value => {
+
+    const button =
+        document.createElement("button");
+
+    button.type = "button";
+
+    button.textContent = value;
+
+
+    if (value === "⌫") {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                enteredPasscode =
+                    enteredPasscode.slice(0,-1);
+
+                updatePasscodeDots();
+
+            }
+        );
+
+    }
+
+    else if (value === "✓") {
+
+        button.addEventListener(
+            "click",
+            checkPasscode
+        );
+
+    }
+
+    else {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                addPasscodeDigit(value);
+
+            }
+        );
+
+    }
+
+
+    passcodePad.appendChild(button);
+
+});
+
+
+/* =========================================================
+   PASSCODE SWIPE DOWN
+========================================================= */
+
+let passStartY = null;
+
+passcodeScreen.addEventListener(
+    "pointerdown",
+    event => {
+
+        passStartY = event.clientY;
+
+    }
+);
+
+
+passcodeScreen.addEventListener(
+    "pointerup",
+    event => {
+
+        if (passStartY === null) return;
+
+        const distance =
+            event.clientY - passStartY;
+
+
+        if (distance > 70) {
+
+            clearPasscode();
+
+            showScreen("lock");
+
+        }
+
+
+        passStartY = null;
+
+    }
+);
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock() {
+
+    const now = new Date();
+
+
+    let hours =
+        now.getHours();
+
+    const minutes =
+        String(
+            now.getMinutes()
+        ).padStart(2,"0");
+
+
+    const ampm =
+        hours >= 12
+            ? "PM"
+            : "AM";
+
+
+    hours =
+        hours % 12 || 12;
+
+
+    const time =
+        `${String(hours).padStart(2,"0")}:${minutes}`;
+
+
+    const date =
+        now.toLocaleDateString(
+            "en-US",
+            {
+                weekday:"long",
+                month:"long",
+                day:"numeric"
+            }
+        );
+
+
+    lockTime.textContent = time;
+
+    lockStatusTime.textContent = time;
+
+    passcodeTime.textContent = time;
+
+    homeStatusTime.textContent = time;
+
+    homeBigTime.textContent =
+        `${String(hours).padStart(2,"0")}:${minutes}`;
+
+
+    homeDate.textContent = date;
+
+}
+
+
+updateClock();
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/* =========================================================
+   APP DATA
+========================================================= */
+
+const apps = {
+
+    calls: {
+        name:"Phone",
+        file:"phone-calls.html"
+    },
+
+    messages: {
+        name:"Messages",
+        file:"messages.html"
+    },
+
+    gallery: {
+        name:"Gallery",
+        file:"gallery.html"
+    },
+
+    notes: {
+        name:"Notes",
+        file:"notes.html"
+    },
+
+    contacts: {
+        name:"Contacts",
+        file:"contacts.html"
+    },
+
+    browser: {
+        name:"Browser",
+        file:"browser.html"
+    },
+
+    camera: {
+        name:"Camera",
+        file:"camera.html"
+    },
+
+    settings: {
+        name:"Settings",
+        file:"settings.html"
+    },
+
+    bank: {
+        name:"Bank",
+        file:"bank.html"
+    },
+
+    music: {
+        name:"Music",
+        file:"music.html"
+    },
+
+    clock: {
+        name:"Clock",
+        file:"clock.html"
+    }
+
+};
+
+
+/* =========================================================
+   RECENT APPS
+========================================================= */
+
+let recentApps = [];
+
+
+function addRecentApp(appId) {
+
+    recentApps =
+        recentApps.filter(
+            id => id !== appId
+        );
+
+
+    recentApps.unshift(appId);
+
+
+    if (recentApps.length > 6) {
+
+        recentApps =
+            recentApps.slice(0,6);
+
+    }
+
+}
+
+
+/* =========================================================
+   APP ICON
+========================================================= */
+
+function getIconHTML(appId) {
+
+    const source =
+        document.querySelector(
+            `[data-app="${appId}"] .real-icon`
+        );
+
+
+    if (!source) {
+
+        return "";
+
+    }
+
+
+    return source.outerHTML;
+
+}
+
+
+/* =========================================================
+   OPEN APP
+========================================================= */
+
+function openApp(appId) {
+
+    const app =
+        apps[appId];
+
+
+    if (!app) return;
+
+
+    addRecentApp(appId);
+
+    appHeaderName.textContent =
+        app.name;
+
+
+    appHeaderIcon.innerHTML =
+        getIconHTML(appId);
+
+
+    appFrame.src =
+        app.file;
+
+
+    showScreen("app");
+
+}
+
+
+/* =========================================================
+   ALL APP BUTTONS
+========================================================= */
+
+document
+    .querySelectorAll("[data-app]")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const appId =
+                    button.dataset.app;
+
+                openApp(appId);
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   APP BACK
+========================================================= */
+
+appBack.addEventListener(
+    "click",
+    () => {
+
+        appFrame.src = "";
+
+        showScreen("home");
+
+    }
+);
+
+
+/* =========================================================
+   ANDROID BACK
+========================================================= */
+
+navBack.addEventListener(
+    "click",
+    () => {
+
+        if (
+            !appScreen.classList.contains("hidden")
+        ) {
+
+            appFrame.src = "";
+
+            showScreen("home");
+
+            return;
+
+        }
+
+
+        if (
+            !passcodeScreen.classList.contains("hidden")
+        ) {
+
+            clearPasscode();
+
+            showScreen("lock");
+
+            return;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ANDROID HOME
+========================================================= */
+
+navHome.addEventListener(
+    "click",
+    () => {
+
+        appFrame.src = "";
+
+        recentPanel.classList.add("hidden");
+
+        showScreen("home");
+
+    }
+);
+
+
+/* =========================================================
+   RECENT APPS
+========================================================= */
+
+function renderRecentApps() {
+
+    recentList.innerHTML = "";
+
+
+    if (recentApps.length === 0) {
+
+        recentList.innerHTML = `
+            <div class="recent-card">
+                No recent apps
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    recentApps.forEach(appId => {
+
+        const app =
+            apps[appId];
+
+
+        if (!app) return;
+
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "recent-card";
+
+
+        card.innerHTML = `
+
+            <button
+                type="button"
+                class="recent-open">
+
+                ${getIconHTML(appId)}
+
+                <span>
+                    ${app.name}
+                </span>
+
+            </button>
+
+        `;
+
+
+        card
+            .querySelector(".recent-open")
+            .addEventListener(
+                "click",
+                () => {
+
+                    recentPanel.classList.add(
+                        "hidden"
+                    );
+
+                    openApp(appId);
+
+                }
+            );
+
+
+        recentList.appendChild(card);
+
+    });
+
+}
+
+
+navRecent.addEventListener(
+    "click",
+    () => {
+
+        renderRecentApps();
+
+        recentPanel.classList.remove(
+            "hidden"
+        );
+
+    }
+);
+
+
+closeRecent.addEventListener(
+    "click",
+    () => {
 
         recentPanel.classList.add(
             "hidden"
         );
 
     }
-
-}
-
-
-function buildRecentApps() {
-
-    if (!recentList) {
-
-        return;
-
-    }
+);
 
 
-    recentList.innerHTML =
-        "";
+/* =========================================================
+   HOME PAGE SWIPING
+========================================================= */
+
+let currentPage = 0;
+
+let homeStartX = null;
+let homeStartY = null;
 
 
-    const apps = [
-        ...state.history
-    ];
+function goToPage(page) {
 
-
-    if (
-        state.currentApp !== "home"
-    ) {
-
-        apps.unshift(
-            state.currentApp
-        );
-
-    }
-
-
-    const uniqueApps = [];
-
-
-    apps.forEach(
-        app => {
-
-            if (
-                app &&
-                app !== "home" &&
-                appFiles[app] &&
-                !uniqueApps.includes(app)
-            ) {
-
-                uniqueApps.push(
-                    app
-                );
-
-            }
-
-        }
-    );
-
-
-    if (
-        !uniqueApps.length
-    ) {
-
-        const empty =
-            document.createElement(
-                "div"
-            );
-
-
-        empty.className =
-            "recent-card";
-
-
-        empty.textContent =
-            "No recent apps";
-
-
-        recentList.appendChild(
-            empty
+    currentPage =
+        Math.max(
+            0,
+            Math.min(
+                2,
+                page
+            )
         );
 
 
-        return;
-
-    }
-
-
-    uniqueApps.forEach(
-        app => {
-
-            const info =
-                appInfo[app];
+    homePages.style.transform =
+        `translateX(-${currentPage * 33.333333}%)`;
 
 
-            if (!info) {
+    pageDots.forEach(
+        (dot,index) => {
 
-                return;
-
-            }
-
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "recent-card";
-
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.className =
-                "recent-open";
-
-
-            button.innerHTML =
-                `
-                <span class="real-icon ${info.className}">
-                    ${info.icon}
-                </span>
-
-                <span>
-                    ${info.name}
-                </span>
-                `;
-
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    state.currentApp =
-                        app;
-
-
-                    closeRecentPanel();
-
-
-                    render();
-
-                }
-            );
-
-
-            card.appendChild(
-                button
-            );
-
-
-            recentList.appendChild(
-                card
+            dot.classList.toggle(
+                "active",
+                index === currentPage
             );
 
         }
@@ -1985,45 +1379,88 @@ function buildRecentApps() {
 }
 
 
-if (closeRecent) {
+homeScreen.addEventListener(
+    "pointerdown",
+    event => {
 
-    closeRecent.addEventListener(
-        "click",
-        closeRecentPanel
-    );
+        homeStartX = event.clientX;
 
-}
+        homeStartY = event.clientY;
+
+    }
+);
+
+
+homeScreen.addEventListener(
+    "pointerup",
+    event => {
+
+        if (
+            homeStartX === null ||
+            homeStartY === null
+        ) {
+
+            return;
+
+        }
+
+
+        const dx =
+            event.clientX - homeStartX;
+
+        const dy =
+            event.clientY - homeStartY;
+
+
+        if (
+            Math.abs(dx) > 60 &&
+            Math.abs(dx) > Math.abs(dy)
+        ) {
+
+            if (dx < 0) {
+
+                goToPage(
+                    currentPage + 1
+                );
+
+            } else {
+
+                goToPage(
+                    currentPage - 1
+                );
+
+            }
+
+        }
+
+
+        homeStartX = null;
+        homeStartY = null;
+
+    }
+);
 
 
 /* =========================================================
    SEARCH
-   ========================================================= */
+========================================================= */
 
-function performSearch() {
-
-    if (
-        !appSearch ||
-        !searchResults
-    ) {
-
-        return;
-
-    }
-
+function performSearch(value) {
 
     const query =
-        appSearch.value
+        value
             .trim()
             .toLowerCase();
 
 
-    searchResults.innerHTML =
-        "";
+    searchResults.innerHTML = "";
 
 
     if (!query) {
 
-        clearSearchResults();
+        searchResults.classList.add(
+            "hidden"
+        );
 
         return;
 
@@ -2031,105 +1468,78 @@ function performSearch() {
 
 
     const matches =
-        Object.keys(appInfo)
+        Object.entries(apps)
             .filter(
-                app => {
-
-                    const name =
-                        appInfo[app]
-                            .name
-                            .toLowerCase();
-
-
-                    return (
-                        name.includes(query) ||
-                        app.includes(query)
-                    );
-
-                }
+                ([id,app]) =>
+                    app.name
+                        .toLowerCase()
+                        .includes(query)
             );
 
 
-    if (
-        !matches.length
-    ) {
+    if (matches.length === 0) {
 
-        const empty =
-            document.createElement(
-                "div"
-            );
-
-
-        empty.className =
-            "search-result";
-
-
-        empty.textContent =
-            "No apps found";
-
-
-        searchResults.appendChild(
-            empty
-        );
-
-
-        searchResults.classList.remove(
-            "hidden"
-        );
-
-
-        return;
+        searchResults.innerHTML = `
+            <div class="search-result">
+                No apps found
+            </div>
+        `;
 
     }
 
+    else {
 
-    matches.forEach(
-        app => {
+        matches.forEach(
+            ([id,app]) => {
 
-            const info =
-                appInfo[app];
+                const button =
+                    document.createElement(
+                        "button"
+                    );
 
+                button.type =
+                    "button";
 
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.className =
-                "search-result";
+                button.className =
+                    "search-result";
 
 
-            button.innerHTML =
-                `
-                <span class="real-icon ${info.className}">
-                    ${info.icon}
-                </span>
+                button.innerHTML = `
 
-                <span>
-                    ${info.name}
-                </span>
+                    ${getIconHTML(id)}
+
+                    <span>
+                        ${app.name}
+                    </span>
+
                 `;
 
 
-            button.addEventListener(
-                "click",
-                () => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    openApp(
-                        app
-                    );
+                        searchInput.value =
+                            "";
 
-                }
-            );
+                        searchResults.classList.add(
+                            "hidden"
+                        );
+
+                        openApp(id);
+
+                    }
+                );
 
 
-            searchResults.appendChild(
-                button
-            );
+                searchResults.appendChild(
+                    button
+                );
 
-        }
-    );
+            }
+        );
+
+    }
 
 
     searchResults.classList.remove(
@@ -2139,399 +1549,123 @@ function performSearch() {
 }
 
 
-function clearSearchResults() {
+searchInput.addEventListener(
+    "input",
+    () => {
 
-    if (!searchResults) {
-
-        return;
+        performSearch(
+            searchInput.value
+        );
 
     }
+);
 
 
-    searchResults.innerHTML =
-        "";
+clearSearch.addEventListener(
+    "click",
+    () => {
 
+        searchInput.value =
+            "";
 
-    searchResults.classList.add(
-        "hidden"
-    );
-
-}
-
-
-if (appSearch) {
-
-    appSearch.addEventListener(
-        "input",
-        performSearch
-    );
-
-
-    appSearch.addEventListener(
-        "focus",
-        () => {
-
-            if (
-                appSearch.value.trim()
-            ) {
-
-                performSearch();
-
-            }
-
-        }
-    );
-
-
-    appSearch.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                const first =
-                    searchResults?.querySelector(
-                        ".search-result"
-                    );
-
-
-                if (first) {
-
-                    first.click();
-
-                }
-
-            }
-
-        }
-    );
-
-}
-
-
-if (clearSearch) {
-
-    clearSearch.addEventListener(
-        "click",
-        () => {
-
-            if (appSearch) {
-
-                appSearch.value =
-                    "";
-
-
-                appSearch.focus();
-
-            }
-
-
-            clearSearchResults();
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   APP BUTTONS
-   ========================================================= */
-
-/*
-   ANY button with:
-
-       data-app="messages"
-
-   automatically opens:
-
-       messages.html
-
-   Victim Info is intentionally NOT included here.
-*/
-
-document
-    .querySelectorAll(
-        "[data-app]"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                event => {
-
-                    event.preventDefault();
-
-                    event.stopPropagation();
-
-
-                    const app =
-                        button.dataset.app;
-
-
-                    openApp(
-                        app
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   CLOCK
-   ========================================================= */
-
-function updateClock() {
-
-    const now =
-        new Date();
-
-
-    const time =
-        now.toLocaleTimeString(
-            [],
-            {
-                hour: "2-digit",
-
-                minute: "2-digit",
-
-                hour12: false
-            }
+        searchResults.classList.add(
+            "hidden"
         );
 
-
-    const weekday =
-        now.toLocaleDateString(
-            [],
-            {
-                weekday: "long"
-            }
-        );
-
-
-    const month =
-        now.toLocaleDateString(
-            [],
-            {
-                month: "long"
-            }
-        );
-
-
-    const day =
-        now.toLocaleDateString(
-            [],
-            {
-                day: "numeric"
-            }
-        );
-
-
-    const elements = {
-
-        lockTime:
-            time,
-
-        lockStatusTime:
-            time,
-
-        lockDate:
-            `${weekday}, ${month} ${day}`,
-
-        passcodeTime:
-            time,
-
-        homeStatusTime:
-            time,
-
-        homeBigTime:
-            time,
-
-        homeDate:
-            `${weekday}, ${month} ${day}`
-
-    };
-
-
-    Object.entries(
-        elements
-    )
-    .forEach(
-        ([id, value]) => {
-
-            const element =
-                document.getElementById(
-                    id
-                );
-
-
-            if (element) {
-
-                element.textContent =
-                    value;
-
-            }
-
-        }
-    );
-
-}
-
-
-updateClock();
-
-
-setInterval(
-    updateClock,
-    1000
+    }
 );
 
 
 /* =========================================================
-   MESSAGES FROM OTHER PAGES
-   ========================================================= */
+   CLICK OUTSIDE SEARCH
+========================================================= */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (
+            !event.target.closest(
+                ".google-search"
+            ) &&
+            !event.target.closest(
+                ".search-results"
+            )
+        ) {
+
+            searchResults.classList.add(
+                "hidden"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   IFRAME COMMUNICATION
+========================================================= */
 
 window.addEventListener(
     "message",
     event => {
 
-        const data =
-            event.data || {};
+        if (!event.data) return;
 
 
-        /* -------------------------------------------------
-           RETURN HOME
-        ------------------------------------------------- */
+        /*
+            PHONE BACK
 
-        if (
-            data.type ===
-            "PHONE_HOME"
-        ) {
-
-            goHome();
-
-            return;
-
-        }
-
-
-        /* -------------------------------------------------
-           BACK
-        ------------------------------------------------- */
+            Used by phone apps such as
+            messages.html / notes.html.
+        */
 
         if (
-            data.type ===
+            event.data.type ===
             "PHONE_BACK"
         ) {
 
-            goBack();
+            appFrame.src = "";
 
-            return;
+            showScreen("home");
 
         }
 
 
-        /* -------------------------------------------------
-           OPEN APP
-        ------------------------------------------------- */
+        /*
+            APP OPEN REQUEST
+
+            Allows an app inside the phone
+            to request another phone app.
+        */
 
         if (
-            data.type ===
-                "PHONE_OPEN_APP" &&
-            data.app
+            event.data.type ===
+            "OPEN_PHONE_APP"
         ) {
 
             openApp(
-                data.app
+                event.data.app
             );
 
-            return;
-
         }
 
 
-        /* -------------------------------------------------
-           PHONE CLOSE
-        ------------------------------------------------- */
+        /*
+            REPAIR COMPLETE
+
+            This is deliberately here too,
+            so repair.html can notify phone.html
+            if it is still open in another context.
+        */
 
         if (
-            data.type ===
-                "PHONE_CLOSE"
+            event.data.type ===
+            "PHONE_REPAIRED"
         ) {
 
-            closePhone();
-
-            return;
-
-        }
-
-
-        /* -------------------------------------------------
-           OLD PHONE_HIDE
-           
-           Apps are NOT allowed to lock the phone.
-        ------------------------------------------------- */
-
-        if (
-            data.type ===
-                "PHONE_HIDE"
-        ) {
-
-            console.warn(
-                "Ignored PHONE_HIDE from app."
-            );
-
-
-            return;
-
-        }
-
-
-        /* -------------------------------------------------
-           REPAIR COMPLETE
-           
-           Repair.html should send:
-
-           {
-               type: "PHONE_REPAIRED"
-           }
-
-           The phone becomes visible automatically.
-        ------------------------------------------------- */
-
-        if (
-            data.type ===
-                "PHONE_REPAIRED"
-        ) {
-
-            showPhoneAfterRepair();
-
-            return;
-
-        }
-
-
-        /* -------------------------------------------------
-           REPAIR CAN EXPLICITLY LOCK PHONE
-           
-           Kept for compatibility with older code.
-        ------------------------------------------------- */
-
-        if (
-            data.type ===
-                "PHONE_LOCK_AFTER_REPAIR"
-        ) {
-
-            closePhone();
-
-            return;
+            completePhoneRepair();
 
         }
 
@@ -2540,13 +1674,76 @@ window.addEventListener(
 
 
 /* =========================================================
+   INITIAL PHONE STATE
+========================================================= */
+
+function initializePhone() {
+
+    checkRepairState();
+
+
+    if (phoneRepaired) {
+
+        /*
+            Repaired phone is automatically
+            available.
+
+            If the player has never manually
+            hidden it, it opens automatically.
+        */
+
+        const savedVisibility =
+            localStorage.getItem(
+                PHONE_VISIBLE_KEY
+            );
+
+
+        if (
+            savedVisibility === null ||
+            savedVisibility === "true"
+        ) {
+
+            phoneVisible = true;
+
+            phoneShell.classList.remove(
+                "hidden-phone"
+            );
+
+        } else {
+
+            phoneVisible = false;
+
+            phoneShell.classList.add(
+                "hidden-phone"
+            );
+
+        }
+
+    }
+
+    else {
+
+        /*
+            BEFORE REPAIR:
+            phone is not available.
+        */
+
+        phoneVisible = false;
+
+        phoneShell.classList.add(
+            "hidden-phone"
+        );
+
+    }
+
+
+    updatePhoneToggle();
+
+}
+
+
+/* =========================================================
    START
-   ========================================================= */
+========================================================= */
 
-setupPasscode();
-
-updateClock();
-
-updateExternalVictimInfo();
-
-render();
+initializePhone();
