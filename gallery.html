@@ -1,1 +1,219 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Gallery</title><link rel="stylesheet" href="app.css"><link rel="stylesheet" href="gallery.css"></head><body><div class="app"><header class="app-header"><button class="back" id="backBtn">‹</button><div class="header-title">Photos</div><button class="header-action">Select</button></header><main class="content" id="galleryContent"></main></div><script src="gallery.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Gallery</title>
+
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="gallery.css">
+
+</head>
+
+<body>
+
+<div class="gallery-app">
+
+    <!-- =====================================
+         MAIN GALLERY
+    ====================================== -->
+
+    <div id="galleryHome">
+
+        <header class="gallery-header">
+
+            <button class="gallery-icon" id="searchButton">
+                ⌕
+            </button>
+
+            <div class="gallery-tabs">
+
+                <button id="photosTab">
+                    Photos
+                </button>
+
+                <button
+                    id="albumsTab"
+                    class="active"
+                >
+                    Albums
+                </button>
+
+            </div>
+
+            <button class="gallery-icon">
+                ⋮
+            </button>
+
+        </header>
+
+
+        <main id="galleryContent"></main>
+
+    </div>
+
+
+    <!-- =====================================
+         ALBUM VIEW
+    ====================================== -->
+
+    <div
+        id="albumView"
+        class="album-view hidden"
+    >
+
+        <header class="album-header">
+
+            <button id="albumBack">
+                ‹
+            </button>
+
+            <div id="albumTitle">
+                All Photos
+            </div>
+
+            <button>
+                ⋮
+            </button>
+
+        </header>
+
+
+        <div
+            id="albumGrid"
+            class="album-grid"
+        ></div>
+
+    </div>
+
+
+    <!-- =====================================
+         PHOTO VIEWER
+    ====================================== -->
+
+    <div
+        id="photoViewer"
+        class="photo-viewer hidden"
+    >
+
+        <header class="viewer-header">
+
+            <button id="viewerBack">
+                ‹
+            </button>
+
+            <div id="photoCounter">
+                1 / 1
+            </div>
+
+            <button>
+                ⋮
+            </button>
+
+        </header>
+
+
+        <div
+            id="photoStage"
+            class="photo-stage"
+        >
+
+            <img
+                id="fullPhoto"
+                draggable="false"
+                alt=""
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         LOCK SCREEN
+    ====================================== -->
+
+    <div
+        id="galleryLock"
+        class="gallery-lock hidden"
+    >
+
+        <button
+            id="lockBack"
+            class="lock-back"
+        >
+            ‹
+        </button>
+
+
+        <div class="lock-content">
+
+            <div class="lock-symbol">
+                🔒
+            </div>
+
+            <h1>
+                Private Gallery
+            </h1>
+
+            <p>
+                Enter PIN to access protected photos
+            </p>
+
+
+            <div
+                id="pinDisplay"
+                class="pin-display"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+
+            <div
+                id="pinError"
+                class="pin-error"
+            ></div>
+
+
+            <div class="pin-pad">
+
+                <button data-pin="1">1</button>
+                <button data-pin="2">2</button>
+                <button data-pin="3">3</button>
+
+                <button data-pin="4">4</button>
+                <button data-pin="5">5</button>
+                <button data-pin="6">6</button>
+
+                <button data-pin="7">7</button>
+                <button data-pin="8">8</button>
+                <button data-pin="9">9</button>
+
+                <button class="empty"></button>
+                <button data-pin="0">0</button>
+                <button id="pinDelete">⌫</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="gallery.js"></script>
+
+</body>
+
+</html>
