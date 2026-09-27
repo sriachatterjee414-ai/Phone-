@@ -1,21 +1,6 @@
 /* =========================================================
    BROKEN PHONE
    PHONE.JS
-   =========================================================
-
-   IMPORTANT STATE
-
-   brokenPhoneRepaired
-   -------------------
-   false / missing = phone has not been repaired
-   true            = phone permanently available
-
-   brokenPhonePhoneVisible
-   -----------------------
-   true  = phone currently visible
-   false = phone currently hidden
-
-   The repaired state NEVER gets removed here.
 ========================================================= */
 
 
@@ -23,80 +8,139 @@
    DOM
 ========================================================= */
 
-const phoneShell = document.getElementById("phoneShell");
+const phoneShell =
+    document.getElementById("phoneShell");
 
-const victimInfoButton = document.getElementById("victimInfoButton");
+const phoneToggle =
+    document.getElementById("phoneToggle");
 
-const phoneToggle = document.getElementById("phoneToggle");
-const toggleText = document.getElementById("toggleText");
+const toggleText =
+    document.getElementById("toggleText");
 
-const lockScreen = document.getElementById("lockScreen");
-const passcodeScreen = document.getElementById("passcodeScreen");
-const homeScreen = document.getElementById("homeScreen");
-const appScreen = document.getElementById("appScreen");
+const victimInfoButton =
+    document.getElementById("victimInfoButton");
 
-const lockTime = document.getElementById("lockTime");
-const lockStatusTime = document.getElementById("lockStatusTime");
 
-const passcodeTime = document.getElementById("passcodeTime");
-const homeStatusTime = document.getElementById("homeStatusTime");
-const homeBigTime = document.getElementById("homeBigTime");
-const homeDate = document.getElementById("homeDate");
+const lockScreen =
+    document.getElementById("lockScreen");
 
-const passcodePad = document.getElementById("passcodePad");
-const passcodeDots = document.getElementById("passcodeDots");
-const passcodeError = document.getElementById("passcodeError");
+const passcodeScreen =
+    document.getElementById("passcodeScreen");
 
-const appFrame = document.getElementById("appFrame");
-const appBack = document.getElementById("appBack");
-const appHeaderName = document.getElementById("appHeaderName");
-const appHeaderIcon = document.getElementById("appHeaderIcon");
+const homeScreen =
+    document.getElementById("homeScreen");
 
-const homePages = document.getElementById("homePages");
-const pageDots = document.querySelectorAll("#pageDots span");
+const appScreen =
+    document.getElementById("appScreen");
 
-const searchInput = document.getElementById("appSearch");
-const clearSearch = document.getElementById("clearSearch");
-const searchResults = document.getElementById("searchResults");
 
-const navBack = document.getElementById("navBack");
-const navHome = document.getElementById("navHome");
-const navRecent = document.getElementById("navRecent");
+const lockTime =
+    document.getElementById("lockTime");
 
-const recentPanel = document.getElementById("recentPanel");
-const recentList = document.getElementById("recentList");
-const closeRecent = document.getElementById("closeRecent");
+const lockStatusTime =
+    document.getElementById("lockStatusTime");
+
+const passcodeTime =
+    document.getElementById("passcodeTime");
+
+const homeStatusTime =
+    document.getElementById("homeStatusTime");
+
+const homeBigTime =
+    document.getElementById("homeBigTime");
+
+const homeDate =
+    document.getElementById("homeDate");
+
+
+const passcodePad =
+    document.getElementById("passcodePad");
+
+const passcodeDots =
+    document.getElementById("passcodeDots");
+
+const passcodeError =
+    document.getElementById("passcodeError");
+
+
+const appFrame =
+    document.getElementById("appFrame");
+
+const appBack =
+    document.getElementById("appBack");
+
+const appHeaderName =
+    document.getElementById("appHeaderName");
+
+const appHeaderIcon =
+    document.getElementById("appHeaderIcon");
+
+
+const homePages =
+    document.getElementById("homePages");
+
+const pageDots =
+    document.querySelectorAll("#pageDots span");
+
+
+const searchInput =
+    document.getElementById("appSearch");
+
+const clearSearch =
+    document.getElementById("clearSearch");
+
+const searchResults =
+    document.getElementById("searchResults");
+
+
+const navBack =
+    document.getElementById("navBack");
+
+const navHome =
+    document.getElementById("navHome");
+
+const navRecent =
+    document.getElementById("navRecent");
+
+
+const recentPanel =
+    document.getElementById("recentPanel");
+
+const recentList =
+    document.getElementById("recentList");
+
+const closeRecent =
+    document.getElementById("closeRecent");
 
 
 /* =========================================================
-   STORAGE KEYS
+   STORAGE
 ========================================================= */
 
-const REPAIRED_KEY = "brokenPhoneRepaired";
-const PHONE_VISIBLE_KEY = "brokenPhonePhoneVisible";
+const REPAIRED_KEY =
+    "brokenPhoneRepaired";
+
+const PHONE_VISIBLE_KEY =
+    "brokenPhonePhoneVisible";
 
 
 /* =========================================================
-   BASIC STATE
+   STATE
 ========================================================= */
 
 let phoneRepaired =
     localStorage.getItem(REPAIRED_KEY) === "true";
 
+
 let phoneVisible =
-    localStorage.getItem(PHONE_VISIBLE_KEY) !== "false";
+    localStorage.getItem(PHONE_VISIBLE_KEY) === "true";
 
 
 /*
-    Before repair:
-    --------------------------------
-    phone is hidden.
+   IMPORTANT
 
-    After repair:
-    --------------------------------
-    phone automatically appears.
-
-    We do NOT create another button.
+   If the phone has NOT been repaired,
+   it must always be hidden.
 */
 
 if (!phoneRepaired) {
@@ -107,20 +151,45 @@ if (!phoneRepaired) {
         PHONE_VISIBLE_KEY,
         "false"
     );
-
 }
 
 
 /* =========================================================
-   PHONE STATE
+   SAVE VISIBILITY
 ========================================================= */
 
 function savePhoneVisibility() {
 
     localStorage.setItem(
         PHONE_VISIBLE_KEY,
-        phoneVisible ? "true" : "false"
+        phoneVisible
+            ? "true"
+            : "false"
     );
+
+}
+
+
+/* =========================================================
+   UPDATE BUTTON TEXT
+========================================================= */
+
+function updatePhoneToggle() {
+
+    if (!phoneToggle) {
+        return;
+    }
+
+    if (phoneVisible) {
+
+        toggleText.textContent =
+            "CLOSE PHONE";
+
+    } else {
+
+        toggleText.textContent =
+            "OPEN PHONE";
+    }
 
 }
 
@@ -131,18 +200,32 @@ function savePhoneVisibility() {
 
 function showPhone(autoOpen = false) {
 
+    /*
+       Never allow the phone to appear
+       before repair.
+    */
+
+    if (!phoneRepaired) {
+        return;
+    }
+
+
     phoneVisible = true;
 
     savePhoneVisibility();
 
-    phoneShell.classList.remove("hidden-phone");
+
+    phoneShell.classList.remove(
+        "hidden-phone"
+    );
+
 
     updatePhoneToggle();
 
 
     /*
-        If this is the first automatic opening after repair,
-        keep the phone in its normal initial state.
+       When repair has JUST finished,
+       start at lock screen.
     */
 
     if (autoOpen) {
@@ -160,11 +243,20 @@ function showPhone(autoOpen = false) {
 
 function hidePhone() {
 
+    /*
+       Hiding the phone does NOT
+       remove the repaired state.
+    */
+
     phoneVisible = false;
 
     savePhoneVisibility();
 
-    phoneShell.classList.add("hidden-phone");
+
+    phoneShell.classList.add(
+        "hidden-phone"
+    );
+
 
     updatePhoneToggle();
 
@@ -172,69 +264,48 @@ function hidePhone() {
 
 
 /* =========================================================
-   PHONE TOGGLE
+   OPEN / CLOSE BUTTON
 ========================================================= */
 
-function updatePhoneToggle() {
+phoneToggle.addEventListener(
+    "click",
+    () => {
 
-    if (!phoneToggle) return;
+        /*
+           Before repair the button does
+           absolutely nothing.
+        */
 
-    if (phoneVisible) {
+        if (!phoneRepaired) {
 
-        toggleText.textContent = "CLOSE PHONE";
+            return;
 
-    } else {
+        }
 
-        toggleText.textContent = "OPEN PHONE";
+
+        if (phoneVisible) {
+
+            hidePhone();
+
+        } else {
+
+            showPhone(false);
+
+        }
 
     }
-
-}
+);
 
 
 /* =========================================================
-   PHONE TOGGLE BUTTON
-========================================================= */
-
-phoneToggle.addEventListener("click", () => {
-
-    /*
-        Phone cannot be manually opened before repair.
-        There is deliberately no separate "repair/open" button.
-    */
-
-    if (!phoneRepaired) {
-
-        return;
-
-    }
-
-
-    if (phoneVisible) {
-
-        hidePhone();
-
-    } else {
-
-        showPhone(false);
-
-    }
-
-});
-
-
-/* =========================================================
-   REPAIR COMPLETED
-   repair.html can trigger this in two ways:
-
-   1. localStorage:
-      brokenPhoneRepaired = true
-
-   2. postMessage:
-      { type: "PHONE_REPAIRED" }
+   REPAIR COMPLETE
 ========================================================= */
 
 function completePhoneRepair() {
+
+    /*
+       Permanently remember repair.
+    */
 
     phoneRepaired = true;
 
@@ -245,10 +316,7 @@ function completePhoneRepair() {
 
 
     /*
-        IMPORTANT:
-
-        The phone becomes visible automatically.
-        No extra button is created.
+       Automatically show phone.
     */
 
     showPhone(true);
@@ -257,39 +325,24 @@ function completePhoneRepair() {
 
 
 /* =========================================================
-   LISTEN FOR REPAIR PAGE
-========================================================= */
-
-window.addEventListener("message", event => {
-
-    if (!event.data) return;
-
-
-    if (event.data.type === "PHONE_REPAIRED") {
-
-        completePhoneRepair();
-
-    }
-
-});
-
-
-/* =========================================================
-   ALSO CHECK LOCAL STORAGE
-   Useful when repair.html navigates directly back
+   CHECK REPAIR STATE
 ========================================================= */
 
 function checkRepairState() {
 
-    const repairedNow =
-        localStorage.getItem(REPAIRED_KEY) === "true";
+    const repaired =
+        localStorage.getItem(
+            REPAIRED_KEY
+        ) === "true";
 
 
-    if (repairedNow && !phoneRepaired) {
+    if (repaired) {
 
         phoneRepaired = true;
 
-        showPhone(true);
+    } else {
+
+        phoneRepaired = false;
 
     }
 
@@ -297,326 +350,26 @@ function checkRepairState() {
 
 
 /* =========================================================
-   VICTIM FILE
+   REPAIR MESSAGE
 ========================================================= */
 
-function createVictimFile() {
+window.addEventListener(
+    "message",
+    event => {
 
-    /*
-        Do not use the phone iframe for Victim File.
+        if (!event.data) {
+            return;
+        }
 
-        This is an OUTSIDE-THE-PHONE investigation control.
-    */
 
-    let existing =
-        document.getElementById("victimFileOverlay");
+        if (
+            event.data.type ===
+            "PHONE_REPAIRED"
+        ) {
 
-    if (existing) {
+            completePhoneRepair();
 
-        existing.classList.remove("hidden");
-
-        return;
-
-    }
-
-
-    const overlay =
-        document.createElement("div");
-
-    overlay.id = "victimFileOverlay";
-
-    overlay.innerHTML = `
-
-        <div class="victim-file-backdrop"></div>
-
-        <section class="victim-file-panel">
-
-            <button
-                type="button"
-                class="victim-file-close"
-                id="victimFileClose">
-                ×
-            </button>
-
-
-            <div class="victim-file-header">
-
-                <div class="victim-file-kicker">
-                    POLICE INVESTIGATION DEPARTMENT
-                </div>
-
-                <h1>
-                    VICTIM FILE
-                </h1>
-
-                <div class="victim-file-case">
-                    CASE #1996-549764
-                </div>
-
-            </div>
-
-
-            <div class="victim-file-content">
-
-                <div class="victim-profile">
-
-                    <div class="victim-photo">
-
-                        <div class="victim-photo-placeholder">
-                            NO PHOTO
-                        </div>
-
-                    </div>
-
-
-                    <div class="victim-basic">
-
-                        <h2>
-                            Evelyn Carter
-                        </h2>
-
-                        <p>
-                            HOMICIDE VICTIM
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="victim-info-grid">
-
-                    <div class="victim-field">
-
-                        <span>
-                            FULL NAME
-                        </span>
-
-                        <strong>
-                            Evelyn Carter
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field">
-
-                        <span>
-                            DATE OF BIRTH
-                        </span>
-
-                        <strong>
-                            May 21, 2002
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field">
-
-                        <span>
-                            AGE
-                        </span>
-
-                        <strong>
-                            24
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field">
-
-                        <span>
-                            SEX
-                        </span>
-
-                        <strong>
-                            Female
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field">
-
-                        <span>
-                            OCCUPATION
-                        </span>
-
-                        <strong>
-                            Unknown
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field">
-
-                        <span>
-                            ADDRESS
-                        </span>
-
-                        <strong>
-                            Unknown
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field">
-
-                        <span>
-                            CASE TYPE
-                        </span>
-
-                        <strong>
-                            Homicide
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field">
-
-                        <span>
-                            STATUS
-                        </span>
-
-                        <strong>
-                            Active Investigation
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field">
-
-                        <span>
-                            EMERGENCY CONTACT
-                        </span>
-
-                        <strong>
-                            Unknown
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field">
-
-                        <span>
-                            CAUSE
-                        </span>
-
-                        <strong>
-                            Stabbing
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field victim-wide">
-
-                        <span>
-                            LOCATION
-                        </span>
-
-                        <strong>
-                            Woodland / Forest Area
-                        </strong>
-
-                    </div>
-
-
-                    <div class="victim-field victim-wide">
-
-                        <span>
-                            DISCOVERY
-                        </span>
-
-                        <strong>
-                            Victim was found restrained to a tree
-                            in a wooded area.
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="victim-notes">
-
-                    <div class="victim-section-title">
-                        INVESTIGATION NOTES
-                    </div>
-
-                    <p>
-                        Victim was discovered deceased at the
-                        scene. The case remains under active
-                        investigation.
-                    </p>
-
-                    <p>
-                        The recovered mobile phone is being
-                        examined as a potential source of
-                        digital evidence.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-    `;
-
-
-    document.body.appendChild(overlay);
-
-
-    /*
-        CLOSE
-    */
-
-    const closeButton =
-        document.getElementById("victimFileClose");
-
-    const backdrop =
-        overlay.querySelector(
-            ".victim-file-backdrop"
-        );
-
-
-    closeButton.addEventListener(
-        "click",
-        closeVictimFile
-    );
-
-
-    backdrop.addEventListener(
-        "click",
-        closeVictimFile
-    );
-
-
-    function closeVictimFile() {
-
-        overlay.classList.add("hidden");
-
-    }
-
-}
-
-
-/* =========================================================
-   VICTIM BUTTON
-========================================================= */
-
-victimInfoButton.addEventListener(
-    "click",
-    () => {
-
-        createVictimFile();
+        }
 
     }
 );
@@ -628,36 +381,55 @@ victimInfoButton.addEventListener(
 
 function showScreen(screenName) {
 
-    lockScreen.classList.add("hidden");
-    passcodeScreen.classList.add("hidden");
-    homeScreen.classList.add("hidden");
-    appScreen.classList.add("hidden");
+    lockScreen.classList.add(
+        "hidden"
+    );
+
+    passcodeScreen.classList.add(
+        "hidden"
+    );
+
+    homeScreen.classList.add(
+        "hidden"
+    );
+
+    appScreen.classList.add(
+        "hidden"
+    );
 
 
     if (screenName === "lock") {
 
-        lockScreen.classList.remove("hidden");
+        lockScreen.classList.remove(
+            "hidden"
+        );
 
     }
 
 
     if (screenName === "passcode") {
 
-        passcodeScreen.classList.remove("hidden");
+        passcodeScreen.classList.remove(
+            "hidden"
+        );
 
     }
 
 
     if (screenName === "home") {
 
-        homeScreen.classList.remove("hidden");
+        homeScreen.classList.remove(
+            "hidden"
+        );
 
     }
 
 
     if (screenName === "app") {
 
-        appScreen.classList.remove("hidden");
+        appScreen.classList.remove(
+            "hidden"
+        );
 
     }
 
@@ -665,17 +437,18 @@ function showScreen(screenName) {
 
 
 /* =========================================================
-   LOCK SCREEN
+   LOCK SCREEN SWIPE
 ========================================================= */
 
 let unlockStartY = null;
-let unlockEndY = null;
+
 
 lockScreen.addEventListener(
     "pointerdown",
     event => {
 
-        unlockStartY = event.clientY;
+        unlockStartY =
+            event.clientY;
 
     }
 );
@@ -685,17 +458,23 @@ lockScreen.addEventListener(
     "pointerup",
     event => {
 
-        if (unlockStartY === null) return;
+        if (
+            unlockStartY === null
+        ) {
+            return;
+        }
 
-        unlockEndY = event.clientY;
 
         const distance =
-            unlockStartY - unlockEndY;
+            unlockStartY -
+            event.clientY;
 
 
         if (distance > 70) {
 
-            showScreen("passcode");
+            showScreen(
+                "passcode"
+            );
 
         }
 
@@ -707,15 +486,17 @@ lockScreen.addEventListener(
 
 
 /*
-    Also allow clicking the lock screen
-    for desktop testing.
+   Desktop testing:
+   double click lock screen.
 */
 
 lockScreen.addEventListener(
     "dblclick",
     () => {
 
-        showScreen("passcode");
+        showScreen(
+            "passcode"
+        );
 
     }
 );
@@ -725,7 +506,8 @@ lockScreen.addEventListener(
    PASSCODE
 ========================================================= */
 
-const PHONE_PASSCODE = "0521";
+const PHONE_PASSCODE =
+    "0521";
 
 let enteredPasscode = "";
 
@@ -733,22 +515,22 @@ let enteredPasscode = "";
 function updatePasscodeDots() {
 
     const dots =
-        passcodeDots.querySelectorAll("span");
+        passcodeDots.querySelectorAll(
+            "span"
+        );
 
 
-    dots.forEach((dot, index) => {
+    dots.forEach(
+        (dot, index) => {
 
-        if (index < enteredPasscode.length) {
-
-            dot.classList.add("filled");
-
-        } else {
-
-            dot.classList.remove("filled");
+            dot.classList.toggle(
+                "filled",
+                index <
+                enteredPasscode.length
+            );
 
         }
-
-    });
+    );
 
 }
 
@@ -773,9 +555,9 @@ function checkPasscode() {
 
         passcodeError.textContent = "";
 
-        showScreen("home");
-
         clearPasscode();
+
+        showScreen("home");
 
         return;
 
@@ -794,10 +576,10 @@ function checkPasscode() {
 
 function addPasscodeDigit(digit) {
 
-    if (enteredPasscode.length >= 4) {
-
+    if (
+        enteredPasscode.length >= 4
+    ) {
         return;
-
     }
 
 
@@ -806,7 +588,9 @@ function addPasscodeDigit(digit) {
     updatePasscodeDots();
 
 
-    if (enteredPasscode.length === 4) {
+    if (
+        enteredPasscode.length === 4
+    ) {
 
         setTimeout(
             checkPasscode,
@@ -819,69 +603,88 @@ function addPasscodeDigit(digit) {
 
 
 /* =========================================================
-   BUILD PASSCODE PAD
+   PASSCODE PAD
 ========================================================= */
 
 const passcodeNumbers = [
-    "1","2","3",
-    "4","5","6",
-    "7","8","9",
-    "⌫","0","✓"
+
+    "1", "2", "3",
+
+    "4", "5", "6",
+
+    "7", "8", "9",
+
+    "⌫", "0", "✓"
+
 ];
 
 
-passcodeNumbers.forEach(value => {
+passcodeNumbers.forEach(
+    value => {
 
-    const button =
-        document.createElement("button");
-
-    button.type = "button";
-
-    button.textContent = value;
+        const button =
+            document.createElement(
+                "button"
+            );
 
 
-    if (value === "⌫") {
+        button.type =
+            "button";
 
-        button.addEventListener(
-            "click",
-            () => {
+        button.textContent =
+            value;
 
-                enteredPasscode =
-                    enteredPasscode.slice(0,-1);
 
-                updatePasscodeDots();
+        if (value === "⌫") {
 
-            }
+            button.addEventListener(
+                "click",
+                () => {
+
+                    enteredPasscode =
+                        enteredPasscode.slice(
+                            0,
+                            -1
+                        );
+
+                    updatePasscodeDots();
+
+                }
+            );
+
+        }
+
+        else if (value === "✓") {
+
+            button.addEventListener(
+                "click",
+                checkPasscode
+            );
+
+        }
+
+        else {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    addPasscodeDigit(
+                        value
+                    );
+
+                }
+            );
+
+        }
+
+
+        passcodePad.appendChild(
+            button
         );
 
     }
-
-    else if (value === "✓") {
-
-        button.addEventListener(
-            "click",
-            checkPasscode
-        );
-
-    }
-
-    else {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                addPasscodeDigit(value);
-
-            }
-        );
-
-    }
-
-
-    passcodePad.appendChild(button);
-
-});
+);
 
 
 /* =========================================================
@@ -890,11 +693,13 @@ passcodeNumbers.forEach(value => {
 
 let passStartY = null;
 
+
 passcodeScreen.addEventListener(
     "pointerdown",
     event => {
 
-        passStartY = event.clientY;
+        passStartY =
+            event.clientY;
 
     }
 );
@@ -904,10 +709,16 @@ passcodeScreen.addEventListener(
     "pointerup",
     event => {
 
-        if (passStartY === null) return;
+        if (
+            passStartY === null
+        ) {
+            return;
+        }
+
 
         const distance =
-            event.clientY - passStartY;
+            event.clientY -
+            passStartY;
 
 
         if (distance > 70) {
@@ -931,22 +742,18 @@ passcodeScreen.addEventListener(
 
 function updateClock() {
 
-    const now = new Date();
+    const now =
+        new Date();
 
 
     let hours =
         now.getHours();
 
+
     const minutes =
         String(
             now.getMinutes()
-        ).padStart(2,"0");
-
-
-    const ampm =
-        hours >= 12
-            ? "PM"
-            : "AM";
+        ).padStart(2, "0");
 
 
     hours =
@@ -954,33 +761,37 @@ function updateClock() {
 
 
     const time =
-        `${String(hours).padStart(2,"0")}:${minutes}`;
+        `${String(hours).padStart(2, "0")}:${minutes}`;
 
 
     const date =
         now.toLocaleDateString(
             "en-US",
             {
-                weekday:"long",
-                month:"long",
-                day:"numeric"
+                weekday: "long",
+                month: "long",
+                day: "numeric"
             }
         );
 
 
-    lockTime.textContent = time;
+    lockTime.textContent =
+        time;
 
-    lockStatusTime.textContent = time;
+    lockStatusTime.textContent =
+        time;
 
-    passcodeTime.textContent = time;
+    passcodeTime.textContent =
+        time;
 
-    homeStatusTime.textContent = time;
+    homeStatusTime.textContent =
+        time;
 
     homeBigTime.textContent =
-        `${String(hours).padStart(2,"0")}:${minutes}`;
+        time;
 
-
-    homeDate.textContent = date;
+    homeDate.textContent =
+        date;
 
 }
 
@@ -994,64 +805,64 @@ setInterval(
 
 
 /* =========================================================
-   APP DATA
+   APPS
 ========================================================= */
 
 const apps = {
 
     calls: {
-        name:"Phone",
-        file:"phone-calls.html"
+        name: "Phone",
+        file: "phone-calls.html"
     },
 
     messages: {
-        name:"Messages",
-        file:"messages.html"
+        name: "Messages",
+        file: "messages.html"
     },
 
     gallery: {
-        name:"Gallery",
-        file:"gallery.html"
+        name: "Gallery",
+        file: "gallery.html"
     },
 
     notes: {
-        name:"Notes",
-        file:"notes.html"
+        name: "Notes",
+        file: "notes.html"
     },
 
     contacts: {
-        name:"Contacts",
-        file:"contacts.html"
+        name: "Contacts",
+        file: "contacts.html"
     },
 
     browser: {
-        name:"Browser",
-        file:"browser.html"
+        name: "Browser",
+        file: "browser.html"
     },
 
     camera: {
-        name:"Camera",
-        file:"camera.html"
+        name: "Camera",
+        file: "camera.html"
     },
 
     settings: {
-        name:"Settings",
-        file:"settings.html"
+        name: "Settings",
+        file: "settings.html"
     },
 
     bank: {
-        name:"Bank",
-        file:"bank.html"
+        name: "Bank",
+        file: "bank.html"
     },
 
     music: {
-        name:"Music",
-        file:"music.html"
+        name: "Music",
+        file: "music.html"
     },
 
     clock: {
-        name:"Clock",
-        file:"clock.html"
+        name: "Clock",
+        file: "clock.html"
     }
 
 };
@@ -1072,13 +883,20 @@ function addRecentApp(appId) {
         );
 
 
-    recentApps.unshift(appId);
+    recentApps.unshift(
+        appId
+    );
 
 
-    if (recentApps.length > 6) {
+    if (
+        recentApps.length > 6
+    ) {
 
         recentApps =
-            recentApps.slice(0,6);
+            recentApps.slice(
+                0,
+                6
+            );
 
     }
 
@@ -1086,7 +904,7 @@ function addRecentApp(appId) {
 
 
 /* =========================================================
-   APP ICON
+   ICON
 ========================================================= */
 
 function getIconHTML(appId) {
@@ -1119,10 +937,15 @@ function openApp(appId) {
         apps[appId];
 
 
-    if (!app) return;
+    if (!app) {
+        return;
+    }
 
 
-    addRecentApp(appId);
+    addRecentApp(
+        appId
+    );
+
 
     appHeaderName.textContent =
         app.name;
@@ -1136,47 +959,57 @@ function openApp(appId) {
         app.file;
 
 
-    showScreen("app");
+    showScreen(
+        "app"
+    );
 
 }
 
 
 /* =========================================================
-   ALL APP BUTTONS
+   APP BUTTONS
 ========================================================= */
 
 document
-    .querySelectorAll("[data-app]")
-    .forEach(button => {
+    .querySelectorAll(
+        "[data-app]"
+    )
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                const appId =
-                    button.dataset.app;
+                    openApp(
+                        button.dataset.app
+                    );
 
-                openApp(appId);
+                }
+            );
 
-            }
-        );
-
-    });
+        }
+    );
 
 
 /* =========================================================
    APP BACK
 ========================================================= */
 
+function returnHome() {
+
+    appFrame.src = "";
+
+    showScreen(
+        "home"
+    );
+
+}
+
+
 appBack.addEventListener(
     "click",
-    () => {
-
-        appFrame.src = "";
-
-        showScreen("home");
-
-    }
+    returnHome
 );
 
 
@@ -1189,12 +1022,12 @@ navBack.addEventListener(
     () => {
 
         if (
-            !appScreen.classList.contains("hidden")
+            !appScreen.classList.contains(
+                "hidden"
+            )
         ) {
 
-            appFrame.src = "";
-
-            showScreen("home");
+            returnHome();
 
             return;
 
@@ -1202,14 +1035,16 @@ navBack.addEventListener(
 
 
         if (
-            !passcodeScreen.classList.contains("hidden")
+            !passcodeScreen.classList.contains(
+                "hidden"
+            )
         ) {
 
             clearPasscode();
 
-            showScreen("lock");
-
-            return;
+            showScreen(
+                "lock"
+            );
 
         }
 
@@ -1227,9 +1062,13 @@ navHome.addEventListener(
 
         appFrame.src = "";
 
-        recentPanel.classList.add("hidden");
+        recentPanel.classList.add(
+            "hidden"
+        );
 
-        showScreen("home");
+        showScreen(
+            "home"
+        );
 
     }
 );
@@ -1244,7 +1083,9 @@ function renderRecentApps() {
     recentList.innerHTML = "";
 
 
-    if (recentApps.length === 0) {
+    if (
+        recentApps.length === 0
+    ) {
 
         recentList.innerHTML = `
             <div class="recent-card">
@@ -1257,58 +1098,69 @@ function renderRecentApps() {
     }
 
 
-    recentApps.forEach(appId => {
+    recentApps.forEach(
+        appId => {
 
-        const app =
-            apps[appId];
-
-
-        if (!app) return;
+            const app =
+                apps[appId];
 
 
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "recent-card";
+            if (!app) {
+                return;
+            }
 
 
-        card.innerHTML = `
-
-            <button
-                type="button"
-                class="recent-open">
-
-                ${getIconHTML(appId)}
-
-                <span>
-                    ${app.name}
-                </span>
-
-            </button>
-
-        `;
+            const card =
+                document.createElement(
+                    "div"
+                );
 
 
-        card
-            .querySelector(".recent-open")
-            .addEventListener(
-                "click",
-                () => {
+            card.className =
+                "recent-card";
 
-                    recentPanel.classList.add(
-                        "hidden"
-                    );
 
-                    openApp(appId);
+            card.innerHTML = `
+                <button
+                    type="button"
+                    class="recent-open">
 
-                }
+                    ${getIconHTML(appId)}
+
+                    <span>
+                        ${app.name}
+                    </span>
+
+                </button>
+            `;
+
+
+            card
+                .querySelector(
+                    ".recent-open"
+                )
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        recentPanel.classList.add(
+                            "hidden"
+                        );
+
+                        openApp(
+                            appId
+                        );
+
+                    }
+                );
+
+
+            recentList.appendChild(
+                card
             );
 
-
-        recentList.appendChild(card);
-
-    });
+        }
+    );
 
 }
 
@@ -1340,7 +1192,7 @@ closeRecent.addEventListener(
 
 
 /* =========================================================
-   HOME PAGE SWIPING
+   HOME PAGE SWIPE
 ========================================================= */
 
 let currentPage = 0;
@@ -1366,7 +1218,7 @@ function goToPage(page) {
 
 
     pageDots.forEach(
-        (dot,index) => {
+        (dot, index) => {
 
             dot.classList.toggle(
                 "active",
@@ -1383,9 +1235,11 @@ homeScreen.addEventListener(
     "pointerdown",
     event => {
 
-        homeStartX = event.clientX;
+        homeStartX =
+            event.clientX;
 
-        homeStartY = event.clientY;
+        homeStartY =
+            event.clientY;
 
     }
 );
@@ -1399,17 +1253,18 @@ homeScreen.addEventListener(
             homeStartX === null ||
             homeStartY === null
         ) {
-
             return;
-
         }
 
 
         const dx =
-            event.clientX - homeStartX;
+            event.clientX -
+            homeStartX;
+
 
         const dy =
-            event.clientY - homeStartY;
+            event.clientY -
+            homeStartY;
 
 
         if (
@@ -1470,14 +1325,16 @@ function performSearch(value) {
     const matches =
         Object.entries(apps)
             .filter(
-                ([id,app]) =>
+                ([id, app]) =>
                     app.name
                         .toLowerCase()
                         .includes(query)
             );
 
 
-    if (matches.length === 0) {
+    if (
+        matches.length === 0
+    ) {
 
         searchResults.innerHTML = `
             <div class="search-result">
@@ -1490,12 +1347,13 @@ function performSearch(value) {
     else {
 
         matches.forEach(
-            ([id,app]) => {
+            ([id, app]) => {
 
                 const button =
                     document.createElement(
                         "button"
                     );
+
 
                 button.type =
                     "button";
@@ -1505,13 +1363,11 @@ function performSearch(value) {
 
 
                 button.innerHTML = `
-
                     ${getIconHTML(id)}
 
                     <span>
                         ${app.name}
                     </span>
-
                 `;
 
 
@@ -1526,7 +1382,9 @@ function performSearch(value) {
                             "hidden"
                         );
 
-                        openApp(id);
+                        openApp(
+                            id
+                        );
 
                     }
                 );
@@ -1577,7 +1435,7 @@ clearSearch.addEventListener(
 
 
 /* =========================================================
-   CLICK OUTSIDE SEARCH
+   SEARCH OUTSIDE CLICK
 ========================================================= */
 
 document.addEventListener(
@@ -1611,14 +1469,13 @@ window.addEventListener(
     "message",
     event => {
 
-        if (!event.data) return;
+        if (!event.data) {
+            return;
+        }
 
 
         /*
-            PHONE BACK
-
-            Used by phone apps such as
-            messages.html / notes.html.
+           Phone app asks to go back.
         */
 
         if (
@@ -1626,18 +1483,14 @@ window.addEventListener(
             "PHONE_BACK"
         ) {
 
-            appFrame.src = "";
-
-            showScreen("home");
+            returnHome();
 
         }
 
 
         /*
-            APP OPEN REQUEST
-
-            Allows an app inside the phone
-            to request another phone app.
+           Phone app asks to open another
+           phone app.
         */
 
         if (
@@ -1653,11 +1506,8 @@ window.addEventListener(
 
 
         /*
-            REPAIR COMPLETE
-
-            This is deliberately here too,
-            so repair.html can notify phone.html
-            if it is still open in another context.
+           Repair page tells this page
+           that the phone has been repaired.
         */
 
         if (
@@ -1674,7 +1524,239 @@ window.addEventListener(
 
 
 /* =========================================================
-   INITIAL PHONE STATE
+   VICTIM FILE
+========================================================= */
+
+function createVictimFile() {
+
+    let existing =
+        document.getElementById(
+            "victimFileOverlay"
+        );
+
+
+    if (existing) {
+
+        existing.classList.remove(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    const overlay =
+        document.createElement(
+            "div"
+        );
+
+
+    overlay.id =
+        "victimFileOverlay";
+
+
+    overlay.innerHTML = `
+
+        <div class="victim-file-backdrop"></div>
+
+        <section class="victim-file-panel">
+
+            <button
+                type="button"
+                class="victim-file-close"
+                id="victimFileClose">
+                ×
+            </button>
+
+            <div class="victim-file-header">
+
+                <div class="victim-file-kicker">
+                    POLICE INVESTIGATION DEPARTMENT
+                </div>
+
+                <h1>
+                    VICTIM FILE
+                </h1>
+
+                <div class="victim-file-case">
+                    CASE #1996-549764
+                </div>
+
+            </div>
+
+
+            <div class="victim-file-content">
+
+                <div class="victim-profile">
+
+                    <div class="victim-photo">
+
+                        <div class="victim-photo-placeholder">
+                            NO PHOTO
+                        </div>
+
+                    </div>
+
+                    <div class="victim-basic">
+
+                        <h2>
+                            Evelyn Carter
+                        </h2>
+
+                        <p>
+                            HOMICIDE VICTIM
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="victim-info-grid">
+
+                    <div class="victim-field">
+                        <span>FULL NAME</span>
+                        <strong>Evelyn Carter</strong>
+                    </div>
+
+                    <div class="victim-field">
+                        <span>DATE OF BIRTH</span>
+                        <strong>May 21, 2002</strong>
+                    </div>
+
+                    <div class="victim-field">
+                        <span>AGE</span>
+                        <strong>24</strong>
+                    </div>
+
+                    <div class="victim-field">
+                        <span>SEX</span>
+                        <strong>Female</strong>
+                    </div>
+
+                    <div class="victim-field">
+                        <span>OCCUPATION</span>
+                        <strong>Unknown</strong>
+                    </div>
+
+                    <div class="victim-field">
+                        <span>ADDRESS</span>
+                        <strong>Unknown</strong>
+                    </div>
+
+                    <div class="victim-field">
+                        <span>CASE TYPE</span>
+                        <strong>Homicide</strong>
+                    </div>
+
+                    <div class="victim-field">
+                        <span>STATUS</span>
+                        <strong>Active Investigation</strong>
+                    </div>
+
+                    <div class="victim-field">
+                        <span>EMERGENCY CONTACT</span>
+                        <strong>Unknown</strong>
+                    </div>
+
+                    <div class="victim-field">
+                        <span>CAUSE</span>
+                        <strong>Stabbing</strong>
+                    </div>
+
+                    <div class="victim-field victim-wide">
+                        <span>LOCATION</span>
+                        <strong>
+                            Woodland / Forest Area
+                        </strong>
+                    </div>
+
+                    <div class="victim-field victim-wide">
+                        <span>DISCOVERY</span>
+                        <strong>
+                            Victim was found restrained
+                            to a tree in a wooded area.
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="victim-notes">
+
+                    <div class="victim-section-title">
+                        INVESTIGATION NOTES
+                    </div>
+
+                    <p>
+                        Victim was discovered deceased
+                        at the scene. The case remains
+                        under active investigation.
+                    </p>
+
+                    <p>
+                        The recovered mobile phone is
+                        being examined as a potential
+                        source of digital evidence.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+    `;
+
+
+    document.body.appendChild(
+        overlay
+    );
+
+
+    const closeButton =
+        document.getElementById(
+            "victimFileClose"
+        );
+
+
+    const backdrop =
+        overlay.querySelector(
+            ".victim-file-backdrop"
+        );
+
+
+    function closeVictimFile() {
+
+        overlay.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    closeButton.addEventListener(
+        "click",
+        closeVictimFile
+    );
+
+
+    backdrop.addEventListener(
+        "click",
+        closeVictimFile
+    );
+
+}
+
+
+victimInfoButton.addEventListener(
+    "click",
+    createVictimFile
+);
+
+
+/* =========================================================
+   INITIALIZE
 ========================================================= */
 
 function initializePhone() {
@@ -1682,14 +1764,34 @@ function initializePhone() {
     checkRepairState();
 
 
-    if (phoneRepaired) {
+    if (!phoneRepaired) {
 
         /*
-            Repaired phone is automatically
-            available.
+           Not repaired.
+           Phone MUST remain hidden.
+        */
 
-            If the player has never manually
-            hidden it, it opens automatically.
+        phoneVisible = false;
+
+        phoneShell.classList.add(
+            "hidden-phone"
+        );
+
+
+        localStorage.setItem(
+            PHONE_VISIBLE_KEY,
+            "false"
+        );
+
+    }
+
+    else {
+
+        /*
+           Repaired.
+
+           If no visibility state exists,
+           default to OPEN.
         */
 
         const savedVisibility =
@@ -1709,7 +1811,9 @@ function initializePhone() {
                 "hidden-phone"
             );
 
-        } else {
+        }
+
+        else {
 
             phoneVisible = false;
 
@@ -1721,23 +1825,19 @@ function initializePhone() {
 
     }
 
-    else {
-
-        /*
-            BEFORE REPAIR:
-            phone is not available.
-        */
-
-        phoneVisible = false;
-
-        phoneShell.classList.add(
-            "hidden-phone"
-        );
-
-    }
-
 
     updatePhoneToggle();
+
+
+    /*
+       Start repaired phone on lock screen.
+    */
+
+    if (phoneRepaired) {
+
+        showScreen("lock");
+
+    }
 
 }
 
