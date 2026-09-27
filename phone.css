@@ -2,84 +2,142 @@
     box-sizing: border-box;
 }
 
+
 html,
 body {
+
     margin: 0;
+
     width: 100%;
     height: 100%;
+
     overflow: hidden;
 
     font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "Segoe UI",
+        Arial,
+        Helvetica,
         sans-serif;
 }
 
 
-/* =========================================================
-   OUTSIDE PHONE
-========================================================= */
-
 body {
-    background:
-        radial-gradient(
-            circle at 50% 45%,
-            #ffffff 0%,
-            #eef1f3 45%,
-            #d8dce0 100%
-        );
+
+    background: #151515;
+
+    color: white;
+}
+
+
+button,
+input {
+
+    font: inherit;
+
+    -webkit-tap-highlight-color:
+        transparent;
 }
 
 
 button {
-    font: inherit;
-    -webkit-tap-highlight-color: transparent;
+
+    cursor: pointer;
 }
 
 
+/* =========================================================
+   OUTSIDE GAME AREA
+========================================================= */
+
 .investigation-stage {
+
     width: 100%;
     height: 100vh;
 
     position: relative;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
+
+    background:
+        radial-gradient(
+            circle,
+            #292929 0%,
+            #111 70%
+        );
 }
 
 
 /* =========================================================
-   PHONE SIDE TAB
+   GAME STYLE BUTTONS
+   These intentionally match the visual language of
+   your Broken Phone menu buttons rather than Android.
 ========================================================= */
 
-.phone-tab {
+.game-controls {
+
     position: fixed;
 
-    right: 0;
-    top: 50%;
+    right: 22px;
+    bottom: 25px;
 
-    transform: translateY(-50%);
+    display: flex;
 
-    width: 58px;
-    height: 112px;
+    flex-direction: column;
 
-    border: 0;
+    gap: 12px;
 
-    border-radius: 22px 0 0 22px;
+    z-index: 500;
+}
 
-    background: #111;
-    color: white;
 
-    font-weight: 800;
+.game-button {
 
-    letter-spacing: 2px;
+    min-width: 165px;
 
-    z-index: 100;
+    padding: 15px 22px;
 
-    cursor: pointer;
+    color: #eee;
+
+    background:
+        rgba(5,5,5,.88);
+
+    border:
+        1px solid rgba(255,255,255,.45);
+
+    outline:
+        1px solid rgba(255,255,255,.16);
+
+    outline-offset: -6px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 13px;
+
+    letter-spacing: 3px;
+
+    text-align: center;
+
+    transition:
+        background .15s,
+        transform .15s;
+}
+
+
+.game-button:hover {
+
+    background:
+        rgba(45,45,45,.95);
+}
+
+
+.game-button:active {
+
+    transform: scale(.97);
 }
 
 
@@ -94,10 +152,8 @@ button {
     width: 390px;
     height: 795px;
 
-    max-width: 88vw;
+    max-width: 86vw;
     max-height: 91vh;
-
-    aspect-ratio: 390 / 795;
 
     transition:
         opacity .25s ease,
@@ -109,8 +165,7 @@ button {
 
     opacity: 0;
 
-    transform:
-        scale(.9);
+    transform: scale(.88);
 
     pointer-events: none;
 }
@@ -123,19 +178,18 @@ button {
 
     padding: 6px;
 
-    border-radius: 55px;
+    border-radius: 48px;
 
     background:
         linear-gradient(
             145deg,
-            #202022,
-            #050505 50%,
-            #363638
+            #333,
+            #050505 45%,
+            #242424
         );
 
     box-shadow:
-        0 35px 65px rgba(0,0,0,.30),
-        0 8px 15px rgba(0,0,0,.25);
+        0 30px 60px rgba(0,0,0,.55);
 }
 
 
@@ -148,82 +202,16 @@ button {
 
     overflow: hidden;
 
-    border-radius: 49px;
+    border-radius: 42px;
 
-    border: 3px solid #111;
-
-    background: #f3b5c7;
-}
-
-
-/* =========================================================
-   SIDE BUTTONS
-========================================================= */
-
-.side-button {
-
-    position: absolute;
+    border: 3px solid #090909;
 
     background: #111;
-
-    z-index: -1;
-
-    border-radius: 5px;
-}
-
-
-.side-left {
-    left: -5px;
-    width: 6px;
-}
-
-
-.side-left.top {
-    top: 20%;
-    height: 45px;
-}
-
-
-.side-left.middle {
-    top: 29%;
-    height: 65px;
-}
-
-
-.side-right {
-    right: -5px;
-    top: 25%;
-    width: 6px;
-    height: 100px;
 }
 
 
 /* =========================================================
-   DYNAMIC ISLAND
-========================================================= */
-
-.dynamic-island {
-
-    position: absolute;
-
-    z-index: 50;
-
-    left: 50%;
-    top: 12px;
-
-    transform: translateX(-50%);
-
-    width: 105px;
-    height: 30px;
-
-    border-radius: 20px;
-
-    background: #050505;
-}
-
-
-/* =========================================================
-   GENERAL SCREEN
+   SCREEN
 ========================================================= */
 
 .screen {
@@ -237,86 +225,98 @@ button {
 
 
 .hidden {
+
     display: none !important;
 }
 
 
 /* =========================================================
-   STATUS BAR
+   ANDROID STATUS BAR
 ========================================================= */
 
-.status-bar {
+.android-status {
 
     position: absolute;
 
-    left: 25px;
-    right: 25px;
-    top: 27px;
+    top: 0;
+    left: 0;
+    right: 0;
 
-    height: 25px;
+    height: 42px;
+
+    padding:
+        12px 17px 0;
 
     display: flex;
-
-    align-items: center;
 
     justify-content: space-between;
 
-    z-index: 40;
+    align-items: center;
+
+    z-index: 100;
 
     color: white;
 
-    font-size: 13px;
+    font-size: 12px;
 
     font-weight: 700;
+
+    text-shadow:
+        0 1px 2px rgba(0,0,0,.45);
 }
 
 
-.status-icons {
+.status-right {
 
     display: flex;
 
-    gap: 8px;
-
     align-items: center;
+
+    gap: 8px;
 }
 
 
 /* =========================================================
    LOCK SCREEN
+   IMPORTANT: YOUR PNG IS THE WALLPAPER.
 ========================================================= */
 
 .lock-screen {
 
+    background-image:
+        url("phone-lock.png");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
     color: white;
-
-    background:
-
-        radial-gradient(
-            circle at 48% 53%,
-            rgba(255, 30, 135, .75),
-            transparent 28%
-        ),
-
-        radial-gradient(
-            circle at 20% 80%,
-            rgba(255, 255, 255, .35),
-            transparent 35%
-        ),
-
-        linear-gradient(
-            160deg,
-            #d9aeb9,
-            #f2bdc8 48%,
-            #efc8cc
-        );
-
-    transition:
-        transform .45s ease,
-        opacity .45s ease;
 }
 
 
-/* DATE */
+/* Dark overlay */
+
+.lock-screen::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.15),
+            transparent 35%,
+            rgba(0,0,0,.18)
+        );
+
+    pointer-events: none;
+}
+
 
 .lock-date {
 
@@ -324,14 +324,16 @@ button {
 
     top: 105px;
 
-    left: 20px;
-    right: 20px;
+    left: 15px;
+    right: 15px;
 
     text-align: center;
 
-    font-size: 18px;
+    font-size: 17px;
 
-    font-weight: 700;
+    font-weight: 500;
+
+    z-index: 2;
 }
 
 
@@ -339,7 +341,7 @@ button {
 
     position: absolute;
 
-    top: 140px;
+    top: 132px;
 
     left: 0;
     right: 0;
@@ -351,121 +353,81 @@ button {
     font-weight: 300;
 
     letter-spacing: -3px;
+
+    z-index: 2;
 }
 
 
-/* WEATHER */
-
-.lock-info {
+.lock-weather {
 
     position: absolute;
 
-    left: 32px;
-    right: 32px;
+    top: 220px;
 
-    top: 245px;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 12px;
-}
-
-
-.lock-info-card {
-
-    height: 78px;
-
-    padding: 12px;
-
-    border-radius: 20px;
-
-    background:
-        rgba(255,255,255,.18);
-
-    border:
-        1px solid rgba(255,255,255,.25);
-
-    backdrop-filter: blur(10px);
+    left: 0;
+    right: 0;
 
     display: flex;
 
-    align-items: center;
+    justify-content: center;
 
-    gap: 8px;
+    gap: 7px;
+
+    font-size: 16px;
+
+    z-index: 2;
 }
 
 
-.lock-info-card strong,
-.lock-info-card small {
-
-    display: block;
-}
-
-
-.lock-info-card strong {
-
-    font-size: 20px;
-
-    font-weight: 600;
-}
-
-
-.lock-info-card small {
-
-    margin-top: 3px;
-
-    font-size: 10px;
-
-    opacity: .85;
-}
-
-
-.info-icon {
+.weather-symbol {
 
     font-size: 25px;
 }
 
 
-/* BOTTOM */
-
 .lock-bottom {
 
     position: absolute;
 
-    left: 30px;
-    right: 30px;
+    left: 28px;
+    right: 28px;
 
     bottom: 35px;
 
     display: flex;
 
+    justify-content: space-between;
+
     align-items: center;
 
-    justify-content: space-between;
+    z-index: 2;
 }
 
 
 .lock-shortcut {
 
-    width: 47px;
-    height: 47px;
-
-    border: 0;
+    width: 45px;
+    height: 45px;
 
     border-radius: 50%;
 
-    color: white;
+    display: grid;
+    place-items: center;
 
     background:
-        rgba(50,50,50,.45);
+        rgba(0,0,0,.35);
 
-    font-size: 19px;
+    backdrop-filter:
+        blur(7px);
+
+    border:
+        1px solid rgba(255,255,255,.3);
+
+    color: white;
 }
 
 
-.swipe-hint {
+.unlock-hint {
 
     display: flex;
 
@@ -473,25 +435,28 @@ button {
 
     align-items: center;
 
-    gap: 5px;
+    gap: 4px;
 
-    font-size: 11px;
+    font-size: 10px;
 
-    opacity: .9;
+    text-shadow:
+        0 1px 3px black;
 }
 
 
-.swipe-arrow {
+.unlock-arrow {
 
     font-size: 22px;
 
-    animation: swipeArrow 1.5s infinite;
+    animation:
+        unlockArrow 1.4s infinite;
 }
 
 
-@keyframes swipeArrow {
+@keyframes unlockArrow {
 
-    0%,100% {
+    0%,
+    100% {
         transform: translateY(3px);
     }
 
@@ -507,24 +472,29 @@ button {
 
 .passcode-screen {
 
+    background-image:
+        url("phone-lock.png");
+
+    background-size: cover;
+
+    background-position: center;
+
     color: white;
+}
+
+
+.passcode-screen::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
 
     background:
+        rgba(0,0,0,.35);
 
-        radial-gradient(
-            circle at 50% 42%,
-            rgba(255, 30, 135, .85),
-            transparent 30%
-        ),
-
-        linear-gradient(
-            160deg,
-            #d9aeb9,
-            #f2bdc8 48%,
-            #efc8cc
-        );
-
-    touch-action: pan-y;
+    pointer-events: none;
 }
 
 
@@ -532,16 +502,18 @@ button {
 
     position: absolute;
 
-    top: 105px;
+    top: 100px;
 
-    left: 20px;
-    right: 20px;
+    left: 0;
+    right: 0;
 
     text-align: center;
+
+    z-index: 2;
 }
 
 
-.passcode-lock-icon {
+.passcode-lock {
 
     font-size: 25px;
 
@@ -554,14 +526,12 @@ button {
     margin: 0;
 
     font-size: 20px;
-
-    font-weight: 600;
 }
 
 
 .passcode-title p {
 
-    margin: 7px 0 0;
+    margin-top: 7px;
 
     font-size: 11px;
 
@@ -569,13 +539,11 @@ button {
 }
 
 
-/* DOTS */
-
 .passcode-dots {
 
     position: absolute;
 
-    top: 215px;
+    top: 210px;
 
     left: 0;
     right: 0;
@@ -585,6 +553,8 @@ button {
     justify-content: center;
 
     gap: 12px;
+
+    z-index: 2;
 }
 
 
@@ -595,9 +565,7 @@ button {
 
     border-radius: 50%;
 
-    border: 1.5px solid white;
-
-    transition: .15s;
+    border: 1px solid white;
 }
 
 
@@ -607,30 +575,30 @@ button {
 }
 
 
-/* KEYPAD */
-
 .passcode-pad {
 
     position: absolute;
 
-    left: 38px;
-    right: 38px;
+    top: 255px;
 
-    top: 260px;
+    left: 35px;
+    right: 35px;
 
     display: grid;
 
     grid-template-columns:
-        repeat(3, 1fr);
+        repeat(3,1fr);
 
-    gap: 13px 16px;
+    gap: 13px 15px;
+
+    z-index: 2;
 }
 
 
 .passcode-pad button {
 
-    width: 75px;
-    height: 75px;
+    width: 72px;
+    height: 72px;
 
     justify-self: center;
 
@@ -639,19 +607,14 @@ button {
     border-radius: 50%;
 
     background:
-        rgba(55,48,54,.68);
+        rgba(30,30,30,.7);
 
     color: white;
 
-    font-size: 28px;
+    font-size: 26px;
 
-    font-weight: 300;
-
-    cursor: pointer;
-
-    transition:
-        transform .1s,
-        background .1s;
+    border:
+        1px solid rgba(255,255,255,.15);
 }
 
 
@@ -660,15 +623,14 @@ button {
     display: block;
 
     font-size: 8px;
+
+    margin-top: 2px;
 }
 
 
 .passcode-pad button:active {
 
-    transform: scale(.91);
-
-    background:
-        rgba(30,30,30,.8);
+    transform: scale(.92);
 }
 
 
@@ -676,48 +638,45 @@ button {
 
     position: absolute;
 
+    top: 690px;
+
     left: 0;
     right: 0;
 
-    top: 690px;
-
     text-align: center;
 
-    height: 20px;
-
     font-size: 12px;
+
+    color: white;
+
+    z-index: 3;
 }
 
 
 /* =========================================================
    HOME SCREEN
+   IMPORTANT: YOUR PNG IS THE WALLPAPER.
 ========================================================= */
 
 .home-screen {
 
+    background-image:
+        url("phone-home.png");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
     color: white;
-
-    background:
-
-        radial-gradient(
-            circle at 48% 48%,
-            rgba(255, 20, 130, .65),
-            transparent 32%
-        ),
-
-        linear-gradient(
-            160deg,
-            #c9aeb7,
-            #efb8c5 50%,
-            #ecc5ca
-        );
 
     touch-action: pan-y;
 }
 
 
 /* =========================================================
-   HOME PAGE SLIDER
+   HOME PAGES
 ========================================================= */
 
 .home-pages {
@@ -731,9 +690,8 @@ button {
     width: 300%;
 
     transition:
-        transform .35s cubic-bezier(.2,.8,.2,1);
-
-    will-change: transform;
+        transform .35s
+        cubic-bezier(.2,.8,.2,1);
 }
 
 
@@ -750,120 +708,129 @@ button {
 
 
 /* =========================================================
-   DATE WIDGET
+   CLOCK WIDGET
 ========================================================= */
 
-.date-widget {
+.android-clock-widget {
 
     position: absolute;
 
-    top: 85px;
+    top: 67px;
 
-    left: 35px;
-    right: 35px;
+    left: 25px;
 
-    height: 145px;
-
-    padding: 20px;
-
-    border-radius: 27px;
-
-    border:
-        2px solid rgba(255,255,255,.8);
-
-    background:
-        rgba(255,255,255,.08);
-
-    backdrop-filter: blur(9px);
+    text-shadow:
+        0 2px 5px rgba(0,0,0,.45);
 }
 
 
-.date-script {
+.android-clock-widget div:first-child {
 
-    font-family:
-        "Brush Script MT",
-        cursive;
-
-    font-size: 29px;
-
-    line-height: 1;
-}
-
-
-.date-number {
-
-    margin-top: 4px;
-
-    display: flex;
-
-    align-items: baseline;
-
-    gap: 8px;
-}
-
-
-.date-number span {
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    letter-spacing: 1px;
-}
-
-
-.date-number strong {
-
-    font-size: 20px;
-}
-
-
-.date-time {
-
-    position: absolute;
-
-    right: 18px;
-
-    top: 49px;
-
-    font-size: 42px;
+    font-size: 48px;
 
     font-weight: 300;
+
+    letter-spacing: -2px;
+}
+
+
+.android-clock-widget div:last-child {
+
+    margin-top: 3px;
+
+    font-size: 13px;
 }
 
 
 /* =========================================================
-   PAGE TITLES
+   GOOGLE SEARCH BAR
 ========================================================= */
 
-.page-title {
+.google-search {
 
     position: absolute;
 
-    top: 255px;
+    top: 160px;
 
-    left: 0;
-    right: 0;
+    left: 20px;
+    right: 20px;
 
-    text-align: center;
+    height: 49px;
 
-    font-size: 14px;
+    display: flex;
 
-    opacity: .85;
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        0 13px;
+
+    border-radius: 28px;
+
+    background:
+        rgba(255,255,255,.94);
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.18);
+
+    color: #555;
+
+    z-index: 40;
 }
 
 
-.page-heading {
-
-    position: absolute;
-
-    top: 90px;
-
-    left: 28px;
+.google-g {
 
     font-size: 24px;
 
-    font-weight: 600;
+    font-weight: 700;
+
+    color: #4285f4;
+}
+
+
+.google-search input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    border: 0;
+
+    outline: 0;
+
+    background: transparent;
+
+    color: #333;
+
+    font-size: 14px;
+}
+
+
+.google-search input::placeholder {
+
+    color: #777;
+}
+
+
+.google-search button {
+
+    border: 0;
+
+    background: transparent;
+
+    color: #777;
+
+    font-size: 22px;
+}
+
+
+.mic {
+
+    font-size: 10px;
+
+    color: #4285f4;
 }
 
 
@@ -875,34 +842,54 @@ button {
 
     position: absolute;
 
-    left: 38px;
-    right: 38px;
+    top: 235px;
+
+    left: 27px;
+    right: 27px;
 
     display: grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap: 27px 13px;
 
     justify-items: center;
 }
 
 
-.three-apps {
+.home-page:nth-child(2)
+.app-grid {
 
-    top: 300px;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 28px;
+    top: 165px;
 }
 
 
-.five-apps {
+.home-page:nth-child(3)
+.app-grid {
 
-    top: 170px;
+    top: 165px;
+}
 
-    grid-template-columns:
-        repeat(3, 1fr);
 
-    gap: 35px 25px;
+.page-label {
+
+    position: absolute;
+
+    top: 90px;
+
+    left: 25px;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 19px;
+
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 2px 4px black;
 }
 
 
@@ -912,13 +899,13 @@ button {
 
 .app-icon {
 
-    width: 75px;
-
-    border: 0;
+    width: 70px;
 
     padding: 0;
 
-    background: none;
+    border: 0;
+
+    background: transparent;
 
     color: white;
 
@@ -928,29 +915,27 @@ button {
 
     align-items: center;
 
-    gap: 7px;
+    gap: 6px;
 
-    cursor: pointer;
+    text-shadow:
+        0 1px 3px rgba(0,0,0,.65);
 }
 
 
 .app-icon > span:last-child {
 
-    font-size: 11px;
+    font-size: 10px;
 
-    font-weight: 500;
-
-    text-shadow:
-        0 1px 3px rgba(0,0,0,.3);
+    white-space: nowrap;
 }
 
 
 .real-icon {
 
-    width: 64px;
-    height: 64px;
+    width: 58px;
+    height: 58px;
 
-    border-radius: 17px;
+    border-radius: 15px;
 
     display: grid;
 
@@ -958,244 +943,163 @@ button {
 
     color: white;
 
-    font-size: 31px;
+    font-size: 27px;
 
     box-shadow:
-        0 7px 15px rgba(0,0,0,.17);
-
-    transition:
-        transform .15s;
+        0 5px 10px rgba(0,0,0,.25);
 }
 
 
-.app-icon:active .real-icon {
+.app-icon:active
+.real-icon {
 
     transform: scale(.9);
 }
 
 
 /* =========================================================
-   APP ICON COLORS
+   ICONS
 ========================================================= */
 
 .phone-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #69f28d,
-            #16d967
-        );
+    background: linear-gradient(145deg,#69f28d,#16d967);
 }
 
 
 .messages-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #55e87b,
-            #1acb63
-        );
-}
-
-
-.music-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #ff7897,
-            #ee456e
-        );
+    background: linear-gradient(145deg,#55e87b,#1acb63);
 }
 
 
 .gallery-icon {
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffbd62,
-            #ee62a2 50%,
-            #64c6ec
-        );
+    background: linear-gradient(135deg,#ffbd62,#ee62a2,#64c6ec);
 }
 
 
 .notes-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #67d9f4,
-            #269ee4
-        );
+    background: linear-gradient(145deg,#67d9f4,#269ee4);
 }
 
 
 .contacts-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #7bb7ff,
-            #3979e9
-        );
+    background: linear-gradient(145deg,#7bb7ff,#3979e9);
 }
 
 
 .browser-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #4ca8f5,
-            #1765cf
-        );
+    background: linear-gradient(145deg,#4ca8f5,#1765cf);
 }
 
 
 .camera-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #58646d,
-            #22282d
-        );
-}
-
-
-.bank-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #5d719e,
-            #26395d
-        );
+    background: linear-gradient(145deg,#5b646b,#22282d);
 }
 
 
 .settings-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #eef1f4,
-            #9ca6ae
-        );
-
-    color: #34383c;
-}
-
-
-.clock-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #f5f5f5,
-            #c9ced2
-        );
-
+    background: linear-gradient(145deg,#f1f1f1,#aab0b5);
     color: #333;
 }
 
 
-/* =========================================================
-   SEARCH
-========================================================= */
-
-.search-pill {
-
-    position: absolute;
-
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    bottom: 105px;
-
-    width: 115px;
-
-    height: 34px;
-
-    border-radius: 20px;
-
-    background:
-        rgba(255,255,255,.5);
-
-    color: rgba(50,50,50,.7);
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 5px;
-
-    font-size: 12px;
+.bank-icon {
+    background: linear-gradient(145deg,#667ba6,#26395d);
 }
 
 
-/* =========================================================
-   DOCK
-========================================================= */
+.music-icon {
+    background: linear-gradient(145deg,#ff7897,#ee456e);
+}
 
-.dock {
 
-    position: absolute;
+.clock-icon {
+    background: linear-gradient(145deg,#fff,#c9ced2);
+    color: #333;
+}
 
-    left: 25px;
-    right: 25px;
 
-    bottom: 17px;
-
-    height: 73px;
-
-    padding: 9px 14px;
-
-    border-radius: 25px;
-
+.victim-icon {
     background:
-        rgba(255,255,255,.27);
+        linear-gradient(
+            145deg,
+            #3a3a3a,
+            #080808
+        );
 
     border:
-        1px solid rgba(255,255,255,.35);
-
-    backdrop-filter: blur(10px);
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap: 12px;
+        1px solid rgba(255,255,255,.4);
 }
 
 
-.dock-icon {
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
 
-    width: 54px;
-    height: 54px;
+.search-results {
 
-    justify-self: center;
+    position: absolute;
+
+    top: 215px;
+
+    left: 20px;
+    right: 20px;
+
+    max-height: 400px;
+
+    overflow-y: auto;
+
+    background:
+        rgba(255,255,255,.97);
+
+    color: #222;
+
+    border-radius: 18px;
+
+    z-index: 80;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.35);
+
+    padding: 7px;
+}
+
+
+.search-result {
+
+    width: 100%;
 
     border: 0;
 
-    border-radius: 15px;
+    background: transparent;
 
-    color: white;
+    display: flex;
 
-    font-size: 26px;
+    align-items: center;
 
-    box-shadow:
-        0 5px 10px rgba(0,0,0,.15);
+    gap: 12px;
 
-    cursor: pointer;
+    padding: 8px;
+
+    text-align: left;
+
+    color: #222;
+}
+
+
+.search-result:hover {
+
+    background: #eee;
+
+    border-radius: 12px;
+}
+
+
+.search-result .real-icon {
+
+    width: 43px;
+    height: 43px;
+
+    font-size: 20px;
 }
 
 
@@ -1210,15 +1114,15 @@ button {
     left: 0;
     right: 0;
 
-    bottom: 87px;
+    bottom: 78px;
 
     display: flex;
 
     justify-content: center;
 
-    gap: 7px;
+    gap: 6px;
 
-    z-index: 20;
+    z-index: 30;
 }
 
 
@@ -1230,7 +1134,7 @@ button {
     border-radius: 50%;
 
     background:
-        rgba(255,255,255,.5);
+        rgba(255,255,255,.55);
 }
 
 
@@ -1238,9 +1142,63 @@ button {
 
     width: 18px;
 
-    border-radius: 8px;
-
     background: white;
+
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   ANDROID DOCK
+========================================================= */
+
+.android-dock {
+
+    position: absolute;
+
+    left: 18px;
+    right: 18px;
+
+    bottom: 25px;
+
+    height: 62px;
+
+    padding:
+        5px 13px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap: 8px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(255,255,255,.22);
+
+    backdrop-filter:
+        blur(12px);
+
+    z-index: 25;
+}
+
+
+.dock-icon {
+
+    width: 49px;
+    height: 49px;
+
+    justify-self: center;
+
+    border: 0;
+
+    border-radius: 14px;
+
+    color: white;
+
+    font-size: 23px;
 }
 
 
@@ -1252,62 +1210,57 @@ button {
 
     background: white;
 
-    z-index: 60;
+    color: #222;
+
+    z-index: 100;
 }
 
 
-.app-header {
+.app-topbar {
 
     position: absolute;
 
-    z-index: 10;
-
     top: 0;
-
     left: 0;
     right: 0;
 
-    height: 68px;
-
-    padding:
-        25px 18px 8px;
+    height: 60px;
 
     display: flex;
 
     align-items: center;
 
-    gap: 12px;
+    gap: 10px;
+
+    padding:
+        8px 13px;
 
     background:
-        rgba(255,255,255,.94);
+        rgba(255,255,255,.96);
 
     border-bottom:
-        1px solid #e8e8e8;
+        1px solid #ddd;
 
-    backdrop-filter: blur(12px);
+    z-index: 10;
 }
 
 
-.app-back {
+.android-back {
 
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
 
     border: 0;
 
     background: transparent;
 
-    color: #007aff;
+    color: #333;
 
-    font-size: 35px;
-
-    line-height: 25px;
-
-    cursor: pointer;
+    font-size: 34px;
 }
 
 
-.app-header-title {
+.app-title {
 
     display: flex;
 
@@ -1315,42 +1268,38 @@ button {
 
     gap: 8px;
 
-    font-size: 16px;
-
     font-weight: 600;
 
-    color: #222;
+    font-size: 15px;
 }
 
 
 .header-app-icon {
 
-    width: 28px;
-    height: 28px;
+    width: 29px;
+    height: 29px;
 
-    border-radius: 7px;
+    border-radius: 8px;
 
     display: grid;
 
     place-items: center;
 
     color: white;
-
-    font-size: 14px;
 }
 
 
-.app-screen iframe {
+#appFrame {
 
     position: absolute;
 
-    top: 68px;
+    top: 60px;
 
     left: 0;
 
     width: 100%;
 
-    height: calc(100% - 68px);
+    height: calc(100% - 60px);
 
     border: 0;
 
@@ -1359,46 +1308,195 @@ button {
 
 
 /* =========================================================
-   MOBILE / SMALL SCREEN
+   ANDROID NAVIGATION
+   Home / Back / Recent buttons
 ========================================================= */
 
-@media(max-height:760px) {
+.android-nav {
 
-    .phone-shell {
+    position: absolute;
 
-        height: 94vh;
+    left: 0;
+    right: 0;
 
-        width: auto;
-    }
+    bottom: 0;
 
-    .date-widget {
+    height: 30px;
 
-        top: 75px;
-    }
+    display: flex;
 
-    .three-apps {
+    justify-content: space-around;
 
-        top: 285px;
-    }
+    align-items: center;
 
-    .five-apps {
+    background:
+        rgba(0,0,0,.86);
 
-        top: 155px;
-    }
+    z-index: 400;
 }
 
+
+.android-nav button {
+
+    width: 33%;
+
+    height: 30px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   RECENT APPS
+========================================================= */
+
+.recent-panel {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 300;
+
+    background:
+        rgba(15,15,15,.95);
+
+    padding:
+        70px 20px 55px;
+
+    overflow-y: auto;
+}
+
+
+.recent-title {
+
+    font-family:
+        Georgia,
+        serif;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 20px;
+}
+
+
+.recent-card {
+
+    margin-bottom: 10px;
+
+    padding: 12px;
+
+    background:
+        #242424;
+
+    border:
+        1px solid #444;
+
+    border-radius: 13px;
+}
+
+
+.recent-open {
+
+    width: 100%;
+
+    border: 0;
+
+    background: transparent;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    text-align: left;
+}
+
+
+.recent-open .real-icon {
+
+    width: 45px;
+    height: 45px;
+}
+
+
+.recent-close {
+
+    margin-top: 15px;
+
+    padding: 10px 20px;
+
+    background: transparent;
+
+    color: white;
+
+    border:
+        1px solid #777;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media(max-width:600px) {
 
     .phone-shell {
 
-        width: 84vw;
+        width: 88vw;
 
-        height: auto;
+        height: 90vh;
     }
 
-    .phone-tab {
 
-        width: 50px;
+    .game-controls {
+
+        right: 8px;
+
+        bottom: 12px;
     }
-  }
+
+
+    .game-button {
+
+        min-width: 135px;
+
+        padding: 12px;
+
+        font-size: 10px;
+
+        letter-spacing: 2px;
+    }
+
+}
+
+
+@media(max-height:700px) {
+
+    .phone-shell {
+
+        height: 94vh;
+    }
+
+
+    .app-grid {
+
+        top: 220px;
+    }
+
+
+    .google-search {
+
+        top: 145px;
+    }
+
+    }
