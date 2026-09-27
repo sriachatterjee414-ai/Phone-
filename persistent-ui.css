@@ -436,3 +436,106 @@
         brightness(1.1);
 
 }
+/* ============================================================
+   CHARACTER GALLERY
+============================================================ */
+
+.gameui-character-card {
+
+    background:
+        linear-gradient(
+            145deg,
+            #211912,
+            #0f0c09
+        );
+
+    border:
+        1px solid
+        rgba(214,178,94,0.45);
+
+    padding: 18px;
+
+    margin-bottom: 14px;
+
+    text-align: center;
+
+    min-height: 170px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.45);
+
+}
+
+
+.gameui-character-card img {
+
+    width: 115px;
+    height: 145px;
+
+    object-fit: contain;
+
+    object-position: bottom center;
+
+    border-radius: 0;
+
+    margin-bottom: 10px;
+
+}
+
+
+.gameui-character-card
+.gameui-card-name {
+
+    color:
+        #e8cda3;
+
+    font-size: 17px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 8px;
+
+}
+
+
+.gameui-character-card
+.gameui-small-btn {
+
+    background:
+        #c9a46b;
+
+    color:
+        #26170e;
+
+    border: none;
+
+    padding:
+        8px 14px;
+
+    font-family:
+        "Special Elite",
+        monospace;
+
+    cursor: pointer;
+
+}
+
+
+.gameui-character-card
+.gameui-small-btn:hover {
+
+    background:
+        #ead0a0;
+
+}
