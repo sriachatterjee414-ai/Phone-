@@ -1,104 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
 
-<title>Phone</title>
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1.0,
+                   maximum-scale=1.0,
+                   user-scalable=no">
 
-<link rel="stylesheet" href="phone.css">
+    <title>Broken Phone</title>
+
+    <link rel="stylesheet" href="phone.css">
 </head>
+
 
 <body>
 
 <div class="investigation-stage">
 
-    <!-- SHOW / HIDE PHONE -->
-    <button id="phoneToggle" class="phone-tab">
-        <span>HIDE</span>
-    </button>
+
+    <!-- =====================================================
+         GAME UI BUTTONS
+         These are NOT Android-style.
+         They use your Broken Phone game UI.
+    ====================================================== -->
+
+    <div class="game-controls">
+
+        <button id="victimInfoButton"
+                class="game-button">
+
+            VICTIM INFO
+
+        </button>
 
 
-    <!-- PHONE -->
-    <section id="phoneShell" class="phone-shell">
+        <button id="phoneToggle"
+                class="game-button">
 
-        <div class="side-button side-left top"></div>
-        <div class="side-button side-left middle"></div>
-        <div class="side-button side-right"></div>
+            HIDE PHONE
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PHONE
+    ====================================================== -->
+
+    <section id="phoneShell"
+             class="phone-shell"
+             aria-label="Broken Phone">
+
 
         <div class="phone-frame">
 
             <div class="phone-bezel">
 
-                <!-- DYNAMIC ISLAND -->
-                <div class="dynamic-island"></div>
+
+                <!-- =================================================
+                     LOCK SCREEN
+                ================================================== -->
+
+                <div id="lockScreen"
+                     class="screen lock-screen">
 
 
-                <!-- ================================================= -->
-                <!-- LOCK SCREEN -->
-                <!-- ================================================= -->
+                    <!-- Android status bar -->
 
-                <div id="lockScreen" class="screen lock-screen">
+                    <div class="android-status">
 
-                    <div class="status-bar">
-                        <span id="lockStatusTime">00:00</span>
+                        <span id="lockStatusTime">
+                            00:00
+                        </span>
 
-                        <div class="status-icons">
+
+                        <div class="status-right">
+
+                            <span>▮▮▮</span>
                             <span>⌁</span>
-                            <span>◦</span>
                             <span>▰</span>
+
                         </div>
+
                     </div>
 
 
-                    <div class="lock-date" id="lockDate">
+
+                    <div id="lockDate"
+                         class="lock-date">
+
                         Sunday, September 27
+
                     </div>
 
-                    <div class="lock-time" id="lockTime">
+
+                    <div id="lockTime"
+                         class="lock-time">
+
                         00:00
-                    </div>
-
-
-                    <!-- SIMPLE LOCK SCREEN INFO -->
-                    <div class="lock-info">
-
-                        <div class="lock-info-card">
-                            <span class="info-icon">☀</span>
-
-                            <div>
-                                <strong>72°</strong>
-                                <small>Mostly Sunny</small>
-                            </div>
-                        </div>
-
-                        <div class="lock-info-card">
-                            <span class="info-icon">▣</span>
-
-                            <div>
-                                <strong>Today</strong>
-                                <small>No new events</small>
-                            </div>
-                        </div>
 
                     </div>
 
 
-                    <!-- BOTTOM -->
+
+                    <div class="lock-weather">
+
+                        <span class="weather-symbol">
+                            ☁
+                        </span>
+
+                        <span>
+                            28°
+                        </span>
+
+                    </div>
+
+
+
                     <div class="lock-bottom">
 
-                        <button class="lock-shortcut">
-                            ◉
-                        </button>
 
-                        <div class="swipe-hint">
-                            <div class="swipe-arrow">↑</div>
-                            <span>Swipe up to unlock</span>
+                        <div class="lock-shortcut">
+                            ●
                         </div>
 
-                        <button class="lock-shortcut">
-                            ◉
-                        </button>
+
+                        <div class="unlock-hint">
+
+                            <span class="unlock-arrow">
+                                ↑
+                            </span>
+
+                            <span>
+                                Swipe up to unlock
+                            </span>
+
+                        </div>
+
+
+                        <div class="lock-shortcut">
+                            ▣
+                        </div>
+
 
                     </div>
 
@@ -106,147 +154,282 @@
 
 
 
-                <!-- ================================================= -->
-                <!-- PASSCODE SCREEN -->
-                <!-- ================================================= -->
+                <!-- =================================================
+                     PASSCODE
+                ================================================== -->
 
-                <div id="passcodeScreen" class="screen passcode-screen hidden">
+                <div id="passcodeScreen"
+                     class="screen passcode-screen hidden">
 
-                    <div class="status-bar">
-                        <span id="passcodeTime">00:00</span>
 
-                        <div class="status-icons">
+                    <div class="android-status">
+
+                        <span id="passcodeTime">
+                            00:00
+                        </span>
+
+                        <div class="status-right">
+
+                            <span>▮▮▮</span>
                             <span>⌁</span>
-                            <span>◦</span>
                             <span>▰</span>
+
                         </div>
+
                     </div>
+
 
 
                     <div class="passcode-title">
 
-                        <div class="passcode-lock-icon">
-                            ♡
+                        <div class="passcode-lock">
+                            ⌑
                         </div>
 
-                        <h2>Enter Passcode</h2>
+                        <h2>
+                            Enter passcode
+                        </h2>
 
-                        <p>Swipe down to return</p>
-
-                    </div>
-
-
-                    <!-- DOTS -->
-
-                    <div id="passcodeDots" class="passcode-dots">
-
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                        <p>
+                            Swipe down to return
+                        </p>
 
                     </div>
 
 
-                    <!-- KEYPAD -->
 
-                    <div id="passcodePad" class="passcode-pad"></div>
+                    <div id="passcodeDots"
+                         class="passcode-dots">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
 
 
-                    <div id="passcodeError" class="passcode-error"></div>
+
+                    <div id="passcodePad"
+                         class="passcode-pad">
+                    </div>
+
+
+                    <div id="passcodeError"
+                         class="passcode-error">
+                    </div>
 
                 </div>
 
 
 
-                <!-- ================================================= -->
-                <!-- HOME SCREEN -->
-                <!-- ================================================= -->
+                <!-- =================================================
+                     HOME SCREEN
+                ================================================== -->
 
-                <div id="homeScreen" class="screen home-screen hidden">
+                <div id="homeScreen"
+                     class="screen home-screen hidden">
 
-                    <div class="status-bar home-status">
 
-                        <span id="homeTime">
+                    <div class="android-status">
+
+                        <span id="homeStatusTime">
                             00:00
                         </span>
 
-                        <div class="status-icons">
+                        <div class="status-right">
+
+                            <span>▮▮▮</span>
                             <span>⌁</span>
-                            <span>◦</span>
                             <span>▰</span>
+
                         </div>
 
                     </div>
 
 
-                    <!-- HORIZONTAL HOME PAGES -->
 
-                    <div id="homePages" class="home-pages">
+                    <!-- =================================================
+                         SWIPEABLE HOME PAGES
+                    ================================================== -->
+
+                    <div id="homePages"
+                         class="home-pages">
 
 
                         <!-- ================= PAGE 1 ================= -->
 
                         <div class="home-page">
 
-                            <div class="date-widget">
 
-                                <div class="date-script">
-                                    <span id="dayName">Sunday</span>
+                            <div class="android-clock-widget">
+
+                                <div id="homeBigTime">
+                                    00:00
                                 </div>
 
-                                <div class="date-number">
-                                    <span id="monthName">SEPTEMBER</span>
-                                    <strong id="dayNumber">27</strong>
-                                </div>
-
-                                <div class="date-time">
-                                    <span id="homeBigTime">00:00</span>
+                                <div id="homeDate">
+                                    Sunday, September 27
                                 </div>
 
                             </div>
 
 
-                            <div class="page-title">
-                                Favorites
+
+                            <!-- Google-style search -->
+
+                            <div class="google-search">
+
+                                <span class="google-g">
+                                    G
+                                </span>
+
+
+                                <input id="appSearch"
+                                       type="search"
+                                       placeholder="Search"
+                                       autocomplete="off">
+
+
+                                <button id="clearSearch"
+                                        aria-label="Clear search">
+
+                                    ×
+
+                                </button>
+
+
+                                <span class="mic">
+                                    ●
+                                </span>
+
                             </div>
 
 
-                            <!-- ONLY 3 APPS -->
 
-                            <div class="app-grid three-apps">
+                            <!-- APPS -->
 
-                                <button class="app-icon" data-app="calls">
+                            <div class="app-grid">
+
+
+                                <button class="app-icon"
+                                        data-app="calls">
 
                                     <span class="real-icon phone-icon">
                                         ☎
                                     </span>
 
-                                    <span>Phone</span>
+                                    <span>
+                                        Phone
+                                    </span>
 
                                 </button>
 
 
-                                <button class="app-icon" data-app="messages">
+
+                                <button class="app-icon"
+                                        data-app="messages">
 
                                     <span class="real-icon messages-icon">
                                         ●
                                     </span>
 
-                                    <span>Messages</span>
-
-                                </button>
-
-
-                                <button class="app-icon" data-app="music">
-
-                                    <span class="real-icon music-icon">
-                                        ♪
+                                    <span>
+                                        Messages
                                     </span>
 
-                                    <span>Music</span>
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="gallery">
+
+                                    <span class="real-icon gallery-icon">
+                                        ▧
+                                    </span>
+
+                                    <span>
+                                        Gallery
+                                    </span>
 
                                 </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="notes">
+
+                                    <span class="real-icon notes-icon">
+                                        ✉
+                                    </span>
+
+                                    <span>
+                                        Notes
+                                    </span>
+
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="contacts">
+
+                                    <span class="real-icon contacts-icon">
+                                        ♟
+                                    </span>
+
+                                    <span>
+                                        Contacts
+                                    </span>
+
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="browser">
+
+                                    <span class="real-icon browser-icon">
+                                        ◉
+                                    </span>
+
+                                    <span>
+                                        Browser
+                                    </span>
+
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="camera">
+
+                                    <span class="real-icon camera-icon">
+                                        ●
+                                    </span>
+
+                                    <span>
+                                        Camera
+                                    </span>
+
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="settings">
+
+                                    <span class="real-icon settings-icon">
+                                        ⚙
+                                    </span>
+
+                                    <span>
+                                        Settings
+                                    </span>
+
+                                </button>
+
 
                             </div>
 
@@ -258,66 +441,103 @@
 
                         <div class="home-page">
 
-                            <div class="page-heading">
-                                Apps
+
+                            <div class="page-label">
+                                APPS
                             </div>
 
 
-                            <div class="app-grid five-apps">
+                            <div class="app-grid">
 
-                                <button class="app-icon" data-app="gallery">
+
+                                <button class="app-icon"
+                                        data-app="bank">
+
+                                    <span class="real-icon bank-icon">
+                                        $
+                                    </span>
+
+                                    <span>
+                                        Bank
+                                    </span>
+
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="music">
+
+                                    <span class="real-icon music-icon">
+                                        ♪
+                                    </span>
+
+                                    <span>
+                                        Music
+                                    </span>
+
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="clock">
+
+                                    <span class="real-icon clock-icon">
+                                        ◷
+                                    </span>
+
+                                    <span>
+                                        Clock
+                                    </span>
+
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="calls">
+
+                                    <span class="real-icon phone-icon">
+                                        ☎
+                                    </span>
+
+                                    <span>
+                                        Phone
+                                    </span>
+
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="messages">
+
+                                    <span class="real-icon messages-icon">
+                                        ●
+                                    </span>
+
+                                    <span>
+                                        Messages
+                                    </span>
+
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="gallery">
 
                                     <span class="real-icon gallery-icon">
-                                        ✿
+                                        ▧
                                     </span>
 
-                                    <span>Gallery</span>
+                                    <span>
+                                        Gallery
+                                    </span>
 
                                 </button>
 
-
-                                <button class="app-icon" data-app="notes">
-
-                                    <span class="real-icon notes-icon">
-                                        ✉
-                                    </span>
-
-                                    <span>Notes</span>
-
-                                </button>
-
-
-                                <button class="app-icon" data-app="contacts">
-
-                                    <span class="real-icon contacts-icon">
-                                        ♟
-                                    </span>
-
-                                    <span>Contacts</span>
-
-                                </button>
-
-
-                                <button class="app-icon" data-app="browser">
-
-                                    <span class="real-icon browser-icon">
-                                        ◉
-                                    </span>
-
-                                    <span>Browser</span>
-
-                                </button>
-
-
-                                <button class="app-icon" data-app="camera">
-
-                                    <span class="real-icon camera-icon">
-                                        ◉
-                                    </span>
-
-                                    <span>Camera</span>
-
-                                </button>
 
                             </div>
 
@@ -329,55 +549,80 @@
 
                         <div class="home-page">
 
-                            <div class="page-heading">
-                                More
+
+                            <div class="page-label">
+                                MORE
                             </div>
 
 
-                            <div class="app-grid five-apps">
+                            <div class="app-grid">
 
-                                <button class="app-icon" data-app="bank">
 
-                                    <span class="real-icon bank-icon">
-                                        $
+                                <button class="app-icon"
+                                        data-app="victimInfo">
+
+                                    <span class="real-icon victim-icon">
+                                        !
                                     </span>
 
-                                    <span>Bank</span>
+                                    <span>
+                                        Victim Info
+                                    </span>
 
                                 </button>
 
 
-                                <button class="app-icon" data-app="settings">
+
+                                <button class="app-icon"
+                                        data-app="settings">
 
                                     <span class="real-icon settings-icon">
                                         ⚙
                                     </span>
 
-                                    <span>Settings</span>
-
-                                </button>
-
-
-                                <button class="app-icon" data-app="clock">
-
-                                    <span class="real-icon clock-icon">
-                                        ◷
+                                    <span>
+                                        Settings
                                     </span>
 
-                                    <span>Clock</span>
+                                </button>
+
+
+
+                                <button class="app-icon"
+                                        data-app="browser">
+
+                                    <span class="real-icon browser-icon">
+                                        ◉
+                                    </span>
+
+                                    <span>
+                                        Browser
+                                    </span>
 
                                 </button>
+
 
                             </div>
 
                         </div>
 
+
                     </div>
+
+
+
+                    <!-- SEARCH RESULTS -->
+
+                    <div id="searchResults"
+                         class="search-results hidden">
+                    </div>
+
 
 
                     <!-- PAGE DOTS -->
 
-                    <div id="pageDots" class="page-dots">
+                    <div id="pageDots"
+                         class="page-dots">
 
                         <span class="active"></span>
                         <span></span>
@@ -386,58 +631,79 @@
                     </div>
 
 
-                    <!-- SEARCH -->
 
-                    <div class="search-pill">
-                        <span>⌕</span>
-                        <span>Search</span>
-                    </div>
+                    <!-- ANDROID DOCK -->
+
+                    <div class="android-dock">
 
 
-                    <!-- DOCK -->
+                        <button class="dock-icon phone-icon"
+                                data-app="calls">
 
-                    <div class="dock">
-
-                        <button class="dock-icon phone-icon" data-app="calls">
                             ☎
+
                         </button>
 
-                        <button class="dock-icon messages-icon" data-app="messages">
+
+                        <button class="dock-icon messages-icon"
+                                data-app="messages">
+
                             ●
+
                         </button>
 
-                        <button class="dock-icon music-icon" data-app="music">
-                            ♪
+
+                        <button class="dock-icon gallery-icon"
+                                data-app="gallery">
+
+                            ▧
+
                         </button>
 
-                        <button class="dock-icon browser-icon" data-app="browser">
+
+                        <button class="dock-icon browser-icon"
+                                data-app="browser">
+
                             ◉
+
                         </button>
+
 
                     </div>
+
 
                 </div>
 
 
 
-                <!-- ================================================= -->
-                <!-- APP SCREEN -->
-                <!-- ================================================= -->
+                <!-- =================================================
+                     APP SCREEN
+                ================================================== -->
 
-                <div id="appScreen" class="screen app-screen hidden">
+                <div id="appScreen"
+                     class="screen app-screen hidden">
 
-                    <div class="app-header">
 
-                        <button id="appBack" class="app-back">
+                    <div class="app-topbar">
+
+
+                        <button id="appBack"
+                                class="android-back">
+
                             ‹
+
                         </button>
 
 
-                        <div class="app-header-title">
+                        <div class="app-title">
 
-                            <span id="appHeaderIcon" class="header-app-icon">
+                            <span id="appHeaderIcon"
+                                  class="header-app-icon">
+
                                 ●
+
                             </span>
+
 
                             <span id="appHeaderName">
                                 App
@@ -445,15 +711,73 @@
 
                         </div>
 
+
                     </div>
 
 
-                    <iframe
-                        id="appFrame"
-                        title="Phone Application">
+                    <iframe id="appFrame"
+                            title="Phone Application">
                     </iframe>
 
+
                 </div>
+
+
+
+                <!-- =================================================
+                     ANDROID NAVIGATION
+                ================================================== -->
+
+                <div id="androidNav"
+                     class="android-nav hidden">
+
+
+                    <button id="navBack">
+                        ◀
+                    </button>
+
+
+                    <button id="navHome">
+                        ○
+                    </button>
+
+
+                    <button id="navRecent">
+                        ▢
+                    </button>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     RECENT APPS
+                ================================================== -->
+
+                <div id="recentPanel"
+                     class="recent-panel hidden">
+
+
+                    <div class="recent-title">
+                        RECENT APPS
+                    </div>
+
+
+                    <div id="recentList">
+                    </div>
+
+
+                    <button id="closeRecent"
+                            class="recent-close">
+
+                        CLOSE
+
+                    </button>
+
+
+                </div>
+
 
             </div>
 
