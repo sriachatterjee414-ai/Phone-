@@ -1,6 +1,169 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Messages</title><link rel="stylesheet" href="app.css"><link rel="stylesheet" href="messages.css"></head>
-<body><div id="messagesApp" class="app">
-<header class="app-header"><button class="back" id="backBtn">‹</button><div class="header-title">Messages</div><button class="header-action" id="newBtn">＋</button></header>
-<main id="messageList" class="content"></main>
-</div><script src="messages.js"></script></body></html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Messages</title>
+
+    <link
+        rel="stylesheet"
+        href="app.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="messages.css"
+    >
+
+</head>
+
+
+<body>
+
+<main id="messagesApp" class="app">
+
+    <!-- =========================================
+         MAIN MESSAGES HEADER
+    ========================================== -->
+
+    <header class="messages-header">
+
+        <button
+            class="top-back"
+            id="backBtn"
+            aria-label="Back"
+        >
+
+            <svg viewBox="0 0 24 24">
+                <path d="M15 5L8 12L15 19"/>
+            </svg>
+
+        </button>
+
+
+        <h1>Messages</h1>
+
+
+        <button
+            class="compose-btn"
+            id="newBtn"
+            aria-label="New message"
+        >
+
+            <svg viewBox="0 0 24 24">
+
+                <path d="M14 5H6.5A2.5 2.5 0 0 0 4 7.5v10A2.5 2.5 0 0 0 6.5 20h10a2.5 2.5 0 0 0 2.5-2.5V10"/>
+
+                <path d="M15 4l5 5"/>
+
+                <path d="M13 11l-1 4 4-1 6-6-3-3z"/>
+
+            </svg>
+
+        </button>
+
+    </header>
+
+
+    <!-- =========================================
+         SEARCH
+    ========================================== -->
+
+    <div class="search-area">
+
+        <div class="search-box">
+
+            <svg viewBox="0 0 24 24">
+
+                <circle
+                    cx="11"
+                    cy="11"
+                    r="6.5"
+                />
+
+                <path
+                    d="M16 16L21 21"
+                />
+
+            </svg>
+
+
+            <input
+                type="text"
+                id="messageSearch"
+                placeholder="Search"
+                autocomplete="off"
+            >
+
+
+            <button
+                id="clearSearch"
+                class="clear-search hidden"
+            >
+                ×
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         CONTACT SHORTCUTS
+    ========================================== -->
+
+    <div
+        class="contact-strip"
+        id="contactStrip"
+    ></div>
+
+
+    <!-- =========================================
+         FILTER
+    ========================================== -->
+
+    <div class="message-filter">
+
+        <button
+            class="filter-btn active"
+            data-filter="all"
+        >
+            All
+        </button>
+
+
+        <button
+            class="filter-btn"
+            data-filter="unread"
+        >
+            Unread
+        </button>
+
+    </div>
+
+
+    <!-- =========================================
+         MESSAGE LIST
+    ========================================== -->
+
+    <section
+        id="messageList"
+        class="message-list"
+    ></section>
+
+
+</main>
+
+
+<script src="messages.js"></script>
+
+</body>
+
+</html>
