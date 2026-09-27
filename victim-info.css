@@ -1,10 +1,3 @@
-/* ============================================================
-   BROKEN PHONE
-   VICTIM INFORMATION / CASE FILE
-   FULL SCREEN DOSSIER
-============================================================ */
-
-
 * {
     box-sizing: border-box;
 }
@@ -38,11 +31,6 @@ body {
 }
 
 
-/* ============================================================
-   PAGE
-============================================================ */
-
-
 #victimInfoPage {
 
     min-height: 100vh;
@@ -61,95 +49,8 @@ body {
 
 
 /* ============================================================
-   LEFT CASE TAB
-============================================================ */
-
-
-.case-tab {
-
-    position: fixed;
-
-    left: 0;
-
-    top: 50%;
-
-    transform:
-        translateY(-50%);
-
-    z-index: 100;
-
-    width: 72px;
-
-    padding:
-        16px
-        8px;
-
-    border:
-        1px solid #514a3b;
-
-    border-left: none;
-
-    background:
-        rgba(20, 19, 16, 0.96);
-
-    color: #c8b98e;
-
-    cursor: pointer;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    box-shadow:
-        8px 10px 30px
-        rgba(0,0,0,0.35);
-
-}
-
-
-.case-tab span {
-
-    display: block;
-
-    margin-bottom: 8px;
-
-    color: #777267;
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
-}
-
-
-.case-tab strong {
-
-    display: block;
-
-    color: #d7c79d;
-
-    font-size: 9px;
-
-    line-height: 1.5;
-
-    letter-spacing: 1px;
-
-}
-
-
-.case-tab:hover {
-
-    background:
-        #27231c;
-
-}
-
-
-/* ============================================================
    HEADER
 ============================================================ */
-
 
 .case-header {
 
@@ -235,15 +136,12 @@ body {
 
     letter-spacing: 2px;
 
-    white-space: nowrap;
-
 }
 
 
 /* ============================================================
    DOSSIER
 ============================================================ */
-
 
 .dossier {
 
@@ -261,11 +159,6 @@ body {
         90px;
 
 }
-
-
-/* ============================================================
-   DOSSIER SECTION
-============================================================ */
 
 
 .dossier-section {
@@ -310,9 +203,8 @@ body {
 
 
 /* ============================================================
-   VICTIM LAYOUT
+   VICTIM
 ============================================================ */
-
 
 .victim-layout {
 
@@ -329,18 +221,12 @@ body {
 }
 
 
-/* ============================================================
-   VICTIM PHOTO
-============================================================ */
-
-
 .victim-photo {
 
     border:
         1px solid #554d3e;
 
-    background:
-        #0d0d0c;
+    background: #0d0d0c;
 
     padding: 14px;
 
@@ -359,8 +245,7 @@ body {
 
     object-position: center bottom;
 
-    background:
-        #191817;
+    background: #191817;
 
 }
 
@@ -378,11 +263,6 @@ body {
     letter-spacing: 3px;
 
 }
-
-
-/* ============================================================
-   VICTIM INFORMATION
-============================================================ */
 
 
 .victim-details {
@@ -459,23 +339,17 @@ body {
    CRIME SCENE
 ============================================================ */
 
-
 .crime-scene-layout {
 
     display: grid;
 
     grid-template-columns:
-        minmax(0, 1.7fr)
-        minmax(280px, 0.8fr);
+        1.7fr
+        1fr;
 
     gap: 28px;
 
 }
-
-
-/* ============================================================
-   CRIME SCENE CARD
-============================================================ */
 
 
 .crime-scene-card {
@@ -483,38 +357,9 @@ body {
     border:
         1px solid #39362f;
 
-    background:
-        #0d0d0c;
-
-    overflow: hidden;
+    background: #0d0d0c;
 
 }
-
-
-.evidence-number {
-
-    padding:
-        11px
-        16px;
-
-    border-bottom:
-        1px solid #39362f;
-
-    color: #82785f;
-
-    background:
-        #11100e;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-}
-
-
-/* ============================================================
-   CRIME SCENE IMAGE
-============================================================ */
 
 
 .crime-scene-image {
@@ -523,44 +368,20 @@ body {
 
     width: 100%;
 
-    height: 500px;
+    height: 520px;
 
     object-fit: cover;
 
-    object-position: center;
-
-    background:
-        #191817;
+    background: #191817;
 
 }
-
-
-.crime-scene-image.image-missing {
-
-    min-height: 500px;
-
-    background:
-        repeating-linear-gradient(
-            45deg,
-            #11100e,
-            #11100e 10px,
-            #151411 10px,
-            #151411 20px
-        );
-
-}
-
-
-/* ============================================================
-   CRIME SCENE CAPTION
-============================================================ */
 
 
 .crime-scene-caption {
 
     padding:
-        20px
-        22px;
+        15px
+        18px;
 
     border-top:
         1px solid #39362f;
@@ -568,81 +389,47 @@ body {
 }
 
 
-.crime-scene-label {
+.crime-scene-caption strong {
 
-    margin-bottom: 8px;
+    display: block;
 
-    color: #82785f;
+    margin-bottom: 6px;
 
-    font-size: 9px;
+    color: #d3c5a3;
 
-    letter-spacing: 3px;
-
-}
-
-
-.crime-scene-caption h2 {
-
-    margin:
-        0 0 8px;
-
-    color: #ded5c2;
-
-    font-size: 18px;
-
-    font-weight: normal;
+    font-size: 11px;
 
     letter-spacing: 2px;
 
 }
 
 
-.crime-scene-caption p {
-
-    margin: 0;
+.crime-scene-caption span {
 
     color: #777267;
 
     font-size: 11px;
 
-    line-height: 1.6;
+    line-height: 1.5;
 
 }
 
 
-/* ============================================================
-   CRIME SCENE DETAILS
-============================================================ */
-
-
-.crime-scene-details {
-
-    display: flex;
-
-    flex-direction: column;
+.scene-information {
 
     border:
-        1px solid #37342d;
+        1px solid #35322c;
 
-    background:
-        rgba(14, 13, 11, 0.96);
+    background: #11100e;
 
 }
 
 
-.scene-detail {
+.scene-row {
 
-    flex: 1;
+    min-height: 85px;
 
-    min-height: 110px;
-
-    padding: 20px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
+    padding: 18px;
 
     border-bottom:
         1px solid #302e29;
@@ -650,14 +437,16 @@ body {
 }
 
 
-.scene-detail:last-child {
+.scene-row:last-child {
 
     border-bottom: none;
 
 }
 
 
-.scene-detail span {
+.scene-row span {
+
+    display: block;
 
     margin-bottom: 9px;
 
@@ -670,23 +459,161 @@ body {
 }
 
 
-.scene-detail strong {
+.scene-row strong {
 
-    color: #d6cfbf;
+    color: #ddd6c7;
 
     font-size: 13px;
 
     font-weight: normal;
 
-    letter-spacing: 1px;
+}
+
+
+/* ============================================================
+   FORENSIC
+============================================================ */
+
+.forensic-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 28px;
+
+}
+
+
+.evidence-card {
+
+    border:
+        1px solid #39362f;
+
+    background: #0d0d0c;
+
+}
+
+
+.evidence-image {
+
+    width: 100%;
+
+    height: 430px;
+
+    display: block;
+
+    object-fit: cover;
+
+    background: #191817;
+
+}
+
+
+.evidence-caption {
+
+    padding:
+        15px
+        18px;
+
+    border-top:
+        1px solid #39362f;
+
+}
+
+
+.evidence-caption strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #d3c5a3;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.evidence-caption span {
+
+    color: #777267;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+}
+
+
+.case-details-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    border:
+        1px solid #37342d;
+
+}
+
+
+.case-detail {
+
+    min-height: 110px;
+
+    padding: 18px;
+
+    border-right:
+        1px solid #302e29;
+
+    border-bottom:
+        1px solid #302e29;
+
+}
+
+
+.case-detail:nth-child(even) {
+
+    border-right: none;
+
+}
+
+
+.case-detail span {
+
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #706b60;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.case-detail strong {
+
+    color: #ddd6c7;
+
+    font-size: 13px;
+
+    font-weight: normal;
 
 }
 
 
 /* ============================================================
-   IDENTIFICATION FILE
+   BIRTHDAY FILE
 ============================================================ */
-
 
 .birthday-hint {
 
@@ -711,11 +638,11 @@ body {
 
 .hint-icon {
 
-    flex-shrink: 0;
-
     width: 42px;
 
     height: 42px;
+
+    flex-shrink: 0;
 
     border:
         1px solid #8a7955;
@@ -750,10 +677,7 @@ body {
 
 .birthday-hint p {
 
-    margin:
-        5px
-        0
-        0;
+    margin: 5px 0 0;
 
     color: #858076;
 
@@ -762,33 +686,21 @@ body {
 }
 
 
-/* ============================================================
-   BUTTONS
-============================================================ */
-
-
 .file-button,
 .back-button {
 
     border:
         1px solid #645a46;
 
-    background:
-        #1b1915;
+    background: #1b1915;
 
-    color:
-        #d7c79d;
+    color: #d7c79d;
 
     padding:
         12px
         19px;
 
     cursor: pointer;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
 
     font-size: 10px;
 
@@ -800,8 +712,7 @@ body {
 .file-button:hover,
 .back-button:hover {
 
-    background:
-        #2a261e;
+    background: #2a261e;
 
 }
 
@@ -813,11 +724,6 @@ body {
     cursor: default;
 
 }
-
-
-/* ============================================================
-   BIRTHDAY FILE
-============================================================ */
 
 
 .hidden {
@@ -834,8 +740,7 @@ body {
     border:
         1px solid #71664f;
 
-    background:
-        #171611;
+    background: #171611;
 
 }
 
@@ -902,8 +807,7 @@ body {
 
     line-height: 1.3;
 
-    transform:
-        rotate(-10deg);
+    transform: rotate(-10deg);
 
 }
 
@@ -946,9 +850,9 @@ body {
 }
 
 
-.file-information .password-reveal {
+.password-reveal {
 
-    color: #d9bb70;
+    color: #d9bb70 !important;
 
     letter-spacing: 4px;
 
@@ -974,82 +878,15 @@ body {
 
 
 /* ============================================================
-   CASE INFORMATION
-============================================================ */
-
-
-.case-details-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    border:
-        1px solid #37342d;
-
-}
-
-
-.case-detail {
-
-    min-height: 95px;
-
-    padding: 18px;
-
-    border-right:
-        1px solid #302e29;
-
-    border-bottom:
-        1px solid #302e29;
-
-}
-
-
-.case-detail:nth-child(3n) {
-
-    border-right: none;
-
-}
-
-
-.case-detail span {
-
-    display: block;
-
-    margin-bottom: 9px;
-
-    color: #706b60;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-}
-
-
-.case-detail strong {
-
-    color: #ddd6c7;
-
-    font-size: 13px;
-
-    font-weight: normal;
-
-}
-
-
-/* ============================================================
    SUSPECTS
 ============================================================ */
-
 
 .suspect-list {
 
     display: grid;
 
     grid-template-columns:
-        1fr;
+        repeat(2, 1fr);
 
     gap: 22px;
 
@@ -1069,8 +906,7 @@ body {
     border:
         1px solid #39362f;
 
-    background:
-        #11100e;
+    background: #11100e;
 
 }
 
@@ -1085,11 +921,23 @@ body {
 
     overflow: hidden;
 
-    background:
-        #191817;
+    background: #191817;
 
     border-right:
         1px solid #37332c;
+
+}
+
+
+.suspect-photo img {
+
+    width: 100%;
+
+    height: 230px;
+
+    object-fit: contain;
+
+    object-position: bottom center;
 
 }
 
@@ -1102,8 +950,7 @@ body {
 
     border-radius: 50%;
 
-    background:
-        #34312d;
+    background: #34312d;
 
     display: flex;
 
@@ -1133,8 +980,6 @@ body {
         5px
         9px;
 
-    margin-bottom: 9px;
-
     border:
         1px solid #514b3e;
 
@@ -1150,7 +995,7 @@ body {
 .suspect-information h2 {
 
     margin:
-        5px
+        12px
         0
         18px;
 
@@ -1159,8 +1004,6 @@ body {
     font-size: 22px;
 
     font-weight: normal;
-
-    letter-spacing: 1px;
 
 }
 
@@ -1205,10 +1048,27 @@ body {
 }
 
 
+.no-suspects {
+
+    padding: 35px;
+
+    border:
+        1px dashed #39362f;
+
+    text-align: center;
+
+    color: #706b60;
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+}
+
+
 /* ============================================================
    BACK
 ============================================================ */
-
 
 .back-button {
 
@@ -1220,9 +1080,8 @@ body {
 
 
 /* ============================================================
-   RESPONSIVE — 1100PX
+   RESPONSIVE
 ============================================================ */
-
 
 @media(max-width:1100px) {
 
@@ -1232,7 +1091,6 @@ body {
             calc(100% - 50px);
 
     }
-
 
     .victim-layout {
 
@@ -1244,69 +1102,41 @@ body {
 
     }
 
-
     .victim-photo img {
 
         height: 430px;
 
     }
 
-
     .crime-scene-layout {
 
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .crime-scene-image {
-
-        height: 450px;
+        grid-template-columns: 1fr;
 
     }
 
 }
 
 
-/* ============================================================
-   RESPONSIVE — 800PX
-============================================================ */
-
-
 @media(max-width:800px) {
-
-    .case-tab {
-
-        display: none;
-
-    }
-
 
     .case-header {
 
-        padding:
-            30px;
+        padding: 30px;
 
-        align-items:
-            flex-start;
+        align-items: flex-start;
 
-        flex-direction:
-            column;
+        flex-direction: column;
 
     }
-
 
     .dossier {
 
         width:
             calc(100% - 30px);
 
-        padding-top:
-            25px;
+        padding-top: 25px;
 
     }
-
 
     .dossier-section {
 
@@ -1314,27 +1144,21 @@ body {
 
     }
 
-
     .victim-layout {
 
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
 
     }
 
-
     .victim-photo {
 
-        max-width:
-            400px;
+        max-width: 400px;
 
-        margin:
-            auto;
+        margin: auto;
 
         width: 100%;
 
     }
-
 
     .victim-photo img {
 
@@ -1342,97 +1166,28 @@ body {
 
     }
 
+    .forensic-layout {
 
-    .crime-scene-image {
-
-        height: 400px;
-
-    }
-
-
-    .crime-scene-details {
-
-        display: grid;
-
-        grid-template-columns:
-            1fr 1fr;
+        grid-template-columns: 1fr;
 
     }
 
+    .suspect-list {
 
-    .scene-detail:nth-child(odd) {
-
-        border-right:
-            1px solid #302e29;
-
-    }
-
-
-    .scene-detail:nth-child(3),
-    .scene-detail:nth-child(4) {
-
-        border-bottom:
-            1px solid #302e29;
-
-    }
-
-
-    .scene-detail:nth-child(5),
-    .scene-detail:nth-child(6) {
-
-        border-bottom:
-            none;
-
-    }
-
-
-    .case-details-grid {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-    }
-
-
-    .case-detail:nth-child(3n) {
-
-        border-right:
-            1px solid #302e29;
-
-    }
-
-
-    .case-detail:nth-child(2n) {
-
-        border-right: none;
-
-    }
-
-
-    .file-information {
-
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
 
     }
 
 }
 
 
-/* ============================================================
-   RESPONSIVE — 550PX
-============================================================ */
-
-
 @media(max-width:550px) {
 
     .victim-details {
 
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
 
     }
-
 
     .info-row:nth-child(even) {
 
@@ -1441,77 +1196,44 @@ body {
 
     }
 
+    .file-information {
 
-    .crime-scene-image {
-
-        height: 300px;
-
-    }
-
-
-    .crime-scene-details {
-
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
 
     }
-
-
-    .scene-detail:nth-child(odd) {
-
-        border-right: none;
-
-    }
-
-
-    .scene-detail:nth-child(5) {
-
-        border-bottom:
-            1px solid #302e29;
-
-    }
-
-
-    .case-details-grid {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .case-detail:nth-child(n) {
-
-        border-right: none;
-
-    }
-
-
-    .suspect-card {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .suspect-photo {
-
-        min-height: 180px;
-
-        border-right: none;
-
-        border-bottom:
-            1px solid #37332c;
-
-    }
-
 
     .file-body {
 
         flex-direction: column;
 
         align-items: flex-start;
+
+    }
+
+    .case-details-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .case-detail {
+
+        border-right: none;
+
+    }
+
+    .suspect-card {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .suspect-photo {
+
+        border-right: none;
+
+        border-bottom:
+            1px solid #37332c;
 
     }
 
