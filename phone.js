@@ -115,10 +115,17 @@ const closeRecent =
 
 /* =========================================================
    STORAGE
+
+   IMPORTANT:
+   repair.js uses:
+
+   brokenPhoneRepairComplete
+
+   Therefore phone.js MUST use the same key.
 ========================================================= */
 
 const REPAIRED_KEY =
-    "brokenPhoneRepaired";
+    "brokenPhoneRepairComplete";
 
 const PHONE_VISIBLE_KEY =
     "brokenPhonePhoneVisible";
@@ -136,26 +143,8 @@ let phoneVisible =
     localStorage.getItem(PHONE_VISIBLE_KEY) === "true";
 
 
-/*
-   IMPORTANT
-
-   If the phone has NOT been repaired,
-   it must always be hidden.
-*/
-
-if (!phoneRepaired) {
-
-    phoneVisible = false;
-
-    localStorage.setItem(
-        PHONE_VISIBLE_KEY,
-        "false"
-    );
-}
-
-
 /* =========================================================
-   SAVE VISIBILITY
+   SAVE PHONE VISIBILITY
 ========================================================= */
 
 function savePhoneVisibility() {
@@ -171,24 +160,28 @@ function savePhoneVisibility() {
 
 
 /* =========================================================
-   UPDATE BUTTON TEXT
+   UPDATE OPEN / HIDE BUTTON
 ========================================================= */
 
 function updatePhoneToggle() {
 
-    if (!phoneToggle) {
+    if (!phoneToggle || !toggleText) {
         return;
     }
+
 
     if (phoneVisible) {
 
         toggleText.textContent =
-            "CLOSE PHONE";
+            "HIDE PHONE";
 
-    } else {
+    }
+
+    else {
 
         toggleText.textContent =
             "OPEN PHONE";
+
     }
 
 }
@@ -201,16 +194,19 @@ function updatePhoneToggle() {
 function showPhone(autoOpen = false) {
 
     /*
-       Never allow the phone to appear
-       before repair.
+       Phone cannot be opened until
+       repair has been completed.
     */
 
     if (!phoneRepaired) {
+
         return;
+
     }
 
 
     phoneVisible = true;
+
 
     savePhoneVisibility();
 
@@ -224,8 +220,8 @@ function showPhone(autoOpen = false) {
 
 
     /*
-       When repair has JUST finished,
-       start at lock screen.
+       When the phone is newly repaired,
+       start at the lock screen.
     */
 
     if (autoOpen) {
@@ -244,11 +240,12 @@ function showPhone(autoOpen = false) {
 function hidePhone() {
 
     /*
-       Hiding the phone does NOT
-       remove the repaired state.
+       Hiding the phone does NOT reset
+       repair progress or phone data.
     */
 
     phoneVisible = false;
+
 
     savePhoneVisibility();
 
@@ -264,62 +261,40 @@ function hidePhone() {
 
 
 /* =========================================================
-   OPEN / CLOSE BUTTON
+   OPEN / HIDE PHONE BUTTON
 ========================================================= */
 
-phoneToggle.addEventListener(
-    "click",
-    () => {
+if (phoneToggle) {
 
-        /*
-           Before repair the button does
-           absolutely nothing.
-        */
+    phoneToggle.addEventListener(
+        "click",
+        function() {
 
-        if (!phoneRepaired) {
+            /*
+               Phone must be repaired first.
+            */
 
-            return;
+            if (!phoneRepaired) {
+
+                return;
+
+            }
+
+
+            if (phoneVisible) {
+
+                hidePhone();
+
+            }
+
+            else {
+
+                showPhone(false);
+
+            }
 
         }
-
-
-        if (phoneVisible) {
-
-            hidePhone();
-
-        } else {
-
-            showPhone(false);
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   REPAIR COMPLETE
-========================================================= */
-
-function completePhoneRepair() {
-
-    /*
-       Permanently remember repair.
-    */
-
-    phoneRepaired = true;
-
-    localStorage.setItem(
-        REPAIRED_KEY,
-        "true"
     );
-
-
-    /*
-       Automatically show phone.
-    */
-
-    showPhone(true);
 
 }
 
@@ -330,49 +305,58 @@ function completePhoneRepair() {
 
 function checkRepairState() {
 
-    const repaired =
+    phoneRepaired =
         localStorage.getItem(
             REPAIRED_KEY
         ) === "true";
-
-
-    if (repaired) {
-
-        phoneRepaired = true;
-
-    } else {
-
-        phoneRepaired = false;
-
-    }
 
 }
 
 
 /* =========================================================
-   REPAIR MESSAGE
+   REPAIR COMPLETE
 ========================================================= */
 
-window.addEventListener(
-    "message",
-    event => {
+function completePhoneRepair() {
 
-        if (!event.data) {
-            return;
-        }
+    /*
+       Permanently remember that the phone
+       has been repaired.
+    */
+
+    phoneRepaired = true;
 
 
-        if (
-            event.data.type ===
-            "PHONE_REPAIRED"
-        ) {
+    localStorage.setItem(
+        REPAIRED_KEY,
+        "true"
+    );
 
-            completePhoneRepair();
 
-        }
+    /*
+       Phone automatically becomes visible.
+    */
 
-    }
-);
+    phoneVisible = true;
+
+
+    localStorage.setItem(
+        PHONE_VISIBLE_KEY,
+        "true"
+    );
+
+
+    phoneShell.classList.remove(
+        "hidden-phone"
+    );
+
+
+    updatePhoneToggle();
+
+
+    showScreen("lock");
+
+}
 
 
 /* =========================================================
@@ -381,21 +365,40 @@ window.addEventListener(
 
 function showScreen(screenName) {
 
-    lockScreen.classList.add(
-        "hidden"
-    );
+    if (lockScreen) {
 
-    passcodeScreen.classList.add(
-        "hidden"
-    );
+        lockScreen.classList.add(
+            "hidden"
+        );
 
-    homeScreen.classList.add(
-        "hidden"
-    );
+    }
 
-    appScreen.classList.add(
-        "hidden"
-    );
+
+    if (passcodeScreen) {
+
+        passcodeScreen.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (homeScreen) {
+
+        homeScreen.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (appScreen) {
+
+        appScreen.classList.add(
+            "hidden"
+        );
+
+    }
 
 
     if (screenName === "lock") {
@@ -445,7 +448,7 @@ let unlockStartY = null;
 
 lockScreen.addEventListener(
     "pointerdown",
-    event => {
+    function(event) {
 
         unlockStartY =
             event.clientY;
@@ -456,12 +459,14 @@ lockScreen.addEventListener(
 
 lockScreen.addEventListener(
     "pointerup",
-    event => {
+    function(event) {
 
         if (
             unlockStartY === null
         ) {
+
             return;
+
         }
 
 
@@ -485,14 +490,13 @@ lockScreen.addEventListener(
 );
 
 
-/*
-   Desktop testing:
-   double click lock screen.
-*/
+/* =========================================================
+   DESKTOP DOUBLE CLICK TO UNLOCK
+========================================================= */
 
 lockScreen.addEventListener(
     "dblclick",
-    () => {
+    function() {
 
         showScreen(
             "passcode"
@@ -509,8 +513,14 @@ lockScreen.addEventListener(
 const PHONE_PASSCODE =
     "0521";
 
-let enteredPasscode = "";
 
+let enteredPasscode =
+    "";
+
+
+/* =========================================================
+   PASSCODE DOTS
+========================================================= */
 
 function updatePasscodeDots() {
 
@@ -521,7 +531,7 @@ function updatePasscodeDots() {
 
 
     dots.forEach(
-        (dot, index) => {
+        function(dot, index) {
 
             dot.classList.toggle(
                 "filled",
@@ -535,16 +545,28 @@ function updatePasscodeDots() {
 }
 
 
+/* =========================================================
+   CLEAR PASSCODE
+========================================================= */
+
 function clearPasscode() {
 
-    enteredPasscode = "";
+    enteredPasscode =
+        "";
+
 
     updatePasscodeDots();
 
-    passcodeError.textContent = "";
+
+    passcodeError.textContent =
+        "";
 
 }
 
+
+/* =========================================================
+   CHECK PASSCODE
+========================================================= */
 
 function checkPasscode() {
 
@@ -553,11 +575,17 @@ function checkPasscode() {
         PHONE_PASSCODE
     ) {
 
-        passcodeError.textContent = "";
+        passcodeError.textContent =
+            "";
+
 
         clearPasscode();
 
-        showScreen("home");
+
+        showScreen(
+            "home"
+        );
+
 
         return;
 
@@ -567,23 +595,36 @@ function checkPasscode() {
     passcodeError.textContent =
         "Incorrect passcode";
 
-    enteredPasscode = "";
+
+    enteredPasscode =
+        "";
+
 
     updatePasscodeDots();
 
 }
 
 
-function addPasscodeDigit(digit) {
+/* =========================================================
+   ADD PASSCODE DIGIT
+========================================================= */
+
+function addPasscodeDigit(
+    digit
+) {
 
     if (
         enteredPasscode.length >= 4
     ) {
+
         return;
+
     }
 
 
-    enteredPasscode += digit;
+    enteredPasscode +=
+        digit;
+
 
     updatePasscodeDots();
 
@@ -620,7 +661,7 @@ const passcodeNumbers = [
 
 
 passcodeNumbers.forEach(
-    value => {
+    function(value) {
 
         const button =
             document.createElement(
@@ -631,21 +672,27 @@ passcodeNumbers.forEach(
         button.type =
             "button";
 
+
         button.textContent =
             value;
 
 
-        if (value === "⌫") {
+        /* BACKSPACE */
+
+        if (
+            value === "⌫"
+        ) {
 
             button.addEventListener(
                 "click",
-                () => {
+                function() {
 
                     enteredPasscode =
                         enteredPasscode.slice(
                             0,
                             -1
                         );
+
 
                     updatePasscodeDots();
 
@@ -654,7 +701,12 @@ passcodeNumbers.forEach(
 
         }
 
-        else if (value === "✓") {
+
+        /* CONFIRM */
+
+        else if (
+            value === "✓"
+        ) {
 
             button.addEventListener(
                 "click",
@@ -663,11 +715,14 @@ passcodeNumbers.forEach(
 
         }
 
+
+        /* NUMBER */
+
         else {
 
             button.addEventListener(
                 "click",
-                () => {
+                function() {
 
                     addPasscodeDigit(
                         value
@@ -696,7 +751,7 @@ let passStartY = null;
 
 passcodeScreen.addEventListener(
     "pointerdown",
-    event => {
+    function(event) {
 
         passStartY =
             event.clientY;
@@ -707,12 +762,14 @@ passcodeScreen.addEventListener(
 
 passcodeScreen.addEventListener(
     "pointerup",
-    event => {
+    function(event) {
 
         if (
             passStartY === null
         ) {
+
             return;
+
         }
 
 
@@ -721,11 +778,16 @@ passcodeScreen.addEventListener(
             passStartY;
 
 
-        if (distance > 70) {
+        if (
+            distance > 70
+        ) {
 
             clearPasscode();
 
-            showScreen("lock");
+
+            showScreen(
+                "lock"
+            );
 
         }
 
@@ -753,7 +815,10 @@ function updateClock() {
     const minutes =
         String(
             now.getMinutes()
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     hours =
@@ -778,17 +843,22 @@ function updateClock() {
     lockTime.textContent =
         time;
 
+
     lockStatusTime.textContent =
         time;
+
 
     passcodeTime.textContent =
         time;
 
+
     homeStatusTime.textContent =
         time;
 
+
     homeBigTime.textContent =
         time;
+
 
     homeDate.textContent =
         date;
@@ -797,6 +867,7 @@ function updateClock() {
 
 
 updateClock();
+
 
 setInterval(
     updateClock,
@@ -875,11 +946,17 @@ const apps = {
 let recentApps = [];
 
 
-function addRecentApp(appId) {
+function addRecentApp(
+    appId
+) {
 
     recentApps =
         recentApps.filter(
-            id => id !== appId
+            function(id) {
+
+                return id !== appId;
+
+            }
         );
 
 
@@ -904,10 +981,12 @@ function addRecentApp(appId) {
 
 
 /* =========================================================
-   ICON
+   GET APP ICON
 ========================================================= */
 
-function getIconHTML(appId) {
+function getIconHTML(
+    appId
+) {
 
     const source =
         document.querySelector(
@@ -931,14 +1010,18 @@ function getIconHTML(appId) {
    OPEN APP
 ========================================================= */
 
-function openApp(appId) {
+function openApp(
+    appId
+) {
 
     const app =
         apps[appId];
 
 
     if (!app) {
+
         return;
+
     }
 
 
@@ -952,7 +1035,9 @@ function openApp(appId) {
 
 
     appHeaderIcon.innerHTML =
-        getIconHTML(appId);
+        getIconHTML(
+            appId
+        );
 
 
     appFrame.src =
@@ -975,11 +1060,11 @@ document
         "[data-app]"
     )
     .forEach(
-        button => {
+        function(button) {
 
             button.addEventListener(
                 "click",
-                () => {
+                function() {
 
                     openApp(
                         button.dataset.app
@@ -993,12 +1078,14 @@ document
 
 
 /* =========================================================
-   APP BACK
+   RETURN HOME
 ========================================================= */
 
 function returnHome() {
 
-    appFrame.src = "";
+    appFrame.src =
+        "";
+
 
     showScreen(
         "home"
@@ -1006,6 +1093,10 @@ function returnHome() {
 
 }
 
+
+/* =========================================================
+   APP BACK
+========================================================= */
 
 appBack.addEventListener(
     "click",
@@ -1019,7 +1110,7 @@ appBack.addEventListener(
 
 navBack.addEventListener(
     "click",
-    () => {
+    function() {
 
         if (
             !appScreen.classList.contains(
@@ -1042,6 +1133,7 @@ navBack.addEventListener(
 
             clearPasscode();
 
+
             showScreen(
                 "lock"
             );
@@ -1058,13 +1150,16 @@ navBack.addEventListener(
 
 navHome.addEventListener(
     "click",
-    () => {
+    function() {
 
-        appFrame.src = "";
+        appFrame.src =
+            "";
+
 
         recentPanel.classList.add(
             "hidden"
         );
+
 
         showScreen(
             "home"
@@ -1080,7 +1175,8 @@ navHome.addEventListener(
 
 function renderRecentApps() {
 
-    recentList.innerHTML = "";
+    recentList.innerHTML =
+        "";
 
 
     if (
@@ -1099,14 +1195,16 @@ function renderRecentApps() {
 
 
     recentApps.forEach(
-        appId => {
+        function(appId) {
 
             const app =
                 apps[appId];
 
 
             if (!app) {
+
                 return;
+
             }
 
 
@@ -1141,11 +1239,12 @@ function renderRecentApps() {
                 )
                 .addEventListener(
                     "click",
-                    () => {
+                    function() {
 
                         recentPanel.classList.add(
                             "hidden"
                         );
+
 
                         openApp(
                             appId
@@ -1167,9 +1266,10 @@ function renderRecentApps() {
 
 navRecent.addEventListener(
     "click",
-    () => {
+    function() {
 
         renderRecentApps();
+
 
         recentPanel.classList.remove(
             "hidden"
@@ -1181,7 +1281,7 @@ navRecent.addEventListener(
 
 closeRecent.addEventListener(
     "click",
-    () => {
+    function() {
 
         recentPanel.classList.add(
             "hidden"
@@ -1201,7 +1301,9 @@ let homeStartX = null;
 let homeStartY = null;
 
 
-function goToPage(page) {
+function goToPage(
+    page
+) {
 
     currentPage =
         Math.max(
@@ -1218,7 +1320,7 @@ function goToPage(page) {
 
 
     pageDots.forEach(
-        (dot, index) => {
+        function(dot, index) {
 
             dot.classList.toggle(
                 "active",
@@ -1233,10 +1335,11 @@ function goToPage(page) {
 
 homeScreen.addEventListener(
     "pointerdown",
-    event => {
+    function(event) {
 
         homeStartX =
             event.clientX;
+
 
         homeStartY =
             event.clientY;
@@ -1247,13 +1350,15 @@ homeScreen.addEventListener(
 
 homeScreen.addEventListener(
     "pointerup",
-    event => {
+    function(event) {
 
         if (
             homeStartX === null ||
             homeStartY === null
         ) {
+
             return;
+
         }
 
 
@@ -1272,13 +1377,17 @@ homeScreen.addEventListener(
             Math.abs(dx) > Math.abs(dy)
         ) {
 
-            if (dx < 0) {
+            if (
+                dx < 0
+            ) {
 
                 goToPage(
                     currentPage + 1
                 );
 
-            } else {
+            }
+
+            else {
 
                 goToPage(
                     currentPage - 1
@@ -1300,7 +1409,9 @@ homeScreen.addEventListener(
    SEARCH
 ========================================================= */
 
-function performSearch(value) {
+function performSearch(
+    value
+) {
 
     const query =
         value
@@ -1308,7 +1419,8 @@ function performSearch(value) {
             .toLowerCase();
 
 
-    searchResults.innerHTML = "";
+    searchResults.innerHTML =
+        "";
 
 
     if (!query) {
@@ -1316,6 +1428,7 @@ function performSearch(value) {
         searchResults.classList.add(
             "hidden"
         );
+
 
         return;
 
@@ -1325,10 +1438,13 @@ function performSearch(value) {
     const matches =
         Object.entries(apps)
             .filter(
-                ([id, app]) =>
-                    app.name
+                function([id, app]) {
+
+                    return app.name
                         .toLowerCase()
-                        .includes(query)
+                        .includes(query);
+
+                }
             );
 
 
@@ -1347,7 +1463,7 @@ function performSearch(value) {
     else {
 
         matches.forEach(
-            ([id, app]) => {
+            function([id, app]) {
 
                 const button =
                     document.createElement(
@@ -1357,6 +1473,7 @@ function performSearch(value) {
 
                 button.type =
                     "button";
+
 
                 button.className =
                     "search-result";
@@ -1373,14 +1490,16 @@ function performSearch(value) {
 
                 button.addEventListener(
                     "click",
-                    () => {
+                    function() {
 
                         searchInput.value =
                             "";
 
+
                         searchResults.classList.add(
                             "hidden"
                         );
+
 
                         openApp(
                             id
@@ -1409,7 +1528,7 @@ function performSearch(value) {
 
 searchInput.addEventListener(
     "input",
-    () => {
+    function() {
 
         performSearch(
             searchInput.value
@@ -1421,10 +1540,11 @@ searchInput.addEventListener(
 
 clearSearch.addEventListener(
     "click",
-    () => {
+    function() {
 
         searchInput.value =
             "";
+
 
         searchResults.classList.add(
             "hidden"
@@ -1440,7 +1560,7 @@ clearSearch.addEventListener(
 
 document.addEventListener(
     "click",
-    event => {
+    function(event) {
 
         if (
             !event.target.closest(
@@ -1467,16 +1587,16 @@ document.addEventListener(
 
 window.addEventListener(
     "message",
-    event => {
+    function(event) {
 
         if (!event.data) {
+
             return;
+
         }
 
 
-        /*
-           Phone app asks to go back.
-        */
+        /* PHONE APP → BACK */
 
         if (
             event.data.type ===
@@ -1488,10 +1608,7 @@ window.addEventListener(
         }
 
 
-        /*
-           Phone app asks to open another
-           phone app.
-        */
+        /* PHONE APP → OPEN ANOTHER APP */
 
         if (
             event.data.type ===
@@ -1505,10 +1622,7 @@ window.addEventListener(
         }
 
 
-        /*
-           Repair page tells this page
-           that the phone has been repaired.
-        */
+        /* REPAIR PAGE → PHONE REPAIRED */
 
         if (
             event.data.type ===
@@ -1540,6 +1654,7 @@ function createVictimFile() {
         existing.classList.remove(
             "hidden"
         );
+
 
         return;
 
@@ -1756,7 +1871,7 @@ victimInfoButton.addEventListener(
 
 
 /* =========================================================
-   INITIALIZE
+   INITIALIZE PHONE
 ========================================================= */
 
 function initializePhone() {
@@ -1764,14 +1879,15 @@ function initializePhone() {
     checkRepairState();
 
 
+    /* =====================================================
+       PHONE NOT REPAIRED
+    ===================================================== */
+
     if (!phoneRepaired) {
 
-        /*
-           Not repaired.
-           Phone MUST remain hidden.
-        */
+        phoneVisible =
+            false;
 
-        phoneVisible = false;
 
         phoneShell.classList.add(
             "hidden-phone"
@@ -1783,45 +1899,81 @@ function initializePhone() {
             "false"
         );
 
+
+        updatePhoneToggle();
+
+
+        /*
+           Keep the phone's internal screen
+           ready at the lock screen.
+        */
+
+        showScreen(
+            "lock"
+        );
+
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       PHONE HAS BEEN REPAIRED
+    ===================================================== */
+
+    const savedVisibility =
+        localStorage.getItem(
+            PHONE_VISIBLE_KEY
+        );
+
+
+    /*
+       If this is the first time phone.html
+       is being opened after repair,
+       automatically show the phone.
+    */
+
+    if (
+        savedVisibility === null
+    ) {
+
+        phoneVisible =
+            true;
+
+
+        localStorage.setItem(
+            PHONE_VISIBLE_KEY,
+            "true"
+        );
+
     }
 
     else {
 
-        /*
-           Repaired.
+        phoneVisible =
+            savedVisibility === "true";
 
-           If no visibility state exists,
-           default to OPEN.
-        */
-
-        const savedVisibility =
-            localStorage.getItem(
-                PHONE_VISIBLE_KEY
-            );
+    }
 
 
-        if (
-            savedVisibility === null ||
-            savedVisibility === "true"
-        ) {
+    /* =====================================================
+       APPLY PHONE VISIBILITY
+    ===================================================== */
 
-            phoneVisible = true;
+    if (phoneVisible) {
 
-            phoneShell.classList.remove(
-                "hidden-phone"
-            );
+        phoneShell.classList.remove(
+            "hidden-phone"
+        );
 
-        }
+    }
 
-        else {
+    else {
 
-            phoneVisible = false;
-
-            phoneShell.classList.add(
-                "hidden-phone"
-            );
-
-        }
+        phoneShell.classList.add(
+            "hidden-phone"
+        );
 
     }
 
@@ -1829,15 +1981,13 @@ function initializePhone() {
     updatePhoneToggle();
 
 
-    /*
-       Start repaired phone on lock screen.
-    */
+    /* =====================================================
+       START AT LOCK SCREEN
+    ===================================================== */
 
-    if (phoneRepaired) {
-
-        showScreen("lock");
-
-    }
+    showScreen(
+        "lock"
+    );
 
 }
 
