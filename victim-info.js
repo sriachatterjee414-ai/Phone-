@@ -1,19 +1,21 @@
 /* ============================================================
    BROKEN PHONE
-   VICTIM INFORMATION SYSTEM
+   VICTIM INFORMATION / CASE FILE
 
-   Uses the SAME persistent state as persistent-ui.js:
+   IMPORTANT:
 
-       brokenPhoneGameState
+   This page is NOT locked behind the phone password.
 
-   This means:
+   The victim information is a police case file outside
+   the victim's phone.
 
-       Characters
-       Suspects
-       Victim
-
-   remain synchronized across the game.
-   ============================================================ */
+   Therefore:
+   - Victim information is always accessible.
+   - Crime scene is always accessible.
+   - Forensic information is always accessible.
+   - The birthday/passcode information is accessible.
+   - Suspects synchronize with brokenPhoneGameState.
+============================================================ */
 
 
 /* ============================================================
@@ -29,7 +31,7 @@ const PHONE_RETURN_KEY =
 
 
 /* ============================================================
-   DEFAULT VICTIM DATA
+   DEFAULT VICTIM
 ============================================================ */
 
 const DEFAULT_VICTIM = {
@@ -117,7 +119,26 @@ function loadGameState() {
         }
 
 
-        return JSON.parse(raw);
+        const state =
+            JSON.parse(raw);
+
+
+        return {
+
+            characters:
+                Array.isArray(state.characters)
+                    ? state.characters
+                    : [],
+
+            suspects:
+                Array.isArray(state.suspects)
+                    ? state.suspects
+                    : [],
+
+            victim:
+                state.victim || null
+
+        };
 
     }
 
@@ -232,12 +253,6 @@ const victimPhoneStatus =
     );
 
 
-const victimCaseStatus =
-    document.getElementById(
-        "victimCaseStatus"
-    );
-
-
 const caseStatus =
     document.getElementById(
         "caseStatus"
@@ -250,15 +265,15 @@ const crimeSceneImage =
     );
 
 
-const deathEvidenceImage =
-    document.getElementById(
-        "deathEvidenceImage"
-    );
-
-
 const crimeSceneCaption =
     document.getElementById(
         "crimeSceneCaption"
+    );
+
+
+const deathEvidenceImage =
+    document.getElementById(
+        "deathEvidenceImage"
     );
 
 
@@ -295,6 +310,30 @@ const dateDiscovered =
 const investigationStatus =
     document.getElementById(
         "investigationStatus"
+    );
+
+
+const forensicTimeOfDeath =
+    document.getElementById(
+        "forensicTimeOfDeath"
+    );
+
+
+const forensicLocation =
+    document.getElementById(
+        "forensicLocation"
+    );
+
+
+const forensicDate =
+    document.getElementById(
+        "forensicDate"
+    );
+
+
+const forensicCaseStatus =
+    document.getElementById(
+        "forensicCaseStatus"
     );
 
 
@@ -341,7 +380,7 @@ const backButton =
 
 
 /* ============================================================
-   FORMAT BIRTHDAY
+   BIRTHDAY → PHONE PASSCODE
 ============================================================ */
 
 function getBirthdayPasscode(birthday) {
@@ -352,16 +391,6 @@ function getBirthdayPasscode(birthday) {
 
     }
 
-
-    /*
-        Example:
-
-        May 21, 2001
-
-        becomes:
-
-        0521
-    */
 
     const match =
         birthday.match(
@@ -387,16 +416,27 @@ function getBirthdayPasscode(birthday) {
     const months = {
 
         january: "01",
+
         february: "02",
+
         march: "03",
+
         april: "04",
+
         may: "05",
+
         june: "06",
+
         july: "07",
+
         august: "08",
+
         september: "09",
+
         october: "10",
+
         november: "11",
+
         december: "12"
 
     };
@@ -427,10 +467,6 @@ function updateVictimInformation() {
     const victim =
         getVictim();
 
-
-    /* -----------------------------
-       IDENTITY
-    ----------------------------- */
 
     victimName.textContent =
         victim.name;
@@ -480,32 +516,18 @@ function updateVictimInformation() {
         "Unknown";
 
 
-    victimCaseStatus.textContent =
-        victim.caseStatus ||
-        "ACTIVE";
-
-
-    /* -----------------------------
-       CASE HEADER
-    ----------------------------- */
-
     caseStatus.textContent =
         victim.caseStatus ||
         "ACTIVE INVESTIGATION";
 
 
-    /* -----------------------------
-       EVIDENCE
-    ----------------------------- */
+    /* ========================================================
+       CRIME SCENE
+    ======================================================== */
 
     crimeSceneImage.src =
         victim.crimeSceneImage ||
         "crime_scene.png";
-
-
-    deathEvidenceImage.src =
-        victim.deathEvidenceImage ||
-        "death_scene.png";
 
 
     crimeSceneImage.alt =
@@ -513,14 +535,34 @@ function updateVictimInformation() {
         victim.name;
 
 
+    crimeSceneCaption.textContent =
+        "Primary crime scene photograph associated with " +
+        victim.name +
+        ". Scene remains under investigation.";
+
+
+    /* ========================================================
+       FORENSIC IMAGE
+    ======================================================== */
+
+    deathEvidenceImage.src =
+        victim.deathEvidenceImage ||
+        "death_scene.png";
+
+
     deathEvidenceImage.alt =
         "Forensic evidence — " +
         victim.name;
 
 
-    /* -----------------------------
-       CASE DETAILS
-    ----------------------------- */
+    deathEvidenceCaption.textContent =
+        "Forensic evidence photograph currently associated " +
+        "with the homicide investigation.";
+
+
+    /* ========================================================
+       CASE INFORMATION
+    ======================================================== */
 
     causeOfDeath.textContent =
         victim.cause ||
@@ -547,9 +589,29 @@ function updateVictimInformation() {
         "ACTIVE";
 
 
-    /* -----------------------------
+    forensicTimeOfDeath.textContent =
+        victim.timeOfDeath ||
+        "UNKNOWN";
+
+
+    forensicLocation.textContent =
+        victim.discoveryLocation ||
+        "UNKNOWN";
+
+
+    forensicDate.textContent =
+        victim.dateDiscovered ||
+        "UNKNOWN";
+
+
+    forensicCaseStatus.textContent =
+        victim.caseStatus ||
+        "ACTIVE";
+
+
+    /* ========================================================
        IDENTIFICATION FILE
-    ----------------------------- */
+    ======================================================== */
 
     fileVictimName.textContent =
         victim.name;
@@ -572,23 +634,7 @@ function updateVictimInformation() {
    SUSPECT STATUS
 ============================================================ */
 
-function getSuspectStatus(
-    characterId,
-    state
-) {
-
-    /*
-        For now every character placed
-        into Suspects is a person of interest.
-
-        Later we can add:
-
-        person of interest
-        primary suspect
-        killer
-
-        without changing the UI.
-    */
+function getSuspectStatus() {
 
     return "PERSON OF INTEREST";
 
@@ -606,29 +652,16 @@ function renderSuspects() {
 
 
     const characters =
-        Array.isArray(
-            state.characters
-        )
-            ? state.characters
-            : [];
+        state.characters;
 
 
     const suspectIds =
-        Array.isArray(
-            state.suspects
-        )
-            ? state.suspects
-            : [];
+        state.suspects;
 
 
     const victim =
         state.victim;
 
-
-    /*
-        Only characters explicitly marked
-        as suspects appear here.
-    */
 
     const suspects =
         characters.filter(
@@ -645,11 +678,6 @@ function renderSuspects() {
                 }
 
 
-                /*
-                    Safety:
-                    victim cannot be a suspect.
-                */
-
                 if (
                     victim &&
                     victim.id === character.id
@@ -665,10 +693,6 @@ function renderSuspects() {
             }
         );
 
-
-    /* ========================================================
-       NO SUSPECTS
-    ======================================================== */
 
     if (!suspects.length) {
 
@@ -688,12 +712,8 @@ function renderSuspects() {
     }
 
 
-    /* ========================================================
-       SUSPECT CARDS
-    ======================================================== */
-
-    suspectList.innerHTML = suspects
-        .map(
+    suspectList.innerHTML =
+        suspects.map(
             character => `
 
                 <article
@@ -730,13 +750,9 @@ function renderSuspects() {
 
                     <div class="suspect-information">
 
-
                         <div class="suspect-status">
 
-                            ${getSuspectStatus(
-                                character.id,
-                                state
-                            )}
+                            ${getSuspectStatus()}
 
                         </div>
 
@@ -779,27 +795,17 @@ function renderSuspects() {
                             </span>
 
                             <strong>
-                                ${
-                                    state.suspects.includes(
-                                        character.id
-                                    )
-                                    ?
-                                    "Flagged by investigator"
-                                    :
-                                    "None"
-                                }
+                                Flagged by investigator
                             </strong>
 
                         </div>
-
 
                     </div>
 
                 </article>
 
             `
-        )
-        .join("");
+        ).join("");
 
 }
 
@@ -808,15 +814,9 @@ function renderSuspects() {
    BIRTHDAY FILE
 ============================================================ */
 
-let birthdayFileShown = false;
-
-
 showBirthdayButton.addEventListener(
     "click",
     function () {
-
-        birthdayFileShown = true;
-
 
         birthdayFile.classList.remove(
             "hidden"
@@ -835,7 +835,7 @@ showBirthdayButton.addEventListener(
 
 
 /* ============================================================
-   BACK BUTTON
+   BACK
 ============================================================ */
 
 function returnToPreviousPage() {
@@ -861,11 +861,6 @@ function returnToPreviousPage() {
 
     }
 
-
-    /*
-        If opened directly,
-        return to the story.
-    */
 
     window.location.href =
         "story.html";
