@@ -1,8 +1,16 @@
 /* ============================================================
    BROKEN PHONE
    VICTIM INFORMATION / CASE FILE
-   FULL SCREEN DOSSIER
+
+   IMPORTANT:
+   This page is NOT part of the phone lock.
+   It is an independent police case file.
    ============================================================ */
+
+
+/* ============================================================
+   RESET
+============================================================ */
 
 * {
     box-sizing: border-box;
@@ -38,15 +46,13 @@ body {
 
 /* ============================================================
    PAGE
-   ============================================================ */
+============================================================ */
 
 #victimInfoPage {
 
     min-height: 100vh;
 
     width: 100%;
-
-    padding: 0;
 
     background:
         radial-gradient(
@@ -60,8 +66,85 @@ body {
 
 
 /* ============================================================
-   TOP HEADER
-   ============================================================ */
+   LEFT CASE TAB
+============================================================ */
+
+.case-tab {
+
+    position: fixed;
+
+    left: 0;
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    z-index: 1000;
+
+    width: 72px;
+
+    padding:
+        15px
+        7px;
+
+    border:
+        1px solid #5a503d;
+
+    border-left: none;
+
+    background:
+        rgba(17, 16, 14, 0.96);
+
+    color: #cbbd9b;
+
+    cursor: pointer;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.case-tab span {
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    color: #777267;
+
+}
+
+
+.case-tab strong {
+
+    font-size: 8px;
+
+    line-height: 1.5;
+
+    letter-spacing: 1px;
+
+    text-align: center;
+
+}
+
+
+.case-tab:hover {
+
+    background:
+        #242119;
+
+}
+
+
+/* ============================================================
+   HEADER
+============================================================ */
 
 .case-header {
 
@@ -87,15 +170,6 @@ body {
 
     background:
         rgba(10, 10, 9, 0.82);
-
-}
-
-
-.case-header-left {
-
-    display: flex;
-
-    flex-direction: column;
 
 }
 
@@ -163,14 +237,15 @@ body {
 
 /* ============================================================
    DOSSIER
-   ============================================================ */
+============================================================ */
 
 .dossier {
 
-    width: min(
-        1500px,
-        calc(100% - 100px)
-    );
+    width:
+        min(
+            1500px,
+            calc(100% - 100px)
+        );
 
     margin: auto;
 
@@ -183,8 +258,8 @@ body {
 
 
 /* ============================================================
-   SECTION
-   ============================================================ */
+   DOSSIER SECTION
+============================================================ */
 
 .dossier-section {
 
@@ -228,8 +303,8 @@ body {
 
 
 /* ============================================================
-   VICTIM HERO
-   ============================================================ */
+   VICTIM
+============================================================ */
 
 .victim-layout {
 
@@ -247,8 +322,8 @@ body {
 
 
 /* ============================================================
-   VICTIM PORTRAIT
-   ============================================================ */
+   PORTRAIT
+============================================================ */
 
 .victim-photo {
 
@@ -297,72 +372,8 @@ body {
 
 
 /* ============================================================
-   VICTIM NAME
-   ============================================================ */
-
-.victim-identity {
-
-    margin-bottom: 25px;
-
-}
-
-
-.victim-identity .small-label {
-
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: #777267;
-
-    font-size: 10px;
-
-    letter-spacing: 3px;
-
-}
-
-
-.victim-identity h2 {
-
-    margin: 0;
-
-    color: #eadfc9;
-
-    font-size:
-        clamp(28px, 3vw, 42px);
-
-    font-weight: normal;
-
-    letter-spacing: 2px;
-
-}
-
-
-.victim-identity .victim-tag {
-
-    display: inline-block;
-
-    margin-top: 12px;
-
-    padding:
-        6px
-        11px;
-
-    border:
-        1px solid #655c49;
-
-    color: #b8aa8c;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-}
-
-
-/* ============================================================
-   INFORMATION GRID
-   ============================================================ */
+   VICTIM DETAILS
+============================================================ */
 
 .victim-details {
 
@@ -370,8 +381,6 @@ body {
 
     grid-template-columns:
         repeat(2, 1fr);
-
-    gap: 0;
 
     border:
         1px solid #35322c;
@@ -437,137 +446,10 @@ body {
 
 
 /* ============================================================
-   INVESTIGATION NOTE
-   ============================================================ */
+   CASE INFORMATION
+============================================================ */
 
-.investigation-note {
-
-    margin-top: 20px;
-
-    padding: 18px 20px;
-
-    border:
-        1px solid #4a4335;
-
-    background:
-        rgba(100, 82, 44, 0.07);
-
-}
-
-
-.investigation-note-title {
-
-    margin-bottom: 7px;
-
-    color: #c8b98e;
-
-    font-size: 10px;
-
-    letter-spacing: 2px;
-
-}
-
-
-.investigation-note p {
-
-    margin: 0;
-
-    color: #969084;
-
-    font-size: 12px;
-
-    line-height: 1.7;
-
-}
-
-
-/* ============================================================
-   EVIDENCE / DEATH SCENE
-   ============================================================ */
-
-.evidence-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr
-        1fr;
-
-    gap: 28px;
-
-}
-
-
-.evidence-card {
-
-    border:
-        1px solid #39362f;
-
-    background:
-        #0d0d0c;
-
-}
-
-
-.evidence-image {
-
-    width: 100%;
-
-    height: 430px;
-
-    display: block;
-
-    object-fit: cover;
-
-    background:
-        #191817;
-
-}
-
-
-.evidence-caption {
-
-    padding:
-        15px
-        18px;
-
-    border-top:
-        1px solid #39362f;
-
-}
-
-
-.evidence-caption strong {
-
-    display: block;
-
-    margin-bottom: 5px;
-
-    color: #d3c5a3;
-
-    font-size: 11px;
-
-    letter-spacing: 2px;
-
-}
-
-
-.evidence-caption span {
-
-    color: #777267;
-
-    font-size: 10px;
-
-    line-height: 1.5;
-
-}
-
-
-/* ============================================================
-   DEATH / CASE DETAILS
-   ============================================================ */
-
-.case-details-grid {
+.case-grid {
 
     display: grid;
 
@@ -580,7 +462,7 @@ body {
 }
 
 
-.case-detail {
+.case-grid > div {
 
     min-height: 95px;
 
@@ -595,14 +477,14 @@ body {
 }
 
 
-.case-detail:nth-child(3n) {
+.case-grid > div:nth-child(3n) {
 
     border-right: none;
 
 }
 
 
-.case-detail span {
+.case-grid span {
 
     display: block;
 
@@ -617,7 +499,7 @@ body {
 }
 
 
-.case-detail strong {
+.case-grid strong {
 
     color: #ddd6c7;
 
@@ -629,8 +511,8 @@ body {
 
 
 /* ============================================================
-   IDENTIFICATION / PHONE FILE
-   ============================================================ */
+   BIRTHDAY / PHONE CLUE
+============================================================ */
 
 .birthday-hint {
 
@@ -703,8 +585,14 @@ body {
 
     font-size: 12px;
 
+    line-height: 1.6;
+
 }
 
+
+/* ============================================================
+   BUTTONS
+============================================================ */
 
 .file-button,
 .back-button {
@@ -723,6 +611,11 @@ body {
         19px;
 
     cursor: pointer;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 
     font-size: 10px;
 
@@ -751,7 +644,7 @@ body {
 
 /* ============================================================
    BIRTHDAY FILE
-   ============================================================ */
+============================================================ */
 
 .birthday-file {
 
@@ -908,7 +801,7 @@ body {
 
 /* ============================================================
    SUSPECTS
-   ============================================================ */
+============================================================ */
 
 .suspect-list {
 
@@ -1085,7 +978,7 @@ body {
 
 /* ============================================================
    NO SUSPECTS
-   ============================================================ */
+============================================================ */
 
 .no-suspects {
 
@@ -1107,7 +1000,7 @@ body {
 
 /* ============================================================
    BACK
-   ============================================================ */
+============================================================ */
 
 .back-button {
 
@@ -1120,7 +1013,7 @@ body {
 
 /* ============================================================
    RESPONSIVE
-   ============================================================ */
+============================================================ */
 
 @media(max-width:1100px) {
 
@@ -1153,6 +1046,13 @@ body {
 
 
 @media(max-width:800px) {
+
+    .case-tab {
+
+        display: none;
+
+    }
+
 
     .case-header {
 
@@ -1210,14 +1110,7 @@ body {
     }
 
 
-    .evidence-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .case-details-grid {
+    .case-grid {
 
         grid-template-columns:
             repeat(2, 1fr);
@@ -1225,7 +1118,7 @@ body {
     }
 
 
-    .case-detail:nth-child(3n) {
+    .case-grid > div:nth-child(3n) {
 
         border-right:
             1px solid #302e29;
@@ -1233,7 +1126,7 @@ body {
     }
 
 
-    .case-detail:nth-child(2n) {
+    .case-grid > div:nth-child(2n) {
 
         border-right: none;
 
@@ -1273,14 +1166,14 @@ body {
     }
 
 
-    .case-details-grid {
+    .case-grid {
 
         grid-template-columns: 1fr;
 
     }
 
 
-    .case-detail:nth-child(n) {
+    .case-grid > div:nth-child(n) {
 
         border-right: none;
 
@@ -1300,6 +1193,15 @@ body {
 
         border-bottom:
             1px solid #37332c;
+
+    }
+
+
+    .file-body {
+
+        flex-direction: column;
+
+        align-items: flex-start;
 
     }
 
