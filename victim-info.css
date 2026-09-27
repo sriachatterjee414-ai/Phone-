@@ -1,19 +1,25 @@
-*{
-    box-sizing:border-box;
+/* ============================================================
+   BROKEN PHONE
+   VICTIM INFORMATION / CASE FILE
+   FULL SCREEN DOSSIER
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
 }
 
 
 html,
-body{
+body {
 
-    margin:0;
+    margin: 0;
 
-    width:100%;
-    min-height:100%;
+    width: 100%;
+    min-height: 100%;
 
-    background:#0b0b0b;
+    background: #090909;
 
-    color:#e8e3d9;
+    color: #e8e3d9;
 
     font-family:
         Georgia,
@@ -23,321 +29,366 @@ body{
 }
 
 
-body{
+body {
 
-    overflow-x:hidden;
+    overflow-x: hidden;
 
 }
 
 
-/* =========================================
+/* ============================================================
    PAGE
-========================================= */
+   ============================================================ */
 
-#victimInfoPage{
+#victimInfoPage {
 
-    min-height:100vh;
+    min-height: 100vh;
 
-    padding-left:75px;
+    width: 100%;
+
+    padding: 0;
 
     background:
-
         radial-gradient(
-            circle at 50% 10%,
+            circle at 50% 0%,
             #292721 0%,
-            #11100e 35%,
-            #070707 100%
+            #151410 35%,
+            #080807 100%
         );
 
 }
 
 
-/* =========================================
-   PERMANENT LEFT TAB
-========================================= */
+/* ============================================================
+   TOP HEADER
+   ============================================================ */
 
-.case-tab{
+.case-header {
 
-    position:fixed;
+    width: 100%;
 
-    left:0;
-    top:50%;
+    min-height: 145px;
 
-    transform:
-        translateY(-50%);
+    padding:
+        38px
+        6vw
+        28px;
 
-    z-index:1000;
+    display: flex;
 
-    width:65px;
-    min-height:145px;
+    align-items: flex-end;
 
-    border:1px solid #75684f;
+    justify-content: space-between;
 
-    border-left:0;
-
-    border-radius:
-        0 12px 12px 0;
-
-    background:#171612;
-
-    color:#d9cba9;
-
-    cursor:pointer;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:9px;
-
-    box-shadow:
-        5px 5px 20px rgba(0,0,0,.5);
-
-}
-
-
-.case-tab:hover{
-
-    background:#26231c;
-
-}
-
-
-.case-tab span{
-
-    font-size:9px;
-
-    letter-spacing:2px;
-
-    writing-mode:
-        vertical-rl;
-
-    transform:
-        rotate(180deg);
-
-}
-
-
-.case-tab strong{
-
-    font-size:10px;
-
-    line-height:1.3;
-
-    text-align:center;
-
-}
-
-
-/* =========================================
-   HEADER
-========================================= */
-
-.case-header{
-
-    max-width:1050px;
-
-    margin:auto;
-
-    padding:55px 45px 30px;
-
-    display:flex;
-
-    align-items:flex-end;
-
-    justify-content:space-between;
-
-    gap:30px;
+    gap: 40px;
 
     border-bottom:
-        1px solid #4a4438;
-
-}
-
-
-.case-label{
-
-    font-size:10px;
-
-    letter-spacing:3px;
-
-    color:#91866e;
-
-}
-
-
-.case-header h1{
-
-    margin:8px 0 4px;
-
-    font-size:31px;
-
-    letter-spacing:2px;
-
-    font-weight:500;
-
-}
-
-
-.case-number{
-
-    font-size:11px;
-
-    color:#777267;
-
-    letter-spacing:1px;
-
-}
-
-
-.case-status{
-
-    padding:8px 12px;
-
-    border:1px solid #75684f;
-
-    color:#c8b98e;
-
-    font-size:10px;
-
-    letter-spacing:1px;
-
-}
-
-
-/* =========================================
-   DOSSIER
-========================================= */
-
-.dossier{
-
-    width:100%;
-
-    max-width:1050px;
-
-    margin:auto;
-
-    padding:25px 45px 70px;
-
-}
-
-
-.dossier-section{
-
-    margin-bottom:25px;
-
-    padding:22px;
-
-    border:1px solid #37342d;
+        1px solid #454036;
 
     background:
-        rgba(24,23,20,.72);
+        rgba(10, 10, 9, 0.82);
 
 }
 
 
-.section-title{
+.case-header-left {
 
-    margin-bottom:20px;
+    display: flex;
 
-    padding-bottom:10px;
+    flex-direction: column;
+
+}
+
+
+.case-label {
+
+    color: #91866e;
+
+    font-size: 11px;
+
+    letter-spacing: 4px;
+
+}
+
+
+.case-header h1 {
+
+    margin:
+        7px
+        0
+        5px;
+
+    color: #eee8da;
+
+    font-size:
+        clamp(30px, 3vw, 48px);
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+
+}
+
+
+.case-number {
+
+    color: #777267;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.case-status {
+
+    padding:
+        10px
+        16px;
+
+    border:
+        1px solid #75684f;
+
+    color: #c8b98e;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    white-space: nowrap;
+
+}
+
+
+/* ============================================================
+   DOSSIER
+   ============================================================ */
+
+.dossier {
+
+    width: min(
+        1500px,
+        calc(100% - 100px)
+    );
+
+    margin: auto;
+
+    padding:
+        45px
+        0
+        90px;
+
+}
+
+
+/* ============================================================
+   SECTION
+   ============================================================ */
+
+.dossier-section {
+
+    margin-bottom: 32px;
+
+    padding: 32px;
+
+    border:
+        1px solid #37342d;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(29, 27, 23, 0.94),
+            rgba(14, 13, 11, 0.96)
+        );
+
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, 0.25);
+
+}
+
+
+.section-title {
+
+    margin-bottom: 28px;
+
+    padding-bottom: 13px;
 
     border-bottom:
         1px solid #3e3a31;
 
-    color:#a99b78;
+    color: #b3a27c;
 
-    font-size:11px;
+    font-size: 11px;
 
-    letter-spacing:3px;
+    letter-spacing: 4px;
 
 }
 
 
-/* =========================================
-   VICTIM
-========================================= */
+/* ============================================================
+   VICTIM HERO
+   ============================================================ */
 
-.victim-layout{
+.victim-layout {
 
-    display:grid;
+    display: grid;
 
     grid-template-columns:
-        230px 1fr;
+        430px
+        1fr;
 
-    gap:35px;
+    gap: 55px;
 
-}
-
-
-.victim-photo{
-
-    border:1px solid #554d3e;
-
-    background:#111;
-
-    padding:10px;
+    align-items: start;
 
 }
 
 
-.victim-photo img{
+/* ============================================================
+   VICTIM PORTRAIT
+   ============================================================ */
 
-    display:block;
+.victim-photo {
 
-    width:100%;
+    border:
+        1px solid #554d3e;
 
-    aspect-ratio:3 / 4;
+    background:
+        #0d0d0c;
 
-    object-fit:cover;
-
-    background:#222;
-
-}
-
-
-.photo-label{
-
-    padding-top:9px;
-
-    text-align:center;
-
-    color:#777;
-
-    font-size:9px;
-
-    letter-spacing:2px;
+    padding: 14px;
 
 }
 
 
-/* =========================================
-   INFO ROWS
-========================================= */
+.victim-photo img {
 
-.victim-details{
+    display: block;
 
-    display:flex;
+    width: 100%;
 
-    flex-direction:column;
+    height: 520px;
+
+    object-fit: contain;
+
+    object-position: center bottom;
+
+    background:
+        #191817;
 
 }
 
 
-.info-row{
+.photo-label {
 
-    min-height:43px;
+    padding-top: 12px;
 
-    display:grid;
+    text-align: center;
+
+    color: #777267;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+}
+
+
+/* ============================================================
+   VICTIM NAME
+   ============================================================ */
+
+.victim-identity {
+
+    margin-bottom: 25px;
+
+}
+
+
+.victim-identity .small-label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #777267;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+}
+
+
+.victim-identity h2 {
+
+    margin: 0;
+
+    color: #eadfc9;
+
+    font-size:
+        clamp(28px, 3vw, 42px);
+
+    font-weight: normal;
+
+    letter-spacing: 2px;
+
+}
+
+
+.victim-identity .victim-tag {
+
+    display: inline-block;
+
+    margin-top: 12px;
+
+    padding:
+        6px
+        11px;
+
+    border:
+        1px solid #655c49;
+
+    color: #b8aa8c;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+}
+
+
+/* ============================================================
+   INFORMATION GRID
+   ============================================================ */
+
+.victim-details {
+
+    display: grid;
 
     grid-template-columns:
-        180px 1fr;
+        repeat(2, 1fr);
 
-    align-items:center;
+    gap: 0;
+
+    border:
+        1px solid #35322c;
+
+}
+
+
+.info-row {
+
+    min-height: 70px;
+
+    padding:
+        14px
+        17px;
+
+    border-right:
+        1px solid #302e29;
 
     border-bottom:
         1px solid #302e29;
@@ -345,214 +396,444 @@ body{
 }
 
 
-.info-row .label{
+.info-row:nth-child(even) {
 
-    color:#777267;
-
-    font-size:10px;
-
-    letter-spacing:1.5px;
+    border-right: none;
 
 }
 
 
-.info-row .value{
+.info-row .label {
 
-    color:#e3ded2;
+    display: block;
 
-    font-size:14px;
+    margin-bottom: 8px;
 
-}
+    color: #706b60;
 
+    font-size: 9px;
 
-.info-row .birthday{
-
-    color:#e5ca82;
-
-    font-weight:bold;
+    letter-spacing: 2px;
 
 }
 
 
-/* =========================================
-   BIRTHDAY HINT
-========================================= */
+.info-row .value {
 
-.birthday-hint{
+    color: #ddd6c7;
 
-    display:flex;
+    font-size: 14px;
 
-    align-items:center;
+}
 
-    gap:15px;
 
-    padding:15px;
+.info-row .birthday {
 
-    margin-bottom:15px;
+    color: #e5ca82;
+
+    font-weight: bold;
+
+}
+
+
+/* ============================================================
+   INVESTIGATION NOTE
+   ============================================================ */
+
+.investigation-note {
+
+    margin-top: 20px;
+
+    padding: 18px 20px;
 
     border:
         1px solid #4a4335;
 
     background:
-        rgba(100,82,44,.08);
+        rgba(100, 82, 44, 0.07);
 
 }
 
 
-.hint-icon{
+.investigation-note-title {
 
-    width:34px;
-    height:34px;
+    margin-bottom: 7px;
 
-    border:1px solid #8a7955;
+    color: #c8b98e;
 
-    border-radius:50%;
+    font-size: 10px;
 
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    color:#d8bf87;
-
-    font-weight:bold;
+    letter-spacing: 2px;
 
 }
 
 
-.birthday-hint strong{
+.investigation-note p {
 
-    display:block;
+    margin: 0;
 
-    color:#d0c09c;
+    color: #969084;
 
-    font-size:11px;
+    font-size: 12px;
 
-    letter-spacing:1px;
-
-}
-
-
-.birthday-hint p{
-
-    margin:5px 0 0;
-
-    color:#858076;
-
-    font-size:12px;
+    line-height: 1.7;
 
 }
 
 
-/* =========================================
-   BUTTON
-========================================= */
+/* ============================================================
+   EVIDENCE / DEATH SCENE
+   ============================================================ */
+
+.evidence-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 28px;
+
+}
+
+
+.evidence-card {
+
+    border:
+        1px solid #39362f;
+
+    background:
+        #0d0d0c;
+
+}
+
+
+.evidence-image {
+
+    width: 100%;
+
+    height: 430px;
+
+    display: block;
+
+    object-fit: cover;
+
+    background:
+        #191817;
+
+}
+
+
+.evidence-caption {
+
+    padding:
+        15px
+        18px;
+
+    border-top:
+        1px solid #39362f;
+
+}
+
+
+.evidence-caption strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #d3c5a3;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.evidence-caption span {
+
+    color: #777267;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+}
+
+
+/* ============================================================
+   DEATH / CASE DETAILS
+   ============================================================ */
+
+.case-details-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    border:
+        1px solid #37342d;
+
+}
+
+
+.case-detail {
+
+    min-height: 95px;
+
+    padding: 18px;
+
+    border-right:
+        1px solid #302e29;
+
+    border-bottom:
+        1px solid #302e29;
+
+}
+
+
+.case-detail:nth-child(3n) {
+
+    border-right: none;
+
+}
+
+
+.case-detail span {
+
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #706b60;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.case-detail strong {
+
+    color: #ddd6c7;
+
+    font-size: 13px;
+
+    font-weight: normal;
+
+}
+
+
+/* ============================================================
+   IDENTIFICATION / PHONE FILE
+   ============================================================ */
+
+.birthday-hint {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 18px;
+
+    margin-bottom: 18px;
+
+    border:
+        1px solid #4a4335;
+
+    background:
+        rgba(100, 82, 44, 0.08);
+
+}
+
+
+.hint-icon {
+
+    flex-shrink: 0;
+
+    width: 42px;
+
+    height: 42px;
+
+    border:
+        1px solid #8a7955;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #d8bf87;
+
+    font-weight: bold;
+
+}
+
+
+.birthday-hint strong {
+
+    display: block;
+
+    color: #d0c09c;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.birthday-hint p {
+
+    margin:
+        5px
+        0
+        0;
+
+    color: #858076;
+
+    font-size: 12px;
+
+}
+
 
 .file-button,
-.back-button{
+.back-button {
 
-    border:1px solid #645a46;
+    border:
+        1px solid #645a46;
 
-    background:#1b1915;
+    background:
+        #1b1915;
 
-    color:#d7c79d;
+    color:
+        #d7c79d;
 
-    padding:11px 18px;
+    padding:
+        12px
+        19px;
 
-    cursor:pointer;
+    cursor: pointer;
 
-    font-size:10px;
+    font-size: 10px;
 
-    letter-spacing:1.5px;
+    letter-spacing: 1.5px;
 
 }
 
 
 .file-button:hover,
-.back-button:hover{
+.back-button:hover {
 
-    background:#2a261e;
+    background:
+        #2a261e;
 
 }
 
 
-/* =========================================
+.file-button:disabled {
+
+    opacity: 0.55;
+
+    cursor: default;
+
+}
+
+
+/* ============================================================
    BIRTHDAY FILE
-========================================= */
+   ============================================================ */
 
-.birthday-file{
+.birthday-file {
 
-    margin-top:18px;
+    margin-top: 18px;
 
-    border:1px solid #71664f;
+    border:
+        1px solid #71664f;
 
-    background:#171611;
-
-}
-
-
-.hidden{
-
-    display:none!important;
+    background:
+        #171611;
 
 }
 
 
-.file-top{
+.hidden {
 
-    display:flex;
+    display: none !important;
 
-    justify-content:space-between;
+}
 
-    padding:10px 14px;
+
+.file-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding:
+        12px
+        16px;
 
     border-bottom:
         1px solid #464033;
 
-    color:#958969;
+    color: #958969;
 
-    font-size:9px;
+    font-size: 9px;
 
-    letter-spacing:1.5px;
-
-}
-
-
-.file-body{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:30px;
-
-    padding:25px;
+    letter-spacing: 1.5px;
 
 }
 
 
-.file-stamp{
+.file-body {
 
-    width:70px;
-    height:70px;
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+
+    padding: 28px;
+
+}
+
+
+.file-stamp {
+
+    width: 75px;
+
+    height: 75px;
+
+    flex-shrink: 0;
 
     border:
         2px solid #795f45;
 
-    border-radius:50%;
+    border-radius: 50%;
 
-    display:flex;
+    display: flex;
 
-    align-items:center;
-    justify-content:center;
+    align-items: center;
 
-    text-align:center;
+    justify-content: center;
 
-    color:#927052;
+    text-align: center;
 
-    font-size:9px;
+    color: #927052;
 
-    line-height:1.3;
+    font-size: 9px;
+
+    line-height: 1.3;
 
     transform:
         rotate(-10deg);
@@ -560,215 +841,219 @@ body{
 }
 
 
-.file-information{
+.file-information {
 
-    flex:1;
+    flex: 1;
 
-    display:grid;
+    display: grid;
 
-    gap:15px;
+    grid-template-columns:
+        repeat(3, 1fr);
 
-}
-
-
-.file-information span{
-
-    display:block;
-
-    margin-bottom:4px;
-
-    color:#6f6a5e;
-
-    font-size:9px;
-
-    letter-spacing:1px;
+    gap: 25px;
 
 }
 
 
-.file-information strong{
+.file-information span {
 
-    color:#ded7c5;
+    display: block;
 
-    font-size:15px;
+    margin-bottom: 5px;
 
-}
+    color: #6f6a5e;
 
+    font-size: 9px;
 
-.file-information .password-reveal{
-
-    color:#d9bb70;
-
-    letter-spacing:4px;
+    letter-spacing: 1px;
 
 }
 
 
-.file-warning{
+.file-information strong {
 
-    padding:12px 18px;
+    color: #ded7c5;
+
+    font-size: 15px;
+
+}
+
+
+.file-information .password-reveal {
+
+    color: #d9bb70;
+
+    letter-spacing: 4px;
+
+}
+
+
+.file-warning {
+
+    padding:
+        13px
+        18px;
 
     border-top:
         1px solid #3c382f;
 
-    color:#817b70;
+    color: #817b70;
 
-    font-size:10px;
+    font-size: 10px;
 
-    line-height:1.5;
+    line-height: 1.5;
 
 }
 
 
-/* =========================================
-   CASE INFORMATION
-========================================= */
+/* ============================================================
+   SUSPECTS
+   ============================================================ */
 
-.case-grid{
+.suspect-list {
 
-    display:grid;
+    display: grid;
 
     grid-template-columns:
-        repeat(4,1fr);
+        repeat(2, 1fr);
 
-    gap:1px;
-
-    background:#37342d;
+    gap: 22px;
 
 }
 
 
-.case-grid > div{
+.suspect-card {
 
-    padding:16px;
-
-    background:#161512;
-
-}
-
-
-.case-grid span{
-
-    display:block;
-
-    margin-bottom:7px;
-
-    color:#706b60;
-
-    font-size:9px;
-
-    letter-spacing:1px;
-
-}
-
-
-.case-grid strong{
-
-    color:#d8d2c4;
-
-    font-size:12px;
-
-}
-
-
-/* =========================================
-   SUSPECT
-========================================= */
-
-.suspect-card{
-
-    display:grid;
+    display: grid;
 
     grid-template-columns:
-        150px 1fr;
+        190px
+        1fr;
 
-    gap:25px;
+    min-height: 230px;
 
-    padding:20px;
+    border:
+        1px solid #39362f;
 
-    border:1px solid #39362f;
-
-    background:#11100e;
-
-}
-
-
-.suspect-photo{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    min-height:170px;
-
-    background:#191817;
-
-    border:1px solid #37332c;
+    background:
+        #11100e;
 
 }
 
 
-.unknown-silhouette{
+.suspect-photo {
 
-    width:80px;
-    height:80px;
+    display: flex;
 
-    border-radius:50%;
+    align-items: center;
 
-    background:#34312d;
+    justify-content: center;
 
-    display:flex;
+    overflow: hidden;
 
-    align-items:center;
-    justify-content:center;
+    background:
+        #191817;
 
-    color:#777;
-
-    font-size:30px;
+    border-right:
+        1px solid #37332c;
 
 }
 
 
-.suspect-status{
+.suspect-photo img {
 
-    display:inline-block;
+    width: 100%;
 
-    padding:5px 9px;
+    height: 230px;
 
-    margin-bottom:8px;
+    object-fit: contain;
 
-    border:1px solid #514b3e;
-
-    color:#9a9079;
-
-    font-size:9px;
-
-    letter-spacing:1.5px;
+    object-position: bottom center;
 
 }
 
 
-.suspect-information h2{
+.unknown-silhouette {
 
-    margin:5px 0 20px;
+    width: 80px;
 
-    font-size:22px;
+    height: 80px;
 
-    font-weight:normal;
+    border-radius: 50%;
+
+    background: #34312d;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #777;
+
+    font-size: 30px;
 
 }
 
 
-.suspect-row{
+.suspect-information {
 
-    display:grid;
+    padding: 22px;
+
+}
+
+
+.suspect-status {
+
+    display: inline-block;
+
+    padding:
+        5px
+        9px;
+
+    margin-bottom: 9px;
+
+    border:
+        1px solid #514b3e;
+
+    color: #9a9079;
+
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.suspect-information h2 {
+
+    margin:
+        5px
+        0
+        18px;
+
+    color: #e2d8c5;
+
+    font-size: 22px;
+
+    font-weight: normal;
+
+    letter-spacing: 1px;
+
+}
+
+
+.suspect-row {
+
+    display: grid;
 
     grid-template-columns:
-        140px 1fr;
+        115px
+        1fr;
 
-    padding:9px 0;
+    padding:
+        8px
+        0;
 
     border-bottom:
         1px solid #2d2b27;
@@ -776,110 +1061,245 @@ body{
 }
 
 
-.suspect-row span{
+.suspect-row span {
 
-    color:#6e6a61;
+    color: #6e6a61;
 
-    font-size:9px;
+    font-size: 9px;
 
-    letter-spacing:1px;
-
-}
-
-
-.suspect-row strong{
-
-    color:#c9c2b2;
-
-    font-size:11px;
+    letter-spacing: 1px;
 
 }
 
 
-/* =========================================
+.suspect-row strong {
+
+    color: #c9c2b2;
+
+    font-size: 11px;
+
+    font-weight: normal;
+
+}
+
+
+/* ============================================================
+   NO SUSPECTS
+   ============================================================ */
+
+.no-suspects {
+
+    padding: 35px;
+
+    border:
+        1px dashed #39362f;
+
+    text-align: center;
+
+    color: #706b60;
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* ============================================================
    BACK
-========================================= */
+   ============================================================ */
 
-.back-button{
+.back-button {
 
-    display:block;
+    display: block;
 
-    margin-left:auto;
+    margin-left: auto;
 
 }
 
 
-/* =========================================
+/* ============================================================
    RESPONSIVE
-========================================= */
+   ============================================================ */
 
-@media(max-width:700px){
+@media(max-width:1100px) {
 
-    #victimInfoPage{
+    .dossier {
 
-        padding-left:55px;
-
-    }
-
-
-    .case-header{
-
-        padding:35px 20px 25px;
-
-        flex-direction:column;
-
-        align-items:flex-start;
+        width:
+            calc(100% - 50px);
 
     }
 
 
-    .case-header h1{
-
-        font-size:23px;
-
-    }
-
-
-    .dossier{
-
-        padding:20px 15px 50px;
-
-    }
-
-
-    .victim-layout{
-
-        grid-template-columns:1fr;
-
-    }
-
-
-    .victim-photo{
-
-        max-width:220px;
-
-    }
-
-
-    .info-row{
+    .victim-layout {
 
         grid-template-columns:
-            130px 1fr;
+            330px
+            1fr;
+
+        gap: 30px;
 
     }
 
 
-    .case-grid{
+    .victim-photo img {
+
+        height: 430px;
+
+    }
+
+}
+
+
+@media(max-width:800px) {
+
+    .case-header {
+
+        padding:
+            30px;
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+
+    .dossier {
+
+        width:
+            calc(100% - 30px);
+
+        padding-top: 25px;
+
+    }
+
+
+    .dossier-section {
+
+        padding: 20px;
+
+    }
+
+
+    .victim-layout {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .victim-photo {
+
+        max-width: 400px;
+
+        margin: auto;
+
+        width: 100%;
+
+    }
+
+
+    .victim-photo img {
+
+        height: 450px;
+
+    }
+
+
+    .evidence-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .case-details-grid {
 
         grid-template-columns:
-            repeat(2,1fr);
+            repeat(2, 1fr);
 
     }
 
 
-    .suspect-card{
+    .case-detail:nth-child(3n) {
 
-        grid-template-columns:1fr;
+        border-right:
+            1px solid #302e29;
+
+    }
+
+
+    .case-detail:nth-child(2n) {
+
+        border-right: none;
+
+    }
+
+
+    .file-information {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .suspect-list {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media(max-width:550px) {
+
+    .victim-details {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .info-row:nth-child(even) {
+
+        border-right:
+            1px solid #302e29;
+
+    }
+
+
+    .case-details-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .case-detail:nth-child(n) {
+
+        border-right: none;
+
+    }
+
+
+    .suspect-card {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .suspect-photo {
+
+        border-right: none;
+
+        border-bottom:
+            1px solid #37332c;
 
     }
 
