@@ -1,1 +1,672 @@
-.call-tabs{display:grid;grid-template-columns:repeat(2,1fr);margin:12px;border-radius:10px;background:#e9e9ed;padding:2px}.call-tabs button{border:0;background:none;border-radius:8px;padding:7px;font-size:12px}.call-tabs button.active{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08);font-weight:700}.contact-view{padding-bottom:20px}.contact-hero{text-align:center;padding:18px;background:#fff;border-bottom:1px solid #e5e5e7}.large-avatar{margin:auto;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:#dce8f4;font-size:25px;font-weight:800;color:#4d6178}.contact-hero h2{font-size:20px;margin:9px 0 2px}.contact-hero p{font-size:12px;color:#888;margin:0}.call-actions{display:flex;justify-content:center;gap:25px;margin-top:15px}.round-action{border:0;background:#ebf8ef;color:#178647;width:47px;height:47px;border-radius:50%;font-size:21px}.call-log .row{min-height:60px}
+/* =========================================
+   PHONE — CALLS
+   DARK VIVO-STYLE UI
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.phone-app {
+    width: 100%;
+    min-height: 100vh;
+    background: #000;
+    position: relative;
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   TOP ICONS
+========================================= */
+
+.phone-top {
+    height: 78px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 75px;
+
+    padding-top: 10px;
+}
+
+.top-icon {
+    width: 47px;
+    height: 47px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: #777;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.top-icon.active {
+    color: #00d66b;
+}
+
+.top-icon:hover {
+    background: #151515;
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.search-box {
+    margin: 10px 42px 18px;
+
+    height: 76px;
+
+    border-radius: 40px;
+
+    background: #202020;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 27px;
+
+    color: #777;
+}
+
+.search-icon {
+    font-size: 37px;
+    line-height: 1;
+
+    margin-right: 15px;
+
+    transform: rotate(-20deg);
+}
+
+.search-box input {
+    flex: 1;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-size: 23px;
+}
+
+.search-box input::placeholder {
+    color: #777;
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.section-header {
+    display: flex;
+    align-items: center;
+
+    padding: 8px 48px;
+
+    color: #aaa;
+
+    font-size: 18px;
+}
+
+.section-arrow {
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   CALL ROW
+========================================= */
+
+.call-list {
+    padding: 0 28px;
+}
+
+.call-row {
+    min-height: 112px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 12px 18px;
+
+    border-bottom: 1px solid #111;
+
+    cursor: pointer;
+
+    transition: background .15s;
+}
+
+.call-row:hover {
+    background: #111;
+}
+
+
+/* AVATAR */
+
+.avatar {
+    width: 70px;
+    height: 70px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    background: #454545;
+
+    color: #ddd;
+
+    font-size: 22px;
+    font-weight: bold;
+}
+
+
+/* PERSON INFO */
+
+.call-info {
+    flex: 1;
+
+    min-width: 0;
+
+    margin-left: 20px;
+}
+
+.call-name {
+    color: #fff;
+
+    font-size: 21px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.call-number {
+    margin-top: 7px;
+
+    color: #777;
+
+    font-size: 16px;
+}
+
+.call-type {
+    margin-top: 5px;
+
+    color: #666;
+
+    font-size: 14px;
+}
+
+
+/* RIGHT SIDE */
+
+.call-right {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    color: #777;
+
+    font-size: 15px;
+}
+
+.call-arrow {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    background: #252525;
+
+    color: #aaa;
+
+    font-size: 27px;
+}
+
+
+/* =========================================
+   CONTACTS
+========================================= */
+
+.contacts-list {
+    padding-right: 60px;
+}
+
+.contact-row {
+    min-height: 105px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 12px 28px;
+
+    border-bottom: 1px solid #111;
+
+    cursor: pointer;
+}
+
+.contact-row:hover {
+    background: #111;
+}
+
+
+/* ALPHABET BAR */
+
+.alphabet {
+    position: fixed;
+
+    right: 10px;
+    top: 270px;
+
+    width: 40px;
+
+    padding: 12px 0;
+
+    border-radius: 22px;
+
+    background: #222;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    z-index: 10;
+}
+
+.alphabet span {
+    color: #aaa;
+
+    font-size: 13px;
+
+    line-height: 21px;
+
+    cursor: pointer;
+}
+
+.alphabet span:hover {
+    color: #00d66b;
+}
+
+
+/* =========================================
+   CONTACT DETAIL
+========================================= */
+
+.contact-detail {
+    min-height: calc(100vh - 80px);
+
+    background: #000;
+
+    padding-top: 35px;
+
+    text-align: center;
+}
+
+.detail-back {
+    position: absolute;
+
+    top: 25px;
+    left: 28px;
+
+    border: none;
+
+    background: none;
+
+    color: white;
+
+    font-size: 45px;
+
+    cursor: pointer;
+}
+
+.detail-avatar {
+    width: 150px;
+    height: 150px;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    margin: 40px auto 25px;
+
+    background: #4b4b4b;
+
+    color: #ddd;
+
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.detail-name {
+    font-size: 36px;
+
+    margin: 0 20px 12px;
+}
+
+.detail-number {
+    color: #ddd;
+
+    font-size: 21px;
+
+    margin: 5px;
+}
+
+.detail-type {
+    color: #777;
+
+    font-size: 17px;
+}
+
+
+/* ACTION BUTTONS */
+
+.detail-actions {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 55px;
+
+    margin: 40px 0;
+}
+
+.detail-action {
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.detail-action-icon {
+    width: 65px;
+    height: 65px;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    font-size: 28px;
+}
+
+.detail-call {
+    background: #20c765;
+}
+
+.detail-message {
+    background: #2196f3;
+}
+
+
+/* =========================================
+   CALL HISTORY
+========================================= */
+
+.history-title {
+    text-align: left;
+
+    padding: 22px 45px;
+
+    color: #aaa;
+
+    border-top: 1px solid #181818;
+}
+
+.history-row {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 45px;
+
+    border-bottom: 1px solid #111;
+
+    text-align: left;
+}
+
+.history-main {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.history-kind {
+    font-size: 18px;
+}
+
+.history-date {
+    color: #777;
+}
+
+.history-icon {
+    color: #888;
+
+    font-size: 24px;
+}
+
+
+/* =========================================
+   INCOMING / OUTGOING CALL SCREEN
+========================================= */
+
+.call-screen {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #3b465d 0%,
+            #252c3c 45%,
+            #121722 100%
+        );
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.call-screen.hidden {
+    display: none;
+}
+
+.call-back {
+    position: absolute;
+
+    top: 25px;
+    left: 25px;
+
+    background: none;
+    border: none;
+
+    color: white;
+
+    font-size: 45px;
+}
+
+.calling-person {
+    margin-top: 110px;
+
+    text-align: center;
+}
+
+.call-avatar {
+    width: 150px;
+    height: 150px;
+
+    margin: auto;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    background: #656b78;
+
+    color: white;
+
+    font-size: 42px;
+    font-weight: bold;
+}
+
+.calling-person h1 {
+    margin: 28px 0 8px;
+
+    font-size: 34px;
+}
+
+.calling-person p {
+    margin: 5px;
+
+    font-size: 20px;
+
+    color: #ddd;
+}
+
+.calling-status {
+    margin-top: 15px;
+
+    font-size: 18px;
+
+    color: #ddd;
+}
+
+
+/* =========================================
+   CALL CONTROLS
+========================================= */
+
+.call-controls {
+    position: absolute;
+
+    bottom: 240px;
+
+    width: 80%;
+
+    max-width: 650px;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 38px;
+}
+
+.call-control {
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 30px;
+}
+
+.call-control small {
+    font-size: 16px;
+
+    color: #eee;
+}
+
+.call-control.disabled {
+    opacity: .35;
+}
+
+
+/* =========================================
+   BOTTOM CALL BUTTONS
+========================================= */
+
+.call-bottom {
+    position: absolute;
+
+    bottom: 55px;
+
+    width: 80%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.speaker-button,
+.dialpad-button {
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 34px;
+}
+
+.end-call {
+    width: 90px;
+    height: 90px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: #ff3030;
+
+    color: white;
+
+    font-size: 35px;
+
+    transform: rotate(135deg);
+
+    cursor: pointer;
+}
