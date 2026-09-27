@@ -249,7 +249,7 @@ function showPerson(index) {
             </div>
 
             <div class="detail-type">
-                ${person.type} · India
+                ${person.type} · USA
             </div>
 
 
