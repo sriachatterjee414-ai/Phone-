@@ -1,38 +1,83 @@
 /* =========================================================
    BROKEN PHONE
-   VICTIM'S PHONE — MESSAGES UI
-========================================================= */
+   VICTIM PHONE — MESSAGES
+   ========================================================= */
 
 
 /* =========================================================
    ELEMENTS
-========================================================= */
+   ========================================================= */
+
+const messageScreen =
+    document.getElementById("messageScreen");
+
+const chatScreen =
+    document.getElementById("chatScreen");
 
 const messageList =
     document.getElementById("messageList");
-
-const backBtn =
-    document.getElementById("backBtn");
-
-const newBtn =
-    document.getElementById("newBtn");
 
 const contactStrip =
     document.getElementById("contactStrip");
 
 const searchInput =
-    document.getElementById("messageSearch");
+    document.getElementById("searchInput");
 
 const clearSearch =
     document.getElementById("clearSearch");
 
-const filterButtons =
-    document.querySelectorAll(".filter-btn");
+const backBtn =
+    document.getElementById("backBtn");
+
+const chatBack =
+    document.getElementById("chatBack");
+
+const newBtn =
+    document.getElementById("newBtn");
+
+const chatMessages =
+    document.getElementById("chatMessages");
+
+const chatAvatar =
+    document.getElementById("chatAvatar");
+
+const chatName =
+    document.getElementById("chatName");
+
+const chatStatus =
+    document.getElementById("chatStatus");
+
+const messageInput =
+    document.getElementById("messageInput");
+
+const sendBtn =
+    document.getElementById("sendBtn");
+
+
+/* =========================================================
+   PHONE HOME
+   =========================================================
+
+   IMPORTANT:
+   Change ONLY this filename if your actual phone
+   home-screen file has another name.
+
+   It must NOT be investigation.html.
+   ========================================================= */
+
+const PHONE_HOME_FILE = "phone.html";
+
+
+/* =========================================================
+   VICTIM
+   ========================================================= */
+
+const victimName = "MAYA";
 
 
 /* =========================================================
    STORAGE
-========================================================= */
+   ========================================================= */
 
 const sentMessagesKey =
     "brokenPhoneVictimSentMessages";
@@ -40,24 +85,1254 @@ const sentMessagesKey =
 
 let sentMessages =
     JSON.parse(
-        localStorage.getItem(sentMessagesKey) || "{}"
+        localStorage.getItem(
+            sentMessagesKey
+        ) || "{}"
     );
 
 
 /* =========================================================
+   CONVERSATIONS
+   ========================================================= */
+
+const conversations = [
+
+    {
+        id: "mom",
+
+        name: "Mom",
+
+        preview:
+            "Don't forget to eat something today.",
+
+        time: "9:18 AM",
+
+        avatar: "M",
+
+        avatarClass: "avatar-mom",
+
+        type: "normal",
+
+        unread: false,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "Good morning sweetheart. Did you sleep properly?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Kind of. I was up late."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Again? You work too much."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "It's not that bad."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You always say that."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Are you coming home for dinner?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Probably late."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Then I'll keep something for you."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Thanks ❤️"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "And please call your father. He was asking about you."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I'll call him tonight."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You said that yesterday."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I know 😭"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Eat something."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Yes, Mom."
+            }
+
+        ]
+
+    },
+
+
+    {
+        id: "dad",
+
+        name: "Dad",
+
+        preview:
+            "Call me when you're free.",
+
+        time: "8:42 AM",
+
+        avatar: "D",
+
+        avatarClass: "avatar-dad",
+
+        type: "normal",
+
+        unread: false,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "Morning."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Morning Dad."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Everything okay?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Yeah. Why?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You sounded tired yesterday."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Just work."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Don't let work become your whole life."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I know."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Call me when you're free."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Tonight."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Promise?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Promise."
+            }
+
+        ]
+
+    },
+
+
+    {
+        id: "sophie",
+
+        name: "Sophie",
+
+        preview:
+            "You cannot cancel on me again.",
+
+        time: "Yesterday",
+
+        avatar: "S",
+
+        avatarClass: "avatar-sophie",
+
+        type: "normal",
+
+        unread: false,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "Are we still going out Friday?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I think so."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "THINK?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Okay okay. Yes."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Good."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "And don't wear that boring black jacket."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Why?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Because I said so."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Excellent argument."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Also I found that little café you liked."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "The one near the bookstore?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "YES."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Okay I'm actually excited now."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "See? I plan everything."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "You really do."
+            }
+
+        ]
+
+    },
+
+
+    {
+        id: "leo",
+
+        name: "Leo",
+
+        preview:
+            "Did you finish that report?",
+
+        time: "Yesterday",
+
+        avatar: "L",
+
+        avatarClass: "avatar-leo",
+
+        type: "normal",
+
+        unread: false,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "Did you finish that report?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Almost."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You've been saying almost for two days."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Then technically I'm consistent."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "That's not how deadlines work."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I'll finish it."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Before tomorrow?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Yes."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Good."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Go bother someone else."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Gladly."
+            }
+
+        ]
+
+    },
+
+
+    /* =====================================================
+       JACOB
+    ===================================================== */
+
+    {
+        id: "jacob",
+
+        name: "Jacob",
+
+        preview:
+            "Did you get it?",
+
+        time: "Yesterday",
+
+        avatar: "J",
+
+        avatarClass: "avatar-jacob",
+
+        type: "suspicious",
+
+        unread: true,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "Did you get it?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Yes."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You're sure?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Yes, Jacob."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Good."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Keep it somewhere safe."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I know."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Don't tell anyone about it."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I wasn't planning to."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Let's meet at my place."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "When?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Tonight."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Okay."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "I'll give you the book."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Coming."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "And don't bring anyone."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I won't."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "One more thing."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "What?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Wear something that doesn't stand out."
+            },
+
+            {
+                sender: "me",
+
+                html:
+                    "I am sure you will love my <strong>red heels</strong>."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You really shouldn't joke about everything."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Relax."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Just be careful."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I'll see you tonight."
+            }
+
+        ]
+
+    },
+
+
+    /* =====================================================
+       K1
+    ===================================================== */
+
+    {
+        id: "k1",
+
+        name: "K1",
+
+        preview:
+            "Don't lie to me.",
+
+        time: "Yesterday",
+
+        avatar: "K1",
+
+        avatarClass: "avatar-k1",
+
+        type: "suspicious",
+
+        unread: true,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "Did you find the diary?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "No."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Don't lie."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I am not."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Are you sure that it is here?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Q texted me and said it is there."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Why do you believe her so much?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "None of your business."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You were supposed to have it already."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I told you I couldn't find it."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Then look again."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Where?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You know where."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I really don't."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Stop wasting time."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "What happens if I don't find it?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You don't want to find out."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Is that a threat?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Take it however you want."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "..."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Now get it done within 20 minutes."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Then reach my place."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Okay."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "And delete this conversation."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Why?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Just do it."
+            }
+
+        ]
+
+    },
+
+
+    /* =====================================================
+       Q
+    ===================================================== */
+
+    {
+        id: "q",
+
+        name: "Q",
+
+        preview:
+            "I told you not to ask questions.",
+
+        time: "Yesterday",
+
+        avatar: "Q",
+
+        avatarClass: "avatar-q",
+
+        type: "suspicious",
+
+        unread: false,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "You found it?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Found what?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Don't do that."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Do what?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Pretend you don't know."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I honestly don't."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Ask K1."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I already did."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Then you already know enough."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "That doesn't make any sense."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Good."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Keep it that way."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "What is going on?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Don't ask questions over text."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Then where?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You'll be told."
+            }
+
+        ]
+
+    },
+
+
+    /* =====================================================
+       UNKNOWN
+    ===================================================== */
+
+    {
+        id: "unknown",
+
+        name: "Unknown",
+
+        preview:
+            "You shouldn't have that.",
+
+        time: "Yesterday",
+
+        avatar: "?",
+
+        avatarClass: "avatar-unknown",
+
+        type: "suspicious",
+
+        unread: false,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "You shouldn't have that."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Who is this?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You know who."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "No, I don't."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Then forget this conversation."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "What are you talking about?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Don't contact this number again."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Wait."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Goodbye."
+            }
+
+        ]
+
+    },
+
+
+    /* =====================================================
+       SARAH
+    ===================================================== */
+
+    {
+        id: "sarah",
+
+        name: "Sarah",
+
+        preview:
+            "Send me the picture 😂",
+
+        time: "2 days ago",
+
+        avatar: "S",
+
+        avatarClass: "avatar-sarah",
+
+        type: "normal",
+
+        unread: false,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "Did you take pictures yesterday?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Maybe."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "SEND."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "You're very demanding."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Please."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Better."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "😂"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I'll send them later."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "You always say later."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Because later is a very useful time."
+            }
+
+        ]
+
+    }
+
+];
+
+
+/* =========================================================
+   ARCHIVED
+   ========================================================= */
+
+const archivedConversations = [
+
+    {
+        id: "archived_old_number",
+
+        name: "Old Number",
+
+        preview:
+            "You promised.",
+
+        time: "Last week",
+
+        avatar: "?",
+
+        avatarClass: "avatar-unknown",
+
+        type: "archived",
+
+        unread: false,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "You promised."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I know."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Then don't change your mind."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "I'm not changing anything."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Good."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Forget we talked."
+            }
+
+        ]
+
+    },
+
+
+    {
+        id: "archived_k",
+
+        name: "K",
+
+        preview:
+            "Delete this after reading.",
+
+        time: "Last week",
+
+        avatar: "K",
+
+        avatarClass: "avatar-k1",
+
+        type: "archived",
+
+        unread: false,
+
+        messages: [
+
+            {
+                sender: "them",
+                text:
+                    "Are you alone?"
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Yes."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Good."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "I heard you were asking questions."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Who told you?"
+            },
+
+            {
+                sender: "them",
+                text:
+                    "It doesn't matter."
+            },
+
+            {
+                sender: "them",
+                text:
+                    "Delete this after reading."
+            },
+
+            {
+                sender: "me",
+                text:
+                    "Okay."
+            }
+
+        ]
+
+    }
+
+];
+
+
+/* =========================================================
    STATE
-========================================================= */
+   ========================================================= */
 
 let currentConversation = null;
 
 let currentFilter = "all";
 
-let searchTerm = "";
-
 
 /* =========================================================
    ALL CONVERSATIONS
-========================================================= */
+   ========================================================= */
 
 function getAllConversations() {
 
@@ -70,218 +1345,73 @@ function getAllConversations() {
 
 
 /* =========================================================
-   SAVE
-========================================================= */
-
-function saveSentMessages() {
-
-    localStorage.setItem(
-        sentMessagesKey,
-        JSON.stringify(sentMessages)
-    );
-
-}
-
-
-/* =========================================================
-   SVG ICONS
-========================================================= */
-
-const icons = {
-
-    phone: `
-        <svg viewBox="0 0 24 24">
-            <path d="M6.6 3.5l3.1 3.1-2 2.4a15.5 15.5 0 0 0 7.3 7.3l2.4-2 3.1 3.1-1.8 2.2c-.6.8-1.7 1.1-2.6.7C9.8 17.9 6.1 14.2 3.7 7.9c-.4-.9-.1-2 .7-2.6z"/>
-        </svg>
-    `,
-
-    video: `
-        <svg viewBox="0 0 24 24">
-            <rect x="3" y="6" width="13" height="12" rx="2"/>
-            <path d="M16 10l5-3v10l-5-3z"/>
-        </svg>
-    `,
-
-    plus: `
-        <svg viewBox="0 0 24 24">
-            <path d="M12 5v14"/>
-            <path d="M5 12h14"/>
-        </svg>
-    `,
-
-    microphone: `
-        <svg viewBox="0 0 24 24">
-            <rect x="9" y="3" width="6" height="11" rx="3"/>
-            <path d="M5.5 11a6.5 6.5 0 0 0 13 0"/>
-            <path d="M12 17.5V21"/>
-            <path d="M8.5 21h7"/>
-        </svg>
-    `,
-
-    send: `
-        <svg viewBox="0 0 24 24">
-            <path d="M4 4l16 8-16 8 3-8z"/>
-            <path d="M7 12h13"/>
-        </svg>
-    `
-
-};
-
-
-/* =========================================================
    AVATAR
-========================================================= */
-
-function avatarHTML(conversation, mini = false) {
-
-    /*
-       Later you can give a conversation an image:
-
-       avatarImage: "images/jacob.png"
-
-       If there is no image, the initial remains.
-    */
-
-    if (conversation.avatarImage) {
-
-        return `
-            <img
-                src="${conversation.avatarImage}"
-                alt=""
-            >
-        `;
-
-    }
-
-    return `
-        <span>
-            ${conversation.avatar || "?"}
-        </span>
-    `;
-
-}
-
-
-/* =========================================================
-   AVATAR CLASS
-========================================================= */
-
-function avatarClass(conversation) {
-
-    if (
-        conversation.id === "mom"
-    ) {
-
-        return "mom";
-
-    }
-
-    if (
-        conversation.id === "dad"
-    ) {
-
-        return "dad";
-
-    }
-
-    if (
-        conversation.type === "suspicious"
-    ) {
-
-        return "suspicious";
-
-    }
-
-    if (
-        conversation.id === "unknown" ||
-        conversation.avatar === "?"
-    ) {
-
-        return "unknown";
-
-    }
-
-    return "friend";
-
-}
-
-
-/* =========================================================
-   UNREAD
-=========================================================
-
-   IMPORTANT:
-
-   Nothing is shown unless unread > 0.
-
-   Your existing conversations currently
-   have no unread value, therefore they
-   will NOT randomly display notification
-   numbers.
-
-   Example if you WANT one:
-
-       unread: 2
-
    ========================================================= */
 
-function getUnreadCount(conversation) {
+function createAvatar(
+    conversation,
+    small = false
+) {
 
-    return Number(
-        conversation.unread || 0
+    const avatar =
+        document.createElement("div");
+
+    avatar.className =
+        small
+            ? "contact-avatar"
+            : "list-avatar";
+
+    avatar.classList.add(
+        conversation.avatarClass
     );
+
+    avatar.textContent =
+        conversation.avatar;
+
+    return avatar;
 
 }
 
 
 /* =========================================================
    CONTACT STRIP
-========================================================= */
+   ========================================================= */
 
 function renderContactStrip() {
 
     contactStrip.innerHTML = "";
 
-    /*
-       These are simply the most relevant
-       contacts shown at the top.
-    */
+    conversations
+        .slice(0, 5)
+        .forEach(conversation => {
 
-    const contacts =
-        conversations.slice(0, 5);
+            const person =
+                document.createElement("div");
 
-
-    contacts.forEach(
-        conversation => {
-
-            const button =
-                document.createElement("button");
-
-            button.className =
-                "contact-shortcut";
+            person.className =
+                "contact-person";
 
 
-            button.innerHTML = `
-
-                <div
-                    class="
-                        contact-avatar
-                        ${avatarClass(conversation)}
-                    "
-                >
-
-                    ${avatarHTML(conversation)}
-
-                </div>
-
-                <span class="contact-name">
-                    ${conversation.name}
-                </span>
-
-            `;
+            const avatar =
+                createAvatar(
+                    conversation,
+                    true
+                );
 
 
-            button.addEventListener(
+            const name =
+                document.createElement("span");
+
+            name.textContent =
+                conversation.name;
+
+
+            person.appendChild(avatar);
+
+            person.appendChild(name);
+
+
+            person.addEventListener(
                 "click",
                 () => {
 
@@ -294,189 +1424,59 @@ function renderContactStrip() {
 
 
             contactStrip.appendChild(
-                button
+                person
             );
 
-        }
-    );
+        });
 
 }
 
 
 /* =========================================================
-   FILTER
-========================================================= */
-
-filterButtons.forEach(
-    button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                filterButtons.forEach(
-                    item =>
-                        item.classList.remove(
-                            "active"
-                        )
-                );
-
-
-                button.classList.add(
-                    "active"
-                );
-
-
-                currentFilter =
-                    button.dataset.filter;
-
-
-                renderMessageList();
-
-            }
-        );
-
-    }
-);
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-searchInput.addEventListener(
-    "input",
-    () => {
-
-        searchTerm =
-            searchInput.value
-                .trim()
-                .toLowerCase();
-
-
-        if (searchTerm.length > 0) {
-
-            clearSearch.classList.remove(
-                "hidden"
-            );
-
-        } else {
-
-            clearSearch.classList.add(
-                "hidden"
-            );
-
-        }
-
-
-        renderMessageList();
-
-    }
-);
-
-
-clearSearch.addEventListener(
-    "click",
-    () => {
-
-        searchInput.value = "";
-
-        searchTerm = "";
-
-        clearSearch.classList.add(
-            "hidden"
-        );
-
-        renderMessageList();
-
-        searchInput.focus();
-
-    }
-);
-
-
-/* =========================================================
-   SHOULD SHOW
-========================================================= */
-
-function shouldShowConversation(
-    conversation
-) {
-
-    /* SEARCH */
-
-    if (searchTerm) {
-
-        const nameMatch =
-            conversation.name
-                .toLowerCase()
-                .includes(searchTerm);
-
-
-        const previewMatch =
-            conversation.preview
-                .toLowerCase()
-                .includes(searchTerm);
-
-
-        if (
-            !nameMatch &&
-            !previewMatch
-        ) {
-
-            return false;
-
-        }
-
-    }
-
-
-    /* UNREAD */
-
-    if (
-        currentFilter === "unread"
-    ) {
-
-        return (
-            getUnreadCount(
-                conversation
-            ) > 0
-        );
-
-    }
-
-
-    return true;
-
-}
-
-
-/* =========================================================
-   RENDER MESSAGE LIST
-========================================================= */
+   MESSAGE LIST
+   ========================================================= */
 
 function renderMessageList() {
-
-    currentConversation = null;
 
     messageList.innerHTML = "";
 
 
-    const active =
+    const search =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+
+    let active =
         conversations.filter(
-            shouldShowConversation
+            conversation => {
+
+                const matchesSearch =
+                    !search ||
+                    conversation.name
+                        .toLowerCase()
+                        .includes(search) ||
+                    conversation.preview
+                        .toLowerCase()
+                        .includes(search);
+
+
+                const matchesFilter =
+                    currentFilter === "all" ||
+                    (
+                        currentFilter === "unread" &&
+                        conversation.unread
+                    );
+
+
+                return (
+                    matchesSearch &&
+                    matchesFilter
+                );
+
+            }
         );
 
-
-    const archived =
-        archivedConversations.filter(
-            shouldShowConversation
-        );
-
-
-    /* =========================================
-       ACTIVE
-    ========================================= */
 
     active.forEach(
         conversation => {
@@ -491,14 +1491,9 @@ function renderMessageList() {
     );
 
 
-    /* =========================================
-       ARCHIVED
-    ========================================= */
-
     if (
-        archived.length > 0 &&
-        currentFilter === "all" &&
-        !searchTerm
+        search === "" &&
+        currentFilter === "all"
     ) {
 
         const archiveTitle =
@@ -515,20 +1510,13 @@ function renderMessageList() {
         );
 
 
-        archived.forEach(
+        archivedConversations.forEach(
             conversation => {
 
-                const item =
+                messageList.appendChild(
                     createConversationItem(
                         conversation
-                    );
-
-                item.classList.add(
-                    "archived-conversation"
-                );
-
-                messageList.appendChild(
-                    item
+                    )
                 );
 
             }
@@ -537,23 +1525,28 @@ function renderMessageList() {
     }
 
 
-    /* =========================================
-       EMPTY
-    ========================================= */
-
     if (
         messageList.children.length === 0
     ) {
 
-        messageList.innerHTML = `
+        const empty =
+            document.createElement("div");
 
-            <div class="empty-messages">
+        empty.style.padding =
+            "40px 20px";
 
-                No conversations found.
+        empty.style.textAlign =
+            "center";
 
-            </div>
+        empty.style.color =
+            "#999";
 
-        `;
+        empty.textContent =
+            "No conversations found.";
+
+        messageList.appendChild(
+            empty
+        );
 
     }
 
@@ -561,8 +1554,8 @@ function renderMessageList() {
 
 
 /* =========================================================
-   CREATE MESSAGE LIST ITEM
-========================================================= */
+   CREATE LIST ITEM
+   ========================================================= */
 
 function createConversationItem(
     conversation
@@ -571,18 +1564,11 @@ function createConversationItem(
     const item =
         document.createElement("button");
 
-
     item.className =
         "message-list-item";
 
 
-    const unread =
-        getUnreadCount(
-            conversation
-        );
-
-
-    if (unread > 0) {
+    if (conversation.unread) {
 
         item.classList.add(
             "unread"
@@ -591,60 +1577,86 @@ function createConversationItem(
     }
 
 
-    item.innerHTML = `
+    if (
+        conversation.type ===
+        "archived"
+    ) {
 
-        <div
-            class="
-                message-avatar
-                ${avatarClass(conversation)}
-            "
-        >
+        item.classList.add(
+            "archived-conversation"
+        );
 
-            ${avatarHTML(conversation)}
-
-        </div>
+    }
 
 
-        <div class="message-info">
-
-            <div class="message-top-line">
-
-                <strong class="message-name">
-                    ${conversation.name}
-                </strong>
+    item.appendChild(
+        createAvatar(
+            conversation
+        )
+    );
 
 
-                <time class="message-time">
-                    ${conversation.time}
-                </time>
+    const preview =
+        document.createElement("div");
 
-            </div>
-
-
-            <span class="message-preview">
-
-                ${conversation.preview}
-
-            </span>
-
-        </div>
+    preview.className =
+        "message-preview";
 
 
-        ${
-            unread > 0
-                ? `
-                    <span class="unread-badge">
-                        ${
-                            unread > 99
-                                ? "99+"
-                                : unread
-                        }
-                    </span>
-                  `
-                : ""
-        }
+    const name =
+        document.createElement("span");
 
-    `;
+    name.className =
+        "message-name";
+
+    name.textContent =
+        conversation.name;
+
+
+    const text =
+        document.createElement("span");
+
+    text.className =
+        "message-text";
+
+    text.textContent =
+        conversation.preview;
+
+
+    preview.appendChild(name);
+
+    preview.appendChild(text);
+
+
+    item.appendChild(
+        preview
+    );
+
+
+    const time =
+        document.createElement("time");
+
+    time.className =
+        "list-time";
+
+    time.textContent =
+        conversation.time;
+
+
+    item.appendChild(time);
+
+
+    if (conversation.unread) {
+
+        const dot =
+            document.createElement("span");
+
+        dot.className =
+            "unread-dot";
+
+        item.appendChild(dot);
+
+    }
 
 
     item.addEventListener(
@@ -665,8 +1677,8 @@ function createConversationItem(
 
 
 /* =========================================================
-   OPEN CONVERSATION
-========================================================= */
+   OPEN CHAT
+   ========================================================= */
 
 function openConversation(
     conversationId
@@ -692,12 +1704,17 @@ function openConversation(
         conversation;
 
 
-    /*
-       Opening the conversation means
-       its unread indicator has been read.
-    */
+    conversation.unread =
+        false;
 
-    conversation.unread = 0;
+
+    messageScreen.classList.add(
+        "hidden"
+    );
+
+    chatScreen.classList.remove(
+        "hidden"
+    );
 
 
     renderConversation();
@@ -706,105 +1723,39 @@ function openConversation(
 
 
 /* =========================================================
-   RENDER CONVERSATION
-========================================================= */
+   RENDER CHAT
+   ========================================================= */
 
 function renderConversation() {
 
-    messageList.innerHTML = "";
+    if (!currentConversation) {
+
+        return;
+
+    }
 
 
-    /* =========================================
-       CHAT HEADER
-    ========================================= */
-
-    const header =
-        document.createElement("header");
-
-    header.className =
-        "conversation-header";
+    chatName.textContent =
+        currentConversation.name;
 
 
-    header.innerHTML = `
-
-        <button
-            class="conversation-back"
-            id="conversationBack"
-            aria-label="Back to messages"
-        >
-
-            <svg viewBox="0 0 24 24">
-                <path d="M15 5L8 12L15 19"/>
-            </svg>
-
-        </button>
+    chatStatus.textContent =
+        currentConversation.type ===
+        "archived"
+            ? "Archived"
+            : "No response";
 
 
-        <div class="chat-person">
-
-            <div
-                class="
-                    chat-avatar
-                    ${avatarClass(currentConversation)}
-                "
-            >
-
-                ${avatarHTML(currentConversation)}
-
-            </div>
+    chatAvatar.className =
+        "chat-avatar " +
+        currentConversation.avatarClass;
 
 
-            <div class="chat-person-text">
-
-                <strong>
-                    ${currentConversation.name}
-                </strong>
-
-                <small>
-                    ${getConversationStatus()}
-                </small>
-
-            </div>
-
-        </div>
+    chatAvatar.textContent =
+        currentConversation.avatar;
 
 
-        <button
-            class="chat-action"
-            aria-label="Call"
-        >
-
-            ${icons.phone}
-
-        </button>
-
-
-        <button
-            class="chat-action"
-            aria-label="Video"
-        >
-
-            ${icons.video}
-
-        </button>
-
-    `;
-
-
-    messageList.appendChild(
-        header
-    );
-
-
-    /* =========================================
-       CHAT SCROLL
-    ========================================= */
-
-    const scroll =
-        document.createElement("div");
-
-    scroll.className =
-        "chat-scroll";
+    chatMessages.innerHTML = "";
 
 
     const divider =
@@ -816,32 +1767,23 @@ function renderConversation() {
     divider.textContent =
         "Recent";
 
-    scroll.appendChild(
+    chatMessages.appendChild(
         divider
     );
 
 
-    /* =========================================
-       ORIGINAL VICTIM MESSAGES
-    ========================================= */
-
     currentConversation.messages
-        .forEach(
-            message => {
+        .forEach(message => {
 
-                scroll.appendChild(
-                    createMessageBubble(
-                        message
-                    )
-                );
+            chatMessages.appendChild(
+                createMessageBubble(
+                    message,
+                    currentConversation
+                )
+            );
 
-            }
-        );
+        });
 
-
-    /* =========================================
-       INVESTIGATOR MESSAGES
-    ========================================= */
 
     const customMessages =
         sentMessages[
@@ -849,132 +1791,70 @@ function renderConversation() {
         ] || [];
 
 
-    customMessages.forEach(
-        message => {
+    customMessages.forEach(message => {
 
-            scroll.appendChild(
-                createMessageBubble(
-                    message
-                )
-            );
-
-        }
-    );
-
-
-    messageList.appendChild(
-        scroll
-    );
-
-
-    /* =========================================
-       COMPOSER
-    ========================================= */
-
-    const composer =
-        createComposer();
-
-
-    messageList.appendChild(
-        composer
-    );
-
-
-    /* =========================================
-       BACK TO MESSAGE LIST
-    ========================================= */
-
-    document
-        .getElementById(
-            "conversationBack"
-        )
-        .addEventListener(
-            "click",
-            () => {
-
-                /*
-                   THIS DOES NOT LOCK THE PHONE.
-
-                   It only returns to Messages.
-                */
-
-                renderMessageList();
-
-            }
+        chatMessages.appendChild(
+            createMessageBubble(
+                message,
+                currentConversation
+            )
         );
+
+    });
 
 
     requestAnimationFrame(
         () => {
 
-            scroll.scrollTop =
-                scroll.scrollHeight;
+            chatMessages.scrollTop =
+                chatMessages.scrollHeight;
 
         }
     );
-
-}
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-function getConversationStatus() {
-
-    if (
-        currentConversation.type ===
-        "archived"
-    ) {
-
-        return "Archived";
-
-    }
-
-
-    return "No response";
 
 }
 
 
 /* =========================================================
    MESSAGE BUBBLE
-========================================================= */
+   ========================================================= */
 
 function createMessageBubble(
-    message
+    message,
+    conversation
 ) {
 
-    const wrapper =
+    const row =
         document.createElement("div");
 
+    row.className =
+        "message-row";
 
-    wrapper.className =
-        "message-wrapper";
 
-
-    wrapper.classList.add(
+    row.classList.add(
         message.sender === "me"
             ? "sent"
             : "received"
     );
 
 
-    const bubble =
-        document.createElement("div");
+    if (
+        conversation.type ===
+        "suspicious"
+    ) {
 
-
-    bubble.className =
-        "message-bubble";
-
-
-    if (message.suspicious) {
-
-        bubble.classList.add(
+        row.classList.add(
             "suspicious"
         );
 
     }
+
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        "message-bubble";
 
 
     if (message.html) {
@@ -990,365 +1870,34 @@ function createMessageBubble(
     }
 
 
-    /* =========================================
-       IMAGE
-    ========================================= */
-
-    if (
-        message.attachmentType ===
-        "image"
-    ) {
-
-        bubble.innerHTML = `
-
-            <div
-                style="
-                    display:flex;
-                    align-items:center;
-                    gap:8px;
-                "
-            >
-
-                ${icons.plus}
-
-                <span>
-                    ${escapeHTML(
-                        message.name ||
-                        "Image"
-                    )}
-                </span>
-
-            </div>
-
-        `;
-
-    }
-
-
-    /* =========================================
-       AUDIO
-    ========================================= */
-
-    if (
-        message.attachmentType ===
-        "audio"
-    ) {
-
-        bubble.innerHTML = `
-
-            <div
-                style="
-                    display:flex;
-                    align-items:center;
-                    gap:8px;
-                "
-            >
-
-                ${icons.microphone}
-
-                <span>
-                    ${escapeHTML(
-                        message.name ||
-                        "Audio"
-                    )}
-                </span>
-
-            </div>
-
-        `;
-
-    }
-
-
-    wrapper.appendChild(
+    row.appendChild(
         bubble
     );
 
 
-    return wrapper;
+    return row;
 
 }
 
 
 /* =========================================================
-   COMPOSER
-========================================================= */
+   SEND MESSAGE
+   ========================================================= */
 
-function createComposer() {
+function sendMessage() {
 
-    const composer =
-        document.createElement("div");
+    if (!currentConversation) {
 
-    composer.className =
-        "composer";
-
-
-    composer.innerHTML = `
-
-        <button
-            class="tool-btn"
-            id="imageBtn"
-            title="Attach"
-        >
-
-            ${icons.plus}
-
-        </button>
-
-
-        <input
-            type="text"
-            class="message-input"
-            id="messageInput"
-            placeholder="Message..."
-            autocomplete="off"
-        >
-
-
-        <button
-            class="tool-btn"
-            id="audioBtn"
-            title="Audio"
-        >
-
-            ${icons.microphone}
-
-        </button>
-
-
-        <button
-            class="send-btn"
-            id="sendBtn"
-            aria-label="Send"
-        >
-
-            ${icons.send}
-
-        </button>
-
-
-        <input
-            type="file"
-            id="imageInput"
-            accept="image/*"
-            hidden
-        >
-
-
-        <input
-            type="file"
-            id="audioInput"
-            accept="audio/*"
-            hidden
-        >
-
-    `;
-
-
-    /* =========================================
-       TEXT
-    ========================================= */
-
-    const input =
-        composer.querySelector(
-            "#messageInput"
-        );
-
-
-    const sendBtn =
-        composer.querySelector(
-            "#sendBtn"
-        );
-
-
-    function sendText() {
-
-        const text =
-            input.value.trim();
-
-
-        if (!text) {
-
-            return;
-
-        }
-
-
-        addPlayerMessage({
-
-            sender: "me",
-
-            text: text
-
-        });
-
-
-        input.value = "";
+        return;
 
     }
 
 
-    sendBtn.addEventListener(
-        "click",
-        sendText
-    );
+    const text =
+        messageInput.value.trim();
 
 
-    input.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                event.preventDefault();
-
-                sendText();
-
-            }
-
-        }
-    );
-
-
-    /* =========================================
-       IMAGE
-    ========================================= */
-
-    const imageBtn =
-        composer.querySelector(
-            "#imageBtn"
-        );
-
-
-    const imageInput =
-        composer.querySelector(
-            "#imageInput"
-        );
-
-
-    imageBtn.addEventListener(
-        "click",
-        () => {
-
-            imageInput.click();
-
-        }
-    );
-
-
-    imageInput.addEventListener(
-        "change",
-        () => {
-
-            const file =
-                imageInput.files[0];
-
-
-            if (!file) {
-
-                return;
-
-            }
-
-
-            addPlayerMessage({
-
-                sender: "me",
-
-                attachmentType:
-                    "image",
-
-                name:
-                    file.name
-
-            });
-
-
-            imageInput.value = "";
-
-        }
-    );
-
-
-    /* =========================================
-       AUDIO
-    ========================================= */
-
-    const audioBtn =
-        composer.querySelector(
-            "#audioBtn"
-        );
-
-
-    const audioInput =
-        composer.querySelector(
-            "#audioInput"
-        );
-
-
-    audioBtn.addEventListener(
-        "click",
-        () => {
-
-            audioInput.click();
-
-        }
-    );
-
-
-    audioInput.addEventListener(
-        "change",
-        () => {
-
-            const file =
-                audioInput.files[0];
-
-
-            if (!file) {
-
-                return;
-
-            }
-
-
-            addPlayerMessage({
-
-                sender: "me",
-
-                attachmentType:
-                    "audio",
-
-                name:
-                    file.name
-
-            });
-
-
-            audioInput.value = "";
-
-        }
-    );
-
-
-    return composer;
-
-}
-
-
-/* =========================================================
-   ADD INVESTIGATOR MESSAGE
-========================================================= */
-
-function addPlayerMessage(
-    message
-) {
-
-    if (
-        !currentConversation
-    ) {
+    if (!text) {
 
         return;
 
@@ -1370,10 +1919,24 @@ function addPlayerMessage(
 
     sentMessages[
         currentConversation.id
-    ].push(message);
+    ].push({
+
+        sender: "me",
+
+        text: text
+
+    });
 
 
-    saveSentMessages();
+    localStorage.setItem(
+        sentMessagesKey,
+        JSON.stringify(
+            sentMessages
+        )
+    );
+
+
+    messageInput.value = "";
 
 
     renderConversation();
@@ -1382,94 +1945,203 @@ function addPlayerMessage(
 
 
 /* =========================================================
-   ESCAPE HTML
-========================================================= */
+   SEND
+   ========================================================= */
 
-function escapeHTML(value) {
+sendBtn.addEventListener(
+    "click",
+    sendMessage
+);
 
-    return String(value)
 
-        .replace(
-            /&/g,
-            "&amp;"
-        )
+messageInput.addEventListener(
+    "keydown",
+    event => {
 
-        .replace(
-            /</g,
-            "&lt;"
-        )
+        if (
+            event.key ===
+            "Enter"
+        ) {
 
-        .replace(
-            />/g,
-            "&gt;"
-        )
+            event.preventDefault();
 
-        .replace(
-            /"/g,
-            "&quot;"
-        )
+            sendMessage();
 
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        }
 
-}
+    }
+);
 
 
 /* =========================================================
-   MAIN BACK BUTTON
-========================================================= */
+   CHAT BACK
+   =========================================================
 
-if (backBtn) {
+   IMPORTANT:
 
-    backBtn.addEventListener(
-        "click",
-        () => {
+   This ONLY closes the conversation.
 
-            /*
-               IMPORTANT:
+   It does NOT leave the Messages app.
+   ========================================================= */
 
-               This is NOT the phone lock action.
+chatBack.addEventListener(
+    "click",
+    () => {
 
-               It simply leaves Messages.
+        currentConversation =
+            null;
 
-               Your repair.html / phone-closing
-               code should be responsible for locking.
-            */
+        chatScreen.classList.add(
+            "hidden"
+        );
 
-            window.location.href =
-                "investigation.html";
+        messageScreen.classList.remove(
+            "hidden"
+        );
 
-        }
-    );
+        renderMessageList();
 
-}
+    }
+);
+
+
+/* =========================================================
+   PHONE HOME BACK
+   =========================================================
+
+   THIS is the only button that leaves Messages.
+
+   It goes to the phone home.
+
+   It does NOT go to investigation.html.
+   ========================================================= */
+
+backBtn.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            PHONE_HOME_FILE;
+
+    }
+);
 
 
 /* =========================================================
    NEW MESSAGE
-========================================================= */
+   ========================================================= */
 
-if (newBtn) {
+newBtn.addEventListener(
+    "click",
+    () => {
 
-    newBtn.addEventListener(
-        "click",
-        () => {
+        /*
+         * Victim phone is being examined
+         * by the investigator.
+         *
+         * There is no reason to create
+         * a new conversation.
+         */
 
-            alert(
-                "The investigator can only examine existing contacts on this device."
-            );
+        newBtn.style.transform =
+            "scale(0.9)";
 
-        }
-    );
 
-}
+        setTimeout(
+            () => {
+
+                newBtn.style.transform =
+                    "";
+
+            },
+            120
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+searchInput.addEventListener(
+    "input",
+    () => {
+
+        clearSearch.style.display =
+            searchInput.value
+                ? "block"
+                : "none";
+
+        renderMessageList();
+
+    }
+);
+
+
+clearSearch.addEventListener(
+    "click",
+    () => {
+
+        searchInput.value = "";
+
+        clearSearch.style.display =
+            "none";
+
+        renderMessageList();
+
+        searchInput.focus();
+
+    }
+);
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+document
+    .querySelectorAll(".filter")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".filter"
+                    )
+                    .forEach(
+                        other =>
+                            other.classList
+                                .remove(
+                                    "active"
+                                )
+                    );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                currentFilter =
+                    button.dataset.filter;
+
+
+                renderMessageList();
+
+            }
+        );
+
+    });
 
 
 /* =========================================================
    INITIALIZE
-========================================================= */
+   ========================================================= */
 
 renderContactStrip();
 
