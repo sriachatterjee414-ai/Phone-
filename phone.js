@@ -1,28 +1,20 @@
 /* =========================================================
    BROKEN PHONE
-   REALISTIC PHONE SYSTEM
+   PHONE CORE
+   ========================================================= */
 
-   IMPORTANT:
-   All phone apps are in the GitHub ROOT.
+const PHONE_KEY = "brokenPhoneStateV6";
 
-   Example:
-
-   phone.html
-   phone.css
-   phone.js
-   messages.html
-   gallery.html
-   victim-info.html
-
-   No folder is required.
-========================================================= */
+/*
+    Change this if you want another password.
+*/
+const PASSCODE = "0521";
 
 
 /* =========================================================
-   CONFIG
-========================================================= */
-
-const PASSCODE = "0521";
+   APP FILES
+   ALL FILES ARE DIRECTLY IN THE GITHUB ROOT
+   ========================================================= */
 
 const appFiles = {
 
@@ -48,10 +40,14 @@ const appFiles = {
 
     clock: "clock.html",
 
-    "victim-info": "victim-info.html"
+    files: "files.html"
 
 };
 
+
+/* =========================================================
+   APP INFORMATION
+   ========================================================= */
 
 const appInfo = {
 
@@ -110,45 +106,49 @@ const appInfo = {
         className: "clock-icon"
     },
 
-    "victim-info": {
-        name: "Recovered File",
-        className: "notes-icon"
+    files: {
+        name: "Files",
+        className: "files-icon"
     }
 
 };
 
 
 /* =========================================================
-   PHONE STATE
-========================================================= */
+   STATE
+   ========================================================= */
 
 /*
-   DO NOT save "unlocked".
+    IMPORTANT:
 
-   Every time phone.html is opened,
-   the device starts LOCKED.
+    unlocked is NEVER loaded from localStorage.
 
-   This is intentional.
+    Therefore:
+        refresh page -> LOCKED
+        close phone -> LOCKED
+        show phone -> LOCKED
+        return from victim file -> phone stays protected
 */
 
-const state = {
-
-    unlocked: false,
+const defaultState = {
 
     hidden: false,
 
-    currentApp: "home",
-
     homePage: 0,
+
+    currentApp: "home",
 
     history: []
 
 };
 
 
+let state = loadState();
+
+
 /* =========================================================
-   DOM
-========================================================= */
+   ELEMENTS
+   ========================================================= */
 
 const shell =
     document.getElementById("phoneShell");
@@ -168,11 +168,26 @@ const appScreen =
 const appFrame =
     document.getElementById("appFrame");
 
-const phoneToggle =
+const toggle =
     document.getElementById("phoneToggle");
 
-const phoneToggleText =
+const toggleText =
     document.getElementById("phoneToggleText");
+
+const toggleSubtext =
+    document.getElementById("phoneToggleSubtext");
+
+const victimInfoButton =
+    document.getElementById("victimInfoButton");
+
+const victimPanel =
+    document.getElementById("victimPanel");
+
+const victimFrame =
+    document.getElementById("victimFrame");
+
+const closeVictimInfo =
+    document.getElementById("closeVictimInfo");
 
 const homePages =
     document.getElementById("homePages");
@@ -204,9 +219,6 @@ const recentList =
 const closeRecent =
     document.getElementById("closeRecent");
 
-const recoveredFile =
-    document.getElementById("recoveredFile");
-
 const appSearch =
     document.getElementById("appSearch");
 
@@ -218,8 +230,114 @@ const searchResults =
 
 
 /* =========================================================
-   SCREEN SWITCHING
-========================================================= */
+   LOAD STATE
+   ========================================================= */
+
+function loadState(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(PHONE_KEY);
+
+        if(!saved){
+
+            return {
+                ...defaultState
+            };
+
+        }
+
+        const parsed =
+            JSON.parse(saved);
+
+        return {
+
+            ...defaultState,
+
+            hidden:
+                Boolean(parsed.hidden),
+
+            homePage:
+                Number.isFinite(Number(parsed.homePage))
+                    ? Number(parsed.homePage)
+                    : 0,
+
+            currentApp:
+                typeof parsed.currentApp === "string"
+                    ? parsed.currentApp
+                    : "home",
+
+            history:
+                Array.isArray(parsed.history)
+                    ? parsed.history
+                    : []
+
+        };
+
+    }catch(error){
+
+        console.error(
+            "Could not load phone state:",
+            error
+        );
+
+        return {
+            ...defaultState
+        };
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE STATE
+   ========================================================= */
+
+function saveState(){
+
+    try{
+
+        /*
+            Notice:
+            state.unlocked is NOT stored.
+        */
+
+        localStorage.setItem(
+            PHONE_KEY,
+            JSON.stringify({
+
+                hidden:
+                    state.hidden,
+
+                homePage:
+                    state.homePage,
+
+                currentApp:
+                    state.currentApp,
+
+                history:
+                    state.history
+
+            })
+        );
+
+    }catch(error){
+
+        console.error(
+            "Could not save phone state:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SHOW ONE PHONE SCREEN
+   ========================================================= */
 
 function showOnly(element){
 
@@ -250,8 +368,8 @@ function showOnly(element){
 
 
 /* =========================================================
-   RENDER
-========================================================= */
+   RENDER PHONE
+   ========================================================= */
 
 function render(){
 
@@ -266,57 +384,84 @@ function render(){
 
     if(state.hidden){
 
-        phoneToggleText.textContent =
-            "OPEN DEVICE";
+        if(toggleText){
+
+            toggleText.textContent =
+                "OPEN DEVICE";
+
+        }
+
+        if(toggleSubtext){
+
+            toggleSubtext.textContent =
+                "PHONE IS LOCKED";
+
+        }
 
         return;
 
     }
 
 
-    phoneToggleText.textContent =
-        "CLOSE DEVICE";
+    if(toggleText){
+
+        toggleText.textContent =
+            "CLOSE DEVICE";
+
+    }
+
+    if(toggleSubtext){
+
+        toggleSubtext.textContent =
+            "SECURE PHONE";
+
+    }
 
 
     /*
-       DEVICE IS LOCKED
+        THE PHONE IS LOCKED UNTIL THE
+        USER ENTERS THE PASSWORD.
     */
 
     if(!state.unlocked){
 
         showOnly(lockScreen);
 
-        androidNav.classList.add("hidden");
+        if(androidNav){
+
+            androidNav.classList.add("hidden");
+
+        }
 
         return;
 
     }
 
-
-    /*
-       HOME
-    */
 
     if(state.currentApp === "home"){
 
         showOnly(homeScreen);
 
-        androidNav.classList.remove("hidden");
-
         updateHomePage();
+
+        if(androidNav){
+
+            androidNav.classList.remove("hidden");
+
+        }
 
         return;
 
     }
 
 
-    /*
-       APPLICATION
-    */
-
     showOnly(appScreen);
 
-    androidNav.classList.add("hidden");
+    if(androidNav){
+
+        androidNav.classList.add("hidden");
+
+    }
 
     loadApp(state.currentApp);
 
@@ -325,7 +470,636 @@ function render(){
 
 /* =========================================================
    OPEN APP
-========================================================= */
+   ========================================================= */
+
+function loadApp(app){
+
+    if(!appFrame) return;
+
+
+    const file =
+        appFiles[app];
+
+
+    if(!file){
+
+        console.error(
+            "Unknown app:",
+            app
+        );
+
+        appFrame.removeAttribute("src");
+
+        return;
+
+    }
+
+
+    const info =
+        appInfo[app];
+
+
+    if(info){
+
+        const icon =
+            document.getElementById(
+                "appHeaderIcon"
+            );
+
+        const name =
+            document.getElementById(
+                "appHeaderName"
+            );
+
+
+        if(icon){
+
+            icon.className =
+                "header-app-icon " +
+                info.className;
+
+            icon.innerHTML = "";
+
+        }
+
+
+        if(name){
+
+            name.textContent =
+                info.name;
+
+        }
+
+    }
+
+
+    const current =
+        appFrame.getAttribute("src") || "";
+
+
+    if(!current.endsWith(file)){
+
+        appFrame.src = file;
+
+    }
+
+}
+
+
+/* =========================================================
+   SHOW PASSCODE
+   ========================================================= */
+
+function showPasscode(){
+
+    if(state.unlocked){
+
+        return;
+
+    }
+
+
+    showOnly(passcodeScreen);
+
+
+    if(typeof window.clearPasscode === "function"){
+
+        window.clearPasscode();
+
+    }
+
+}
+
+
+/* =========================================================
+   RETURN TO LOCK
+   ========================================================= */
+
+function returnToLock(){
+
+    state.unlocked = false;
+
+    showOnly(lockScreen);
+
+}
+
+
+/* =========================================================
+   PASSCODE
+   ========================================================= */
+
+function setupPasscode(){
+
+    const pad =
+        document.getElementById(
+            "passcodePad"
+        );
+
+    const dots =
+        [
+            ...document.querySelectorAll(
+                "#passcodeDots span"
+            )
+        ];
+
+    const error =
+        document.getElementById(
+            "passcodeError"
+        );
+
+
+    if(!pad) return;
+
+
+    let entered = "";
+
+
+    pad.innerHTML = "";
+
+
+    const keys = [
+        "1","2","3",
+        "4","5","6",
+        "7","8","9",
+        "0"
+    ];
+
+
+    const letters = {
+
+        "2":"ABC",
+        "3":"DEF",
+        "4":"GHI",
+        "5":"JKL",
+        "6":"MNO",
+        "7":"PQRS",
+        "8":"TUV",
+        "9":"WXYZ"
+
+    };
+
+
+    keys.forEach(value => {
+
+        const button =
+            document.createElement("button");
+
+
+        if(letters[value]){
+
+            button.innerHTML =
+                `${value}<small>${letters[value]}</small>`;
+
+        }else{
+
+            button.textContent =
+                value;
+
+        }
+
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                if(
+                    entered.length >=
+                    PASSCODE.length
+                ){
+
+                    return;
+
+                }
+
+
+                entered += value;
+
+                updateDots();
+
+
+                if(
+                    entered.length !==
+                    PASSCODE.length
+                ){
+
+                    return;
+
+                }
+
+
+                if(entered === PASSCODE){
+
+                    /*
+                        CORRECT PASSWORD
+                    */
+
+                    state.unlocked = true;
+
+                    state.currentApp =
+                        "home";
+
+                    state.homePage = 0;
+
+                    state.history = [];
+
+                    entered = "";
+
+                    updateDots();
+
+
+                    if(error){
+
+                        error.textContent = "";
+
+                    }
+
+
+                    saveState();
+
+                    render();
+
+                }else{
+
+                    if(error){
+
+                        error.textContent =
+                            "Incorrect passcode";
+
+                    }
+
+
+                    setTimeout(() => {
+
+                        entered = "";
+
+                        updateDots();
+
+
+                        if(error){
+
+                            error.textContent = "";
+
+                        }
+
+                    },700);
+
+                }
+
+            }
+        );
+
+
+        pad.appendChild(button);
+
+    });
+
+
+    function updateDots(){
+
+        dots.forEach(
+            (dot,index) => {
+
+                dot.classList.toggle(
+                    "filled",
+                    index < entered.length
+                );
+
+            }
+        );
+
+    }
+
+
+    window.clearPasscode = () => {
+
+        entered = "";
+
+        updateDots();
+
+
+        if(error){
+
+            error.textContent = "";
+
+        }
+
+    };
+
+}
+
+
+/* =========================================================
+   HOME PAGES
+   ========================================================= */
+
+function updateHomePage(){
+
+    if(!homePages) return;
+
+
+    const page =
+        Math.max(
+            0,
+            Math.min(
+                2,
+                Number(state.homePage) || 0
+            )
+        );
+
+
+    state.homePage =
+        page;
+
+
+    homePages.style.transform =
+        `translateX(-${page * 33.333333}%)`;
+
+
+    pageDots.forEach(
+        (dot,index) => {
+
+            dot.classList.toggle(
+                "active",
+                index === page
+            );
+
+        }
+    );
+
+
+    saveState();
+
+}
+
+
+function nextHomePage(){
+
+    if(state.homePage >= 2){
+
+        return;
+
+    }
+
+
+    state.homePage++;
+
+    updateHomePage();
+
+}
+
+
+function previousHomePage(){
+
+    if(state.homePage <= 0){
+
+        return;
+
+    }
+
+
+    state.homePage--;
+
+    updateHomePage();
+
+}
+
+
+/* =========================================================
+   SWIPING
+   ========================================================= */
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+
+function startTouch(event){
+
+    if(!event.touches?.[0]){
+
+        return;
+
+    }
+
+
+    touchStartX =
+        event.touches[0].clientX;
+
+    touchStartY =
+        event.touches[0].clientY;
+
+}
+
+
+function endTouch(event){
+
+    if(!event.changedTouches?.[0]){
+
+        return;
+
+    }
+
+
+    touchEndX =
+        event.changedTouches[0].clientX;
+
+    touchEndY =
+        event.changedTouches[0].clientY;
+
+
+    handleSwipe();
+
+}
+
+
+function handleSwipe(){
+
+    const deltaX =
+        touchEndX - touchStartX;
+
+    const deltaY =
+        touchEndY - touchStartY;
+
+
+    const absX =
+        Math.abs(deltaX);
+
+    const absY =
+        Math.abs(deltaY);
+
+
+    /*
+        LOCK SCREEN
+        swipe up -> password
+    */
+
+    if(
+        !state.unlocked &&
+        !lockScreen.classList.contains("hidden")
+    ){
+
+        if(
+            deltaY < -60 &&
+            absY > absX
+        ){
+
+            showPasscode();
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+        PASSCODE
+        swipe down -> lock
+    */
+
+    if(
+        !state.unlocked &&
+        !passcodeScreen.classList.contains("hidden")
+    ){
+
+        if(
+            deltaY > 60 &&
+            absY > absX
+        ){
+
+            returnToLock();
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+        HOME PAGE SWIPE
+    */
+
+    if(
+        state.unlocked &&
+        state.currentApp === "home" &&
+        absX > 60 &&
+        absX > absY
+    ){
+
+        if(deltaX < 0){
+
+            nextHomePage();
+
+        }else{
+
+            previousHomePage();
+
+        }
+
+    }
+
+}
+
+
+[
+    lockScreen,
+    passcodeScreen,
+    homeScreen
+
+].forEach(screen => {
+
+    if(!screen) return;
+
+
+    screen.addEventListener(
+        "touchstart",
+        startTouch,
+        {passive:true}
+    );
+
+
+    screen.addEventListener(
+        "touchend",
+        endTouch,
+        {passive:true}
+    );
+
+});
+
+
+/* =========================================================
+   MOUSE SWIPE
+   ========================================================= */
+
+let mouseDown = false;
+
+
+function mouseStart(event){
+
+    mouseDown = true;
+
+    touchStartX =
+        event.clientX;
+
+    touchStartY =
+        event.clientY;
+
+}
+
+
+function mouseEnd(event){
+
+    if(!mouseDown){
+
+        return;
+
+    }
+
+
+    mouseDown = false;
+
+
+    touchEndX =
+        event.clientX;
+
+    touchEndY =
+        event.clientY;
+
+
+    handleSwipe();
+
+}
+
+
+[
+    homeScreen,
+    lockScreen,
+    passcodeScreen
+
+].forEach(screen => {
+
+    if(!screen) return;
+
+
+    screen.addEventListener(
+        "mousedown",
+        mouseStart
+    );
+
+
+    screen.addEventListener(
+        "mouseup",
+        mouseEnd
+    );
+
+});
+
+
+/* =========================================================
+   OPEN APP
+   ========================================================= */
 
 function openApp(app){
 
@@ -339,7 +1113,7 @@ function openApp(app){
     if(!appFiles[app]){
 
         console.error(
-            "Unknown phone app:",
+            "Unknown app:",
             app
         );
 
@@ -360,12 +1134,15 @@ function openApp(app){
     }
 
 
-    state.currentApp = app;
+    state.currentApp =
+        app;
 
 
     closeRecentPanel();
 
     clearSearchResults();
+
+    saveState();
 
     render();
 
@@ -373,617 +1150,12 @@ function openApp(app){
 
 
 /* =========================================================
-   LOAD APP
-========================================================= */
-
-function loadApp(app){
-
-    const file =
-        appFiles[app];
-
-    if(!file){
-
-        return;
-
-    }
-
-
-    const info =
-        appInfo[app];
-
-
-    const header =
-        document.getElementById(
-            "appHeaderIcon"
-        );
-
-
-    const title =
-        document.getElementById(
-            "appHeaderName"
-        );
-
-
-    if(info){
-
-        header.className =
-            "header-app-icon " +
-            info.className;
-
-        /*
-           Small SVG-style visual
-           instead of ugly characters.
-        */
-
-        header.innerHTML =
-            createHeaderIcon(app);
-
-
-        title.textContent =
-            info.name;
-
-    }
-
-
-    /*
-       IMPORTANT:
-
-       Files are directly in GitHub root.
-
-       Therefore:
-
-       messages.html
-
-       NOT:
-
-       broken-phone/messages.html
-    */
-
-    if(
-        !appFrame.src ||
-        !appFrame.src.endsWith(file)
-    ){
-
-        appFrame.src = file;
-
-    }
-
-}
-
-
-/* =========================================================
-   HEADER ICONS
-========================================================= */
-
-function createHeaderIcon(app){
-
-    const icons = {
-
-        calls: `
-            <svg viewBox="0 0 24 24">
-                <path d="M6.6 3.5l3 2.5-1.8 3
-                c1 2 2.7 3.7 4.7 4.7
-                l3-1.8 2.5 3
-                c.6.7.5 1.7-.2 2.2-1
-                .8-2.1 1.1-3.2.7-4.2
-                -1.3-7.1-4.1-8.4-8.4
-                -.4-1.1-.1-2.2.7-3.2
-                .5-.7 1.5-.8 2.2-.2z"/>
-            </svg>
-        `,
-
-        messages: `
-            <svg viewBox="0 0 24 24">
-                <path d="M4 5.5A2.5 2.5 0 0 1
-                6.5 3h11A2.5 2.5 0 0 1
-                20 5.5v8A2.5 2.5 0 0 1
-                17.5 16H10l-4.5 4V16h-1
-                A2.5 2.5 0 0 1 2 13.5v-8z"/>
-                <path d="M7 8h10M7 11.5h6"/>
-            </svg>
-        `,
-
-        gallery: `
-            <svg viewBox="0 0 24 24">
-                <rect x="3" y="4"
-                width="18" height="16" rx="2"/>
-                <circle cx="8" cy="9" r="1.5"/>
-                <path d="M4 17l5-5
-                3 3 2-2 6 5"/>
-            </svg>
-        `,
-
-        notes: `
-            <svg viewBox="0 0 24 24">
-                <path d="M6 3h12
-                a2 2 0 0 1 2 2v14
-                a2 2 0 0 1-2 2H6
-                a2 2 0 0 1-2-2V5
-                a2 2 0 0 1 2-2z"/>
-                <path d="M7.5 8h9
-                M7.5 11.5h9
-                M7.5 15h6"/>
-            </svg>
-        `,
-
-        browser: `
-            <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="9"/>
-                <path d="M3 12h18"/>
-                <path d="M12 3
-                c3 3 3 15 0 18"/>
-            </svg>
-        `,
-
-        settings: `
-            <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M19 13.5l1.5 1-2 3
-                -1.8-.8a7 7 0 0 1-2 1.2
-                L14.5 20h-3l-.2-2.1
-                a7 7 0 0 1-2-1.2l-1.8.8
-                -2-3 1.5-1a7 7 0 0 1 0-3
-                l-1.5-1 2-3 1.8.8
-                a7 7 0 0 1 2-1.2L11.5 4h3
-                l.2 2.1a7 7 0 0 1 2 1.2
-                l1.8-.8 2 3-1.5 1
-                a7 7 0 0 1 0 3z"/>
-            </svg>
-        `
-
-    };
-
-
-    return icons[app] || icons.notes;
-
-}
-
-
-/* =========================================================
-   PASSCODE
-========================================================= */
-
-let enteredCode = "";
-
-
-function setupPasscode(){
-
-    const pad =
-        document.getElementById(
-            "passcodePad"
-        );
-
-    const dots =
-        [...document.querySelectorAll(
-            "#passcodeDots span"
-        )];
-
-    const error =
-        document.getElementById(
-            "passcodeError"
-        );
-
-
-    pad.innerHTML = "";
-
-
-    const keys = [
-        "1","2","3",
-        "4","5","6",
-        "7","8","9",
-        "0"
-    ];
-
-
-    const letters = {
-
-        "2":"ABC",
-        "3":"DEF",
-
-        "4":"GHI",
-        "5":"JKL",
-        "6":"MNO",
-
-        "7":"PQRS",
-        "8":"TUV",
-        "9":"WXYZ"
-
-    };
-
-
-    keys.forEach(value => {
-
-        const button =
-            document.createElement(
-                "button"
-            );
-
-
-        if(letters[value]){
-
-            button.innerHTML =
-                `${value}<small>
-                    ${letters[value]}
-                 </small>`;
-
-        }else{
-
-            button.textContent =
-                value;
-
-        }
-
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                if(
-                    enteredCode.length >=
-                    PASSCODE.length
-                ){
-
-                    return;
-
-                }
-
-
-                enteredCode += value;
-
-                updatePasscodeDots();
-
-
-                if(
-                    enteredCode.length !==
-                    PASSCODE.length
-                ){
-
-                    return;
-
-                }
-
-
-                if(
-                    enteredCode === PASSCODE
-                ){
-
-                    /*
-                       CORRECT PASSWORD
-
-                       New phone session begins.
-                    */
-
-                    state.unlocked = true;
-
-                    state.currentApp = "home";
-
-                    state.homePage = 0;
-
-                    state.history = [];
-
-                    enteredCode = "";
-
-                    updatePasscodeDots();
-
-                    error.textContent = "";
-
-                    render();
-
-                }else{
-
-                    error.textContent =
-                        "Incorrect passcode";
-
-                    setTimeout(() => {
-
-                        enteredCode = "";
-
-                        updatePasscodeDots();
-
-                        error.textContent = "";
-
-                    },700);
-
-                }
-
-            }
-        );
-
-
-        pad.appendChild(button);
-
-    });
-
-}
-
-
-function updatePasscodeDots(){
-
-    const dots =
-        [...document.querySelectorAll(
-            "#passcodeDots span"
-        )];
-
-
-    dots.forEach(
-        (dot,index) => {
-
-            dot.classList.toggle(
-                "filled",
-                index <
-                enteredCode.length
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   CANCEL PASSCODE
-========================================================= */
-
-const passcodeCancel =
-    document.getElementById(
-        "passcodeCancel"
-    );
-
-
-if(passcodeCancel){
-
-    passcodeCancel.addEventListener(
-        "click",
-        () => {
-
-            enteredCode = "";
-
-            updatePasscodeDots();
-
-            document
-                .getElementById(
-                    "passcodeError"
-                )
-                .textContent = "";
-
-            showOnly(lockScreen);
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SHOW PASSCODE
-========================================================= */
-
-function showPasscode(){
-
-    if(state.unlocked){
-
-        return;
-
-    }
-
-
-    enteredCode = "";
-
-    updatePasscodeDots();
-
-    document
-        .getElementById(
-            "passcodeError"
-        )
-        .textContent = "";
-
-
-    showOnly(passcodeScreen);
-
-}
-
-
-/* =========================================================
-   LOCK DEVICE
-========================================================= */
-
-function lockDevice(){
-
-    /*
-       THIS IS THE IMPORTANT FIX.
-
-       Closing the phone destroys the
-       unlocked session.
-
-       Next opening requires 0521 again.
-    */
-
-    state.hidden = true;
-
-    state.unlocked = false;
-
-    state.currentApp = "home";
-
-    state.homePage = 0;
-
-    state.history = [];
-
-    enteredCode = "";
-
-    clearSearchResults();
-
-    closeRecentPanel();
-
-    appFrame.removeAttribute("src");
-
-    render();
-
-}
-
-
-/* =========================================================
-   PHONE TOGGLE
-========================================================= */
-
-phoneToggle.addEventListener(
-    "click",
-    () => {
-
-        if(state.hidden){
-
-            /*
-               Open device.
-
-               It is STILL LOCKED.
-            */
-
-            state.hidden = false;
-
-            state.unlocked = false;
-
-            state.currentApp = "home";
-
-            state.homePage = 0;
-
-            state.history = [];
-
-            render();
-
-            return;
-
-        }
-
-
-        /*
-           Close device.
-        */
-
-        lockDevice();
-
-    }
-);
-
-
-/* =========================================================
-   HOME PAGE
-========================================================= */
-
-function updateHomePage(){
-
-    const page =
-        Math.max(
-            0,
-            Math.min(
-                2,
-                Number(state.homePage) || 0
-            )
-        );
-
-
-    state.homePage = page;
-
-
-    homePages.style.transform =
-        `translateX(-${page * 33.333333}%)`;
-
-
-    pageDots.forEach(
-        (dot,index) => {
-
-            dot.classList.toggle(
-                "active",
-                index === page
-            );
-
-        }
-    );
-
-}
-
-
-function nextHomePage(){
-
-    if(state.homePage >= 2){
-
-        return;
-
-    }
-
-    state.homePage++;
-
-    updateHomePage();
-
-}
-
-
-function previousHomePage(){
-
-    if(state.homePage <= 0){
-
-        return;
-
-    }
-
-    state.homePage--;
-
-    updateHomePage();
-
-}
-
-
-/* =========================================================
-   RECOVERED FILE
-========================================================= */
-
-if(recoveredFile){
-
-    recoveredFile.addEventListener(
-        "click",
-        () => {
-
-            openApp(
-                "victim-info"
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   APP BACK
-========================================================= */
+   BACK
+   ========================================================= */
 
 function goBack(){
 
-    if(
-        state.currentApp ===
-        "home"
-    ){
-
-        return;
-
-    }
-
-
-    /*
-       If we are viewing the
-       recovered victim file,
-       back returns to phone home.
-    */
-
-    if(
-        state.currentApp ===
-        "victim-info"
-    ){
-
-        state.currentApp =
-            "home";
-
-        state.history = [];
-
-        render();
+    if(state.currentApp === "home"){
 
         return;
 
@@ -998,20 +1170,16 @@ function goBack(){
         previous || "home";
 
 
+    saveState();
+
     render();
 
 }
 
 
-appBack.addEventListener(
-    "click",
-    goBack
-);
-
-
 /* =========================================================
-   HOME BUTTON
-========================================================= */
+   HOME
+   ========================================================= */
 
 function goHome(){
 
@@ -1026,49 +1194,220 @@ function goHome(){
 
     clearSearchResults();
 
+    saveState();
+
     render();
 
 }
 
 
-navHome.addEventListener(
-    "click",
-    goHome
-);
-
-
 /* =========================================================
-   BACK BUTTON
-========================================================= */
+   CLOSE / OPEN PHONE
+   ========================================================= */
 
-navBack.addEventListener(
-    "click",
-    () => {
+if(toggle){
 
-        if(
-            state.currentApp ===
-            "home"
-        ){
+    toggle.addEventListener(
+        "click",
+        () => {
 
-            previousHomePage();
+            /*
+                CLOSING PHONE
+                ALWAYS LOCK IT.
+            */
 
-        }else{
+            if(!state.hidden){
 
-            goBack();
+                state.hidden = true;
+
+                state.unlocked = false;
+
+                state.currentApp =
+                    "home";
+
+                state.homePage = 0;
+
+                state.history = [];
+
+                closeRecentPanel();
+
+                saveState();
+
+                render();
+
+                return;
+
+            }
+
+
+            /*
+                OPENING PHONE
+                ALWAYS START AT LOCK SCREEN.
+            */
+
+            state.hidden = false;
+
+            state.unlocked = false;
+
+            state.currentApp =
+                "home";
+
+            state.homePage = 0;
+
+            state.history = [];
+
+
+            closeRecentPanel();
+
+            saveState();
+
+            render();
 
         }
+    );
 
-    }
-);
+}
 
 
 /* =========================================================
-   RECENT APPS
-========================================================= */
+   VICTIM INFO
+   OUTSIDE PHONE
+   ========================================================= */
+
+function openVictimInfo(){
+
+    if(!victimPanel){
+
+        return;
+
+    }
+
+
+    /*
+        Load the victim file only when opened.
+        All files are directly in GitHub root.
+    */
+
+    if(
+        victimFrame &&
+        !victimFrame.getAttribute("src")
+    ){
+
+        victimFrame.src =
+            "victim-info.html";
+
+    }
+
+
+    victimPanel.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function closeVictimInfoPanel(){
+
+    if(!victimPanel){
+
+        return;
+
+    }
+
+
+    victimPanel.classList.add(
+        "hidden"
+    );
+
+}
+
+
+if(victimInfoButton){
+
+    victimInfoButton.addEventListener(
+        "click",
+        openVictimInfo
+    );
+
+}
+
+
+if(closeVictimInfo){
+
+    closeVictimInfo.addEventListener(
+        "click",
+        closeVictimInfoPanel
+    );
+
+}
+
+
+/* =========================================================
+   PHONE NAVIGATION
+   ========================================================= */
+
+if(appBack){
+
+    appBack.addEventListener(
+        "click",
+        goBack
+    );
+
+}
+
+
+if(navBack){
+
+    navBack.addEventListener(
+        "click",
+        () => {
+
+            if(state.currentApp === "home"){
+
+                previousHomePage();
+
+            }else{
+
+                goBack();
+
+            }
+
+        }
+    );
+
+}
+
+
+if(navHome){
+
+    navHome.addEventListener(
+        "click",
+        goHome
+    );
+
+}
+
+
+if(navRecent){
+
+    navRecent.addEventListener(
+        "click",
+        openRecentPanel
+    );
+
+}
+
+
+/* =========================================================
+   RECENTS
+   ========================================================= */
 
 function openRecentPanel(){
 
-    if(!state.unlocked){
+    if(
+        !state.unlocked ||
+        !recentPanel
+    ){
 
         return;
 
@@ -1086,38 +1425,35 @@ function openRecentPanel(){
 
 function closeRecentPanel(){
 
-    recentPanel.classList.add(
-        "hidden"
-    );
+    if(recentPanel){
+
+        recentPanel.classList.add(
+            "hidden"
+        );
+
+    }
 
 }
 
 
-navRecent.addEventListener(
-    "click",
-    openRecentPanel
-);
-
-
-closeRecent.addEventListener(
-    "click",
-    closeRecentPanel
-);
-
-
 function buildRecentApps(){
+
+    if(!recentList){
+
+        return;
+
+    }
+
 
     recentList.innerHTML = "";
 
 
-    const apps = [
-        ...state.history
-    ];
+    const apps =
+        [...state.history];
 
 
     if(
-        state.currentApp !==
-        "home"
+        state.currentApp !== "home"
     ){
 
         apps.unshift(
@@ -1148,12 +1484,18 @@ function buildRecentApps(){
 
     if(!uniqueApps.length){
 
-        recentList.innerHTML =
-            `
-            <div class="recent-card">
-                No recent applications
-            </div>
-            `;
+        const empty =
+            document.createElement("div");
+
+        empty.className =
+            "recent-card";
+
+        empty.textContent =
+            "No recent apps";
+
+        recentList.appendChild(
+            empty
+        );
 
         return;
 
@@ -1166,34 +1508,45 @@ function buildRecentApps(){
             appInfo[app];
 
 
+        if(!info){
+
+            return;
+
+        }
+
+
         const card =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         card.className =
             "recent-card";
 
 
         const button =
-            document.createElement(
-                "button"
-            );
+            document.createElement("button");
 
         button.className =
             "recent-open";
 
 
-        button.innerHTML =
-            `
-            <span
-                class="real-icon ${info.className}">
-            </span>
+        const icon =
+            document.createElement("span");
 
-            <span>
-                ${info.name}
-            </span>
-            `;
+        icon.className =
+            "real-icon " +
+            info.className;
+
+
+        const name =
+            document.createElement("span");
+
+        name.textContent =
+            info.name;
+
+
+        button.appendChild(icon);
+
+        button.appendChild(name);
 
 
         button.addEventListener(
@@ -1204,6 +1557,8 @@ function buildRecentApps(){
                     app;
 
                 closeRecentPanel();
+
+                saveState();
 
                 render();
 
@@ -1220,11 +1575,31 @@ function buildRecentApps(){
 }
 
 
+if(closeRecent){
+
+    closeRecent.addEventListener(
+        "click",
+        closeRecentPanel
+    );
+
+}
+
+
 /* =========================================================
    SEARCH
-========================================================= */
+   ========================================================= */
 
 function performSearch(){
+
+    if(
+        !appSearch ||
+        !searchResults
+    ){
+
+        return;
+
+    }
+
 
     const query =
         appSearch.value
@@ -1249,8 +1624,7 @@ function performSearch(){
             .filter(app => {
 
                 const name =
-                    appInfo[app]
-                        .name
+                    appInfo[app].name
                         .toLowerCase();
 
                 return (
@@ -1263,12 +1637,18 @@ function performSearch(){
 
     if(!matches.length){
 
-        searchResults.innerHTML =
-            `
-            <div class="search-result">
-                No apps found
-            </div>
-            `;
+        const empty =
+            document.createElement("div");
+
+        empty.className =
+            "search-result";
+
+        empty.textContent =
+            "No apps found";
+
+        searchResults.appendChild(
+            empty
+        );
 
         searchResults.classList.remove(
             "hidden"
@@ -1286,34 +1666,35 @@ function performSearch(){
 
 
         const button =
-            document.createElement(
-                "button"
-            );
-
+            document.createElement("button");
 
         button.className =
             "search-result";
 
 
-        button.innerHTML =
-            `
-            <span
-                class="real-icon ${info.className}">
-            </span>
+        const icon =
+            document.createElement("span");
 
-            <span>
-                ${info.name}
-            </span>
-            `;
+        icon.className =
+            "real-icon " +
+            info.className;
+
+
+        const name =
+            document.createElement("span");
+
+        name.textContent =
+            info.name;
+
+
+        button.appendChild(icon);
+
+        button.appendChild(name);
 
 
         button.addEventListener(
             "click",
-            () => {
-
-                openApp(app);
-
-            }
+            () => openApp(app)
         );
 
 
@@ -1333,6 +1714,13 @@ function performSearch(){
 
 function clearSearchResults(){
 
+    if(!searchResults){
+
+        return;
+
+    }
+
+
     searchResults.innerHTML = "";
 
     searchResults.classList.add(
@@ -1342,34 +1730,84 @@ function clearSearchResults(){
 }
 
 
-appSearch.addEventListener(
-    "input",
-    performSearch
-);
+if(appSearch){
+
+    appSearch.addEventListener(
+        "input",
+        performSearch
+    );
 
 
-clearSearch.addEventListener(
-    "click",
-    () => {
+    appSearch.addEventListener(
+        "focus",
+        () => {
 
-        appSearch.value = "";
+            if(
+                appSearch.value.trim()
+            ){
 
-        clearSearchResults();
+                performSearch();
 
-        appSearch.focus();
+            }
 
-    }
-);
+        }
+    );
+
+
+    appSearch.addEventListener(
+        "keydown",
+        event => {
+
+            if(event.key === "Enter"){
+
+                const first =
+                    searchResults?.querySelector(
+                        ".search-result"
+                    );
+
+
+                if(first){
+
+                    first.click();
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+if(clearSearch){
+
+    clearSearch.addEventListener(
+        "click",
+        () => {
+
+            if(appSearch){
+
+                appSearch.value = "";
+
+                appSearch.focus();
+
+            }
+
+            clearSearchResults();
+
+        }
+    );
+
+}
 
 
 /* =========================================================
    APP BUTTONS
-========================================================= */
+   ========================================================= */
 
 document
-    .querySelectorAll(
-        "[data-app]"
-    )
+    .querySelectorAll("[data-app]")
     .forEach(button => {
 
         button.addEventListener(
@@ -1390,7 +1828,7 @@ document
 
 /* =========================================================
    CLOCK
-========================================================= */
+   ========================================================= */
 
 function updateClock(){
 
@@ -1436,20 +1874,25 @@ function updateClock(){
         );
 
 
-    const values = {
+    const elements = {
 
-        lockTime: time,
+        lockTime:
+            time,
 
-        lockStatusTime: time,
+        lockStatusTime:
+            time,
 
         lockDate:
             `${weekday}, ${month} ${day}`,
 
-        passcodeTime: time,
+        passcodeTime:
+            time,
 
-        homeStatusTime: time,
+        homeStatusTime:
+            time,
 
-        homeBigTime: time,
+        homeBigTime:
+            time,
 
         homeDate:
             `${weekday}, ${month} ${day}`
@@ -1457,280 +1900,28 @@ function updateClock(){
     };
 
 
-    Object.entries(values)
-        .forEach(
-            ([id,value]) => {
+    Object.entries(elements)
+        .forEach(([id,value]) => {
 
-                const element =
-                    document.getElementById(
-                        id
-                    );
+            const element =
+                document.getElementById(id);
 
 
-                if(element){
+            if(element){
 
-                    element.textContent =
-                        value;
-
-                }
+                element.textContent =
+                    value;
 
             }
-        );
+
+        });
 
 }
-
-
-updateClock();
-
-setInterval(
-    updateClock,
-    1000
-);
 
 
 /* =========================================================
-   TOUCH SWIPES
-========================================================= */
-
-let touchStartX = 0;
-let touchStartY = 0;
-
-let touchEndX = 0;
-let touchEndY = 0;
-
-
-function startTouch(event){
-
-    if(
-        !event.touches ||
-        !event.touches[0]
-    ){
-
-        return;
-
-    }
-
-
-    touchStartX =
-        event.touches[0].clientX;
-
-    touchStartY =
-        event.touches[0].clientY;
-
-}
-
-
-function endTouch(event){
-
-    if(
-        !event.changedTouches ||
-        !event.changedTouches[0]
-    ){
-
-        return;
-
-    }
-
-
-    touchEndX =
-        event.changedTouches[0].clientX;
-
-    touchEndY =
-        event.changedTouches[0].clientY;
-
-
-    handleSwipe();
-
-}
-
-
-function handleSwipe(){
-
-    const deltaX =
-        touchEndX -
-        touchStartX;
-
-
-    const deltaY =
-        touchEndY -
-        touchStartY;
-
-
-    const absX =
-        Math.abs(deltaX);
-
-
-    const absY =
-        Math.abs(deltaY);
-
-
-    /*
-       LOCK SCREEN
-       Swipe up -> passcode
-    */
-
-    if(
-        !state.unlocked &&
-        !lockScreen.classList.contains(
-            "hidden"
-        )
-    ){
-
-        if(
-            deltaY < -60 &&
-            absY > absX
-        ){
-
-            showPasscode();
-
-        }
-
-        return;
-
-    }
-
-
-    /*
-       PASSCODE
-       Swipe down -> lock screen
-    */
-
-    if(
-        !state.unlocked &&
-        !passcodeScreen.classList.contains(
-            "hidden"
-        )
-    ){
-
-        if(
-            deltaY > 60 &&
-            absY > absX
-        ){
-
-            showOnly(lockScreen);
-
-        }
-
-        return;
-
-    }
-
-
-    /*
-       HOME
-       Horizontal swipe
-    */
-
-    if(
-        state.unlocked &&
-        state.currentApp === "home" &&
-        absX > 60 &&
-        absX > absY
-    ){
-
-        if(deltaX < 0){
-
-            nextHomePage();
-
-        }else{
-
-            previousHomePage();
-
-        }
-
-    }
-
-}
-
-
-[
-    lockScreen,
-    passcodeScreen,
-    homeScreen
-]
-.forEach(screen => {
-
-    screen.addEventListener(
-        "touchstart",
-        startTouch,
-        {passive:true}
-    );
-
-    screen.addEventListener(
-        "touchend",
-        endTouch,
-        {passive:true}
-    );
-
-});
-
-
-/* =========================================================
-   MOUSE SWIPE SUPPORT
-========================================================= */
-
-let mouseDown = false;
-
-
-function mouseStart(event){
-
-    mouseDown = true;
-
-    touchStartX =
-        event.clientX;
-
-    touchStartY =
-        event.clientY;
-
-}
-
-
-function mouseEnd(event){
-
-    if(!mouseDown){
-
-        return;
-
-    }
-
-
-    mouseDown = false;
-
-    touchEndX =
-        event.clientX;
-
-    touchEndY =
-        event.clientY;
-
-
-    handleSwipe();
-
-}
-
-
-[
-    lockScreen,
-    passcodeScreen,
-    homeScreen
-]
-.forEach(screen => {
-
-    screen.addEventListener(
-        "mousedown",
-        mouseStart
-    );
-
-    screen.addEventListener(
-        "mouseup",
-        mouseEnd
-    );
-
-});
-
-
-/* =========================================================
-   IFRAME COMMUNICATION
-========================================================= */
+   MESSAGES FROM OTHER GAME FILES
+   ========================================================= */
 
 window.addEventListener(
     "message",
@@ -1740,20 +1931,14 @@ window.addEventListener(
             event.data || {};
 
 
-        if(
-            data.type ===
-            "PHONE_HOME"
-        ){
+        if(data.type === "PHONE_HOME"){
 
             goHome();
 
         }
 
 
-        if(
-            data.type ===
-            "PHONE_BACK"
-        ){
+        if(data.type === "PHONE_BACK"){
 
             goBack();
 
@@ -1766,19 +1951,30 @@ window.addEventListener(
             data.app
         ){
 
-            openApp(
-                data.app
-            );
+            openApp(data.app);
 
         }
 
 
         if(
             data.type ===
-            "PHONE_LOCK"
+            "PHONE_HIDE"
         ){
 
-            lockDevice();
+            state.hidden = true;
+
+            state.unlocked = false;
+
+            state.currentApp =
+                "home";
+
+            state.homePage = 0;
+
+            state.history = [];
+
+            saveState();
+
+            render();
 
         }
 
@@ -1787,11 +1983,27 @@ window.addEventListener(
 
 
 /* =========================================================
-   INITIALIZE
-========================================================= */
+   START
+   ========================================================= */
 
 setupPasscode();
 
 updateClock();
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/*
+    CRITICAL:
+    Even if an older V5 localStorage entry says
+    "unlocked:true", we intentionally ignore it.
+
+    The phone always starts locked.
+*/
+
+state.unlocked = false;
 
 render();
