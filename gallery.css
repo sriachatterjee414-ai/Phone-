@@ -1,1 +1,648 @@
-.locked-gallery{height:100%;display:flex;align-items:center;justify-content:center;padding:25px;background:#f6f6f8}.lock-panel{text-align:center;background:#fff;border:1px solid #e5e5e8;border-radius:24px;padding:28px 22px;width:100%;box-shadow:0 8px 25px rgba(0,0,0,.06)}.gallery-lock-icon{width:64px;height:64px;border-radius:20px;background:#eef1f4;margin:0 auto 12px;display:grid;place-items:center;font-size:28px}.lock-panel h2{font-size:21px;margin:6px}.lock-panel p{font-size:12px;color:#85858a;line-height:1.5}.gallery-input{height:43px;width:100%;border:1px solid #d9d9dd;border-radius:12px;padding:0 12px;outline:none;text-align:center;margin:8px 0}.unlock-gallery{width:100%;height:43px;border:0;border-radius:12px;background:#147ef5;color:#fff;font-weight:700}.hint{font-size:11px!important;margin-top:12px}.photos-grid{padding:4px;display:grid;grid-template-columns:repeat(3,1fr);gap:3px}.photo-tile{aspect-ratio:1;background:#e7e8eb;overflow:hidden;position:relative}.photo-tile img{width:100%;height:100%;object-fit:cover;display:block}.placeholder{height:100%;display:grid;place-items:center;color:#9b9ba1;font-size:22px}
+/* =========================================
+   BROKEN PHONE
+   GALLERY
+========================================= */
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+
+    background: #000;
+
+    color: #fff;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    overflow: hidden;
+}
+
+
+button {
+    font-family: inherit;
+}
+
+
+/* =========================================
+   APP
+========================================= */
+
+.gallery-app {
+    width: 100%;
+    height: 100vh;
+
+    background: #000;
+
+    overflow: hidden;
+
+    position: relative;
+}
+
+
+/* =========================================
+   MAIN HEADER
+========================================= */
+
+.gallery-header {
+    height: 82px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 12px 25px 0;
+
+    background: #000;
+}
+
+
+.gallery-tabs {
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+}
+
+
+.gallery-tabs button {
+    border: 0;
+
+    background: transparent;
+
+    color: #f0f0f0;
+
+    font-size: 25px;
+
+    padding: 8px 2px;
+
+    cursor: pointer;
+}
+
+
+.gallery-tabs button.active {
+    color: #1687ff;
+}
+
+
+.gallery-icon {
+    width: 42px;
+    height: 42px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-size: 31px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   ALBUM PAGE
+========================================= */
+
+#galleryContent {
+    height: calc(100vh - 82px);
+
+    overflow-y: auto;
+
+    padding: 10px 28px 80px;
+
+    scrollbar-width: none;
+}
+
+#galleryContent::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================
+   ALBUM SECTION
+========================================= */
+
+.gallery-section-title {
+    color: #9ca5bd;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    margin:
+
+        25px 0 18px;
+}
+
+
+/* =========================================
+   ALBUM GRID
+========================================= */
+
+.album-cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 25px 22px;
+}
+
+
+.album-card {
+    cursor: pointer;
+
+    min-width: 0;
+}
+
+
+.album-cover {
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    background: #222;
+
+    border: 1px solid #292929;
+
+    position: relative;
+}
+
+
+.album-cover img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+.album-cover.empty {
+    display: grid;
+
+    place-items: center;
+
+    color: #777;
+
+    font-size: 32px;
+}
+
+
+.album-name {
+    margin-top: 11px;
+
+    color: #f4f4f4;
+
+    font-size: 19px;
+
+    font-weight: 600;
+
+    line-height: 1.15;
+}
+
+
+.album-count {
+    margin-top: 5px;
+
+    color: #777;
+
+    font-size: 15px;
+}
+
+
+/* =========================================
+   ALBUM VIEW
+========================================= */
+
+.album-view {
+    position: absolute;
+
+    inset: 0;
+
+    background: #000;
+
+    z-index: 20;
+}
+
+
+.album-view.hidden,
+.photo-viewer.hidden,
+.gallery-lock.hidden {
+    display: none;
+}
+
+
+.album-header {
+    height: 76px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 10px 20px;
+
+    border-bottom: 1px solid #111;
+}
+
+
+.album-header button {
+    border: 0;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-size: 32px;
+
+    width: 45px;
+}
+
+
+#albumTitle {
+    font-size: 22px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   ALBUM PHOTOS
+========================================= */
+
+.album-grid {
+    height: calc(100vh - 76px);
+
+    overflow-y: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 3px;
+
+    padding: 3px;
+
+    scrollbar-width: none;
+}
+
+.album-grid::-webkit-scrollbar {
+    display: none;
+}
+
+
+.album-photo {
+    width: 100%;
+
+    aspect-ratio: 1;
+
+    background: #1b1b1b;
+
+    overflow: hidden;
+
+    cursor: pointer;
+}
+
+
+.album-photo img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* =========================================
+   FULL PHOTO VIEWER
+========================================= */
+
+.photo-viewer {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 50;
+
+    background: #000;
+}
+
+
+.viewer-header {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 72px;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 8px 18px;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.65),
+            transparent
+        );
+}
+
+
+.viewer-header button {
+    border: 0;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-size: 33px;
+
+    width: 45px;
+}
+
+
+#photoCounter {
+    color: #ddd;
+
+    font-size: 16px;
+}
+
+
+.photo-stage {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    touch-action: pan-y;
+
+    user-select: none;
+}
+
+
+.photo-stage img {
+    max-width: 100%;
+
+    max-height: 100%;
+
+    object-fit: contain;
+
+    user-select: none;
+
+    -webkit-user-drag: none;
+
+    transition:
+        transform .18s ease,
+        opacity .18s ease;
+}
+
+
+/* =========================================
+   LOCK SCREEN
+========================================= */
+
+.gallery-lock {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 100;
+
+    background:
+        radial-gradient(
+            circle at 50% 30%,
+            #242936,
+            #0b0c10 70%
+        );
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+
+.lock-back {
+    position: absolute;
+
+    top: 22px;
+    left: 20px;
+
+    width: 45px;
+    height: 45px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-size: 40px;
+}
+
+
+.lock-content {
+    width: min(380px, 90%);
+
+    text-align: center;
+
+    margin-top: 20px;
+}
+
+
+.lock-symbol {
+    width: 76px;
+    height: 76px;
+
+    margin: 0 auto 22px;
+
+    border-radius: 50%;
+
+    background: #20242d;
+
+    border: 1px solid #343946;
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 31px;
+}
+
+
+.lock-content h1 {
+    margin: 0;
+
+    font-size: 25px;
+
+    font-weight: 500;
+}
+
+
+.lock-content p {
+    color: #858b98;
+
+    font-size: 14px;
+
+    margin: 10px 0 25px;
+}
+
+
+/* =========================================
+   PIN
+========================================= */
+
+.pin-display {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 17px;
+
+    margin-bottom: 12px;
+}
+
+
+.pin-display span {
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+
+    background: #3c414c;
+
+    border: 1px solid #555b67;
+}
+
+
+.pin-display span.filled {
+    background: #fff;
+
+    border-color: #fff;
+}
+
+
+.pin-error {
+    height: 22px;
+
+    color: #ff5757;
+
+    font-size: 13px;
+}
+
+
+.pin-pad {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 13px;
+
+    margin-top: 10px;
+}
+
+
+.pin-pad button {
+    height: 68px;
+
+    border: 1px solid #272b33;
+
+    border-radius: 50%;
+
+    background: #17191e;
+
+    color: #fff;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    transition: background .1s;
+}
+
+
+.pin-pad button:active {
+    background: #30343c;
+}
+
+
+.pin-pad button.empty {
+    visibility: hidden;
+}
+
+
+#pinDelete {
+    font-size: 21px;
+
+    color: #aaa;
+}
+
+
+/* =========================================
+   SMALL SCREENS
+========================================= */
+
+@media (max-width: 600px) {
+
+    .gallery-header {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .gallery-tabs {
+        gap: 22px;
+    }
+
+    .gallery-tabs button {
+        font-size: 22px;
+    }
+
+    .album-cards {
+        gap: 22px 14px;
+    }
+
+    .album-name {
+        font-size: 16px;
+    }
+
+    .album-count {
+        font-size: 13px;
+    }
+
+}
