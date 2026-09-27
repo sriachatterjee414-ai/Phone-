@@ -1,153 +1,71 @@
 /* ============================================================
    PERSISTENT-UI.JS
+   BROKEN PHONE — SHARED GAME SYSTEM
 
-   Add this ONE line to every page that should have the
-   persistent game UI:
+   Add this to every page that should have the permanent UI:
 
        <script src="persistent-ui.js"></script>
 
-   This file:
-   - Saves shared game state in localStorage
-   - Keeps characters between pages
-   - Keeps suspects between pages
-   - Keeps victim information between pages
-   - Keeps clues between pages
-   - Keeps phone repair/unlock state between pages
-   - Creates the persistent game bar automatically
-   - Provides window.GameUI for your existing JS files
+   This file handles:
+   - Characters
+   - Suspects
+   - Victim
+   - Phone
+   - Clues
+   - Phone repair progress
+   - Phone unlock state
 
+   Everything is stored in localStorage.
    ============================================================ */
 
 (function () {
 
-    "use strict";
-
-    /* ========================================================
-       SAVE KEY
-       ======================================================== */
-
     const STORAGE_KEY = "brokenPhoneGameState";
 
 
-    /* ========================================================
+    /* ============================================================
        DEFAULT GAME STATE
-       ======================================================== */
+    ============================================================ */
 
     const defaultState = {
 
-        /* --------------------------------
-           Characters
-           --------------------------------
-
-           Example:
-
-           {
-               id: "ryan",
-               name: "Ryan Hale",
-               img: "ryan_neutral.png",
-               isVictim: false
-           }
-        */
-
         characters: [],
-
-
-        /* --------------------------------
-           Suspects
-
-           Stores CHARACTER IDs only.
-
-           Example:
-           ["ryan", "officer_male"]
-        */
+        // {
+        //   id,
+        //   name,
+        //   img,
+        //   isVictim
+        // }
 
         suspects: [],
 
-
-        /* --------------------------------
-           Victim
-
-           Example:
-
-           {
-               id: "victim",
-               name: "Victim Name",
-               img: "victim.png",
-               cause: "Cause of death",
-               birthday: "12/05/1999"
-           }
-        */
-
         victim: null,
-
-
-        /* --------------------------------
-           Clues
-
-           Stores unique clue IDs.
-
-           Example:
-           ["desk_file_01", "phone_note_03"]
-        */
+        // {
+        //   id,
+        //   name,
+        //   img,
+        //   cause,
+        //   birthday
+        // }
 
         clues: [],
 
-
-        /* --------------------------------
-           Total possible clues
-
-           Change this later when you know
-           the actual final number.
-        */
-
         totalCluesPossible: 15,
-
-
-        /* --------------------------------
-           PHONE
-           -------------------------------- */
 
         phone: {
 
-            /* Has the phone been obtained? */
-            obtained: false,
-
-            /* Repair percentage */
             repairPercent: 0,
 
-            /* Repair is completely finished */
-            repaired: false,
-
-            /* Password successfully entered */
             unlocked: false
-        },
 
+        }
 
-        /* --------------------------------
-           STORY PROGRESS
-
-           Useful later for Continue Game.
-        */
-
-        currentStory: "story",
-
-
-        /* --------------------------------
-           INVENTORY
-
-           Stores item IDs.
-
-           Example:
-           ["precision_screwdriver", "battery"]
-        */
-
-        inventory: []
     };
 
 
-    /* ========================================================
-       SAFE CLONE
-       ======================================================== */
+    /* ============================================================
+       CLONE DEFAULT STATE
+    ============================================================ */
 
     function cloneDefaultState() {
 
@@ -158,19 +76,20 @@
     }
 
 
-    /* ========================================================
+    /* ============================================================
        LOAD STATE
-       ======================================================== */
+    ============================================================ */
 
     function loadState() {
 
         try {
 
             const raw =
-                localStorage.getItem(STORAGE_KEY);
+                localStorage.getItem(
+                    STORAGE_KEY
+                );
 
 
-            /* No previous save */
             if (!raw) {
 
                 return cloneDefaultState();
@@ -178,85 +97,55 @@
             }
 
 
-            const parsed = JSON.parse(raw);
+            const parsed =
+                JSON.parse(raw);
 
-            const fresh = cloneDefaultState();
+
+            const fresh =
+                cloneDefaultState();
 
 
-            /* --------------------------------------------
-               Merge top-level values
-               -------------------------------------------- */
+            /*
+                Merge safely.
+            */
 
-            Object.keys(parsed).forEach(key => {
+            return {
 
-                if (
-                    key !== "phone" &&
-                    parsed[key] !== undefined
-                ) {
+                ...fresh,
 
-                    fresh[key] = parsed[key];
+                ...parsed,
+
+                characters:
+                    Array.isArray(parsed.characters)
+                        ? parsed.characters
+                        : [],
+
+                suspects:
+                    Array.isArray(parsed.suspects)
+                        ? parsed.suspects
+                        : [],
+
+                clues:
+                    Array.isArray(parsed.clues)
+                        ? parsed.clues
+                        : [],
+
+                phone: {
+
+                    ...fresh.phone,
+
+                    ...(parsed.phone || {})
 
                 }
 
-            });
-
-
-            /* --------------------------------------------
-               Merge phone separately
-               -------------------------------------------- */
-
-            if (
-                parsed.phone &&
-                typeof parsed.phone === "object"
-            ) {
-
-                fresh.phone = {
-
-                    ...fresh.phone,
-                    ...parsed.phone
-
-                };
-
-            }
-
-
-            /* --------------------------------------------
-               Safety checks
-               -------------------------------------------- */
-
-            if (!Array.isArray(fresh.characters)) {
-
-                fresh.characters = [];
-
-            }
-
-            if (!Array.isArray(fresh.suspects)) {
-
-                fresh.suspects = [];
-
-            }
-
-            if (!Array.isArray(fresh.clues)) {
-
-                fresh.clues = [];
-
-            }
-
-            if (!Array.isArray(fresh.inventory)) {
-
-                fresh.inventory = [];
-
-            }
-
-
-            return fresh;
+            };
 
         }
 
         catch (error) {
 
             console.error(
-                "GameUI: Could not load save.",
+                "GameUI: Could not load game state.",
                 error
             );
 
@@ -267,36 +156,22 @@
     }
 
 
-    /* ========================================================
-       CURRENT STATE
-       ======================================================== */
-
     let state = loadState();
 
 
-    /* ========================================================
+    /* ============================================================
        SAVE STATE
-       ======================================================== */
+    ============================================================ */
 
     function saveState() {
 
-        try {
+        localStorage.setItem(
 
-            localStorage.setItem(
-                STORAGE_KEY,
-                JSON.stringify(state)
-            );
+            STORAGE_KEY,
 
-        }
+            JSON.stringify(state)
 
-        catch (error) {
-
-            console.error(
-                "GameUI: Could not save game state.",
-                error
-            );
-
-        }
+        );
 
 
         renderBar();
@@ -304,630 +179,414 @@
     }
 
 
-    /* ========================================================
-       CHARACTER FUNCTIONS
-       ======================================================== */
+    /* ============================================================
+       PUBLIC GAME UI
+    ============================================================ */
 
-    function addCharacter(id, name, img) {
-
-        if (!id) {
-
-            console.warn(
-                "GameUI.addCharacter(): missing character ID."
-            );
-
-            return;
-
-        }
+    const GameUI = {
 
 
-        /* Don't add the same character twice */
+        /* ========================================================
+           CHARACTERS
+        ======================================================== */
 
-        const alreadyExists =
-            state.characters.some(
-                character => character.id === id
-            );
+        addCharacter(
+            id,
+            name,
+            img
+        ) {
 
+            /*
+                Prevent duplicates.
+            */
 
-        if (alreadyExists) {
+            if (
+                state.characters.some(
+                    character =>
+                        character.id === id
+                )
+            ) {
 
-            return;
+                return;
 
-        }
+            }
 
-
-        state.characters.push({
-
-            id: id,
-
-            name: name || "Unknown",
-
-            img: img || "",
-
-            isVictim: false
-
-        });
-
-
-        saveState();
-
-    }
-
-
-    function removeCharacter(id) {
-
-        state.characters =
-            state.characters.filter(
-                character => character.id !== id
-            );
-
-
-        /* Also remove from suspects */
-
-        state.suspects =
-            state.suspects.filter(
-                suspectID => suspectID !== id
-            );
-
-
-        saveState();
-
-    }
-
-
-    function hasCharacter(id) {
-
-        return state.characters.some(
-            character => character.id === id
-        );
-
-    }
-
-
-    /* ========================================================
-       VICTIM
-       ======================================================== */
-
-    function setVictim(
-        name,
-        img,
-        cause,
-        birthday
-    ) {
-
-        const victimID = "victim";
-
-
-        state.victim = {
-
-            id: victimID,
-
-            name: name || "Unknown",
-
-            img: img || "",
-
-            cause: cause || "",
-
-            birthday: birthday || ""
-
-        };
-
-
-        /* --------------------------------------------
-           Make sure victim exists in Characters too.
-           -------------------------------------------- */
-
-        const victimAlreadyExists =
-            state.characters.some(
-                character => character.id === victimID
-            );
-
-
-        if (!victimAlreadyExists) {
 
             state.characters.push({
 
-                id: victimID,
+                id: id,
 
-                name: name || "Unknown",
+                name: name,
 
                 img: img || "",
 
-                isVictim: true
+                isVictim: false
 
             });
 
-        }
+
+            saveState();
+
+        },
 
 
-        /* --------------------------------------------
-           If victim somehow existed as a suspect,
-           remove them immediately.
-           -------------------------------------------- */
+        /* ========================================================
+           VICTIM
+        ======================================================== */
 
-        state.suspects =
-            state.suspects.filter(
-                id => id !== victimID
-            );
-
-
-        saveState();
-
-    }
-
-
-    function hasVictim() {
-
-        return state.victim !== null;
-
-    }
-
-
-    /* ========================================================
-       SUSPECT FUNCTIONS
-       ======================================================== */
-
-    function markSuspect(id) {
-
-        if (!id) {
-
-            return;
-
-        }
-
-
-        /* --------------------------------------------
-           Victim can NEVER be a suspect.
-           -------------------------------------------- */
-
-        if (id === "victim") {
-
-            return;
-
-        }
-
-
-        if (
-            state.victim &&
-            state.victim.id === id
+        setVictim(
+            id,
+            name,
+            img,
+            cause,
+            birthday
         ) {
 
-            return;
+            /*
+                Save victim information.
+            */
 
-        }
+            state.victim = {
 
+                id: id,
 
-        /* Only existing characters can become suspects */
+                name: name,
 
-        const exists =
-            state.characters.some(
-                character => character.id === id
-            );
+                img: img || "",
 
+                cause: cause || "",
 
-        if (!exists) {
+                birthday: birthday || ""
 
-            console.warn(
-                "GameUI.markSuspect(): character does not exist:",
-                id
-            );
+            };
 
-            return;
 
-        }
+            /*
+                Make sure victim appears
+                in Characters too.
+            */
 
+            const existingCharacter =
+                state.characters.find(
+                    character =>
+                        character.id === id
+                );
 
-        /* Don't duplicate */
 
-        if (
-            state.suspects.includes(id)
-        ) {
+            if (!existingCharacter) {
 
-            return;
+                state.characters.push({
 
-        }
+                    id: id,
 
+                    name: name,
 
-        state.suspects.push(id);
+                    img: img || "",
 
-        saveState();
+                    isVictim: true
 
-    }
+                });
 
+            }
 
-    function removeSuspect(id) {
+            else {
 
-        state.suspects =
-            state.suspects.filter(
-                suspectID => suspectID !== id
-            );
+                existingCharacter.isVictim =
+                    true;
 
-        saveState();
+            }
 
-    }
 
+            /*
+                Safety:
+                remove victim from suspects
+                if somehow added before.
+            */
 
-    function isSuspect(id) {
+            state.suspects =
+                state.suspects.filter(
+                    suspectId =>
+                        suspectId !== id
+                );
 
-        return state.suspects.includes(id);
 
-    }
+            saveState();
 
+        },
 
-    /* ========================================================
-       CLUE SYSTEM
-       ======================================================== */
 
-    function addClue(id) {
+        /* ========================================================
+           ADD SUSPECT
+        ======================================================== */
 
-        if (!id) {
+        markSuspect(id) {
 
-            console.warn(
-                "GameUI.addClue(): missing clue ID."
-            );
+            /*
+                Victim can NEVER be a suspect.
+            */
 
-            return;
+            if (
+                state.victim &&
+                state.victim.id === id
+            ) {
 
-        }
+                return;
 
+            }
 
-        /* Prevent duplicate clues */
 
-        if (
-            state.clues.includes(id)
-        ) {
+            /*
+                Only characters can become suspects.
+            */
 
-            return;
+            const character =
+                state.characters.find(
+                    c => c.id === id
+                );
 
-        }
 
+            if (!character) {
 
-        state.clues.push(id);
+                return;
 
-        saveState();
+            }
 
-    }
 
+            if (
+                !state.suspects.includes(id)
+            ) {
 
-    function hasClue(id) {
+                state.suspects.push(id);
 
-        return state.clues.includes(id);
+                saveState();
 
-    }
+            }
 
+        },
 
-    function getClueCount() {
 
-        return state.clues.length;
+        /* ========================================================
+           REMOVE SUSPECT
+        ======================================================== */
 
-    }
+        removeSuspect(id) {
 
+            state.suspects =
+                state.suspects.filter(
+                    suspectId =>
+                        suspectId !== id
+                );
 
-    function setTotalCluesPossible(number) {
 
-        const value =
-            Number(number);
+            saveState();
 
+        },
 
-        if (
-            !Number.isFinite(value) ||
-            value < 0
-        ) {
 
-            console.warn(
-                "GameUI.setTotalCluesPossible(): invalid number."
-            );
+        /* ========================================================
+           CHECK SUSPECT
+        ======================================================== */
 
-            return;
+        isSuspect(id) {
 
-        }
+            return state.suspects.includes(id);
 
+        },
 
-        state.totalCluesPossible =
-            Math.floor(value);
 
-        saveState();
+        /* ========================================================
+           CLUES
+        ======================================================== */
 
-    }
+        addClue(id) {
 
+            if (
+                !state.clues.includes(id)
+            ) {
 
-    /* ========================================================
-       ENDING SYSTEM
-       ======================================================== */
+                state.clues.push(id);
 
-    function getEndingTier() {
+                saveState();
 
-        const total =
-            Number(state.totalCluesPossible);
+            }
 
+        },
 
-        /* Avoid division by zero */
 
-        if (
-            !Number.isFinite(total) ||
-            total <= 0
-        ) {
+        getClueCount() {
+
+            return state.clues.length;
+
+        },
+
+
+        setTotalCluesPossible(number) {
+
+            const value =
+                Number(number);
+
+
+            if (
+                Number.isFinite(value) &&
+                value > 0
+            ) {
+
+                state.totalCluesPossible =
+                    value;
+
+                saveState();
+
+            }
+
+        },
+
+
+        /* ========================================================
+           ENDING
+        ======================================================== */
+
+        getEndingTier() {
+
+            const total =
+                state.totalCluesPossible;
+
+
+            if (!total) {
+
+                return "bad";
+
+            }
+
+
+            const ratio =
+                state.clues.length / total;
+
+
+            if (ratio >= 0.80) {
+
+                return "good";
+
+            }
+
+
+            if (ratio >= 0.40) {
+
+                return "medium";
+
+            }
+
 
             return "bad";
 
-        }
+        },
 
 
-        const ratio =
-            state.clues.length / total;
+        /* ========================================================
+           PHONE REPAIR
+        ======================================================== */
+
+        setRepairPercent(percent) {
+
+            let value =
+                Number(percent);
 
 
-        if (ratio >= 0.80) {
+            if (!Number.isFinite(value)) {
 
-            return "good";
+                value = 0;
 
-        }
-
-
-        if (ratio >= 0.40) {
-
-            return "medium";
-
-        }
+            }
 
 
-        return "bad";
-
-    }
-
-
-    /* ========================================================
-       PHONE FUNCTIONS
-       ======================================================== */
-
-    function setPhoneObtained(value = true) {
-
-        state.phone.obtained =
-            Boolean(value);
-
-        saveState();
-
-    }
+            value =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        value
+                    )
+                );
 
 
-    function setRepairPercent(percent) {
-
-        let value =
-            Number(percent);
+            state.phone.repairPercent =
+                value;
 
 
-        if (!Number.isFinite(value)) {
+            saveState();
 
-            value = 0;
-
-        }
+        },
 
 
-        value =
-            Math.max(
-                0,
-                Math.min(
-                    100,
-                    value
-                )
+        getRepairPercent() {
+
+            return state.phone.repairPercent;
+
+        },
+
+
+        /* ========================================================
+           PHONE UNLOCK
+        ======================================================== */
+
+        unlockPhone() {
+
+            state.phone.unlocked =
+                true;
+
+
+            saveState();
+
+        },
+
+
+        isPhoneUnlocked() {
+
+            return state.phone.unlocked;
+
+        },
+
+
+        /* ========================================================
+           DEBUG
+        ======================================================== */
+
+        _debugGetState() {
+
+            return JSON.parse(
+                JSON.stringify(state)
             );
 
-
-        state.phone.repairPercent =
-            value;
+        },
 
 
-        /* Automatically mark repaired at 100% */
+        /* ========================================================
+           RESET GAME
+        ======================================================== */
 
-        if (value >= 100) {
+        resetAll() {
 
-            state.phone.repaired = true;
+            state =
+                cloneDefaultState();
 
-            state.phone.obtained = true;
-
-        }
-
-
-        saveState();
-
-    }
-
-
-    function isPhoneRepaired() {
-
-        return state.phone.repaired === true;
-
-    }
-
-
-    function unlockPhone() {
-
-        /* --------------------------------------------
-           Don't allow unlocking before repair.
-           -------------------------------------------- */
-
-        if (
-            !state.phone.repaired
-        ) {
-
-            console.warn(
-                "GameUI.unlockPhone(): phone is not repaired yet."
-            );
-
-            return;
-
-        }
-
-
-        state.phone.unlocked = true;
-
-        state.phone.obtained = true;
-
-        saveState();
-
-    }
-
-
-    function isPhoneUnlocked() {
-
-        return state.phone.unlocked === true;
-
-    }
-
-
-    /* ========================================================
-       INVENTORY
-       ======================================================== */
-
-    function addItem(id) {
-
-        if (!id) {
-
-            return;
-
-        }
-
-
-        if (
-            !state.inventory.includes(id)
-        ) {
-
-            state.inventory.push(id);
 
             saveState();
 
         }
 
-    }
-
-
-    function removeItem(id) {
-
-        state.inventory =
-            state.inventory.filter(
-                item => item !== id
-            );
-
-        saveState();
-
-    }
-
-
-    function hasItem(id) {
-
-        return state.inventory.includes(id);
-
-    }
-
-
-    /* ========================================================
-       STORY PROGRESS
-       ======================================================== */
-
-    function setCurrentStory(storyName) {
-
-        state.currentStory =
-            storyName || "story";
-
-        saveState();
-
-    }
-
-
-    function getCurrentStory() {
-
-        return state.currentStory;
-
-    }
-
-
-    /* ========================================================
-       DEBUG
-       ======================================================== */
-
-    function getState() {
-
-        return JSON.parse(
-            JSON.stringify(state)
-        );
-
-    }
-
-
-    /* ========================================================
-       RESET GAME
-       ======================================================== */
-
-    function resetAll() {
-
-        state =
-            cloneDefaultState();
-
-
-        saveState();
-
-    }
-
-
-    /* ========================================================
-       PUBLIC GAMEUI API
-       ======================================================== */
-
-    window.GameUI = {
-
-        /* Characters */
-        addCharacter,
-        removeCharacter,
-        hasCharacter,
-
-        /* Victim */
-        setVictim,
-        hasVictim,
-
-        /* Suspects */
-        markSuspect,
-        removeSuspect,
-        isSuspect,
-
-        /* Clues */
-        addClue,
-        hasClue,
-        getClueCount,
-        setTotalCluesPossible,
-        getEndingTier,
-
-        /* Phone */
-        setPhoneObtained,
-        setRepairPercent,
-        isPhoneRepaired,
-        unlockPhone,
-        isPhoneUnlocked,
-
-        /* Inventory */
-        addItem,
-        removeItem,
-        hasItem,
-
-        /* Story */
-        setCurrentStory,
-        getCurrentStory,
-
-        /* Debug */
-        _debugGetState: getState,
-
-        /* Reset */
-        resetAll
     };
 
 
-    /* ========================================================
-       PERSISTENT UI
-       ======================================================== */
+    window.GameUI = GameUI;
+
+
+    /* ============================================================
+       BUILD PERMANENT BAR
+    ============================================================ */
 
     let barBuilt = false;
 
 
-    function buildBar() {
+    function buildBarOnce() {
 
         if (barBuilt) {
 
@@ -939,9 +598,9 @@
         barBuilt = true;
 
 
-        /* --------------------------------------------
-           Main floating bar
-           -------------------------------------------- */
+        /* ========================================================
+           BAR
+        ======================================================== */
 
         const bar =
             document.createElement("div");
@@ -955,56 +614,48 @@
 
             <button
                 class="gameui-btn"
-                data-panel="characters">
-
+                data-panel="characters"
+            >
                 Characters
-
                 <span
                     class="gameui-count"
-                    id="gameuiCharCount">
-                </span>
-
+                    id="gameuiCharCount"
+                ></span>
             </button>
 
 
             <button
                 class="gameui-btn"
-                data-panel="suspects">
-
+                data-panel="suspects"
+            >
                 Suspects
-
                 <span
                     class="gameui-count"
-                    id="gameuiSuspectCount">
-                </span>
-
+                    id="gameuiSuspectCount"
+                ></span>
             </button>
 
 
             <button
                 class="gameui-btn"
-                data-panel="victim">
-
+                data-panel="victim"
+            >
                 Victim
-
             </button>
 
 
             <button
                 class="gameui-btn"
-                data-panel="phone">
-
+                data-panel="phone"
+            >
                 Phone
-
             </button>
 
 
             <div
                 class="gameui-clues"
-                id="gameuiClueCount">
-
-                Clues: 0/15
-
+                id="gameuiClueCount"
+            >
             </div>
 
         `;
@@ -1013,9 +664,9 @@
         document.body.appendChild(bar);
 
 
-        /* --------------------------------------------
-           Modal overlay
-           -------------------------------------------- */
+        /* ========================================================
+           OVERLAY
+        ======================================================== */
 
         const overlay =
             document.createElement("div");
@@ -1035,28 +686,28 @@
 
                 <button
                     class="gameui-close"
-                    id="gameuiClose">
-
+                    id="gameuiClose"
+                >
                     ×
-
                 </button>
 
-
                 <div
-                    id="gameuiModalBody">
-                </div>
+                    id="gameuiModalBody"
+                ></div>
 
             </div>
 
         `;
 
 
-        document.body.appendChild(overlay);
+        document.body.appendChild(
+            overlay
+        );
 
 
-        /* --------------------------------------------
-           Button events
-           -------------------------------------------- */
+        /* ========================================================
+           BUTTON EVENTS
+        ======================================================== */
 
         bar
             .querySelectorAll(".gameui-btn")
@@ -1064,10 +715,10 @@
 
                 button.addEventListener(
                     "click",
-                    function () {
+                    () => {
 
                         openPanel(
-                            this.dataset.panel
+                            button.dataset.panel
                         );
 
                     }
@@ -1075,10 +726,6 @@
 
             });
 
-
-        /* --------------------------------------------
-           Close button
-           -------------------------------------------- */
 
         document
             .getElementById("gameuiClose")
@@ -1088,13 +735,9 @@
             );
 
 
-        /* --------------------------------------------
-           Click outside modal
-           -------------------------------------------- */
-
         overlay.addEventListener(
             "click",
-            function (event) {
+            event => {
 
                 if (
                     event.target === overlay
@@ -1110,9 +753,9 @@
     }
 
 
-    /* ========================================================
+    /* ============================================================
        CLOSE PANEL
-       ======================================================== */
+    ============================================================ */
 
     function closePanel() {
 
@@ -1133,9 +776,9 @@
     }
 
 
-    /* ========================================================
+    /* ============================================================
        OPEN PANEL
-       ======================================================== */
+    ============================================================ */
 
     function openPanel(panel) {
 
@@ -1152,177 +795,153 @@
         }
 
 
-        /* ================================================
+        /* ========================================================
            CHARACTERS
-           ================================================ */
+        ======================================================== */
 
         if (panel === "characters") {
 
-            if (
-                state.characters.length === 0
-            ) {
+            body.innerHTML = `
 
-                body.innerHTML = `
+                <h2>Characters</h2>
 
-                    <h2>Characters</h2>
+                ${
+                    state.characters.length
 
-                    <p>
-                        No characters have been discovered yet.
-                    </p>
+                    ?
 
-                `;
+                    state.characters
+                        .map(character => `
 
-            }
+                            <div
+                                class="gameui-character-card"
+                            >
 
-            else {
+                                ${
+                                    character.img
+                                    ?
+                                    `
+                                    <img
+                                        src="${character.img}"
+                                        alt="${character.name}"
+                                    >
+                                    `
+                                    :
+                                    ""
+                                }
 
-                body.innerHTML = `
-
-                    <h2>Characters</h2>
-
-                    <div id="gameuiCharacters">
-
-                        ${state.characters.map(character => {
-
-                            const suspect =
-                                state.suspects.includes(
-                                    character.id
-                                );
-
-
-                            const isVictim =
-                                character.id === "victim" ||
-                                character.isVictim;
-
-
-                            return `
 
                                 <div
-                                    class="gameui-card">
-
-                                    ${
-                                        character.img
-
-                                        ?
-
-                                        `
-                                        <img
-                                            src="${character.img}"
-                                            alt="${character.name}">
-                                        `
-
-                                        :
-
-                                        ""
-                                    }
-
-
-                                    <div
-                                        class="gameui-card-name">
-
-                                        ${character.name}
-
-                                    </div>
-
-
-                                    ${
-                                        isVictim
-
-                                        ?
-
-                                        `
-                                        <div
-                                            class="gameui-tag">
-
-                                            Victim
-
-                                        </div>
-                                        `
-
-                                        :
-
-                                        `
-                                        <button
-                                            class="gameui-small-btn"
-                                            data-suspect="${character.id}">
-
-                                            ${
-                                                suspect
-                                                ?
-                                                "Remove from Suspects"
-                                                :
-                                                "Add to Suspects"
-                                            }
-
-                                        </button>
-                                        `
-                                    }
-
+                                    class="gameui-card-name"
+                                >
+                                    ${character.name}
                                 </div>
 
-                            `;
 
-                        }).join("")}
+                                ${
+                                    character.isVictim
 
-                    </div>
+                                    ?
 
-                `;
+                                    `
+                                    <span
+                                        class="gameui-tag"
+                                    >
+                                        VICTIM
+                                    </span>
+                                    `
 
+                                    :
 
-                /* ----------------------------------------
-                   Suspect buttons
-                   ---------------------------------------- */
-
-                body
-                    .querySelectorAll(
-                        "[data-suspect]"
-                    )
-                    .forEach(button => {
-
-                        button.addEventListener(
-                            "click",
-                            function () {
-
-                                const id =
-                                    this.dataset.suspect;
-
-
-                                if (
-                                    GameUI.isSuspect(id)
-                                ) {
-
-                                    GameUI.removeSuspect(id);
-
+                                    `
+                                    <button
+                                        class="gameui-small-btn"
+                                        data-suspect="${character.id}"
+                                    >
+                                        ${
+                                            state.suspects.includes(
+                                                character.id
+                                            )
+                                            ?
+                                            "Remove from Suspects"
+                                            :
+                                            "Add to Suspects"
+                                        }
+                                    </button>
+                                    `
                                 }
 
-                                else {
+                            </div>
 
-                                    GameUI.markSuspect(id);
+                        `)
+                        .join("")
 
-                                }
+                    :
+
+                    `
+                    <p>
+                        No characters have appeared yet.
+                    </p>
+                    `
+                }
+
+            `;
 
 
-                                openPanel(
-                                    "characters"
+            body
+                .querySelectorAll(
+                    "[data-suspect]"
+                )
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const id =
+                                button.dataset.suspect;
+
+
+                            if (
+                                state.suspects.includes(
+                                    id
+                                )
+                            ) {
+
+                                GameUI.removeSuspect(
+                                    id
                                 );
 
                             }
-                        );
 
-                    });
+                            else {
 
-            }
+                                GameUI.markSuspect(
+                                    id
+                                );
+
+                            }
+
+
+                            openPanel(
+                                "characters"
+                            );
+
+                        }
+                    );
+
+                });
 
         }
 
 
-        /* ================================================
+        /* ========================================================
            SUSPECTS
-           ================================================ */
+        ======================================================== */
 
         if (panel === "suspects") {
 
-            const suspectCharacters =
+            const suspects =
                 state.characters.filter(
                     character =>
                         state.suspects.includes(
@@ -1336,42 +955,40 @@
                 <h2>Suspects</h2>
 
                 ${
-                    suspectCharacters.length
+                    suspects.length
 
                     ?
 
-                    suspectCharacters.map(
-                        character => `
+                    suspects
+                        .map(character => `
 
                             <div
-                                class="gameui-card">
+                                class="gameui-character-card"
+                            >
 
                                 ${
                                     character.img
                                     ?
-
                                     `
                                     <img
                                         src="${character.img}"
-                                        alt="${character.name}">
+                                        alt="${character.name}"
+                                    >
                                     `
-
                                     :
-
                                     ""
                                 }
 
                                 <div
-                                    class="gameui-card-name">
-
+                                    class="gameui-card-name"
+                                >
                                     ${character.name}
-
                                 </div>
 
                             </div>
 
-                        `
-                    ).join("")
+                        `)
+                        .join("")
 
                     :
 
@@ -1387,9 +1004,9 @@
         }
 
 
-        /* ================================================
+        /* ========================================================
            VICTIM
-           ================================================ */
+        ======================================================== */
 
         if (panel === "victim") {
 
@@ -1397,28 +1014,20 @@
                 state.victim;
 
 
-            if (!victim) {
+            body.innerHTML = `
 
-                body.innerHTML = `
+                <h2>Victim</h2>
 
-                    <h2>Victim</h2>
+                ${
+                    victim
 
-                    <p>
-                        Victim information has not been revealed yet.
-                    </p>
+                    ?
 
-                `;
-
-            }
-
-            else {
-
-                body.innerHTML = `
-
-                    <h2>Victim</h2>
+                    `
 
                     <div
-                        class="gameui-card">
+                        class="gameui-character-card"
+                    >
 
                         ${
                             victim.img
@@ -1428,7 +1037,8 @@
                             `
                             <img
                                 src="${victim.img}"
-                                alt="${victim.name}">
+                                alt="${victim.name}"
+                            >
                             `
 
                             :
@@ -1438,10 +1048,9 @@
 
 
                         <div
-                            class="gameui-card-name">
-
+                            class="gameui-card-name"
+                        >
                             ${victim.name}
-
                         </div>
 
 
@@ -1450,15 +1059,9 @@
 
                             ?
 
-                            `
-                            <p>
-                                <strong>
-                                    Cause of Death:
-                                </strong>
-
+                            `<p>
                                 ${victim.cause}
-                            </p>
-                            `
+                            </p>`
 
                             :
 
@@ -1486,37 +1089,44 @@
                             ""
                         }
 
+
+                        <span
+                            class="gameui-tag"
+                        >
+                            VICTIM — NOT A SUSPECT
+                        </span>
+
                     </div>
 
-                `;
+                    `
 
-            }
+                    :
+
+                    `
+                    <p>
+                        Victim information has not
+                        been revealed yet.
+                    </p>
+                    `
+                }
+
+            `;
 
         }
 
 
-        /* ================================================
+        /* ========================================================
            PHONE
-           ================================================ */
+        ======================================================== */
 
         if (panel === "phone") {
 
-            if (!state.phone.obtained) {
+            const repair =
+                state.phone.repairPercent;
 
-                body.innerHTML = `
 
-                    <h2>Phone</h2>
-
-                    <p>
-                        The phone has not been obtained yet.
-                    </p>
-
-                `;
-
-            }
-
-            else if (
-                !state.phone.repaired
+            if (
+                state.phone.unlocked
             ) {
 
                 body.innerHTML = `
@@ -1524,16 +1134,14 @@
                     <h2>Phone</h2>
 
                     <p>
-                        Repair:
-                        ${state.phone.repairPercent}%
+                        Phone repaired and unlocked.
                     </p>
 
                     <a
                         class="gameui-small-btn"
-                        href="repair.html">
-
-                        Continue Repair
-
+                        href="phone.html"
+                    >
+                        OPEN PHONE
                     </a>
 
                 `;
@@ -1541,7 +1149,7 @@
             }
 
             else if (
-                !state.phone.unlocked
+                repair >= 100
             ) {
 
                 body.innerHTML = `
@@ -1549,19 +1157,19 @@
                     <h2>Phone</h2>
 
                     <p>
-                        The phone has been repaired.
+                        Repair complete.
                     </p>
 
                     <p>
-                        It is still locked.
+                        You still need the
+                        victim's birthday.
                     </p>
 
                     <a
                         class="gameui-small-btn"
-                        href="victim-info.html">
-
-                        View Victim Information
-
+                        href="victim-info.html"
+                    >
+                        VIEW VICTIM INFO
                     </a>
 
                 `;
@@ -1575,15 +1183,15 @@
                     <h2>Phone</h2>
 
                     <p>
-                        The phone is repaired and unlocked.
+                        Repair:
+                        ${repair}%
                     </p>
 
                     <a
                         class="gameui-small-btn"
-                        href="phone.html">
-
-                        Open Phone
-
+                        href="repair.html"
+                    >
+                        CONTINUE REPAIR
                     </a>
 
                 `;
@@ -1593,22 +1201,30 @@
         }
 
 
-        /* ================================================
-           SHOW MODAL
-           ================================================ */
+        /* ========================================================
+           SHOW OVERLAY
+        ======================================================== */
 
-        document
-            .getElementById("gameuiOverlay")
-            .classList.remove(
+        const overlay =
+            document.getElementById(
+                "gameuiOverlay"
+            );
+
+
+        if (overlay) {
+
+            overlay.classList.remove(
                 "hidden"
             );
+
+        }
 
     }
 
 
-    /* ========================================================
-       UPDATE BAR COUNTERS
-       ======================================================== */
+    /* ============================================================
+       RENDER COUNTS
+    ============================================================ */
 
     function renderBar() {
 
@@ -1640,9 +1256,9 @@
         if (characterCount) {
 
             characterCount.textContent =
-                state.characters.length > 0
-                ? ` (${state.characters.length})`
-                : "";
+                state.characters.length
+                    ? ` (${state.characters.length})`
+                    : "";
 
         }
 
@@ -1650,9 +1266,9 @@
         if (suspectCount) {
 
             suspectCount.textContent =
-                state.suspects.length > 0
-                ? ` (${state.suspects.length})`
-                : "";
+                state.suspects.length
+                    ? ` (${state.suspects.length})`
+                    : "";
 
         }
 
@@ -1667,20 +1283,19 @@
     }
 
 
-    /* ========================================================
-       START UI AFTER PAGE LOAD
-       ======================================================== */
+    /* ============================================================
+       START
+    ============================================================ */
 
     document.addEventListener(
         "DOMContentLoaded",
-        function () {
+        () => {
 
-            buildBar();
+            buildBarOnce();
 
             renderBar();
 
         }
     );
-
 
 })();
