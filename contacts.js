@@ -30,7 +30,24 @@ const people = [
         email: "natasha@unknown.test",
         initials: "N"
     },
-
+ {
+        name: "k1",
+        phone: "+1 (646) 255-0118",
+        email: "na@unknown.test",
+        initials: "k"
+    },
+    {
+        name: "mom",
+        phone: "+1 (646) 566-0118",
+        email: "mom@unknown.test",
+        initials: "m"
+    },
+    {
+        name: "dad",
+        phone: "+1 (646) 565-0118",
+        email: "dad@unknown.test",
+        initials: "d"
+    },
     {
         name: "Daniel Carter",
         phone: "+1 (202) 555-0182",
