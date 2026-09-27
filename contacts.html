@@ -1,1 +1,96 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Contacts</title><link rel="stylesheet" href="app.css"><link rel="stylesheet" href="contacts.css"></head><body><div class="app"><header class="app-header"><button class="back" id="backBtn">‹</button><div class="header-title">Contacts</div><button class="header-action">＋</button></header><main class="content" id="contactsContent"></main></div><script src="contacts.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Contacts</title>
+
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="contacts.css">
+
+</head>
+
+
+<body>
+
+<div class="contacts-app">
+
+
+    <!-- TOP NAVIGATION -->
+
+    <header class="contacts-top">
+
+        <button
+            class="top-icon"
+            id="callsButton"
+        >
+            ☎
+        </button>
+
+        <button
+            class="top-icon active"
+        >
+            ♟
+        </button>
+
+        <button class="top-icon">
+            ⬡
+        </button>
+
+    </header>
+
+
+    <!-- SEARCH -->
+
+    <div class="contact-search-box">
+
+        <span>⌕</span>
+
+        <input
+            id="contactSearch"
+            placeholder="Search contacts"
+        >
+
+    </div>
+
+
+    <!-- IMPORT BAR -->
+
+    <div class="import-bar">
+
+        <span>
+            Import SIM contacts
+        </span>
+
+        <button>
+            ×
+        </button>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <main id="contactsContent"></main>
+
+
+    <!-- ALPHABET -->
+
+    <div class="alphabet" id="alphabet"></div>
+
+
+</div>
+
+
+<script src="contacts.js"></script>
+
+</body>
+
+</html>
