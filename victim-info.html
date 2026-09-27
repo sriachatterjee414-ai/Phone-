@@ -3,19 +3,19 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>Victim Information</title>
+    <title>Victim Information</title>
 
-<link
-    rel="stylesheet"
-    href="victim-info.css"
->
+    <link
+        rel="stylesheet"
+        href="victim-info.css"
+    >
 
 </head>
 
@@ -34,9 +34,16 @@
         id="caseTab"
         class="case-tab"
         type="button"
+        aria-label="Victim information"
     >
+
         <span>CASE</span>
-        <strong>VICTIM<br>INFO</strong>
+
+        <strong>
+            VICTIM<br>
+            INFO
+        </strong>
+
     </button>
 
 
@@ -83,11 +90,10 @@
 
 
         <!-- =====================================
-             VICTIM SECTION
+             VICTIM
         ====================================== -->
 
         <section class="dossier-section">
-
 
             <div class="section-title">
                 VICTIM
@@ -97,11 +103,12 @@
             <div class="victim-layout">
 
 
-                <!-- ONLY IMAGE IN THE DOSSIER -->
+                <!-- VICTIM PORTRAIT -->
 
                 <div class="victim-photo">
 
                     <img
+                        id="victimPortrait"
                         src="victim_portrait.png"
                         alt="Victim"
                     >
@@ -114,7 +121,7 @@
 
 
 
-                <!-- UI INFORMATION -->
+                <!-- VICTIM INFORMATION -->
 
                 <div class="victim-details">
 
@@ -135,7 +142,6 @@
                     </div>
 
 
-
                     <div class="info-row birthday-row">
 
                         <span class="label">
@@ -146,11 +152,10 @@
                             id="victimBirthday"
                             class="value birthday"
                         >
-                            May 21, 2002
+                            May 21, 2001
                         </span>
 
                     </div>
-
 
 
                     <div class="info-row">
@@ -169,19 +174,20 @@
                     </div>
 
 
-
                     <div class="info-row">
 
                         <span class="label">
                             SEX
                         </span>
 
-                        <span class="value">
+                        <span
+                            id="victimSex"
+                            class="value"
+                        >
                             Female
                         </span>
 
                     </div>
-
 
 
                     <div class="info-row">
@@ -190,12 +196,14 @@
                             OCCUPATION
                         </span>
 
-                        <span class="value">
-                            —
+                        <span
+                            id="victimOccupation"
+                            class="value"
+                        >
+                            Unknown
                         </span>
 
                     </div>
-
 
 
                     <div class="info-row">
@@ -204,12 +212,14 @@
                             ADDRESS
                         </span>
 
-                        <span class="value">
-                            —
+                        <span
+                            id="victimAddress"
+                            class="value"
+                        >
+                            Unknown
                         </span>
 
                     </div>
-
 
 
                     <div class="info-row">
@@ -218,8 +228,43 @@
                             EMERGENCY CONTACT
                         </span>
 
-                        <span class="value">
-                            —
+                        <span
+                            id="victimEmergency"
+                            class="value"
+                        >
+                            Unknown
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="label">
+                            PHONE STATUS
+                        </span>
+
+                        <span
+                            id="victimPhoneStatus"
+                            class="value"
+                        >
+                            RECOVERED — DAMAGED
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="label">
+                            CASE STATUS
+                        </span>
+
+                        <span
+                            id="victimCaseStatus"
+                            class="value"
+                        >
+                            ACTIVE
                         </span>
 
                     </div>
@@ -234,11 +279,10 @@
 
 
         <!-- =====================================
-             BIRTHDAY FILE
+             IDENTIFICATION FILE
         ====================================== -->
 
         <section class="dossier-section">
-
 
             <div class="section-title">
                 IDENTIFICATION FILE
@@ -260,6 +304,8 @@
 
                     <p>
                         Her birthday may be the key.
+                        This information is available
+                        independently of the recovered phone.
                     </p>
 
                 </div>
@@ -273,9 +319,7 @@
                 class="file-button"
                 type="button"
             >
-
                 SHOW BIRTHDAY FILE
-
             </button>
 
 
@@ -301,34 +345,55 @@
                 <div class="file-body">
 
                     <div class="file-stamp">
-                        BIRTH<br>DATE
+                        BIRTH<br>
+                        DATE
                     </div>
 
 
                     <div class="file-information">
 
+
                         <div>
-                            <span>NAME</span>
-                            <strong>
+
+                            <span>
+                                NAME
+                            </span>
+
+                            <strong id="fileVictimName">
                                 Evelyn Carter
                             </strong>
+
                         </div>
 
 
                         <div>
-                            <span>DATE OF BIRTH</span>
-                            <strong>
+
+                            <span>
+                                DATE OF BIRTH
+                            </span>
+
+                            <strong id="fileVictimBirthday">
                                 MAY 21, 2001
                             </strong>
+
                         </div>
 
 
                         <div>
-                            <span>PHONE PASSCODE</span>
-                            <strong class="password-reveal">
+
+                            <span>
+                                POSSIBLE PHONE PASSCODE
+                            </span>
+
+                            <strong
+                                id="phonePasscode"
+                                class="password-reveal"
+                            >
                                 0521
                             </strong>
+
                         </div>
+
 
                     </div>
 
@@ -354,7 +419,6 @@
         ====================================== -->
 
         <section class="dossier-section">
-
 
             <div class="section-title">
                 CASE INFORMATION
@@ -396,7 +460,7 @@
                         LOCATION
                     </span>
 
-                    <strong>
+                    <strong id="discoveryLocation">
                         UNKNOWN
                     </strong>
 
@@ -409,11 +473,38 @@
                         DATE
                     </span>
 
-                    <strong>
+                    <strong id="dateDiscovered">
                         OCTOBER 17
                     </strong>
 
                 </div>
+
+
+                <div>
+
+                    <span>
+                        CAUSE OF DEATH
+                    </span>
+
+                    <strong id="causeOfDeath">
+                        UNDER INVESTIGATION
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ESTIMATED TIME
+                    </span>
+
+                    <strong id="timeOfDeath">
+                        UNKNOWN
+                    </strong>
+
+                </div>
+
 
             </div>
 
@@ -422,11 +513,10 @@
 
 
         <!-- =====================================
-             SUSPECT SECTION
+             SUSPECT INFORMATION
         ====================================== -->
 
         <section class="dossier-section">
-
 
             <div class="section-title">
                 SUSPECT INFORMATION
@@ -434,68 +524,14 @@
 
 
             <div
-                id="suspectCard"
-                class="suspect-card"
+                id="suspectList"
+                class="suspect-list"
             >
 
-                <div class="suspect-photo">
+                <div class="no-suspects">
 
-                    <div class="unknown-silhouette">
-                        ?
-                    </div>
-
-                </div>
-
-
-                <div class="suspect-information">
-
-                    <div class="suspect-status">
-                        UNKNOWN
-                    </div>
-
-
-                    <h2 id="suspectName">
-                        Unknown
-                    </h2>
-
-
-                    <div class="suspect-row">
-
-                        <span>
-                            AGE
-                        </span>
-
-                        <strong id="suspectAge">
-                            Unknown
-                        </strong>
-
-                    </div>
-
-
-                    <div class="suspect-row">
-
-                        <span>
-                            CONNECTION
-                        </span>
-
-                        <strong id="suspectConnection">
-                            Unknown
-                        </strong>
-
-                    </div>
-
-
-                    <div class="suspect-row">
-
-                        <span>
-                            STATUS
-                        </span>
-
-                        <strong id="suspectStatus">
-                            No identified suspect
-                        </strong>
-
-                    </div>
+                    NO PERSONS OF INTEREST
+                    HAVE BEEN IDENTIFIED.
 
                 </div>
 
@@ -514,9 +550,7 @@
             class="back-button"
             type="button"
         >
-
             ← BACK
-
         </button>
 
 
