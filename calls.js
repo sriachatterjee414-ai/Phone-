@@ -14,6 +14,34 @@ const people = [
             "Sep 24 · 9:15 AM"
         ]
     },
+       {
+        name: "R",
+        number: "+1 (212) 355-2174",
+        initials: "SM",
+        type: "Mobile",
+        history: [
+            "Sep 26 · 8:44 PM",
+            "Sep 26 · 8:41 PM",
+            "Sep 26 · 8:30 PM",
+            "Sep 26 · 8:25 PM",
+            "Sep 26 · 8:20 PM",
+            "Sep 26 · 8:16 PM"
+        ]
+    },
+    name: "unknown",
+        number: "+1 (212) 665-2174",
+        initials: "SM",
+        type: "Mobile",
+        history: [
+            "Sep 26 · 7:44 PM",
+            "Sep 26 · 7:41 PM",
+            "Sep 26 · 7:30 PM",
+            "Sep 26 · 7:25 PM",
+            "Sep 26 · 7:20 PM",
+            "Sep 26 · 7:16 PM"
+        ]
+    },
+
 
     {
         name: "Sarah Miller",
