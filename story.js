@@ -1,4 +1,4 @@
-/* =========================================
+/* ============================================================
    BROKEN PHONE
    PART 1 — OPENING SEQUENCE
 
@@ -16,17 +16,19 @@
       ↓
    NORMAL PHONE ASSIGNMENT
       ↓
+   VICTIM REVEALED
+      ↓
    SMALL MYSTERY
       ↓
    RYAN LEAVES
       ↓
-   REPAIR THE DAMAGED PHONE
-========================================= */
+   INVESTIGATION
+============================================================ */
 
 
-/* =========================================
+/* ============================================================
    ELEMENTS
-========================================= */
+============================================================ */
 
 const roomImage =
     document.getElementById("roomImage");
@@ -74,9 +76,9 @@ const doorOpen =
     document.getElementById("doorOpen");
 
 
-/* =========================================
+/* ============================================================
    PLAYER NAME ELEMENTS
-========================================= */
+============================================================ */
 
 const namePrompt =
     document.getElementById("namePrompt");
@@ -88,26 +90,93 @@ const nameContinue =
     document.getElementById("nameContinue");
 
 
-/* =========================================
+/* ============================================================
    PLAYER NAME
-========================================= */
-
-/*
-   IMPORTANT:
-
-   We intentionally DO NOT automatically
-   use an old saved name here.
-
-   This means every NEW GAME / story start
-   can ask the player for their name.
-*/
+============================================================ */
 
 let playerName = "";
 
 
-/* =========================================
+/* ============================================================
+   GAME UI CHARACTER DATA
+============================================================ */
+
+/*
+    Ryan is added only once.
+
+    Evelyn is added only once.
+
+    The persistent-ui.js file stores these in localStorage,
+    so they remain available on later pages.
+*/
+
+function registerRyan() {
+
+    if (
+        typeof GameUI !== "undefined" &&
+        GameUI.addCharacter
+    ) {
+
+        GameUI.addCharacter(
+            "ryan_hale",
+            "Ryan Hale",
+            "officer_neutral.png"
+        );
+
+    }
+
+}
+
+
+function registerEvelyn() {
+
+    if (
+        typeof GameUI !== "undefined"
+    ) {
+
+        /*
+            Add Evelyn to Characters.
+        */
+
+        if (GameUI.addCharacter) {
+
+            GameUI.addCharacter(
+                "evelyn_carter",
+                "Evelyn Carter",
+                "victim.png"
+            );
+
+        }
+
+
+        /*
+            Set Evelyn as the victim.
+
+            Because the corrected persistent UI knows
+            that this character is the victim, she will
+            not be allowed into the Suspects list.
+        */
+
+        if (GameUI.setVictim) {
+
+            GameUI.setVictim(
+                "evelyn_carter",
+                "Evelyn Carter",
+                "victim.png",
+                "Stabbed after being found tied to a tree in a jungle.",
+                "May 21, 2002"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
    AUDIO
-========================================= */
+============================================================ */
 
 function startRoomAudio() {
 
@@ -117,12 +186,7 @@ function startRoomAudio() {
 
     roomAmbience
         .play()
-        .catch(() => {
-            /*
-                Browser may block autoplay.
-                Audio will simply remain silent.
-            */
-        });
+        .catch(() => {});
 }
 
 
@@ -143,34 +207,23 @@ function playSound(
 }
 
 
-/* =========================================
+/* ============================================================
    OPENING SEQUENCE
-========================================= */
+============================================================ */
 
 function beginOpening() {
-
-    /*
-        Start room dark and blurred.
-    */
 
     if (roomImage) {
 
         roomImage.classList.add(
             "waking"
         );
+
     }
 
 
-    /*
-        Start ambience.
-    */
-
     startRoomAudio();
 
-
-    /*
-        Waking sound.
-    */
 
     setTimeout(() => {
 
@@ -182,10 +235,6 @@ function beginOpening() {
     }, 900);
 
 
-    /*
-        Vision begins clearing.
-    */
-
     setTimeout(() => {
 
         if (wakeOverlay) {
@@ -193,6 +242,7 @@ function beginOpening() {
             wakeOverlay.classList.add(
                 "opening"
             );
+
         }
 
 
@@ -201,6 +251,7 @@ function beginOpening() {
             blurLayer.classList.add(
                 "clear"
             );
+
         }
 
 
@@ -213,26 +264,24 @@ function beginOpening() {
             roomImage.classList.add(
                 "awake"
             );
+
         }
 
     }, 1800);
 
-
-    /*
-        Ryan appears.
-    */
 
     setTimeout(() => {
 
         showOfficer();
 
     }, 5600);
+
 }
 
 
-/* =========================================
+/* ============================================================
    RYAN HALE APPEARS
-========================================= */
+============================================================ */
 
 function showOfficer() {
 
@@ -240,26 +289,22 @@ function showOfficer() {
 
 
     /*
-        Make Ryan visible.
+        ADD RYAN TO CHARACTER LIST
+        THE FIRST TIME HE APPEARS.
     */
+
+    registerRyan();
+
 
     officer.classList.remove(
         "hidden"
     );
 
 
-    /*
-        Start from farther away.
-    */
-
     officer.classList.remove(
         "approach"
     );
 
-
-    /*
-        Ryan approaches.
-    */
 
     setTimeout(() => {
 
@@ -270,45 +315,29 @@ function showOfficer() {
     }, 100);
 
 
-    /*
-        IMPORTANT:
-
-        Do NOT start dialogue yet.
-
-        First ask for the player's name.
-    */
-
     setTimeout(() => {
 
         askPlayerName();
 
     }, 1800);
+
 }
 
 
-/* =========================================
+/* ============================================================
    ASK PLAYER NAME
-========================================= */
+============================================================ */
 
 function askPlayerName() {
-
-    /*
-        Make absolutely sure dialogue
-        cannot appear before the name.
-    */
 
     if (dialogueBox) {
 
         dialogueBox.classList.add(
             "hidden"
         );
+
     }
 
-
-    /*
-        If the name prompt exists,
-        show it.
-    */
 
     if (namePrompt) {
 
@@ -316,45 +345,35 @@ function askPlayerName() {
             "hidden"
         );
 
-        /*
-            Clear previous input.
-        */
 
         if (storyPlayerName) {
 
             storyPlayerName.value = "";
+
 
             setTimeout(() => {
 
                 storyPlayerName.focus();
 
             }, 150);
+
         }
 
         return;
+
     }
 
-
-    /*
-        Fallback if HTML name prompt
-        is somehow missing.
-
-        This should NOT normally happen.
-    */
 
     console.error(
         "namePrompt was not found in story.html"
     );
 
-    /*
-        Do not start dialogue with Y/N.
-    */
 }
 
 
-/* =========================================
+/* ============================================================
    SAVE PLAYER NAME
-========================================= */
+============================================================ */
 
 function savePlayerName() {
 
@@ -365,6 +384,7 @@ function savePlayerName() {
         );
 
         return;
+
     }
 
 
@@ -372,29 +392,18 @@ function savePlayerName() {
         storyPlayerName.value.trim();
 
 
-    /*
-        Don't allow blank names.
-    */
-
     if (enteredName === "") {
 
         storyPlayerName.focus();
 
         return;
+
     }
 
-
-    /*
-        Save name in memory.
-    */
 
     playerName =
         enteredName;
 
-
-    /*
-        Save name for this game.
-    */
 
     localStorage.setItem(
         "brokenPhonePlayerName",
@@ -402,29 +411,23 @@ function savePlayerName() {
     );
 
 
-    /*
-        Hide name prompt.
-    */
-
     if (namePrompt) {
 
         namePrompt.classList.add(
             "hidden"
         );
+
     }
 
 
-    /*
-        NOW dialogue is allowed.
-    */
-
     startDialogue();
+
 }
 
 
-/* =========================================
+/* ============================================================
    NAME BUTTON
-========================================= */
+============================================================ */
 
 if (nameContinue) {
 
@@ -432,12 +435,13 @@ if (nameContinue) {
         "click",
         savePlayerName
     );
+
 }
 
 
-/* =========================================
+/* ============================================================
    NAME ENTER KEY
-========================================= */
+============================================================ */
 
 if (storyPlayerName) {
 
@@ -450,688 +454,605 @@ if (storyPlayerName) {
                 event.preventDefault();
 
                 savePlayerName();
+
             }
+
         }
     );
+
 }
 
 
-/* =========================================
+/* ============================================================
    COMPLETE STORY DIALOGUE
-========================================= */
+============================================================ */
 
 const dialogue = [
 
     /* =====================================
        Y/N WAKES
-    ===================================== */
+    ====================================== */
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Finally. You're awake."
+        text: "Finally. You're awake."
     },
 
     {
         speaker: "Y/N",
         expression: "concerned",
-        text:
-            "Ryan?"
+        text: "Ryan?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Good. At least you remember my face."
+        text: "Good. At least you remember my face."
     },
 
     {
         speaker: "Y/N",
         expression: "concerned",
-        text:
-            "Why wouldn't I?"
+        text: "Why wouldn't I?"
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "I don't know. You were sleeping like the dead."
+        text: "I don't know. You were sleeping like the dead."
     },
 
     {
         speaker: "Y/N",
         expression: "annoyed",
-        text:
-            "Very funny."
+        text: "Very funny."
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "Thank you. I practice."
+        text: "Thank you. I practice."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "How long was I out?"
+        text: "How long was I out?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Long enough for me to finish two coffees."
+        text: "Long enough for me to finish two coffees."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "So, about ten minutes?"
+        text: "So, about ten minutes?"
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "Three hours."
+        text: "Three hours."
     },
 
     {
         speaker: "Y/N",
         expression: "surprised",
-        text:
-            "...Oh."
+        text: "...Oh."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "You needed the rest."
+        text: "You needed the rest."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "So why am I here?"
+        text: "So why am I here?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Work."
+        text: "Work."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "Of course it is."
+        text: "Of course it is."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Got something for you."
+        text: "Got something for you."
     },
 
 
     /* =====================================
        PHONE
-    ===================================== */
+    ====================================== */
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "Another phone?"
+        text: "Another phone?"
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "Congratulations. You've solved the mystery."
+        text: "Congratulations. You've solved the mystery."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "I'm clearly ready for a promotion."
+        text: "I'm clearly ready for a promotion."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Don't get excited."
+        text: "Don't get excited."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "It was recovered during an investigation. It's pretty badly damaged."
+        text: "It was recovered during an investigation. It's pretty badly damaged."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "How badly?"
+        text: "How badly?"
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "Bad enough that I didn't touch it after finding it."
+        text: "Bad enough that I didn't touch it after finding it."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "That's probably for the best."
+        text: "That's probably for the best."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Your usual job. Get it working, extract whatever data you can, and send it back to us."
+        text: "Your usual job. Get it working, extract whatever data you can, and send it back to us."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "Any special instructions?"
+        text: "Any special instructions?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Nope. Same procedure as always."
+        text: "Nope. Same procedure as always."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "So you woke me up for a broken phone."
+        text: "So you woke me up for a broken phone."
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "Technically, I didn't wake you up."
+        text: "Technically, I didn't wake you up."
     },
 
     {
         speaker: "Y/N",
         expression: "annoyed",
-        text:
-            "Ryan."
+        text: "Ryan."
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "Fine. Yes. I woke you up for a broken phone."
+        text: "Fine. Yes. I woke you up for a broken phone."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "Give it here."
+        text: "Give it here."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "That's the spirit."
+        text: "That's the spirit."
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "Try not to destroy it more than it already is."
+        text: "Try not to destroy it more than it already is."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "No promises."
+        text: "No promises."
     },
+
+    /*
+        IMPORTANT STORY BEAT:
+
+        Evelyn is now registered as the victim
+        when Ryan has handed over the phone.
+    */
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "I'll leave you to it."
+        text: "I'll leave you to it.",
+        action: "registerVictim"
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "Ryan."
+        text: "Ryan."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Yeah?"
+        text: "Yeah?"
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "Coffee."
+        text: "Coffee."
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "You want coffee after sleeping for three hours?"
+        text: "You want coffee after sleeping for three hours?"
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "Yes."
+        text: "Yes."
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "Unbelievable."
+        text: "Unbelievable."
     },
 
 
     /* =====================================
        SMALL MYSTERY
-    ===================================== */
+    ====================================== */
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Actually..."
+        text: "Actually..."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "What?"
+        text: "What?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "There is one thing."
+        text: "There is one thing."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "I knew there was a catch."
+        text: "I knew there was a catch."
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "There's always a catch with you."
+        text: "There's always a catch with you."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "Ryan."
+        text: "Ryan."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "The phone was found yesterday."
+        text: "The phone was found yesterday."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "Okay."
+        text: "Okay."
     },
 
     {
         speaker: "RYAN",
         expression: "serious",
-        text:
-            "But the last activity recorded on it was this morning."
+        text: "But the last activity recorded on it was this morning."
     },
 
     {
         speaker: "Y/N",
         expression: "surprised",
-        text:
-            "...This morning?"
+        text: "...This morning?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Yeah."
+        text: "Yeah."
     },
 
     {
         speaker: "Y/N",
         expression: "serious",
-        text:
-            "That's not possible if it was already evidence."
+        text: "That's not possible if it was already evidence."
     },
 
     {
         speaker: "RYAN",
         expression: "serious",
-        text:
-            "Exactly."
+        text: "Exactly."
     },
 
     {
         speaker: "Y/N",
         expression: "concerned",
-        text:
-            "What kind of activity?"
+        text: "What kind of activity?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "We couldn't tell."
+        text: "We couldn't tell."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "And you didn't try to turn it on?"
+        text: "And you didn't try to turn it on?"
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "You know me better than that."
+        text: "You know me better than that."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "Unfortunately, I do."
+        text: "Unfortunately, I do."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "That's why it's yours."
+        text: "That's why it's yours."
     },
 
     {
         speaker: "Y/N",
         expression: "serious",
-        text:
-            "Anything else?"
+        text: "Anything else?"
     },
 
     {
         speaker: "RYAN",
         expression: "concerned",
-        text:
-            "There was one file name."
+        text: "There was one file name."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "What file?"
+        text: "What file?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "We couldn't open it."
+        text: "We couldn't open it."
     },
 
     {
         speaker: "Y/N",
         expression: "serious",
-        text:
-            "What's it called?"
+        text: "What's it called?"
     },
 
     {
         speaker: "RYAN",
         expression: "serious",
-        text:
-            "I don't remember the whole thing."
+        text: "I don't remember the whole thing."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "Convenient."
+        text: "Convenient."
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "I was busy doing actual police work."
+        text: "I was busy doing actual police work."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "And I'm apparently not."
+        text: "And I'm apparently not."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Your words, not mine."
+        text: "Your words, not mine."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "What did you remember?"
+        text: "What did you remember?"
     },
 
     {
         speaker: "RYAN",
         expression: "concerned",
-        text:
-            "Something about a date."
+        text: "Something about a date."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "A date?"
+        text: "A date?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Yeah."
+        text: "Yeah."
     },
 
     {
         speaker: "RYAN",
         expression: "serious",
-        text:
-            "Tomorrow's date."
+        text: "Tomorrow's date."
     },
 
     {
         speaker: "Y/N",
         expression: "surprised",
-        text:
-            "Tomorrow?"
+        text: "Tomorrow?"
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Probably nothing."
+        text: "Probably nothing."
     },
 
     {
         speaker: "Y/N",
         expression: "serious",
-        text:
-            "You don't usually say 'probably nothing.'"
+        text: "You don't usually say 'probably nothing.'"
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "And you don't usually interrogate your coworkers before coffee."
+        text: "And you don't usually interrogate your coworkers before coffee."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "You brought me the suspicious phone."
+        text: "You brought me the suspicious phone."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Fair."
+        text: "Fair."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Just repair it."
+        text: "Just repair it."
     },
 
     {
         speaker: "RYAN",
         expression: "serious",
-        text:
-            "If there's anything important on there, we'll deal with it."
+        text: "If there's anything important on there, we'll deal with it."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "You mean we'll deal with it."
+        text: "You mean we'll deal with it."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "Exactly."
+        text: "Exactly."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "Now go get my coffee."
+        text: "Now go get my coffee."
     },
 
     {
         speaker: "RYAN",
         expression: "surprised",
-        text:
-            "Excuse me?"
+        text: "Excuse me?"
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "You woke me up."
+        text: "You woke me up."
     },
 
     {
         speaker: "RYAN",
         expression: "sarcastic",
-        text:
-            "You're impossible."
+        text: "You're impossible."
     },
 
     {
         speaker: "Y/N",
         expression: "sarcastic",
-        text:
-            "And yet you keep coming back."
+        text: "And yet you keep coming back."
     },
 
     {
         speaker: "RYAN",
         expression: "neutral",
-        text:
-            "I'll see you later."
+        text: "I'll see you later."
     },
 
     {
         speaker: "Y/N",
         expression: "neutral",
-        text:
-            "Yeah. Later."
+        text: "Yeah. Later."
     }
 
 ];
@@ -1140,24 +1061,21 @@ const dialogue = [
 let dialogueIndex = 0;
 
 
-/* =========================================
+/* ============================================================
    START DIALOGUE
-========================================= */
+============================================================ */
 
 function startDialogue() {
 
-    /*
-        Safety check:
-        NEVER start dialogue without
-        a player name.
-    */
-
-    if (!playerName ||
-        playerName.trim() === "") {
+    if (
+        !playerName ||
+        playerName.trim() === ""
+    ) {
 
         askPlayerName();
 
         return;
+
     }
 
 
@@ -1168,18 +1086,16 @@ function startDialogue() {
         );
 
         return;
+
     }
 
-
-    /*
-        Make sure name prompt is hidden.
-    */
 
     if (namePrompt) {
 
         namePrompt.classList.add(
             "hidden"
         );
+
     }
 
 
@@ -1192,18 +1108,15 @@ function startDialogue() {
 
 
     displayDialogue();
+
 }
 
 
-/* =========================================
+/* ============================================================
    DISPLAY DIALOGUE
-========================================= */
+============================================================ */
 
 function displayDialogue() {
-
-    /*
-        End of conversation.
-    */
 
     if (
         dialogueIndex >=
@@ -1213,6 +1126,7 @@ function displayDialogue() {
         finishDialogue();
 
         return;
+
     }
 
 
@@ -1220,9 +1134,22 @@ function displayDialogue() {
         dialogue[dialogueIndex];
 
 
+    /*
+        STORY ACTIONS
+
+        Some dialogue lines trigger game-state changes.
+    */
+
+    if (line.action === "registerVictim") {
+
+        registerEvelyn();
+
+    }
+
+
     /* =====================================
        SPEAKER NAME
-    ===================================== */
+    ====================================== */
 
     if (line.speaker === "Y/N") {
 
@@ -1233,12 +1160,13 @@ function displayDialogue() {
 
         speakerName.textContent =
             line.speaker;
+
     }
 
 
     /* =====================================
        DIALOGUE TEXT
-    ===================================== */
+    ====================================== */
 
     const finalText =
         line.text.replace(
@@ -1253,17 +1181,18 @@ function displayDialogue() {
 
     /* =====================================
        RYAN EXPRESSION
-    ===================================== */
+    ====================================== */
 
     changeOfficerExpression(
         line.expression
     );
+
 }
 
 
-/* =========================================
+/* ============================================================
    RYAN EXPRESSIONS
-========================================= */
+============================================================ */
 
 function changeOfficerExpression(
     expression
@@ -1322,13 +1251,15 @@ function changeOfficerExpression(
                 "officer_neutral.png";
 
             break;
+
     }
+
 }
 
 
-/* =========================================
+/* ============================================================
    ADVANCE DIALOGUE
-========================================= */
+============================================================ */
 
 function advanceDialogue() {
 
@@ -1342,18 +1273,20 @@ function advanceDialogue() {
     ) {
 
         return;
+
     }
 
 
     dialogueIndex++;
 
     displayDialogue();
+
 }
 
 
-/* =========================================
+/* ============================================================
    NEXT BUTTON
-========================================= */
+============================================================ */
 
 if (nextDialogue) {
 
@@ -1361,21 +1294,17 @@ if (nextDialogue) {
         "click",
         advanceDialogue
     );
+
 }
 
 
-/* =========================================
+/* ============================================================
    KEYBOARD
-========================================= */
+============================================================ */
 
 document.addEventListener(
     "keydown",
     function(event) {
-
-        /*
-            Don't advance dialogue while
-            typing the player's name.
-        */
 
         if (
             namePrompt &&
@@ -1385,6 +1314,7 @@ document.addEventListener(
         ) {
 
             return;
+
         }
 
 
@@ -1403,26 +1333,36 @@ document.addEventListener(
                 event.preventDefault();
 
                 advanceDialogue();
+
             }
+
         }
+
     }
 );
 
 
-/* =========================================
+/* ============================================================
    FINISH CONVERSATION
-========================================= */
+============================================================ */
 
 function finishDialogue() {
 
     if (dialogueBox) {
-        dialogueBox.classList.add("hidden");
+
+        dialogueBox.classList.add(
+            "hidden"
+        );
+
     }
 
-    changeOfficerExpression("neutral");
+
+    changeOfficerExpression(
+        "neutral"
+    );
 
 
-    /* ================================
+    /* =================================
        RYAN LEAVES
     ================================= */
 
@@ -1430,13 +1370,18 @@ function finishDialogue() {
 
         if (officer) {
 
-            officer.classList.remove("approach");
+            officer.classList.remove(
+                "approach"
+            );
 
             officer.style.transform =
                 "translateX(180px) scale(0.98)";
 
-            officer.style.opacity = "0";
+            officer.style.opacity =
+                "0";
+
         }
+
 
         playSound(
             doorOpen,
@@ -1446,7 +1391,7 @@ function finishDialogue() {
     }, 500);
 
 
-    /* ================================
+    /* =================================
        SHOW OBJECTIVE
     ================================= */
 
@@ -1457,9 +1402,8 @@ function finishDialogue() {
     }, 2200);
 
 
-    /* ================================
+    /* =================================
        GO TO INVESTIGATION
-       AFTER OBJECTIVE
     ================================= */
 
     setTimeout(() => {
@@ -1469,9 +1413,12 @@ function finishDialogue() {
 
     }, 5200);
 
-}/* =========================================
+}
+
+
+/* ============================================================
    OBJECTIVE
-========================================= */
+============================================================ */
 
 function showObjective() {
 
@@ -1505,6 +1452,7 @@ function showObjective() {
 
         objectiveLabel.textContent =
             "NEW OBJECTIVE";
+
     }
 
 
@@ -1512,6 +1460,7 @@ function showObjective() {
 
         objectiveTitle.textContent =
             "NEW OBJECTIVE";
+
     }
 
 
@@ -1519,13 +1468,9 @@ function showObjective() {
 
         objectiveText.textContent =
             "Repair the damaged phone.";
+
     }
 
-
-    /*
-        Hide objective and activate
-        investigation mode.
-    */
 
     setTimeout(() => {
 
@@ -1539,18 +1484,20 @@ function showObjective() {
             investigationHUD.classList.remove(
                 "hidden"
             );
+
         }
 
 
         enableInvestigation();
 
     }, 3500);
+
 }
 
 
-/* =========================================
+/* ============================================================
    INVESTIGATION MODE
-========================================= */
+============================================================ */
 
 function enableInvestigation() {
 
@@ -1558,6 +1505,7 @@ function enableInvestigation() {
 
         roomImage.style.cursor =
             "default";
+
     }
 
 
@@ -1581,21 +1529,17 @@ function enableInvestigation() {
     console.log(
         "================================="
     );
+
 }
 
 
-/* =========================================
+/* ============================================================
    START
-========================================= */
+============================================================ */
 
 window.addEventListener(
     "load",
     function() {
-
-        /*
-            Small delay after story.html
-            loads.
-        */
 
         setTimeout(() => {
 
