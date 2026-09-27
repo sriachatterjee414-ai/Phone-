@@ -1,19 +1,29 @@
+/* =========================================================
+   BROKEN PHONE
+   PHONE UI
+   ALL FILES ARE IN GITHUB ROOT
+========================================================= */
+
 *{
     box-sizing:border-box;
 }
 
 html,
 body{
-    margin:0;
     width:100%;
     height:100%;
+    margin:0;
     overflow:hidden;
-    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-    background:#21180f;
-    color:#fff;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:#24170f;
+    color:white;
 }
 
 button,
@@ -28,271 +38,252 @@ button{
 
 
 /* =========================================================
-   WHOLE GAME BACKGROUND
-   ========================================================= */
+   OUTER INVESTIGATION BACKGROUND
+   FILE: phone-bg.png
+========================================================= */
 
 .investigation-stage{
-    width:100%;
-    height:100vh;
 
     position:relative;
+
+    width:100%;
+    height:100vh;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
     background:
+        #24170f
         url("phone-bg.png")
-        center center /
-        cover
+        center/cover
         no-repeat;
 
-    overflow:hidden;
 }
 
 
 /* =========================================================
-   SIDE CONTROLS
-   ========================================================= */
+   DARK OVERLAY
+========================================================= */
+
+.investigation-stage::before{
+
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(0,0,0,.05),
+            rgba(0,0,0,.40)
+        );
+
+    pointer-events:none;
+
+}
+
+
+/* =========================================================
+   OUTSIDE PHONE CONTROLS
+========================================================= */
 
 .game-controls{
+
     position:fixed;
 
-    right:42px;
-    top:50%;
-
-    transform:translateY(-50%);
+    right:32px;
+    bottom:34px;
 
     display:flex;
     flex-direction:column;
 
-    gap:14px;
+    gap:12px;
 
     z-index:900;
+
 }
 
 
-.game-side-button{
-    width:205px;
-    min-height:68px;
+/* =========================================================
+   SIDE BUTTON
+========================================================= */
 
-    padding:11px 15px;
+.side-control{
+
+    width:174px;
+    height:52px;
 
     display:flex;
     align-items:center;
 
-    gap:12px;
+    gap:13px;
 
-    color:#eee;
+    padding:0 16px;
+
+    color:rgba(255,255,255,.88);
 
     background:
-        linear-gradient(
-            145deg,
-            rgba(45,32,20,.94),
-            rgba(18,13,9,.97)
-        );
+        rgba(20,13,9,.72);
 
-    border:1px solid rgba(214,179,116,.34);
+    border:
+        1px solid
+        rgba(226,194,139,.32);
 
-    border-radius:10px;
+    border-radius:8px;
 
     box-shadow:
-        0 10px 28px rgba(0,0,0,.35),
-        inset 0 1px rgba(255,255,255,.06);
+        0 8px 25px rgba(0,0,0,.35),
+        inset 0 0 0 1px rgba(255,255,255,.035);
+
+    backdrop-filter:blur(10px);
 
     transition:
-        transform .18s ease,
-        background .18s ease,
-        border-color .18s ease;
+        background .2s ease,
+        border-color .2s ease,
+        transform .15s ease;
+
 }
 
-
-.game-side-button:hover{
-    transform:translateX(-4px);
+.side-control:hover{
 
     background:
-        linear-gradient(
-            145deg,
-            rgba(67,48,29,.96),
-            rgba(25,17,11,.98)
-        );
+        rgba(46,31,21,.88);
 
-    border-color:rgba(225,194,136,.6);
+    border-color:
+        rgba(226,194,139,.58);
+
+}
+
+.side-control:active{
+
+    transform:
+        scale(.97);
+
 }
 
 
-.game-side-button:active{
-    transform:translateX(-2px) scale(.98);
+.side-control-icon{
+
+    width:25px;
+    height:25px;
+
+    display:grid;
+    place-items:center;
+
+    opacity:.86;
+
+}
+
+.side-control-icon svg{
+
+    width:21px;
+    height:21px;
+
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
 }
 
 
-.side-button-icon{
-    width:34px;
-    height:34px;
+.side-control-text{
 
-    flex:0 0 34px;
-
-    position:relative;
-
-    opacity:.9;
-}
-
-
-.side-button-text{
-    display:flex;
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    gap:4px;
-}
-
-
-.side-button-text strong{
-    font-family:Georgia,"Times New Roman",serif;
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 
     font-size:11px;
 
-    letter-spacing:2px;
+    letter-spacing:2.5px;
 
-    font-weight:500;
 }
 
 
-.side-button-text small{
-    color:rgba(255,255,255,.48);
+/* Victim file slightly more important */
 
-    font-size:8px;
+.victim-control{
 
-    letter-spacing:1.2px;
-}
+    border-color:
+        rgba(231,205,160,.42);
 
-
-/* victim file icon */
-
-.victim-file-icon{
-    border:1px solid rgba(218,190,143,.75);
-
-    border-radius:4px;
-}
-
-
-.victim-file-icon:before{
-    content:"";
-
-    position:absolute;
-
-    left:7px;
-    top:8px;
-
-    width:20px;
-    height:1px;
-
-    background:#d9bd91;
-
-    box-shadow:
-        0 6px #d9bd91,
-        0 12px #d9bd91;
-}
-
-
-.victim-file-icon:after{
-    content:"";
-
-    position:absolute;
-
-    right:-1px;
-    top:-1px;
-
-    width:9px;
-    height:9px;
-
-    border-left:1px solid rgba(218,190,143,.75);
-    border-bottom:1px solid rgba(218,190,143,.75);
-}
-
-
-/* device icon */
-
-.device-icon{
-    border:1.5px solid #d8c3a1;
-
-    border-radius:7px;
-}
-
-
-.device-icon:after{
-    content:"";
-
-    position:absolute;
-
-    left:50%;
-    bottom:3px;
-
-    width:4px;
-    height:4px;
-
-    transform:translateX(-50%);
-
-    border-radius:50%;
-
-    background:#d8c3a1;
 }
 
 
 /* =========================================================
    PHONE
-   ========================================================= */
+========================================================= */
 
 .phone-shell{
+
     position:relative;
 
     width:390px;
     height:795px;
 
-    max-width:76vw;
+    max-width:84vw;
     max-height:91vh;
 
     transition:
-        opacity .25s ease,
-        transform .25s ease;
+        opacity .28s ease,
+        transform .28s ease;
+
+    z-index:20;
+
 }
 
 
 .phone-shell.hidden-phone{
+
     opacity:0;
 
     transform:
-        scale(.9)
-        translateY(12px);
+        scale(.88)
+        translateY(20px);
 
     pointer-events:none;
+
 }
 
 
+/* =========================================================
+   PHONE FRAME
+========================================================= */
+
 .phone-frame{
+
     width:100%;
     height:100%;
 
     padding:6px;
 
-    border-radius:48px;
+    border-radius:49px;
 
     background:
         linear-gradient(
             145deg,
-            #444,
-            #080808 45%,
-            #282828
+            #3c3c3c 0%,
+            #0a0a0a 42%,
+            #262626 100%
         );
 
     box-shadow:
-        0 35px 70px rgba(0,0,0,.65),
-        0 4px 12px rgba(255,255,255,.05);
+        0 35px 80px rgba(0,0,0,.65),
+        0 8px 20px rgba(0,0,0,.35);
+
 }
 
 
+/* =========================================================
+   PHONE BEZEL
+========================================================= */
+
 .phone-bezel{
+
     position:relative;
 
     width:100%;
@@ -300,283 +291,219 @@ button{
 
     overflow:hidden;
 
-    border-radius:42px;
+    border-radius:43px;
 
-    border:3px solid #080808;
+    border:
+        2px solid
+        #070707;
 
     background:#111;
+
 }
 
 
-.screen{
-    position:absolute;
+/* =========================================================
+   GENERIC SCREEN
+========================================================= */
 
+.screen{
+
+    position:absolute;
     inset:0;
 
     overflow:hidden;
+
 }
 
-
 .hidden{
+
     display:none!important;
+
 }
 
 
 /* =========================================================
    STATUS BAR
-   ========================================================= */
+========================================================= */
 
 .android-status{
+
     position:absolute;
 
     top:0;
     left:0;
     right:0;
 
-    height:42px;
+    height:40px;
 
     padding:
-        12px
-        17px
-        0;
+        11px 17px 0;
 
     display:flex;
-
+    align-items:flex-start;
     justify-content:space-between;
-    align-items:center;
 
     z-index:100;
 
-    color:#fff;
+    color:white;
 
-    font-size:12px;
+    font-size:11px;
+    font-weight:500;
 
-    font-weight:600;
+    text-shadow:
+        0 1px 3px rgba(0,0,0,.7);
 
-    text-shadow:0 1px 3px #000;
 }
-
 
 .status-right{
+
     display:flex;
     align-items:center;
-    gap:9px;
+
+    gap:7px;
+
 }
 
+.signal-icon svg,
+.wifi-icon svg,
+.battery-icon svg{
 
-.signal-icon{
     width:16px;
-    height:11px;
+    height:16px;
 
-    position:relative;
+    fill:none;
+
+    stroke:currentColor;
+    stroke-width:1.4;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
 }
 
+.signal-icon svg path{
 
-.signal-icon:before{
-    content:"";
+    fill:currentColor;
+    stroke:none;
 
-    position:absolute;
-
-    right:0;
-    bottom:0;
-
-    width:3px;
-    height:3px;
-
-    background:#fff;
-
-    box-shadow:
-        -4px 2px #fff,
-        -8px 4px #fff,
-        -12px 6px #fff;
-}
-
-
-.wifi-icon{
-    width:15px;
-    height:11px;
-
-    position:relative;
-
-    border-top:2px solid #fff;
-
-    border-radius:50%;
-}
-
-
-.wifi-icon:before{
-    content:"";
-
-    position:absolute;
-
-    left:2px;
-    top:2px;
-
-    width:9px;
-    height:6px;
-
-    border-top:2px solid #fff;
-
-    border-radius:50%;
-}
-
-
-.wifi-icon:after{
-    content:"";
-
-    position:absolute;
-
-    left:6px;
-    top:6px;
-
-    width:3px;
-    height:3px;
-
-    border-radius:50%;
-
-    background:#fff;
-}
-
-
-.battery-icon{
-    width:20px;
-    height:10px;
-
-    border:1px solid rgba(255,255,255,.9);
-
-    border-radius:3px;
-
-    position:relative;
-}
-
-
-.battery-icon:before{
-    content:"";
-
-    position:absolute;
-
-    left:2px;
-    top:2px;
-
-    width:14px;
-    height:4px;
-
-    background:#fff;
-
-    border-radius:1px;
-}
-
-
-.battery-icon:after{
-    content:"";
-
-    position:absolute;
-
-    right:-3px;
-    top:2px;
-
-    width:2px;
-    height:5px;
-
-    background:#fff;
-
-    border-radius:0 1px 1px 0;
 }
 
 
 /* =========================================================
    LOCK SCREEN
-   ========================================================= */
+   YOUR PNG
+========================================================= */
 
 .lock-screen{
+
+    color:white;
+
     background:
         url("phone-lock.png")
-        center /
-        cover
+        center/cover
         no-repeat;
 
-    color:#fff;
 }
 
 
-.lock-screen:after{
+.lock-screen::after{
+
     content:"";
 
     position:absolute;
-
     inset:0;
 
     background:
         linear-gradient(
             to bottom,
             rgba(0,0,0,.12),
-            transparent 38%,
+            transparent 35%,
             rgba(0,0,0,.22)
         );
 
     pointer-events:none;
+
 }
 
 
+/* =========================================================
+   LOCK DATE / TIME
+========================================================= */
+
 .lock-date{
+
     position:absolute;
 
-    top:105px;
+    top:104px;
     left:15px;
     right:15px;
 
     text-align:center;
 
     font-size:17px;
+    font-weight:500;
 
     z-index:2;
+
 }
 
-
 .lock-time{
+
     position:absolute;
 
-    top:132px;
+    top:129px;
     left:0;
     right:0;
 
     text-align:center;
 
     font-size:64px;
-
     font-weight:300;
 
     letter-spacing:-3px;
 
     z-index:2;
+
 }
 
 
 .lock-weather{
+
     position:absolute;
 
-    top:220px;
+    top:218px;
     left:0;
     right:0;
 
     display:flex;
 
     justify-content:center;
+    align-items:center;
 
     gap:7px;
 
     font-size:16px;
 
     z-index:2;
+
+}
+
+.lock-weather svg{
+
+    width:25px;
+    height:25px;
+
+    fill:white;
+
 }
 
 
-.weather-symbol{
-    font-size:23px;
-}
-
+/* =========================================================
+   LOCK BOTTOM
+========================================================= */
 
 .lock-bottom{
+
     position:absolute;
 
     left:28px;
@@ -584,122 +511,78 @@ button{
     bottom:35px;
 
     display:flex;
-
     justify-content:space-between;
     align-items:center;
 
     z-index:2;
+
 }
 
 
 .lock-shortcut{
+
     width:45px;
     height:45px;
-
-    border-radius:50%;
 
     display:grid;
     place-items:center;
 
-    background:rgba(0,0,0,.35);
+    padding:0;
+
+    border-radius:50%;
+
+    background:
+        rgba(0,0,0,.34);
 
     backdrop-filter:blur(7px);
 
-    border:1px solid rgba(255,255,255,.28);
+    border:
+        1px solid
+        rgba(255,255,255,.27);
+
+    color:white;
+
 }
 
+.lock-shortcut svg{
 
-.camera-mini-icon{
-    width:19px;
-    height:14px;
+    width:21px;
+    height:21px;
 
-    border:2px solid white;
+    fill:none;
 
-    border-radius:4px;
+    stroke:currentColor;
+    stroke-width:1.5;
 
-    position:relative;
-}
+    stroke-linecap:round;
+    stroke-linejoin:round;
 
-
-.camera-mini-icon:before{
-    content:"";
-
-    position:absolute;
-
-    left:5px;
-    top:2px;
-
-    width:6px;
-    height:6px;
-
-    border:1px solid white;
-
-    border-radius:50%;
-}
-
-
-.camera-mini-icon:after{
-    content:"";
-
-    position:absolute;
-
-    left:3px;
-    top:-5px;
-
-    width:7px;
-    height:3px;
-
-    border-radius:2px;
-
-    background:white;
-}
-
-
-.phone-mini-icon{
-    width:17px;
-    height:17px;
-
-    position:relative;
-}
-
-
-.phone-mini-icon:before{
-    content:"";
-
-    position:absolute;
-
-    inset:1px;
-
-    border-left:3px solid white;
-    border-bottom:3px solid white;
-
-    border-radius:3px 0 8px 5px;
-
-    transform:rotate(-45deg);
 }
 
 
 .unlock-hint{
+
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
 
     gap:4px;
 
     font-size:10px;
 
-    text-shadow:0 1px 3px black;
-}
+    text-shadow:
+        0 1px 3px black;
 
+}
 
 .unlock-arrow{
+
     font-size:22px;
 
-    animation:unlockArrow 1.4s infinite;
-}
+    animation:
+        unlockArrow 1.4s infinite;
 
+}
 
 @keyframes unlockArrow{
 
@@ -717,32 +600,40 @@ button{
 
 /* =========================================================
    PASSCODE
-   ========================================================= */
+========================================================= */
 
 .passcode-screen{
+
     background:
         url("phone-lock.png")
-        center /
-        cover
+        center/cover
         no-repeat;
+
+    color:white;
+
 }
 
 
-.passcode-screen:after{
+.passcode-screen::after{
+
     content:"";
 
     position:absolute;
-
     inset:0;
 
-    background:rgba(0,0,0,.48);
+    background:
+        rgba(0,0,0,.48);
+
+    pointer-events:none;
+
 }
 
 
 .passcode-title{
+
     position:absolute;
 
-    top:100px;
+    top:96px;
 
     left:0;
     right:0;
@@ -750,70 +641,53 @@ button{
     text-align:center;
 
     z-index:2;
+
 }
 
 
-.passcode-lock-icon{
-    width:22px;
-    height:18px;
+.passcode-lock{
 
-    display:block;
+    width:25px;
+    height:25px;
 
-    margin:
-        0
-        auto
-        12px;
+    fill:none;
 
-    border:2px solid white;
+    stroke:white;
 
-    border-radius:3px;
+    stroke-width:1.5;
 
-    position:relative;
-}
+    margin-bottom:8px;
 
-
-.passcode-lock-icon:before{
-    content:"";
-
-    position:absolute;
-
-    left:4px;
-    top:-12px;
-
-    width:10px;
-    height:13px;
-
-    border:
-        2px solid white;
-
-    border-bottom:0;
-
-    border-radius:8px 8px 0 0;
 }
 
 
 .passcode-title h2{
+
     margin:0;
 
     font-size:20px;
 
     font-weight:500;
+
 }
 
 
 .passcode-title p{
+
     margin-top:7px;
 
     font-size:11px;
 
-    opacity:.65;
+    opacity:.72;
+
 }
 
 
 .passcode-dots{
+
     position:absolute;
 
-    top:210px;
+    top:207px;
 
     left:0;
     right:0;
@@ -825,25 +699,37 @@ button{
     gap:12px;
 
     z-index:2;
+
 }
 
 
 .passcode-dots span{
+
     width:9px;
     height:9px;
 
     border-radius:50%;
 
-    border:1px solid white;
+    border:
+        1px solid
+        white;
+
 }
 
 
 .passcode-dots span.filled{
+
     background:white;
+
 }
 
 
+/* =========================================================
+   PASSCODE PAD
+========================================================= */
+
 .passcode-pad{
+
     position:absolute;
 
     top:255px;
@@ -859,47 +745,60 @@ button{
     gap:13px 15px;
 
     z-index:2;
+
 }
 
 
 .passcode-pad button{
+
     width:72px;
     height:72px;
 
     justify-self:center;
 
-    border:1px solid rgba(255,255,255,.18);
+    border:0;
 
     border-radius:50%;
 
     background:
-        rgba(30,30,30,.72);
+        rgba(30,30,30,.68);
 
     color:white;
 
     font-size:26px;
 
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
     backdrop-filter:blur(5px);
+
 }
 
 
 .passcode-pad button:active{
+
     transform:scale(.92);
 
-    background:rgba(100,100,100,.75);
+    background:
+        rgba(100,100,100,.72);
+
 }
 
 
 .passcode-pad button small{
+
     display:block;
 
     font-size:8px;
 
     margin-top:2px;
+
 }
 
 
 .passcode-error{
+
     position:absolute;
 
     top:690px;
@@ -911,30 +810,36 @@ button{
 
     font-size:12px;
 
-    color:#f0b2a7;
-
     z-index:3;
+
 }
 
 
 /* =========================================================
    HOME SCREEN
-   ========================================================= */
+   YOUR PNG
+========================================================= */
 
 .home-screen{
+
     background:
         url("phone-home.png")
-        center /
-        cover
+        center/cover
         no-repeat;
 
     color:white;
 
     touch-action:pan-y;
+
 }
 
 
+/* =========================================================
+   HOME PAGES
+========================================================= */
+
 .home-pages{
+
     position:absolute;
 
     inset:0;
@@ -946,10 +851,12 @@ button{
     transition:
         transform .35s
         cubic-bezier(.2,.8,.2,1);
+
 }
 
 
 .home-page{
+
     position:relative;
 
     width:33.333333%;
@@ -957,10 +864,16 @@ button{
     flex-shrink:0;
 
     height:100%;
+
 }
 
 
+/* =========================================================
+   CLOCK
+========================================================= */
+
 .android-clock-widget{
+
     position:absolute;
 
     top:67px;
@@ -968,26 +881,36 @@ button{
 
     text-shadow:
         0 2px 5px rgba(0,0,0,.45);
+
 }
 
 
 .android-clock-widget div:first-child{
+
     font-size:48px;
 
     font-weight:300;
 
     letter-spacing:-2px;
+
 }
 
 
 .android-clock-widget div:last-child{
+
     margin-top:3px;
 
     font-size:13px;
+
 }
 
 
+/* =========================================================
+   SEARCH
+========================================================= */
+
 .google-search{
+
     position:absolute;
 
     top:160px;
@@ -998,16 +921,17 @@ button{
     height:49px;
 
     display:flex;
-
     align-items:center;
 
     gap:8px;
 
-    padding:0 13px;
+    padding:
+        0 13px;
 
     border-radius:28px;
 
-    background:rgba(255,255,255,.94);
+    background:
+        rgba(255,255,255,.94);
 
     box-shadow:
         0 4px 12px rgba(0,0,0,.18);
@@ -1015,25 +939,31 @@ button{
     color:#555;
 
     z-index:40;
+
 }
 
 
-.google-g{
-    font-size:24px;
+.google-search-icon{
 
-    font-weight:700;
+    width:20px;
+    height:20px;
 
-    color:#4285f4;
+    fill:none;
+
+    stroke:#4285f4;
+
+    stroke-width:2.5;
+
 }
 
 
 .google-search input{
+
     flex:1;
 
     min-width:0;
 
     border:0;
-
     outline:0;
 
     background:transparent;
@@ -1041,61 +971,54 @@ button{
     color:#333;
 
     font-size:14px;
+
 }
 
 
 .google-search input::placeholder{
+
     color:#777;
+
 }
 
 
 .google-search button{
+
     border:0;
 
     background:transparent;
 
     color:#777;
 
-    font-size:22px;
+    font-size:21px;
 
     padding:2px 5px;
+
 }
 
 
-.search-mic-icon{
-    width:11px;
-    height:16px;
+.mic-icon{
 
-    border:2px solid #4285f4;
+    width:18px;
+    height:18px;
 
-    border-radius:8px;
+    fill:none;
 
-    position:relative;
-}
+    stroke:#4285f4;
 
+    stroke-width:1.7;
 
-.search-mic-icon:after{
-    content:"";
+    stroke-linecap:round;
 
-    position:absolute;
-
-    left:-5px;
-    bottom:-5px;
-
-    width:17px;
-    height:7px;
-
-    border-bottom:2px solid #4285f4;
-
-    border-radius:50%;
 }
 
 
 /* =========================================================
    APP GRID
-   ========================================================= */
+========================================================= */
 
 .app-grid{
+
     position:absolute;
 
     top:235px;
@@ -1111,32 +1034,45 @@ button{
     gap:27px 13px;
 
     justify-items:center;
+
 }
 
 
 .home-page:nth-child(2) .app-grid,
 .home-page:nth-child(3) .app-grid{
+
     top:165px;
+
 }
 
 
 .page-label{
+
     position:absolute;
 
     top:90px;
     left:25px;
 
-    font-family:Georgia,serif;
+    font-family:
+        Georgia,
+        serif;
 
     font-size:19px;
 
     letter-spacing:3px;
 
-    text-shadow:0 2px 4px black;
+    text-shadow:
+        0 2px 4px black;
+
 }
 
 
+/* =========================================================
+   APP BUTTON
+========================================================= */
+
 .app-icon{
+
     width:70px;
 
     padding:0;
@@ -1156,26 +1092,37 @@ button{
     gap:6px;
 
     text-shadow:
-        0 1px 3px rgba(0,0,0,.7);
+        0 1px 3px rgba(0,0,0,.65);
 
     transition:
         transform .12s;
+
 }
 
 
 .app-icon:active{
-    transform:scale(.91);
+
+    transform:
+        scale(.91);
+
 }
 
 
-.app-icon>span:last-child{
+.app-icon > span:last-child{
+
     font-size:10px;
 
     white-space:nowrap;
+
 }
 
 
+/* =========================================================
+   REAL APP ICONS
+========================================================= */
+
 .real-icon{
+
     width:58px;
     height:58px;
 
@@ -1185,458 +1132,192 @@ button{
 
     place-items:center;
 
-    position:relative;
+    color:white;
 
     box-shadow:
-        0 5px 12px rgba(0,0,0,.28);
+        0 5px 10px rgba(0,0,0,.25);
+
 }
 
 
-/* =========================================================
-   REALISTIC-STYLE APP ICONS
-   ========================================================= */
-
-.phone-icon{
-    background:
-        linear-gradient(
-            145deg,
-            #5ee783,
-            #18bb59
-        );
-}
-
-
-.phone-icon:before{
-    content:"";
-
-    width:21px;
-    height:28px;
-
-    border:3px solid white;
-
-    border-top-color:transparent;
-    border-right-color:transparent;
-
-    border-radius:
-        4px 5px 13px 5px;
-
-    transform:
-        rotate(-45deg);
-}
-
-
-.messages-icon{
-    background:
-        linear-gradient(
-            145deg,
-            #62df85,
-            #16bd5a
-        );
-}
-
-
-.messages-icon:before{
-    content:"";
-
-    width:30px;
-    height:23px;
-
-    border:3px solid white;
-
-    border-radius:9px;
-
-    background:transparent;
-}
-
-
-.messages-icon:after{
-    content:"";
-
-    position:absolute;
-
-    width:9px;
-    height:9px;
-
-    left:17px;
-    top:36px;
-
-    border-left:3px solid white;
-
-    transform:skew(-25deg);
-}
-
-
-.gallery-icon{
-    background:
-        linear-gradient(
-            145deg,
-            #ffbd68,
-            #ec5e99 55%,
-            #5ebbe7
-        );
-}
-
-
-.gallery-icon:before{
-    content:"";
-
-    width:34px;
-    height:29px;
-
-    border:3px solid white;
-
-    border-radius:6px;
-}
-
-
-.gallery-icon:after{
-    content:"";
-
-    position:absolute;
-
-    width:18px;
-    height:13px;
-
-    border-left:3px solid white;
-    border-top:3px solid white;
-
-    transform:
-        rotate(45deg);
-
-    top:21px;
-}
-
-
-.notes-icon{
-    background:
-        linear-gradient(
-            145deg,
-            #6cd9ef,
-            #319de1
-        );
-}
-
-
-.notes-icon:before{
-    content:"";
-
-    width:29px;
-    height:35px;
-
-    background:white;
-
-    border-radius:4px;
-
-    box-shadow:
-        inset 0 -6px rgba(255,255,255,.3);
-}
-
-
-.notes-icon:after{
-    content:"";
-
-    width:17px;
-    height:2px;
-
-    position:absolute;
-
-    background:#319de1;
-
-    box-shadow:
-        0 6px #319de1,
-        0 12px #319de1;
-}
-
-
-.contacts-icon{
-    background:
-        linear-gradient(
-            145deg,
-            #79baff,
-            #347ce5
-        );
-}
-
-
-.contacts-icon:before{
-    content:"";
-
-    width:14px;
-    height:14px;
-
-    border:3px solid white;
-
-    border-radius:50%;
-
-    position:absolute;
-
-    top:11px;
-}
-
-
-.contacts-icon:after{
-    content:"";
-
-    width:28px;
-    height:14px;
-
-    border:
-        3px solid white;
-
-    border-bottom:0;
-
-    border-radius:
-        18px 18px 0 0;
-
-    position:absolute;
-
-    bottom:10px;
-}
-
-
-.browser-icon{
-    background:
-        linear-gradient(
-            145deg,
-            #53b1f4,
-            #1765c8
-        );
-}
-
-
-.browser-icon:before{
-    content:"";
+.real-icon svg{
 
     width:34px;
     height:34px;
 
-    border:
-        3px solid white;
+    fill:none;
 
-    border-radius:50%;
+    stroke:currentColor;
+
+    stroke-width:1.7;
+
+    stroke-linecap:round;
+
+    stroke-linejoin:round;
+
 }
 
 
-.browser-icon:after{
-    content:"";
+/* PHONE */
 
-    width:3px;
-    height:38px;
+.phone-icon{
 
-    background:white;
+    background:
+        linear-gradient(
+            145deg,
+            #51db78,
+            #18bd5b
+        );
 
-    transform:
-        rotate(45deg);
 }
 
+
+/* MESSAGES */
+
+.messages-icon{
+
+    background:
+        linear-gradient(
+            145deg,
+            #4ddd78,
+            #19bd5d
+        );
+
+}
+
+
+/* GALLERY */
+
+.gallery-icon{
+
+    background:
+        linear-gradient(
+            145deg,
+            #ff9a78,
+            #ee5c9b
+        );
+
+}
+
+
+/* NOTES */
+
+.notes-icon{
+
+    background:
+        linear-gradient(
+            145deg,
+            #58cbe9,
+            #299bd4
+        );
+
+}
+
+
+/* CONTACTS */
+
+.contacts-icon{
+
+    background:
+        linear-gradient(
+            145deg,
+            #65a9f7,
+            #3877d7
+        );
+
+}
+
+
+/* BROWSER */
+
+.browser-icon{
+
+    background:
+        linear-gradient(
+            145deg,
+            #5da8ee,
+            #337bc9
+        );
+
+}
+
+
+/* CAMERA */
 
 .camera-icon{
+
     background:
         linear-gradient(
             145deg,
-            #68727a,
-            #242a2f
+            #707980,
+            #31373c
         );
+
 }
 
 
-.camera-icon:before{
-    content:"";
-
-    width:35px;
-    height:24px;
-
-    border:3px solid white;
-
-    border-radius:6px;
-}
-
-
-.camera-icon:after{
-    content:"";
-
-    width:11px;
-    height:11px;
-
-    border:3px solid white;
-
-    border-radius:50%;
-
-    position:absolute;
-}
-
+/* SETTINGS */
 
 .settings-icon{
+
     background:
         linear-gradient(
             145deg,
-            #f2f2f2,
-            #adb2b6
+            #eeeeee,
+            #b9bec2
         );
+
+    color:#3b3b3b;
+
 }
 
 
-.settings-icon:before{
-    content:"⚙";
-
-    color:#454545;
-
-    font-size:30px;
-}
-
+/* OTHER APPS */
 
 .bank-icon{
+
     background:
         linear-gradient(
             145deg,
-            #7184aa,
-            #26395c
+            #7186ad,
+            #304361
         );
-}
 
-
-.bank-icon:before{
-    content:"";
-
-    width:34px;
-    height:22px;
-
-    border:
-        3px solid white;
-
-    border-top:0;
-
-    position:absolute;
-
-    bottom:12px;
-}
-
-
-.bank-icon:after{
-    content:"";
-
-    width:0;
-    height:0;
-
-    border-left:20px solid transparent;
-    border-right:20px solid transparent;
-    border-bottom:12px solid white;
-
-    position:absolute;
-
-    top:12px;
 }
 
 
 .music-icon{
+
     background:
         linear-gradient(
             145deg,
-            #ff7898,
-            #e94670
+            #ff829c,
+            #e84970
         );
-}
 
-
-.music-icon:before{
-    content:"♪";
-
-    color:white;
-
-    font-size:35px;
 }
 
 
 .clock-icon{
+
     background:
         linear-gradient(
             145deg,
-            #fff,
-            #c9ced2
+            #ffffff,
+            #c8cdd0
         );
-}
 
+    color:#333;
 
-.clock-icon:before{
-    content:"";
-
-    width:34px;
-    height:34px;
-
-    border:3px solid #454545;
-
-    border-radius:50%;
-}
-
-
-.clock-icon:after{
-    content:"";
-
-    width:3px;
-    height:13px;
-
-    background:#454545;
-
-    position:absolute;
-
-    top:15px;
-
-    left:29px;
-
-    transform-origin:bottom;
-
-    transform:rotate(-25deg);
-}
-
-
-.files-icon{
-    background:
-        linear-gradient(
-            145deg,
-            #e1ae5e,
-            #a56c27
-        );
-}
-
-
-.files-icon:before{
-    content:"";
-
-    width:34px;
-    height:27px;
-
-    background:white;
-
-    border-radius:4px;
-
-    position:absolute;
-
-    top:21px;
-}
-
-
-.files-icon:after{
-    content:"";
-
-    width:17px;
-    height:6px;
-
-    background:white;
-
-    border-radius:4px 4px 0 0;
-
-    position:absolute;
-
-    top:15px;
-    left:12px;
 }
 
 
 /* =========================================================
-   SEARCH
-   ========================================================= */
+   SEARCH RESULTS
+========================================================= */
 
 .search-results{
+
     position:absolute;
 
     top:215px;
@@ -1648,7 +1329,8 @@ button{
 
     overflow-y:auto;
 
-    background:rgba(255,255,255,.97);
+    background:
+        rgba(255,255,255,.97);
 
     color:#222;
 
@@ -1660,10 +1342,12 @@ button{
         0 8px 25px rgba(0,0,0,.35);
 
     padding:7px;
+
 }
 
 
 .search-result{
+
     width:100%;
 
     border:0;
@@ -1681,27 +1365,33 @@ button{
     text-align:left;
 
     color:#222;
+
 }
 
 
 .search-result:hover{
+
     background:#eee;
 
     border-radius:12px;
+
 }
 
 
 .search-result .real-icon{
+
     width:43px;
     height:43px;
+
 }
 
 
 /* =========================================================
    PAGE DOTS
-   ========================================================= */
+========================================================= */
 
 .page-dots{
+
     position:absolute;
 
     left:0;
@@ -1716,33 +1406,40 @@ button{
     gap:6px;
 
     z-index:30;
+
 }
 
 
 .page-dots span{
+
     width:6px;
     height:6px;
 
     border-radius:50%;
 
-    background:rgba(255,255,255,.55);
+    background:
+        rgba(255,255,255,.55);
+
 }
 
 
 .page-dots span.active{
+
     width:18px;
 
     background:white;
 
     border-radius:8px;
+
 }
 
 
 /* =========================================================
    DOCK
-   ========================================================= */
+========================================================= */
 
 .android-dock{
+
     position:absolute;
 
     left:18px;
@@ -1763,15 +1460,19 @@ button{
 
     border-radius:22px;
 
-    background:rgba(255,255,255,.2);
+    background:
+        rgba(255,255,255,.18);
 
-    backdrop-filter:blur(14px);
+    backdrop-filter:
+        blur(14px);
 
     z-index:25;
+
 }
 
 
 .dock-icon{
+
     width:49px;
     height:49px;
 
@@ -1783,29 +1484,43 @@ button{
 
     color:white;
 
-    background-color:transparent;
+    display:grid;
+    place-items:center;
 
-    box-shadow:
-        0 3px 8px rgba(0,0,0,.2);
+}
+
+
+.dock-icon svg{
+
+    width:28px;
+    height:28px;
+
+    fill:none;
+
+    stroke:currentColor;
+
+    stroke-width:1.7;
+
+    stroke-linecap:round;
+
+    stroke-linejoin:round;
+
 }
 
 
 .dock-icon:active{
+
     transform:scale(.9);
-}
 
-
-.dock-icon:before,
-.dock-icon:after{
-    pointer-events:none;
 }
 
 
 /* =========================================================
    ANDROID NAVIGATION
-   ========================================================= */
+========================================================= */
 
 .android-nav{
+
     position:absolute;
 
     left:0;
@@ -1821,15 +1536,17 @@ button{
 
     align-items:center;
 
-    background:rgba(0,0,0,.86);
+    background:
+        rgba(0,0,0,.86);
 
     z-index:400;
+
 }
 
 
 .android-nav button{
-    width:33%;
 
+    width:33%;
     height:30px;
 
     border:0;
@@ -1837,60 +1554,53 @@ button{
     background:transparent;
 
     color:white;
+
 }
 
 
-.nav-back-icon{
-    width:13px;
-    height:13px;
+.android-nav svg{
 
-    display:inline-block;
+    width:18px;
+    height:18px;
 
-    border-left:2px solid currentColor;
-    border-bottom:2px solid currentColor;
+    fill:none;
 
-    transform:rotate(45deg);
+    stroke:currentColor;
+
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+
+    stroke-linejoin:round;
+
 }
 
 
-.nav-home-icon{
-    width:11px;
-    height:11px;
+.android-nav button:active{
 
-    display:inline-block;
+    background:
+        rgba(255,255,255,.15);
 
-    border:2px solid currentColor;
-
-    border-radius:50%;
-}
-
-
-.nav-recent-icon{
-    width:13px;
-    height:13px;
-
-    display:inline-block;
-
-    border:2px solid currentColor;
-
-    border-radius:2px;
 }
 
 
 /* =========================================================
    APP SCREEN
-   ========================================================= */
+========================================================= */
 
 .app-screen{
+
     background:white;
 
     color:#222;
 
     z-index:100;
+
 }
 
 
 .app-topbar{
+
     position:absolute;
 
     top:0;
@@ -1900,24 +1610,31 @@ button{
     height:60px;
 
     display:flex;
-
     align-items:center;
 
     gap:10px;
 
-    padding:8px 13px;
+    padding:
+        8px 13px;
 
-    background:rgba(255,255,255,.97);
+    background:
+        rgba(255,255,255,.97);
 
-    border-bottom:1px solid #ddd;
+    border-bottom:
+        1px solid #ddd;
 
     z-index:10;
+
 }
 
 
 .android-back{
+
     width:40px;
     height:40px;
+
+    display:grid;
+    place-items:center;
 
     border:0;
 
@@ -1925,15 +1642,30 @@ button{
 
     color:#333;
 
-    display:grid;
+}
 
-    place-items:center;
+
+.android-back svg{
+
+    width:24px;
+    height:24px;
+
+    fill:none;
+
+    stroke:currentColor;
+
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+
+    stroke-linejoin:round;
+
 }
 
 
 .app-title{
-    display:flex;
 
+    display:flex;
     align-items:center;
 
     gap:8px;
@@ -1941,78 +1673,106 @@ button{
     font-weight:600;
 
     font-size:15px;
+
 }
 
 
 .header-app-icon{
+
     width:29px;
     height:29px;
 
     border-radius:8px;
 
     display:grid;
-
     place-items:center;
+
+    color:white;
+
+}
+
+
+.header-app-icon svg{
+
+    width:18px;
+    height:18px;
+
 }
 
 
 #appFrame{
+
     position:absolute;
 
     top:60px;
     left:0;
 
     width:100%;
-    height:calc(100% - 60px);
+
+    height:
+        calc(100% - 60px);
 
     border:0;
 
     background:white;
+
 }
 
 
 /* =========================================================
-   RECENTS
-   ========================================================= */
+   RECENT APPS
+========================================================= */
 
 .recent-panel{
+
     position:absolute;
 
     inset:0;
 
     z-index:300;
 
-    background:rgba(15,15,15,.97);
+    background:
+        rgba(15,15,15,.97);
 
-    padding:70px 20px 55px;
+    padding:
+        70px 20px 55px;
 
     overflow-y:auto;
+
 }
 
 
 .recent-title{
-    font-family:Georgia,serif;
+
+    font-family:
+        Georgia,
+        serif;
 
     letter-spacing:3px;
 
     margin-bottom:20px;
+
 }
 
 
 .recent-card{
+
     margin-bottom:10px;
 
     padding:12px;
 
     background:#242424;
 
-    border:1px solid #444;
+    border:
+        1px solid #444;
 
     border-radius:13px;
+
 }
 
 
 .recent-open{
+
     width:100%;
 
     border:0;
@@ -2028,16 +1788,20 @@ button{
     gap:12px;
 
     text-align:left;
+
 }
 
 
 .recent-open .real-icon{
+
     width:45px;
     height:45px;
+
 }
 
 
 .recent-close{
+
     margin-top:15px;
 
     padding:10px 20px;
@@ -2046,210 +1810,46 @@ button{
 
     color:white;
 
-    border:1px solid #777;
+    border:
+        1px solid #777;
 
     border-radius:8px;
-}
 
-
-/* =========================================================
-   VICTIM INFO PANEL
-   OUTSIDE PHONE
-   ========================================================= */
-
-.victim-panel{
-    position:fixed;
-
-    inset:0;
-
-    z-index:2000;
-
-    background:
-        url("phone-bg.png")
-        center /
-        cover
-        no-repeat;
-
-    display:flex;
-
-    flex-direction:column;
-}
-
-
-.victim-panel:before{
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-        rgba(18,12,7,.74);
-
-    pointer-events:none;
-}
-
-
-.victim-panel-header{
-    position:relative;
-
-    z-index:2;
-
-    height:105px;
-
-    flex:0 0 105px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    padding:25px 45px;
-
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(12,8,5,.9),
-            rgba(12,8,5,.5)
-        );
-
-    border-bottom:
-        1px solid
-        rgba(214,179,116,.25);
-}
-
-
-.victim-panel-kicker{
-    display:block;
-
-    color:#c8a979;
-
-    font-size:9px;
-
-    letter-spacing:3px;
-
-    margin-bottom:5px;
-}
-
-
-.victim-panel-header h1{
-    margin:0;
-
-    font-family:Georgia,"Times New Roman",serif;
-
-    font-size:24px;
-
-    font-weight:400;
-
-    letter-spacing:4px;
-}
-
-
-.victim-close{
-    width:48px;
-    height:48px;
-
-    border:1px solid rgba(255,255,255,.22);
-
-    border-radius:50%;
-
-    background:rgba(0,0,0,.3);
-
-    position:relative;
-}
-
-
-.victim-close span{
-    position:absolute;
-
-    left:13px;
-    top:23px;
-
-    width:21px;
-    height:1px;
-
-    background:white;
-}
-
-
-.victim-close span:first-child{
-    transform:rotate(45deg);
-}
-
-
-.victim-close span:last-child{
-    transform:rotate(-45deg);
-}
-
-
-.victim-close:hover{
-    background:rgba(255,255,255,.1);
-}
-
-
-#victimFrame{
-    position:relative;
-
-    z-index:2;
-
-    flex:1;
-
-    width:100%;
-
-    border:0;
-
-    background:transparent;
 }
 
 
 /* =========================================================
    RESPONSIVE
-   ========================================================= */
+========================================================= */
 
-@media(max-width:1100px){
-
-    .game-controls{
-        right:18px;
-    }
-
-    .game-side-button{
-        width:175px;
-    }
-
-}
-
-
-@media(max-width:700px){
+@media(max-width:600px){
 
     .phone-shell{
+
         width:88vw;
         height:90vh;
+
     }
 
     .game-controls{
-        right:8px;
 
-        top:auto;
+        right:8px;
         bottom:12px;
 
-        transform:none;
-
-        flex-direction:row;
     }
 
-    .game-side-button{
-        width:auto;
+    .side-control{
 
-        min-width:55px;
+        width:145px;
+        height:45px;
 
-        min-height:48px;
-
-        padding:8px;
     }
 
-    .side-button-text{
-        display:none;
+    .side-control-text{
+
+        font-size:9px;
+        letter-spacing:1.8px;
+
     }
 
 }
@@ -2258,15 +1858,21 @@ button{
 @media(max-height:700px){
 
     .phone-shell{
+
         height:94vh;
+
     }
 
     .app-grid{
+
         top:220px;
+
     }
 
     .google-search{
+
         top:145px;
+
     }
 
 }
