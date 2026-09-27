@@ -1,1 +1,138 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Phone</title><link rel="stylesheet" href="app.css"><link rel="stylesheet" href="calls.css"></head><body><div class="app"><header class="app-header"><button class="back" id="backBtn">‹</button><div class="header-title">Phone</div><button class="header-action">Edit</button></header><main class="content" id="callsContent"></main></div><script src="calls.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Phone</title>
+
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="calls.css">
+</head>
+
+<body>
+
+<div class="phone-app">
+
+    <!-- TOP NAVIGATION -->
+    <header class="phone-top">
+
+        <button class="top-icon active" id="callsTab">
+            ☎
+        </button>
+
+        <button class="top-icon" id="contactsTab">
+            ♟
+        </button>
+
+        <button class="top-icon">
+            ⬡
+        </button>
+
+    </header>
+
+
+    <!-- SEARCH -->
+    <div class="search-box">
+        <span class="search-icon">⌕</span>
+        <input
+            type="text"
+            id="callSearch"
+            placeholder="Search contacts"
+        >
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+    <main id="callsContent"></main>
+
+
+    <!-- IN-CALL SCREEN -->
+    <div id="callScreen" class="call-screen hidden">
+
+        <button class="call-back" id="callBack">
+            ‹
+        </button>
+
+        <div class="calling-person">
+
+            <div class="call-avatar" id="callingAvatar">
+                JD
+            </div>
+
+            <h1 id="callingName">
+                John Doe
+            </h1>
+
+            <p id="callingNumber">
+                +1 000 000 0000
+            </p>
+
+            <div class="calling-status" id="callingStatus">
+                DIALLING
+            </div>
+
+        </div>
+
+
+        <div class="call-controls">
+
+            <button class="call-control disabled">
+                <span>▣</span>
+                <small>Video call</small>
+            </button>
+
+            <button class="call-control disabled">
+                <span>＋</span>
+                <small>Add call</small>
+            </button>
+
+            <button class="call-control">
+                <span>⌑</span>
+                <small>Note</small>
+            </button>
+
+
+            <button class="call-control">
+                <span>♩</span>
+                <small>Mute</small>
+            </button>
+
+            <button class="call-control">
+                <span>Ⅱ</span>
+                <small>Hold</small>
+            </button>
+
+            <button class="call-control">
+                <span>▣</span>
+                <small>Record</small>
+            </button>
+
+        </div>
+
+
+        <div class="call-bottom">
+
+            <button class="speaker-button">
+                ◖))
+            </button>
+
+            <button class="end-call" id="endCall">
+                ☎
+            </button>
+
+            <button class="dialpad-button">
+                ⠿
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="calls.js"></script>
+
+</body>
+</html>
