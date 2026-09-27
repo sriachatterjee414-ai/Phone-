@@ -9,11 +9,11 @@ body{
     height:100%;
     overflow:hidden;
     font-family:Arial,Helvetica,sans-serif;
-    background:#111;
 }
 
 body{
-    color:white;
+    background:#21180f;
+    color:#fff;
 }
 
 button,
@@ -28,12 +28,13 @@ button{
 
 
 /* =========================================================
-   INVESTIGATION ROOM
-========================================================= */
+   WHOLE GAME BACKGROUND
+   ========================================================= */
 
 .investigation-stage{
     width:100%;
     height:100vh;
+
     position:relative;
 
     display:flex;
@@ -41,18 +42,207 @@ button{
     justify-content:center;
 
     background:
-        radial-gradient(
-            circle at center,
-            #303030 0%,
-            #181818 52%,
-            #090909 100%
+        url("phone-bg.png")
+        center center /
+        cover
+        no-repeat;
+
+    overflow:hidden;
+}
+
+
+/* =========================================================
+   SIDE CONTROLS
+   ========================================================= */
+
+.game-controls{
+    position:fixed;
+
+    right:42px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    display:flex;
+    flex-direction:column;
+
+    gap:14px;
+
+    z-index:900;
+}
+
+
+.game-side-button{
+    width:205px;
+    min-height:68px;
+
+    padding:11px 15px;
+
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    color:#eee;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(45,32,20,.94),
+            rgba(18,13,9,.97)
         );
+
+    border:1px solid rgba(214,179,116,.34);
+
+    border-radius:10px;
+
+    box-shadow:
+        0 10px 28px rgba(0,0,0,.35),
+        inset 0 1px rgba(255,255,255,.06);
+
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+}
+
+
+.game-side-button:hover{
+    transform:translateX(-4px);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(67,48,29,.96),
+            rgba(25,17,11,.98)
+        );
+
+    border-color:rgba(225,194,136,.6);
+}
+
+
+.game-side-button:active{
+    transform:translateX(-2px) scale(.98);
+}
+
+
+.side-button-icon{
+    width:34px;
+    height:34px;
+
+    flex:0 0 34px;
+
+    position:relative;
+
+    opacity:.9;
+}
+
+
+.side-button-text{
+    display:flex;
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:4px;
+}
+
+
+.side-button-text strong{
+    font-family:Georgia,"Times New Roman",serif;
+
+    font-size:11px;
+
+    letter-spacing:2px;
+
+    font-weight:500;
+}
+
+
+.side-button-text small{
+    color:rgba(255,255,255,.48);
+
+    font-size:8px;
+
+    letter-spacing:1.2px;
+}
+
+
+/* victim file icon */
+
+.victim-file-icon{
+    border:1px solid rgba(218,190,143,.75);
+
+    border-radius:4px;
+}
+
+
+.victim-file-icon:before{
+    content:"";
+
+    position:absolute;
+
+    left:7px;
+    top:8px;
+
+    width:20px;
+    height:1px;
+
+    background:#d9bd91;
+
+    box-shadow:
+        0 6px #d9bd91,
+        0 12px #d9bd91;
+}
+
+
+.victim-file-icon:after{
+    content:"";
+
+    position:absolute;
+
+    right:-1px;
+    top:-1px;
+
+    width:9px;
+    height:9px;
+
+    border-left:1px solid rgba(218,190,143,.75);
+    border-bottom:1px solid rgba(218,190,143,.75);
+}
+
+
+/* device icon */
+
+.device-icon{
+    border:1.5px solid #d8c3a1;
+
+    border-radius:7px;
+}
+
+
+.device-icon:after{
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    bottom:3px;
+
+    width:4px;
+    height:4px;
+
+    transform:translateX(-50%);
+
+    border-radius:50%;
+
+    background:#d8c3a1;
 }
 
 
 /* =========================================================
    PHONE
-========================================================= */
+   ========================================================= */
 
 .phone-shell{
     position:relative;
@@ -60,22 +250,21 @@ button{
     width:390px;
     height:795px;
 
-    max-width:86vw;
+    max-width:76vw;
     max-height:91vh;
 
     transition:
-        opacity .35s ease,
-        transform .35s ease,
-        filter .35s ease;
-
-    z-index:20;
+        opacity .25s ease,
+        transform .25s ease;
 }
+
 
 .phone-shell.hidden-phone{
     opacity:0;
+
     transform:
-        translateX(30px)
-        scale(.94);
+        scale(.9)
+        translateY(12px);
 
     pointer-events:none;
 }
@@ -85,22 +274,21 @@ button{
     width:100%;
     height:100%;
 
-    padding:7px;
+    padding:6px;
 
-    border-radius:50px;
+    border-radius:48px;
 
     background:
         linear-gradient(
             145deg,
-            #414141 0%,
-            #111 25%,
-            #050505 50%,
-            #252525 100%
+            #444,
+            #080808 45%,
+            #282828
         );
 
     box-shadow:
-        0 40px 80px rgba(0,0,0,.65),
-        inset 0 1px 1px rgba(255,255,255,.18);
+        0 35px 70px rgba(0,0,0,.65),
+        0 4px 12px rgba(255,255,255,.05);
 }
 
 
@@ -112,27 +300,22 @@ button{
 
     overflow:hidden;
 
-    border-radius:43px;
+    border-radius:42px;
 
-    border:2px solid #050505;
+    border:3px solid #080808;
 
-    background:#080808;
-
-    box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.06);
+    background:#111;
 }
 
 
-/* =========================================================
-   GENERIC SCREEN
-========================================================= */
-
 .screen{
     position:absolute;
+
     inset:0;
 
     overflow:hidden;
 }
+
 
 .hidden{
     display:none!important;
@@ -141,89 +324,119 @@ button{
 
 /* =========================================================
    STATUS BAR
-========================================================= */
+   ========================================================= */
 
-.status-bar{
+.android-status{
     position:absolute;
 
     top:0;
     left:0;
     right:0;
 
-    height:38px;
+    height:42px;
 
     padding:
-        11px
-        18px
-        0
-        18px;
+        12px
+        17px
+        0;
 
     display:flex;
+
     justify-content:space-between;
-    align-items:flex-start;
+    align-items:center;
 
-    color:white;
+    z-index:100;
 
-    font-size:11px;
+    color:#fff;
+
+    font-size:12px;
+
     font-weight:600;
 
-    z-index:200;
-
-    text-shadow:
-        0 1px 3px rgba(0,0,0,.8);
+    text-shadow:0 1px 3px #000;
 }
 
-.status-icons{
+
+.status-right{
     display:flex;
     align-items:center;
     gap:9px;
 }
 
 
-/* SIGNAL */
-
 .signal-icon{
-    height:12px;
+    width:16px;
+    height:11px;
 
-    display:flex;
-    align-items:flex-end;
-    gap:2px;
-}
-
-.signal-icon i{
-    display:block;
-    width:2.5px;
-    background:white;
-    border-radius:2px;
-}
-
-.signal-icon i:nth-child(1){
-    height:4px;
-}
-
-.signal-icon i:nth-child(2){
-    height:6px;
-}
-
-.signal-icon i:nth-child(3){
-    height:8px;
-}
-
-.signal-icon i:nth-child(4){
-    height:10px;
+    position:relative;
 }
 
 
-/* WIFI */
+.signal-icon:before{
+    content:"";
+
+    position:absolute;
+
+    right:0;
+    bottom:0;
+
+    width:3px;
+    height:3px;
+
+    background:#fff;
+
+    box-shadow:
+        -4px 2px #fff,
+        -8px 4px #fff,
+        -12px 6px #fff;
+}
+
 
 .wifi-icon{
-    font-size:16px;
-    line-height:10px;
-    transform:rotate(-45deg);
+    width:15px;
+    height:11px;
+
+    position:relative;
+
+    border-top:2px solid #fff;
+
+    border-radius:50%;
 }
 
 
-/* BATTERY */
+.wifi-icon:before{
+    content:"";
+
+    position:absolute;
+
+    left:2px;
+    top:2px;
+
+    width:9px;
+    height:6px;
+
+    border-top:2px solid #fff;
+
+    border-radius:50%;
+}
+
+
+.wifi-icon:after{
+    content:"";
+
+    position:absolute;
+
+    left:6px;
+    top:6px;
+
+    width:3px;
+    height:3px;
+
+    border-radius:50%;
+
+    background:#fff;
+}
+
 
 .battery-icon{
     width:20px;
@@ -233,10 +446,26 @@ button{
 
     border-radius:3px;
 
-    padding:1px;
-
     position:relative;
 }
+
+
+.battery-icon:before{
+    content:"";
+
+    position:absolute;
+
+    left:2px;
+    top:2px;
+
+    width:14px;
+    height:4px;
+
+    background:#fff;
+
+    border-radius:1px;
+}
+
 
 .battery-icon:after{
     content:"";
@@ -249,104 +478,101 @@ button{
     width:2px;
     height:5px;
 
-    background:white;
+    background:#fff;
 
-    border-radius:0 2px 2px 0;
-}
-
-.battery-icon span{
-    display:block;
-
-    width:80%;
-    height:100%;
-
-    background:white;
-
-    border-radius:1px;
+    border-radius:0 1px 1px 0;
 }
 
 
 /* =========================================================
    LOCK SCREEN
-========================================================= */
+   ========================================================= */
 
 .lock-screen{
-    color:white;
-
     background:
-        linear-gradient(
-            rgba(0,0,0,.12),
-            rgba(0,0,0,.25)
-        ),
         url("phone-lock.png")
-        center/cover
+        center /
+        cover
         no-repeat;
+
+    color:#fff;
 }
+
 
 .lock-screen:after{
     content:"";
 
     position:absolute;
+
     inset:0;
 
     background:
         linear-gradient(
             to bottom,
-            rgba(0,0,0,.05),
-            transparent 45%,
-            rgba(0,0,0,.28)
+            rgba(0,0,0,.12),
+            transparent 38%,
+            rgba(0,0,0,.22)
         );
 
     pointer-events:none;
 }
 
 
-.lock-content{
+.lock-date{
     position:absolute;
 
-    top:100px;
+    top:105px;
+    left:15px;
+    right:15px;
+
+    text-align:center;
+
+    font-size:17px;
+
+    z-index:2;
+}
+
+
+.lock-time{
+    position:absolute;
+
+    top:132px;
     left:0;
     right:0;
 
     text-align:center;
 
-    z-index:5;
-
-    text-shadow:
-        0 3px 12px rgba(0,0,0,.65);
-}
-
-.lock-date{
-    font-size:16px;
-    font-weight:500;
-    opacity:.95;
-}
-
-.lock-time{
-    margin-top:4px;
-
-    font-size:67px;
-    line-height:1;
+    font-size:64px;
 
     font-weight:300;
 
-    letter-spacing:-4px;
+    letter-spacing:-3px;
+
+    z-index:2;
 }
+
 
 .lock-weather{
-    margin-top:14px;
+    position:absolute;
+
+    top:220px;
+    left:0;
+    right:0;
 
     display:flex;
+
     justify-content:center;
-    align-items:center;
 
-    gap:8px;
+    gap:7px;
 
-    font-size:14px;
+    font-size:16px;
+
+    z-index:2;
 }
 
-.weather-cloud{
-    font-size:22px;
+
+.weather-symbol{
+    font-size:23px;
 }
 
 
@@ -355,174 +581,262 @@ button{
 
     left:28px;
     right:28px;
-    bottom:39px;
+    bottom:35px;
 
     display:flex;
+
     justify-content:space-between;
     align-items:center;
 
-    z-index:5;
+    z-index:2;
 }
 
 
 .lock-shortcut{
-    width:47px;
-    height:47px;
+    width:45px;
+    height:45px;
 
-    padding:12px;
+    border-radius:50%;
 
     display:grid;
     place-items:center;
 
+    background:rgba(0,0,0,.35);
+
+    backdrop-filter:blur(7px);
+
     border:1px solid rgba(255,255,255,.28);
+}
+
+
+.camera-mini-icon{
+    width:19px;
+    height:14px;
+
+    border:2px solid white;
+
+    border-radius:4px;
+
+    position:relative;
+}
+
+
+.camera-mini-icon:before{
+    content:"";
+
+    position:absolute;
+
+    left:5px;
+    top:2px;
+
+    width:6px;
+    height:6px;
+
+    border:1px solid white;
 
     border-radius:50%;
-
-    background:rgba(0,0,0,.28);
-
-    backdrop-filter:blur(10px);
-
-    color:white;
-
-    transition:.15s;
-}
-
-.lock-shortcut:hover{
-    background:rgba(255,255,255,.12);
-}
-
-.lock-shortcut svg{
-    width:22px;
-    height:22px;
-
-    fill:none;
-    stroke:white;
-    stroke-width:1.7;
-
-    stroke-linecap:round;
-    stroke-linejoin:round;
 }
 
 
-.unlock-prompt{
+.camera-mini-icon:after{
+    content:"";
+
+    position:absolute;
+
+    left:3px;
+    top:-5px;
+
+    width:7px;
+    height:3px;
+
+    border-radius:2px;
+
+    background:white;
+}
+
+
+.phone-mini-icon{
+    width:17px;
+    height:17px;
+
+    position:relative;
+}
+
+
+.phone-mini-icon:before{
+    content:"";
+
+    position:absolute;
+
+    inset:1px;
+
+    border-left:3px solid white;
+    border-bottom:3px solid white;
+
+    border-radius:3px 0 8px 5px;
+
+    transform:rotate(-45deg);
+}
+
+
+.unlock-hint{
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
 
-    gap:2px;
+    gap:4px;
 
     font-size:10px;
 
-    opacity:.85;
-
-    text-shadow:
-        0 2px 5px black;
+    text-shadow:0 1px 3px black;
 }
+
 
 .unlock-arrow{
-    font-size:23px;
+    font-size:22px;
 
-    animation:
-        unlockArrow 1.5s infinite;
+    animation:unlockArrow 1.4s infinite;
 }
+
 
 @keyframes unlockArrow{
 
     0%,
     100%{
         transform:translateY(3px);
-        opacity:.6;
     }
 
     50%{
-        transform:translateY(-4px);
-        opacity:1;
+        transform:translateY(-5px);
     }
+
 }
 
 
 /* =========================================================
    PASSCODE
-========================================================= */
+   ========================================================= */
 
 .passcode-screen{
     background:
-        linear-gradient(
-            rgba(8,8,8,.82),
-            rgba(8,8,8,.94)
-        ),
         url("phone-lock.png")
-        center/cover;
+        center /
+        cover
+        no-repeat;
 }
 
 
-.passcode-content{
+.passcode-screen:after{
+    content:"";
+
     position:absolute;
 
-    top:82px;
+    inset:0;
+
+    background:rgba(0,0,0,.48);
+}
+
+
+.passcode-title{
+    position:absolute;
+
+    top:100px;
+
     left:0;
     right:0;
 
     text-align:center;
+
+    z-index:2;
 }
+
 
 .passcode-lock-icon{
-    width:38px;
-    height:38px;
+    width:22px;
+    height:18px;
 
-    margin:auto;
+    display:block;
 
-    display:grid;
-    place-items:center;
+    margin:
+        0
+        auto
+        12px;
 
-    opacity:.9;
+    border:2px solid white;
+
+    border-radius:3px;
+
+    position:relative;
 }
 
-.passcode-lock-icon svg{
-    width:27px;
-    height:27px;
 
-    fill:none;
-    stroke:white;
-    stroke-width:1.7;
+.passcode-lock-icon:before{
+    content:"";
 
-    stroke-linecap:round;
-    stroke-linejoin:round;
+    position:absolute;
+
+    left:4px;
+    top:-12px;
+
+    width:10px;
+    height:13px;
+
+    border:
+        2px solid white;
+
+    border-bottom:0;
+
+    border-radius:8px 8px 0 0;
 }
 
-.passcode-content h2{
-    margin:12px 0 4px;
+
+.passcode-title h2{
+    margin:0;
 
     font-size:20px;
+
     font-weight:500;
 }
 
-.passcode-content p{
-    margin:0;
+
+.passcode-title p{
+    margin-top:7px;
 
     font-size:11px;
 
-    color:rgba(255,255,255,.55);
+    opacity:.65;
 }
 
 
 .passcode-dots{
-    margin-top:26px;
+    position:absolute;
+
+    top:210px;
+
+    left:0;
+    right:0;
 
     display:flex;
+
     justify-content:center;
 
-    gap:13px;
+    gap:12px;
+
+    z-index:2;
 }
 
+
 .passcode-dots span{
-    width:8px;
-    height:8px;
+    width:9px;
+    height:9px;
 
     border-radius:50%;
 
-    border:1px solid rgba(255,255,255,.7);
+    border:1px solid white;
 }
+
 
 .passcode-dots span.filled{
     background:white;
@@ -532,112 +846,86 @@ button{
 .passcode-pad{
     position:absolute;
 
-    top:270px;
+    top:255px;
 
-    left:50px;
-    right:50px;
+    left:35px;
+    right:35px;
 
     display:grid;
 
     grid-template-columns:
         repeat(3,1fr);
 
-    gap:13px 17px;
+    gap:13px 15px;
+
+    z-index:2;
 }
 
+
 .passcode-pad button{
-    width:68px;
-    height:68px;
+    width:72px;
+    height:72px;
 
     justify-self:center;
 
+    border:1px solid rgba(255,255,255,.18);
+
     border-radius:50%;
 
-    border:1px solid
-        rgba(255,255,255,.12);
-
     background:
-        rgba(255,255,255,.065);
+        rgba(30,30,30,.72);
 
     color:white;
 
-    font-size:24px;
+    font-size:26px;
 
-    transition:
-        background .12s,
-        transform .12s;
+    backdrop-filter:blur(5px);
 }
 
-.passcode-pad button:hover{
-    background:
-        rgba(255,255,255,.13);
-}
 
 .passcode-pad button:active{
-    transform:scale(.91);
-    background:
-        rgba(255,255,255,.2);
+    transform:scale(.92);
+
+    background:rgba(100,100,100,.75);
 }
 
-.passcode-pad small{
+
+.passcode-pad button small{
     display:block;
 
-    margin-top:1px;
+    font-size:8px;
 
-    font-size:7px;
-
-    opacity:.55;
-
-    letter-spacing:1px;
+    margin-top:2px;
 }
 
-
-.passcode-cancel{
-    position:absolute;
-
-    bottom:48px;
-    left:0;
-    right:0;
-
-    margin:auto;
-
-    border:0;
-
-    background:transparent;
-
-    color:rgba(255,255,255,.65);
-
-    font-size:12px;
-}
 
 .passcode-error{
     position:absolute;
 
+    top:690px;
+
     left:0;
     right:0;
 
-    bottom:76px;
-
     text-align:center;
 
-    color:#ffb2b2;
+    font-size:12px;
 
-    font-size:11px;
+    color:#f0b2a7;
+
+    z-index:3;
 }
 
 
 /* =========================================================
    HOME SCREEN
-========================================================= */
+   ========================================================= */
 
 .home-screen{
     background:
-        linear-gradient(
-            rgba(0,0,0,.03),
-            rgba(0,0,0,.08)
-        ),
         url("phone-home.png")
-        center/cover
+        center /
+        cover
         no-repeat;
 
     color:white;
@@ -656,99 +944,88 @@ button{
     width:300%;
 
     transition:
-        transform .38s
+        transform .35s
         cubic-bezier(.2,.8,.2,1);
 }
+
 
 .home-page{
     position:relative;
 
     width:33.333333%;
 
-    height:100%;
-
     flex-shrink:0;
+
+    height:100%;
 }
 
 
-/* =========================================================
-   CLOCK WIDGET
-========================================================= */
-
-.clock-widget{
+.android-clock-widget{
     position:absolute;
 
-    top:66px;
+    top:67px;
     left:25px;
 
     text-shadow:
-        0 3px 8px rgba(0,0,0,.55);
+        0 2px 5px rgba(0,0,0,.45);
 }
 
-.clock-widget div:first-child{
+
+.android-clock-widget div:first-child{
     font-size:48px;
 
     font-weight:300;
 
-    letter-spacing:-3px;
-}
-
-.clock-widget div:last-child{
-    margin-top:4px;
-
-    font-size:12px;
-
-    opacity:.85;
+    letter-spacing:-2px;
 }
 
 
-/* =========================================================
-   SEARCH
-========================================================= */
+.android-clock-widget div:last-child{
+    margin-top:3px;
+
+    font-size:13px;
+}
+
 
 .google-search{
     position:absolute;
 
-    top:153px;
+    top:160px;
+
     left:20px;
     right:20px;
 
-    height:47px;
+    height:49px;
 
     display:flex;
+
     align-items:center;
 
-    gap:10px;
+    gap:8px;
 
-    padding:
-        0
-        13px;
+    padding:0 13px;
 
-    border-radius:25px;
+    border-radius:28px;
 
-    background:
-        rgba(255,255,255,.93);
+    background:rgba(255,255,255,.94);
 
     box-shadow:
-        0 6px 18px
-        rgba(0,0,0,.25);
+        0 4px 12px rgba(0,0,0,.18);
 
     color:#555;
 
-    z-index:50;
+    z-index:40;
 }
 
-.search-icon{
-    width:18px;
-    height:18px;
 
-    fill:none;
+.google-g{
+    font-size:24px;
 
-    stroke:#666;
-    stroke-width:2;
+    font-weight:700;
 
-    stroke-linecap:round;
+    color:#4285f4;
 }
+
 
 .google-search input{
     flex:1;
@@ -756,68 +1033,111 @@ button{
     min-width:0;
 
     border:0;
+
     outline:0;
 
     background:transparent;
 
-    color:#222;
+    color:#333;
 
     font-size:14px;
 }
+
 
 .google-search input::placeholder{
     color:#777;
 }
 
+
 .google-search button{
     border:0;
+
     background:transparent;
 
     color:#777;
 
-    font-size:21px;
+    font-size:22px;
 
-    padding:0 3px;
+    padding:2px 5px;
 }
 
-.mic-icon{
+
+.search-mic-icon{
+    width:11px;
+    height:16px;
+
+    border:2px solid #4285f4;
+
+    border-radius:8px;
+
+    position:relative;
+}
+
+
+.search-mic-icon:after{
+    content:"";
+
+    position:absolute;
+
+    left:-5px;
+    bottom:-5px;
+
     width:17px;
-    height:17px;
+    height:7px;
 
-    fill:none;
+    border-bottom:2px solid #4285f4;
 
-    stroke:#666;
-    stroke-width:1.8;
-
-    stroke-linecap:round;
+    border-radius:50%;
 }
 
 
 /* =========================================================
    APP GRID
-========================================================= */
+   ========================================================= */
 
 .app-grid{
     position:absolute;
 
-    top:229px;
+    top:235px;
 
-    left:25px;
-    right:25px;
+    left:27px;
+    right:27px;
 
     display:grid;
 
     grid-template-columns:
         repeat(4,1fr);
 
-    gap:27px 11px;
+    gap:27px 13px;
 
     justify-items:center;
 }
 
 
+.home-page:nth-child(2) .app-grid,
+.home-page:nth-child(3) .app-grid{
+    top:165px;
+}
+
+
+.page-label{
+    position:absolute;
+
+    top:90px;
+    left:25px;
+
+    font-family:Georgia,serif;
+
+    font-size:19px;
+
+    letter-spacing:3px;
+
+    text-shadow:0 2px 4px black;
+}
+
+
 .app-icon{
-    width:72px;
+    width:70px;
 
     padding:0;
 
@@ -828,21 +1148,25 @@ button{
     color:white;
 
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
 
-    gap:7px;
+    gap:6px;
 
     text-shadow:
-        0 2px 4px rgba(0,0,0,.7);
+        0 1px 3px rgba(0,0,0,.7);
 
     transition:
         transform .12s;
 }
 
+
 .app-icon:active{
-    transform:scale(.9);
+    transform:scale(.91);
 }
+
 
 .app-icon>span:last-child{
     font-size:10px;
@@ -851,356 +1175,493 @@ button{
 }
 
 
-/* =========================================================
-   REALISTIC ICONS
-========================================================= */
-
 .real-icon{
     width:58px;
     height:58px;
 
-    border-radius:17px;
+    border-radius:16px;
 
     display:grid;
+
     place-items:center;
 
-    color:white;
+    position:relative;
 
     box-shadow:
-        0 6px 12px
-        rgba(0,0,0,.3);
-
-    overflow:hidden;
-}
-
-.real-icon svg{
-    width:29px;
-    height:29px;
-
-    fill:none;
-
-    stroke:currentColor;
-
-    stroke-width:1.8;
-
-    stroke-linecap:round;
-    stroke-linejoin:round;
+        0 5px 12px rgba(0,0,0,.28);
 }
 
 
-/* PHONE */
+/* =========================================================
+   REALISTIC-STYLE APP ICONS
+   ========================================================= */
 
 .phone-icon{
     background:
         linear-gradient(
             145deg,
-            #62dc83,
-            #17a957
+            #5ee783,
+            #18bb59
         );
 }
 
 
-/* MESSAGES */
+.phone-icon:before{
+    content:"";
+
+    width:21px;
+    height:28px;
+
+    border:3px solid white;
+
+    border-top-color:transparent;
+    border-right-color:transparent;
+
+    border-radius:
+        4px 5px 13px 5px;
+
+    transform:
+        rotate(-45deg);
+}
+
 
 .messages-icon{
     background:
         linear-gradient(
             145deg,
-            #62df83,
-            #13b75c
+            #62df85,
+            #16bd5a
         );
 }
 
 
-/* GALLERY */
+.messages-icon:before{
+    content:"";
+
+    width:30px;
+    height:23px;
+
+    border:3px solid white;
+
+    border-radius:9px;
+
+    background:transparent;
+}
+
+
+.messages-icon:after{
+    content:"";
+
+    position:absolute;
+
+    width:9px;
+    height:9px;
+
+    left:17px;
+    top:36px;
+
+    border-left:3px solid white;
+
+    transform:skew(-25deg);
+}
+
 
 .gallery-icon{
     background:
         linear-gradient(
             145deg,
-            #ffbd65,
-            #ef6e91 55%,
-            #5cbde8
+            #ffbd68,
+            #ec5e99 55%,
+            #5ebbe7
         );
 }
 
 
-/* NOTES */
+.gallery-icon:before{
+    content:"";
+
+    width:34px;
+    height:29px;
+
+    border:3px solid white;
+
+    border-radius:6px;
+}
+
+
+.gallery-icon:after{
+    content:"";
+
+    position:absolute;
+
+    width:18px;
+    height:13px;
+
+    border-left:3px solid white;
+    border-top:3px solid white;
+
+    transform:
+        rotate(45deg);
+
+    top:21px;
+}
+
 
 .notes-icon{
     background:
         linear-gradient(
             145deg,
-            #55d8f0,
-            #258fd4
+            #6cd9ef,
+            #319de1
         );
 }
 
 
-/* CONTACTS */
+.notes-icon:before{
+    content:"";
+
+    width:29px;
+    height:35px;
+
+    background:white;
+
+    border-radius:4px;
+
+    box-shadow:
+        inset 0 -6px rgba(255,255,255,.3);
+}
+
+
+.notes-icon:after{
+    content:"";
+
+    width:17px;
+    height:2px;
+
+    position:absolute;
+
+    background:#319de1;
+
+    box-shadow:
+        0 6px #319de1,
+        0 12px #319de1;
+}
+
 
 .contacts-icon{
     background:
         linear-gradient(
             145deg,
-            #7eb7ff,
-            #3979df
+            #79baff,
+            #347ce5
         );
 }
 
 
-/* BROWSER */
+.contacts-icon:before{
+    content:"";
+
+    width:14px;
+    height:14px;
+
+    border:3px solid white;
+
+    border-radius:50%;
+
+    position:absolute;
+
+    top:11px;
+}
+
+
+.contacts-icon:after{
+    content:"";
+
+    width:28px;
+    height:14px;
+
+    border:
+        3px solid white;
+
+    border-bottom:0;
+
+    border-radius:
+        18px 18px 0 0;
+
+    position:absolute;
+
+    bottom:10px;
+}
+
 
 .browser-icon{
     background:
         linear-gradient(
             145deg,
-            #5eb4f8,
-            #1265c6
+            #53b1f4,
+            #1765c8
         );
 }
 
 
-/* CAMERA */
+.browser-icon:before{
+    content:"";
+
+    width:34px;
+    height:34px;
+
+    border:
+        3px solid white;
+
+    border-radius:50%;
+}
+
+
+.browser-icon:after{
+    content:"";
+
+    width:3px;
+    height:38px;
+
+    background:white;
+
+    transform:
+        rotate(45deg);
+}
+
 
 .camera-icon{
     background:
         linear-gradient(
             145deg,
-            #667078,
-            #20262a
+            #68727a,
+            #242a2f
         );
 }
 
 
-/* SETTINGS */
+.camera-icon:before{
+    content:"";
+
+    width:35px;
+    height:24px;
+
+    border:3px solid white;
+
+    border-radius:6px;
+}
+
+
+.camera-icon:after{
+    content:"";
+
+    width:11px;
+    height:11px;
+
+    border:3px solid white;
+
+    border-radius:50%;
+
+    position:absolute;
+}
+
 
 .settings-icon{
     background:
         linear-gradient(
             145deg,
-            #f4f4f4,
-            #b3b8bc
+            #f2f2f2,
+            #adb2b6
         );
-
-    color:#333;
 }
 
 
-/* BANK */
+.settings-icon:before{
+    content:"⚙";
+
+    color:#454545;
+
+    font-size:30px;
+}
+
 
 .bank-icon{
     background:
         linear-gradient(
             145deg,
-            #667ba7,
-            #293b61
+            #7184aa,
+            #26395c
         );
-
-    font-size:27px;
-    font-weight:500;
 }
 
 
-/* MUSIC */
+.bank-icon:before{
+    content:"";
+
+    width:34px;
+    height:22px;
+
+    border:
+        3px solid white;
+
+    border-top:0;
+
+    position:absolute;
+
+    bottom:12px;
+}
+
+
+.bank-icon:after{
+    content:"";
+
+    width:0;
+    height:0;
+
+    border-left:20px solid transparent;
+    border-right:20px solid transparent;
+    border-bottom:12px solid white;
+
+    position:absolute;
+
+    top:12px;
+}
+
 
 .music-icon{
     background:
         linear-gradient(
             145deg,
-            #ff7797,
-            #df3d68
+            #ff7898,
+            #e94670
         );
 }
 
 
-/* CLOCK */
+.music-icon:before{
+    content:"♪";
+
+    color:white;
+
+    font-size:35px;
+}
+
 
 .clock-icon{
     background:
         linear-gradient(
             145deg,
-            #ffffff,
-            #c7ccd0
+            #fff,
+            #c9ced2
         );
-
-    color:#333;
 }
 
 
-/* =========================================================
-   SECOND PAGE
-========================================================= */
+.clock-icon:before{
+    content:"";
 
-.page-heading{
+    width:34px;
+    height:34px;
+
+    border:3px solid #454545;
+
+    border-radius:50%;
+}
+
+
+.clock-icon:after{
+    content:"";
+
+    width:3px;
+    height:13px;
+
+    background:#454545;
+
     position:absolute;
 
-    top:72px;
-    left:25px;
+    top:15px;
 
-    font-size:18px;
+    left:29px;
 
-    letter-spacing:.5px;
+    transform-origin:bottom;
 
-    text-shadow:
-        0 2px 5px black;
-}
-
-.secondary-grid{
-    top:135px;
+    transform:rotate(-25deg);
 }
 
 
-/* =========================================================
-   RECOVERED FILE
-========================================================= */
+.files-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #e1ae5e,
+            #a56c27
+        );
+}
 
-.recovered-file{
+
+.files-icon:before{
+    content:"";
+
+    width:34px;
+    height:27px;
+
+    background:white;
+
+    border-radius:4px;
+
     position:absolute;
 
-    left:22px;
-    right:22px;
-
-    bottom:126px;
-
-    height:58px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    padding:
-        0
-        13px;
-
-    border:1px solid
-        rgba(255,255,255,.16);
-
-    border-radius:14px;
-
-    background:
-        rgba(0,0,0,.25);
-
-    backdrop-filter:blur(10px);
-
-    color:white;
-
-    text-align:left;
-
-    box-shadow:
-        0 7px 20px
-        rgba(0,0,0,.2);
-
-    transition:
-        background .15s,
-        border .15s;
+    top:21px;
 }
 
-.recovered-file:hover{
-    background:
-        rgba(255,255,255,.09);
 
-    border-color:
-        rgba(255,255,255,.28);
-}
+.files-icon:after{
+    content:"";
 
-.file-symbol{
-    width:33px;
-    height:33px;
+    width:17px;
+    height:6px;
 
-    display:grid;
-    place-items:center;
+    background:white;
 
-    border-radius:9px;
+    border-radius:4px 4px 0 0;
 
-    background:
-        rgba(255,255,255,.1);
-}
+    position:absolute;
 
-.file-symbol svg{
-    width:19px;
-    height:19px;
-
-    fill:none;
-
-    stroke:#eee;
-
-    stroke-width:1.5;
-
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
-
-.file-text{
-    display:flex;
-
-    flex-direction:column;
-
-    gap:2px;
-
-    flex:1;
-}
-
-.file-text strong{
-    font-size:10px;
-
-    font-weight:600;
-
-    letter-spacing:1.4px;
-
-    color:#ddd;
-}
-
-.file-text small{
-    font-size:9px;
-
-    color:rgba(255,255,255,.48);
-
-    font-family:
-        monospace;
-}
-
-.file-arrow{
-    font-size:24px;
-
-    color:
-        rgba(255,255,255,.45);
+    top:15px;
+    left:12px;
 }
 
 
 /* =========================================================
-   SEARCH RESULTS
-========================================================= */
+   SEARCH
+   ========================================================= */
 
 .search-results{
     position:absolute;
 
-    top:207px;
+    top:215px;
 
     left:20px;
     right:20px;
 
-    max-height:390px;
+    max-height:400px;
 
     overflow-y:auto;
 
-    padding:6px;
-
-    background:
-        rgba(250,250,250,.97);
+    background:rgba(255,255,255,.97);
 
     color:#222;
 
-    border-radius:17px;
+    border-radius:18px;
+
+    z-index:80;
 
     box-shadow:
-        0 12px 30px
-        rgba(0,0,0,.4);
+        0 8px 25px rgba(0,0,0,.35);
 
-    z-index:100;
+    padding:7px;
 }
+
 
 .search-result{
     width:100%;
@@ -1208,8 +1669,6 @@ button{
     border:0;
 
     background:transparent;
-
-    color:#222;
 
     display:flex;
 
@@ -1219,26 +1678,28 @@ button{
 
     padding:8px;
 
-    border-radius:12px;
-
     text-align:left;
+
+    color:#222;
 }
+
 
 .search-result:hover{
     background:#eee;
-}
-
-.search-result .real-icon{
-    width:42px;
-    height:42px;
 
     border-radius:12px;
+}
+
+
+.search-result .real-icon{
+    width:43px;
+    height:43px;
 }
 
 
 /* =========================================================
    PAGE DOTS
-========================================================= */
+   ========================================================= */
 
 .page-dots{
     position:absolute;
@@ -1246,9 +1707,10 @@ button{
     left:0;
     right:0;
 
-    bottom:94px;
+    bottom:78px;
 
     display:flex;
+
     justify-content:center;
 
     gap:6px;
@@ -1256,43 +1718,41 @@ button{
     z-index:30;
 }
 
+
 .page-dots span{
-    width:5px;
-    height:5px;
+    width:6px;
+    height:6px;
 
     border-radius:50%;
 
-    background:
-        rgba(255,255,255,.45);
-
-    transition:.2s;
+    background:rgba(255,255,255,.55);
 }
 
-.page-dots span.active{
-    width:17px;
 
-    border-radius:7px;
+.page-dots span.active{
+    width:18px;
 
     background:white;
+
+    border-radius:8px;
 }
 
 
 /* =========================================================
    DOCK
-========================================================= */
+   ========================================================= */
 
 .android-dock{
     position:absolute;
 
-    left:17px;
-    right:17px;
+    left:18px;
+    right:18px;
 
-    bottom:35px;
+    bottom:25px;
 
-    height:59px;
+    height:62px;
 
-    padding:
-        5px 12px;
+    padding:5px 13px;
 
     display:grid;
 
@@ -1301,24 +1761,19 @@ button{
 
     gap:8px;
 
-    border-radius:21px;
+    border-radius:22px;
 
-    background:
-        rgba(255,255,255,.17);
+    background:rgba(255,255,255,.2);
 
-    border:
-        1px solid
-        rgba(255,255,255,.12);
-
-    backdrop-filter:
-        blur(18px);
+    backdrop-filter:blur(14px);
 
     z-index:25;
 }
 
+
 .dock-icon{
-    width:48px;
-    height:48px;
+    width:49px;
+    height:49px;
 
     justify-self:center;
 
@@ -1328,36 +1783,27 @@ button{
 
     color:white;
 
-    display:grid;
-    place-items:center;
+    background-color:transparent;
 
     box-shadow:
-        0 4px 10px
-        rgba(0,0,0,.25);
+        0 3px 8px rgba(0,0,0,.2);
 }
 
-.dock-icon svg{
-    width:24px;
-    height:24px;
-
-    fill:none;
-
-    stroke:currentColor;
-
-    stroke-width:1.8;
-
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
 
 .dock-icon:active{
     transform:scale(.9);
 }
 
 
+.dock-icon:before,
+.dock-icon:after{
+    pointer-events:none;
+}
+
+
 /* =========================================================
    ANDROID NAVIGATION
-========================================================= */
+   ========================================================= */
 
 .android-nav{
     position:absolute;
@@ -1367,76 +1813,80 @@ button{
 
     bottom:0;
 
-    height:29px;
+    height:30px;
 
-    display:grid;
+    display:flex;
 
-    grid-template-columns:
-        repeat(3,1fr);
+    justify-content:space-around;
 
     align-items:center;
 
-    background:
-        rgba(0,0,0,.8);
+    background:rgba(0,0,0,.86);
 
-    z-index:150;
+    z-index:400;
 }
 
+
 .android-nav button{
-    height:29px;
+    width:33%;
+
+    height:30px;
 
     border:0;
 
     background:transparent;
 
     color:white;
-
-    display:grid;
-    place-items:center;
-
-    opacity:.82;
 }
 
-.android-nav button:hover{
-    background:
-        rgba(255,255,255,.08);
+
+.nav-back-icon{
+    width:13px;
+    height:13px;
+
+    display:inline-block;
+
+    border-left:2px solid currentColor;
+    border-bottom:2px solid currentColor;
+
+    transform:rotate(45deg);
 }
 
-.android-nav svg{
-    width:17px;
-    height:17px;
 
-    fill:none;
+.nav-home-icon{
+    width:11px;
+    height:11px;
 
-    stroke:white;
+    display:inline-block;
 
-    stroke-width:2;
-
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
-
-.home-nav-circle{
-    width:12px;
-    height:12px;
-
-    border:
-        1.7px solid white;
+    border:2px solid currentColor;
 
     border-radius:50%;
 }
 
 
+.nav-recent-icon{
+    width:13px;
+    height:13px;
+
+    display:inline-block;
+
+    border:2px solid currentColor;
+
+    border-radius:2px;
+}
+
+
 /* =========================================================
    APP SCREEN
-========================================================= */
+   ========================================================= */
 
 .app-screen{
-    background:#f7f7f7;
+    background:white;
 
     color:#222;
 
-    z-index:120;
+    z-index:100;
 }
 
 
@@ -1455,31 +1905,19 @@ button{
 
     gap:10px;
 
-    padding:
-        8px 13px;
+    padding:8px 13px;
 
-    background:
-        rgba(255,255,255,.97);
+    background:rgba(255,255,255,.97);
 
-    border-bottom:
-        1px solid #ddd;
+    border-bottom:1px solid #ddd;
 
-    box-shadow:
-        0 1px 5px
-        rgba(0,0,0,.08);
-
-    z-index:20;
+    z-index:10;
 }
 
 
-.app-back{
-    width:39px;
-    height:39px;
-
-    padding:9px;
-
-    display:grid;
-    place-items:center;
+.android-back{
+    width:40px;
+    height:40px;
 
     border:0;
 
@@ -1487,52 +1925,34 @@ button{
 
     color:#333;
 
-    border-radius:50%;
-}
-
-.app-back:hover{
-    background:#eee;
-}
-
-.app-back svg{
-    width:22px;
-    height:22px;
-
-    fill:none;
-
-    stroke:#222;
-
-    stroke-width:2;
-
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
-
-
-.header-app-icon{
-    width:30px;
-    height:30px;
-
-    border-radius:9px;
-
     display:grid;
+
     place-items:center;
-
-    color:white;
-
-    font-size:0;
-}
-
-.header-app-icon svg{
-    width:18px;
-    height:18px;
 }
 
 
 .app-title{
-    font-size:15px;
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
 
     font-weight:600;
+
+    font-size:15px;
+}
+
+
+.header-app-icon{
+    width:29px;
+    height:29px;
+
+    border-radius:8px;
+
+    display:grid;
+
+    place-items:center;
 }
 
 
@@ -1543,9 +1963,7 @@ button{
     left:0;
 
     width:100%;
-
-    height:
-        calc(100% - 60px);
+    height:calc(100% - 60px);
 
     border:0;
 
@@ -1554,8 +1972,8 @@ button{
 
 
 /* =========================================================
-   RECENT APPS
-========================================================= */
+   RECENTS
+   ========================================================= */
 
 .recent-panel{
     position:absolute;
@@ -1564,59 +1982,35 @@ button{
 
     z-index:300;
 
-    padding:
-        45px 16px 40px;
+    background:rgba(15,15,15,.97);
+
+    padding:70px 20px 55px;
 
     overflow-y:auto;
-
-    background:
-        rgba(12,12,12,.96);
-
-    backdrop-filter:
-        blur(20px);
 }
 
-.recent-header{
-    display:flex;
 
-    justify-content:space-between;
-    align-items:center;
+.recent-title{
+    font-family:Georgia,serif;
 
-    margin-bottom:17px;
+    letter-spacing:3px;
 
-    font-size:20px;
-
-    font-weight:500;
+    margin-bottom:20px;
 }
 
-.recent-header button{
-    width:32px;
-    height:32px;
-
-    border:0;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,255,255,.08);
-
-    color:white;
-
-    font-size:21px;
-}
 
 .recent-card{
     margin-bottom:10px;
 
-    padding:11px;
+    padding:12px;
 
-    background:#202020;
+    background:#242424;
 
-    border:
-        1px solid #363636;
+    border:1px solid #444;
 
-    border-radius:14px;
+    border-radius:13px;
 }
+
 
 .recent-open{
     width:100%;
@@ -1636,99 +2030,230 @@ button{
     text-align:left;
 }
 
+
 .recent-open .real-icon{
-    width:44px;
-    height:44px;
+    width:45px;
+    height:45px;
+}
+
+
+.recent-close{
+    margin-top:15px;
+
+    padding:10px 20px;
+
+    background:transparent;
+
+    color:white;
+
+    border:1px solid #777;
+
+    border-radius:8px;
 }
 
 
 /* =========================================================
-   SIDE CONTROL
-========================================================= */
+   VICTIM INFO PANEL
+   OUTSIDE PHONE
+   ========================================================= */
 
-.phone-side-control{
+.victim-panel{
     position:fixed;
 
-    right:23px;
-    bottom:25px;
+    inset:0;
 
-    height:38px;
+    z-index:2000;
 
-    padding:
-        0
-        14px;
+    background:
+        url("phone-bg.png")
+        center /
+        cover
+        no-repeat;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+
+.victim-panel:before{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        rgba(18,12,7,.74);
+
+    pointer-events:none;
+}
+
+
+.victim-panel-header{
+    position:relative;
+
+    z-index:2;
+
+    height:105px;
+
+    flex:0 0 105px;
 
     display:flex;
 
     align-items:center;
 
-    gap:9px;
+    justify-content:space-between;
 
-    border:
-        1px solid
-        rgba(255,255,255,.15);
-
-    border-radius:20px;
+    padding:25px 45px;
 
     background:
-        rgba(10,10,10,.52);
+        linear-gradient(
+            to bottom,
+            rgba(12,8,5,.9),
+            rgba(12,8,5,.5)
+        );
 
-    backdrop-filter:
-        blur(12px);
+    border-bottom:
+        1px solid
+        rgba(214,179,116,.25);
+}
 
-    color:
-        rgba(255,255,255,.58);
+
+.victim-panel-kicker{
+    display:block;
+
+    color:#c8a979;
 
     font-size:9px;
 
-    letter-spacing:1.8px;
+    letter-spacing:3px;
 
-    z-index:500;
-
-    transition:
-        background .2s,
-        color .2s;
+    margin-bottom:5px;
 }
 
-.phone-side-control:hover{
-    background:
-        rgba(255,255,255,.09);
 
-    color:white;
+.victim-panel-header h1{
+    margin:0;
+
+    font-family:Georgia,"Times New Roman",serif;
+
+    font-size:24px;
+
+    font-weight:400;
+
+    letter-spacing:4px;
 }
 
-.side-control-dot{
-    width:6px;
-    height:6px;
+
+.victim-close{
+    width:48px;
+    height:48px;
+
+    border:1px solid rgba(255,255,255,.22);
 
     border-radius:50%;
 
-    background:
-        rgba(255,255,255,.55);
+    background:rgba(0,0,0,.3);
 
-    box-shadow:
-        0 0 8px
-        rgba(255,255,255,.25);
+    position:relative;
+}
+
+
+.victim-close span{
+    position:absolute;
+
+    left:13px;
+    top:23px;
+
+    width:21px;
+    height:1px;
+
+    background:white;
+}
+
+
+.victim-close span:first-child{
+    transform:rotate(45deg);
+}
+
+
+.victim-close span:last-child{
+    transform:rotate(-45deg);
+}
+
+
+.victim-close:hover{
+    background:rgba(255,255,255,.1);
+}
+
+
+#victimFrame{
+    position:relative;
+
+    z-index:2;
+
+    flex:1;
+
+    width:100%;
+
+    border:0;
+
+    background:transparent;
 }
 
 
 /* =========================================================
    RESPONSIVE
-========================================================= */
+   ========================================================= */
 
-@media(max-width:600px){
+@media(max-width:1100px){
+
+    .game-controls{
+        right:18px;
+    }
+
+    .game-side-button{
+        width:175px;
+    }
+
+}
+
+
+@media(max-width:700px){
 
     .phone-shell{
         width:88vw;
         height:90vh;
     }
 
-    .phone-side-control{
-        right:9px;
+    .game-controls{
+        right:8px;
+
+        top:auto;
         bottom:12px;
+
+        transform:none;
+
+        flex-direction:row;
+    }
+
+    .game-side-button{
+        width:auto;
+
+        min-width:55px;
+
+        min-height:48px;
+
+        padding:8px;
+    }
+
+    .side-button-text{
+        display:none;
     }
 
 }
+
 
 @media(max-height:700px){
 
