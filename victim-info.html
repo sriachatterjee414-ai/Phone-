@@ -34,10 +34,11 @@
         id="caseTab"
         class="case-tab"
         type="button"
-        aria-label="Victim information"
     >
 
-        <span>CASE</span>
+        <span>
+            CASE
+        </span>
 
         <strong>
             VICTIM<br>
@@ -90,7 +91,7 @@
 
 
         <!-- =====================================
-             VICTIM
+             VICTIM SECTION
         ====================================== -->
 
         <section class="dossier-section">
@@ -103,14 +104,13 @@
             <div class="victim-layout">
 
 
-                <!-- VICTIM PORTRAIT -->
+                <!-- VICTIM IMAGE -->
 
                 <div class="victim-photo">
 
                     <img
-                        id="victimPortrait"
                         src="victim_portrait.png"
-                        alt="Victim"
+                        alt="Evelyn Carter"
                     >
 
                     <div class="photo-label">
@@ -132,26 +132,20 @@
                             NAME
                         </span>
 
-                        <span
-                            id="victimName"
-                            class="value"
-                        >
+                        <span class="value">
                             Evelyn Carter
                         </span>
 
                     </div>
 
 
-                    <div class="info-row birthday-row">
+                    <div class="info-row">
 
                         <span class="label">
                             DATE OF BIRTH
                         </span>
 
-                        <span
-                            id="victimBirthday"
-                            class="value birthday"
-                        >
+                        <span class="value birthday">
                             May 21, 2001
                         </span>
 
@@ -164,10 +158,7 @@
                             AGE
                         </span>
 
-                        <span
-                            id="victimAge"
-                            class="value"
-                        >
+                        <span class="value">
                             24
                         </span>
 
@@ -180,10 +171,7 @@
                             SEX
                         </span>
 
-                        <span
-                            id="victimSex"
-                            class="value"
-                        >
+                        <span class="value">
                             Female
                         </span>
 
@@ -196,10 +184,7 @@
                             OCCUPATION
                         </span>
 
-                        <span
-                            id="victimOccupation"
-                            class="value"
-                        >
+                        <span class="value">
                             Unknown
                         </span>
 
@@ -212,10 +197,7 @@
                             ADDRESS
                         </span>
 
-                        <span
-                            id="victimAddress"
-                            class="value"
-                        >
+                        <span class="value">
                             Unknown
                         </span>
 
@@ -228,10 +210,7 @@
                             EMERGENCY CONTACT
                         </span>
 
-                        <span
-                            id="victimEmergency"
-                            class="value"
-                        >
+                        <span class="value">
                             Unknown
                         </span>
 
@@ -244,28 +223,163 @@
                             PHONE STATUS
                         </span>
 
-                        <span
-                            id="victimPhoneStatus"
-                            class="value"
-                        >
+                        <span class="value">
                             RECOVERED — DAMAGED
                         </span>
 
                     </div>
 
 
-                    <div class="info-row">
+                </div>
 
-                        <span class="label">
-                            CASE STATUS
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             CRIME SCENE
+        ====================================== -->
+
+        <section class="dossier-section">
+
+
+            <div class="section-title">
+                CRIME SCENE
+            </div>
+
+
+            <div class="crime-scene-layout">
+
+
+                <!-- =================================
+                     CRIME SCENE IMAGE
+                ================================== -->
+
+                <div class="crime-scene-card">
+
+
+                    <div class="evidence-number">
+                        EVIDENCE PHOTOGRAPH — #01
+                    </div>
+
+
+                    <img
+                        src="crime_scene.png"
+                        alt="Crime scene photograph"
+                        class="crime-scene-image"
+                        onerror="this.classList.add('image-missing')"
+                    >
+
+
+                    <div class="crime-scene-caption">
+
+
+                        <div class="crime-scene-label">
+                            CRIME SCENE PHOTOGRAPH
+                        </div>
+
+
+                        <h2>
+                            SCENE OF DISCOVERY
+                        </h2>
+
+
+                        <p>
+                            Photograph recovered from the
+                            initial crime scene investigation.
+                        </p>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================
+                     SCENE INFORMATION
+                ================================== -->
+
+                <div class="crime-scene-details">
+
+
+                    <div class="scene-detail">
+
+                        <span>
+                            LOCATION
                         </span>
 
-                        <span
-                            id="victimCaseStatus"
-                            class="value"
-                        >
-                            ACTIVE
+                        <strong>
+                            UNKNOWN
+                        </strong>
+
+                    </div>
+
+
+                    <div class="scene-detail">
+
+                        <span>
+                            DATE
                         </span>
+
+                        <strong>
+                            OCTOBER 17
+                        </strong>
+
+                    </div>
+
+
+                    <div class="scene-detail">
+
+                        <span>
+                            CASE TYPE
+                        </span>
+
+                        <strong>
+                            HOMICIDE
+                        </strong>
+
+                    </div>
+
+
+                    <div class="scene-detail">
+
+                        <span>
+                            STATUS
+                        </span>
+
+                        <strong>
+                            UNDER INVESTIGATION
+                        </strong>
+
+                    </div>
+
+
+                    <div class="scene-detail">
+
+                        <span>
+                            EVIDENCE NUMBER
+                        </span>
+
+                        <strong>
+                            EVIDENCE #01
+                        </strong>
+
+                    </div>
+
+
+                    <div class="scene-detail">
+
+                        <span>
+                            PHOTOGRAPH STATUS
+                        </span>
+
+                        <strong>
+                            VERIFIED
+                        </strong>
 
                     </div>
 
@@ -284,12 +398,14 @@
 
         <section class="dossier-section">
 
+
             <div class="section-title">
                 IDENTIFICATION FILE
             </div>
 
 
             <div class="birthday-hint">
+
 
                 <div class="hint-icon">
                     ?
@@ -304,11 +420,10 @@
 
                     <p>
                         Her birthday may be the key.
-                        This information is available
-                        independently of the recovered phone.
                     </p>
 
                 </div>
+
 
             </div>
 
@@ -319,7 +434,9 @@
                 class="file-button"
                 type="button"
             >
+
                 SHOW BIRTHDAY FILE
+
             </button>
 
 
@@ -328,6 +445,7 @@
                 id="birthdayFile"
                 class="birthday-file hidden"
             >
+
 
                 <div class="file-top">
 
@@ -342,7 +460,9 @@
                 </div>
 
 
+
                 <div class="file-body">
+
 
                     <div class="file-stamp">
                         BIRTH<br>
@@ -359,7 +479,7 @@
                                 NAME
                             </span>
 
-                            <strong id="fileVictimName">
+                            <strong>
                                 Evelyn Carter
                             </strong>
 
@@ -372,7 +492,7 @@
                                 DATE OF BIRTH
                             </span>
 
-                            <strong id="fileVictimBirthday">
+                            <strong>
                                 MAY 21, 2001
                             </strong>
 
@@ -382,13 +502,10 @@
                         <div>
 
                             <span>
-                                POSSIBLE PHONE PASSCODE
+                                PHONE PASSCODE
                             </span>
 
-                            <strong
-                                id="phonePasscode"
-                                class="password-reveal"
-                            >
+                            <strong class="password-reveal">
                                 0521
                             </strong>
 
@@ -400,6 +517,7 @@
                 </div>
 
 
+
                 <div class="file-warning">
 
                     The birthday appears to be
@@ -407,6 +525,7 @@
                     passcode.
 
                 </div>
+
 
             </div>
 
@@ -420,15 +539,16 @@
 
         <section class="dossier-section">
 
+
             <div class="section-title">
                 CASE INFORMATION
             </div>
 
 
-            <div class="case-grid">
+            <div class="case-details-grid">
 
 
-                <div>
+                <div class="case-detail">
 
                     <span>
                         CASE TYPE
@@ -441,65 +561,65 @@
                 </div>
 
 
-                <div>
+                <div class="case-detail">
 
                     <span>
                         STATUS
                     </span>
 
-                    <strong id="caseTypeStatus">
+                    <strong>
                         ACTIVE
                     </strong>
 
                 </div>
 
 
-                <div>
+                <div class="case-detail">
 
                     <span>
                         LOCATION
                     </span>
 
-                    <strong id="discoveryLocation">
+                    <strong>
                         UNKNOWN
                     </strong>
 
                 </div>
 
 
-                <div>
+                <div class="case-detail">
 
                     <span>
-                        DATE
+                        DATE DISCOVERED
                     </span>
 
-                    <strong id="dateDiscovered">
+                    <strong>
                         OCTOBER 17
                     </strong>
 
                 </div>
 
 
-                <div>
+                <div class="case-detail">
 
                     <span>
                         CAUSE OF DEATH
                     </span>
 
-                    <strong id="causeOfDeath">
+                    <strong>
                         UNDER INVESTIGATION
                     </strong>
 
                 </div>
 
 
-                <div>
+                <div class="case-detail">
 
                     <span>
-                        ESTIMATED TIME
+                        TIME OF DEATH
                     </span>
 
-                    <strong id="timeOfDeath">
+                    <strong>
                         UNKNOWN
                     </strong>
 
@@ -518,22 +638,85 @@
 
         <section class="dossier-section">
 
+
             <div class="section-title">
                 SUSPECT INFORMATION
             </div>
 
 
-            <div
-                id="suspectList"
-                class="suspect-list"
-            >
+            <div class="suspect-list">
 
-                <div class="no-suspects">
 
-                    NO PERSONS OF INTEREST
-                    HAVE BEEN IDENTIFIED.
+                <!-- CURRENTLY UNKNOWN -->
 
-                </div>
+                <article class="suspect-card">
+
+
+                    <div class="suspect-photo">
+
+                        <div class="unknown-silhouette">
+                            ?
+                        </div>
+
+                    </div>
+
+
+                    <div class="suspect-information">
+
+
+                        <div class="suspect-status">
+                            UNKNOWN
+                        </div>
+
+
+                        <h2>
+                            No Identified Suspect
+                        </h2>
+
+
+                        <div class="suspect-row">
+
+                            <span>
+                                AGE
+                            </span>
+
+                            <strong>
+                                Unknown
+                            </strong>
+
+                        </div>
+
+
+                        <div class="suspect-row">
+
+                            <span>
+                                CONNECTION
+                            </span>
+
+                            <strong>
+                                Unknown
+                            </strong>
+
+                        </div>
+
+
+                        <div class="suspect-row">
+
+                            <span>
+                                STATUS
+                            </span>
+
+                            <strong>
+                                No identified suspect
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </article>
+
 
             </div>
 
@@ -550,7 +733,9 @@
             class="back-button"
             type="button"
         >
+
             ← BACK
+
         </button>
 
 
@@ -561,7 +746,95 @@
 
 
 
-<script src="victim-info.js"></script>
+<!-- =========================================
+     SMALL INLINE SCRIPT
+     NO victim.js REQUIRED
+========================================== -->
+
+<script>
+
+const showBirthdayButton =
+    document.getElementById(
+        "showBirthdayButton"
+    );
+
+
+const birthdayFile =
+    document.getElementById(
+        "birthdayFile"
+    );
+
+
+showBirthdayButton.addEventListener(
+    "click",
+    function () {
+
+        birthdayFile.classList.remove(
+            "hidden"
+        );
+
+        showBirthdayButton.textContent =
+            "IDENTIFICATION FILE OPEN";
+
+        showBirthdayButton.disabled =
+            true;
+
+    }
+);
+
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+const backButton =
+    document.getElementById(
+        "backButton"
+    );
+
+
+backButton.addEventListener(
+    "click",
+    function () {
+
+        /*
+            If your game stores the previous
+            page here, return to it.
+        */
+
+        const returnPage =
+            localStorage.getItem(
+                "victimInfoReturnPage"
+            );
+
+
+        if (returnPage) {
+
+            localStorage.removeItem(
+                "victimInfoReturnPage"
+            );
+
+            window.location.href =
+                returnPage;
+
+            return;
+
+        }
+
+
+        /*
+            Default destination.
+        */
+
+        window.location.href =
+            "story.html";
+
+    }
+);
+
+</script>
+
 
 </body>
 
