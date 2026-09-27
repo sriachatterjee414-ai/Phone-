@@ -2,20 +2,26 @@
    PERSISTENT-UI.JS
    BROKEN PHONE — SHARED GAME SYSTEM
 
-   Persistent systems:
+   Handles:
    - Characters
    - Suspects
    - Victim
    - Victim File
    - Phone
    - Clues
-   - Repair progress
-   - Phone unlock state
+   - Phone repair
+   - Phone unlock
 
-   Everything is stored in localStorage.
-   ============================================================ */
+   State persists through localStorage.
+============================================================ */
+
 
 (function () {
+
+
+    /* ============================================================
+       STORAGE
+    ============================================================ */
 
     const STORAGE_KEY =
         "brokenPhoneGameState";
@@ -97,23 +103,17 @@
                 ...parsed,
 
                 characters:
-                    Array.isArray(
-                        parsed.characters
-                    )
+                    Array.isArray(parsed.characters)
                         ? parsed.characters
                         : [],
 
                 suspects:
-                    Array.isArray(
-                        parsed.suspects
-                    )
+                    Array.isArray(parsed.suspects)
                         ? parsed.suspects
                         : [],
 
                 clues:
-                    Array.isArray(
-                        parsed.clues
-                    )
+                    Array.isArray(parsed.clues)
                         ? parsed.clues
                         : [],
 
@@ -132,7 +132,7 @@
         catch (error) {
 
             console.error(
-                "GameUI: Could not load state.",
+                "GameUI: Could not load game state.",
                 error
             );
 
@@ -168,7 +168,7 @@
 
 
     /* ============================================================
-       GAME UI API
+       PUBLIC GAME UI
     ============================================================ */
 
     const GameUI = {
@@ -216,6 +216,11 @@
 
         /* ========================================================
            SET VICTIM
+
+           The old five arguments still work.
+
+           Optional sixth argument can contain
+           additional victim information.
         ======================================================== */
 
         setVictim(
@@ -224,8 +229,12 @@
             img,
             cause,
             birthday,
-            location
+            extra
         ) {
+
+            extra =
+                extra || {};
+
 
             state.victim = {
 
@@ -239,19 +248,62 @@
 
                 birthday:birthday || "",
 
-                location:location || ""
+                age:extra.age || "",
+
+                sex:extra.sex || "",
+
+                occupation:
+                    extra.occupation || "",
+
+                address:
+                    extra.address || "",
+
+                emergencyContact:
+                    extra.emergencyContact || "",
+
+                caseNumber:
+                    extra.caseNumber ||
+                    "1996-549764",
+
+                caseType:
+                    extra.caseType ||
+                    "HOMICIDE",
+
+                caseStatus:
+                    extra.caseStatus ||
+                    "ACTIVE INVESTIGATION",
+
+                location:
+                    extra.location ||
+                    "UNKNOWN",
+
+                date:
+                    extra.date ||
+                    "",
+
+                deathImage:
+                    extra.deathImage ||
+                    "",
+
+                crimeSceneImage:
+                    extra.crimeSceneImage ||
+                    "",
+
+                notes:
+                    extra.notes ||
+                    ""
 
             };
 
 
-            const existing =
+            const existingCharacter =
                 state.characters.find(
                     character =>
                         character.id === id
                 );
 
 
-            if (!existing) {
+            if (!existingCharacter) {
 
                 state.characters.push({
 
@@ -269,14 +321,8 @@
 
             else {
 
-                existing.isVictim =
+                existingCharacter.isVictim =
                     true;
-
-                existing.name =
-                    name;
-
-                existing.img =
-                    img || existing.img;
 
             }
 
@@ -294,7 +340,7 @@
 
 
         /* ========================================================
-           ADD SUSPECT
+           SUSPECT
         ======================================================== */
 
         markSuspect(id) {
@@ -311,7 +357,8 @@
 
             const character =
                 state.characters.find(
-                    c => c.id === id
+                    c =>
+                        c.id === id
                 );
 
 
@@ -354,7 +401,7 @@
 
 
         /* ========================================================
-           SUSPECT CHECK
+           CHECK SUSPECT
         ======================================================== */
 
         isSuspect(id) {
@@ -429,7 +476,8 @@
 
 
             const ratio =
-                state.clues.length / total;
+                state.clues.length /
+                total;
 
 
             if (ratio >= .80) {
@@ -506,10 +554,6 @@
                 true;
 
 
-            state.phone.repairPercent =
-                100;
-
-
             saveState();
 
         },
@@ -573,18 +617,11 @@
         }
 
 
-        barBuilt =
-            true;
+        barBuilt = true;
 
-
-        /* ========================================================
-           TOP BAR
-        ======================================================== */
 
         const bar =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
 
         bar.id =
@@ -597,7 +634,7 @@
                 class="gameui-btn"
                 data-panel="characters"
             >
-                CHARACTERS
+                Characters
                 <span
                     class="gameui-count"
                     id="gameuiCharCount"
@@ -609,7 +646,7 @@
                 class="gameui-btn"
                 data-panel="suspects"
             >
-                SUSPECTS
+                Suspects
                 <span
                     class="gameui-count"
                     id="gameuiSuspectCount"
@@ -621,7 +658,7 @@
                 class="gameui-btn"
                 data-panel="victim"
             >
-                VICTIM
+                Victim
             </button>
 
 
@@ -629,7 +666,7 @@
                 class="gameui-btn"
                 data-panel="phone"
             >
-                PHONE
+                Phone
             </button>
 
 
@@ -651,9 +688,7 @@
         ======================================================== */
 
         const overlay =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
 
         overlay.id =
@@ -671,10 +706,10 @@
                 <button
                     class="gameui-close"
                     id="gameuiClose"
-                    aria-label="Close"
                 >
                     ×
                 </button>
+
 
                 <div
                     id="gameuiModalBody"
@@ -691,18 +726,16 @@
 
 
         /* ========================================================
-           BAR BUTTONS
+           BUTTONS
         ======================================================== */
 
         bar
-            .querySelectorAll(
-                ".gameui-btn"
-            )
+            .querySelectorAll(".gameui-btn")
             .forEach(button => {
 
                 button.addEventListener(
                     "click",
-                    () => {
+                    function () {
 
                         openPanel(
                             button.dataset.panel
@@ -714,10 +747,6 @@
             });
 
 
-        /* ========================================================
-           CLOSE
-        ======================================================== */
-
         document
             .getElementById(
                 "gameuiClose"
@@ -728,37 +757,13 @@
             );
 
 
-        /* ========================================================
-           CLICK OUTSIDE
-        ======================================================== */
-
         overlay.addEventListener(
             "click",
-            event => {
+            function(event){
 
-                if (
+                if(
                     event.target === overlay
-                ) {
-
-                    closePanel();
-
-                }
-
-            }
-        );
-
-
-        /* ========================================================
-           ESC
-        ======================================================== */
-
-        document.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key === "Escape"
-                ) {
+                ){
 
                     closePanel();
 
@@ -771,7 +776,7 @@
 
 
     /* ============================================================
-       CLOSE PANEL
+       CLOSE
     ============================================================ */
 
     function closePanel() {
@@ -820,9 +825,7 @@
             panel === "characters"
         ) {
 
-            renderCharacters(
-                body
-            );
+            renderCharacters();
 
         }
 
@@ -835,9 +838,7 @@
             panel === "suspects"
         ) {
 
-            renderSuspects(
-                body
-            );
+            renderSuspects();
 
         }
 
@@ -850,24 +851,7 @@
             panel === "victim"
         ) {
 
-            renderVictim(
-                body
-            );
-
-        }
-
-
-        /* ========================================================
-           VICTIM FILE
-        ======================================================== */
-
-        if (
-            panel === "victim-file"
-        ) {
-
-            renderVictimFile(
-                body
-            );
+            renderVictimFile();
 
         }
 
@@ -880,9 +864,7 @@
             panel === "phone"
         ) {
 
-            renderPhone(
-                body
-            );
+            renderPhone();
 
         }
 
@@ -905,29 +887,31 @@
 
 
     /* ============================================================
-       CHARACTER GALLERY
+       CHARACTERS
     ============================================================ */
 
     let selectedCharacterId =
         null;
 
 
-    function renderCharacters(body) {
+    function renderCharacters() {
 
-        const characters =
-            state.characters;
+        const body =
+            document.getElementById(
+                "gameuiModalBody"
+            );
 
 
-        if (!characters.length) {
+        if (
+            !state.characters.length
+        ) {
 
             body.innerHTML = `
 
                 <h2>Characters</h2>
 
                 <div class="gameui-empty">
-
                     No characters have appeared yet.
-
                 </div>
 
             `;
@@ -939,7 +923,7 @@
 
         if (
             !selectedCharacterId ||
-            !characters.some(
+            !state.characters.some(
                 character =>
                     character.id ===
                     selectedCharacterId
@@ -947,13 +931,13 @@
         ) {
 
             selectedCharacterId =
-                characters[0].id;
+                state.characters[0].id;
 
         }
 
 
         const selected =
-            characters.find(
+            state.characters.find(
                 character =>
                     character.id ===
                     selectedCharacterId
@@ -962,16 +946,17 @@
 
         body.innerHTML = `
 
-            <h2>Characters</h2>
-
             <div
-                class="gameui-character-gallery"
+                class="gameui-character-viewer"
             >
 
-                <!-- MAIN CHARACTER -->
+                <h2>
+                    Characters
+                </h2>
+
 
                 <div
-                    class="gameui-main-character"
+                    class="gameui-character-main"
                 >
 
                     ${
@@ -993,101 +978,87 @@
 
 
                     <div
-                        class="gameui-card-name"
+                        class="gameui-character-main-info"
                     >
-                        ${selected.name}
+
+                        <div
+                            class="gameui-character-main-name"
+                        >
+                            ${selected.name}
+                        </div>
+
+
+                        <div
+                            class="gameui-character-main-role"
+                        >
+
+                            ${
+                                selected.isVictim
+                                    ? "VICTIM"
+                                    : state.suspects.includes(
+                                        selected.id
+                                    )
+                                    ? "SUSPECT"
+                                    : "CHARACTER"
+                            }
+
+                        </div>
+
+
+                        ${
+                            !selected.isVictim
+
+                            ?
+
+                            `
+                            <br>
+
+                            <button
+                                class="gameui-character-action"
+                                id="mainSuspectButton"
+                            >
+                                ${
+                                    state.suspects.includes(
+                                        selected.id
+                                    )
+                                    ?
+                                    "REMOVE FROM SUSPECTS"
+                                    :
+                                    "ADD TO SUSPECTS"
+                                }
+                            </button>
+                            `
+
+                            :
+
+                            ""
+                        }
+
                     </div>
-
-
-                    ${
-                        selected.isVictim
-
-                        ?
-
-                        `
-                        <div
-                            class="gameui-character-status"
-                        >
-                            VICTIM
-                        </div>
-                        `
-
-                        :
-
-                        `
-                        <div
-                            class="gameui-character-status"
-                        >
-                            ${
-                                state.suspects.includes(
-                                    selected.id
-                                )
-                                ?
-                                "CURRENTLY MARKED AS SUSPECT"
-                                :
-                                "PERSON OF INTEREST"
-                            }
-                        </div>
-                        `
-                    }
-
-
-                    ${
-                        selected.isVictim
-
-                        ?
-
-                        ""
-
-                        :
-
-                        `
-                        <button
-                            class="gameui-small-btn"
-                            id="mainSuspectButton"
-                        >
-                            ${
-                                state.suspects.includes(
-                                    selected.id
-                                )
-                                ?
-                                "REMOVE FROM SUSPECTS"
-                                :
-                                "ADD TO SUSPECTS"
-                            }
-                        </button>
-                        `
-                    }
 
                 </div>
 
 
-                <!-- SMALL CHARACTER BOXES -->
-
                 <div
-                    class="gameui-character-strip"
+                    class="gameui-character-list"
                 >
 
                     ${
-                        characters
+                        state.characters
                             .map(
                                 character => `
 
                                 <div
                                     class="
-                                        gameui-character-small
+                                        gameui-character-card
                                         ${
                                             character.id ===
                                             selected.id
-                                            ?
-                                            "selected"
-                                            :
-                                            ""
+                                            ? "active"
+                                            : ""
                                         }
                                     "
-                                    data-character-id="
-                                        ${character.id}
-                                    "
+                                    data-character-id="${character.id}"
                                 >
 
                                     ${
@@ -1109,9 +1080,7 @@
 
 
                                     <div
-                                        class="
-                                            gameui-character-small-name
-                                        "
+                                        class="gameui-character-card-info"
                                     >
                                         ${character.name}
                                     </div>
@@ -1131,7 +1100,7 @@
 
 
         /* ========================================================
-           SMALL CHARACTER CLICK
+           CHARACTER SELECTION
         ======================================================== */
 
         body
@@ -1142,15 +1111,12 @@
 
                 card.addEventListener(
                     "click",
-                    () => {
+                    function(){
 
                         selectedCharacterId =
                             card.dataset.characterId;
 
-
-                        renderCharacters(
-                            body
-                        );
+                        renderCharacters();
 
                     }
                 );
@@ -1162,20 +1128,17 @@
            SUSPECT BUTTON
         ======================================================== */
 
-        const suspectButton =
+        const mainSuspectButton =
             document.getElementById(
                 "mainSuspectButton"
             );
 
 
-        if (suspectButton) {
+        if (mainSuspectButton) {
 
-            suspectButton.addEventListener(
+            mainSuspectButton.addEventListener(
                 "click",
-                event => {
-
-                    event.stopPropagation();
-
+                function(){
 
                     if (
                         state.suspects.includes(
@@ -1198,9 +1161,7 @@
                     }
 
 
-                    renderCharacters(
-                        body
-                    );
+                    renderCharacters();
 
                 }
             );
@@ -1214,7 +1175,13 @@
        SUSPECTS
     ============================================================ */
 
-    function renderSuspects(body) {
+    function renderSuspects() {
+
+        const body =
+            document.getElementById(
+                "gameuiModalBody"
+            );
+
 
         const suspects =
             state.characters.filter(
@@ -1227,7 +1194,10 @@
 
         body.innerHTML = `
 
-            <h2>Suspects</h2>
+            <h2>
+                Suspects
+            </h2>
+
 
             ${
                 suspects.length
@@ -1236,7 +1206,7 @@
 
                 `
                 <div
-                    class="gameui-suspect-grid"
+                    class="gameui-file-suspects"
                 >
 
                     ${
@@ -1245,46 +1215,51 @@
                                 character => `
 
                                 <div
-                                    class="
-                                        gameui-suspect-card
-                                    "
+                                    class="gameui-file-suspect"
                                 >
 
-                                    ${
-                                        character.img
-
-                                        ?
-
-                                        `
-                                        <img
-                                            src="${character.img}"
-                                            alt="${character.name}"
-                                        >
-                                        `
-
-                                        :
-
-                                        ""
-                                    }
-
-
                                     <div
-                                        class="
-                                            gameui-card-name
-                                        "
+                                        class="gameui-file-suspect-photo"
                                     >
-                                        ${character.name}
+
+                                        ${
+                                            character.img
+
+                                            ?
+
+                                            `
+                                            <img
+                                                src="${character.img}"
+                                                alt="${character.name}"
+                                            >
+                                            `
+
+                                            :
+
+                                            `?`
+                                        }
+
                                     </div>
 
 
-                                    <button
-                                        class="gameui-small-btn"
-                                        data-remove-suspect="
-                                            ${character.id}
-                                        "
+                                    <div
+                                        class="gameui-file-suspect-info"
                                     >
-                                        REMOVE FROM SUSPECTS
-                                    </button>
+
+                                        <div
+                                            class="gameui-file-suspect-name"
+                                        >
+                                            ${character.name}
+                                        </div>
+
+
+                                        <span
+                                            class="gameui-file-suspect-status"
+                                        >
+                                            SUSPECT
+                                        </span>
+
+                                    </div>
 
                                 </div>
 
@@ -1301,7 +1276,7 @@
                 `
                 <div class="gameui-empty">
 
-                    No suspects have been added yet.
+                    No suspects have been identified.
 
                 </div>
                 `
@@ -1309,39 +1284,20 @@
 
         `;
 
-
-        body
-            .querySelectorAll(
-                "[data-remove-suspect]"
-            )
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        GameUI.removeSuspect(
-                            button.dataset.removeSuspect
-                        );
-
-
-                        renderSuspects(
-                            body
-                        );
-
-                    }
-                );
-
-            });
-
     }
 
 
     /* ============================================================
-       VICTIM SUMMARY
+       VICTIM FILE
     ============================================================ */
 
-    function renderVictim(body) {
+    function renderVictimFile() {
+
+        const body =
+            document.getElementById(
+                "gameuiModalBody"
+            );
+
 
         const victim =
             state.victim;
@@ -1351,7 +1307,10 @@
 
             body.innerHTML = `
 
-                <h2>Victim</h2>
+                <h2>
+                    Victim File
+                </h2>
+
 
                 <div class="gameui-empty">
 
@@ -1367,263 +1326,78 @@
         }
 
 
-        body.innerHTML = `
-
-            <h2>Victim</h2>
-
-
-            <div
-                class="gameui-victim-summary"
-            >
-
-                <div
-                    class="gameui-victim-photo"
-                >
-
-                    ${
-                        victim.img
-
-                        ?
-
-                        `
-                        <img
-                            src="${victim.img}"
-                            alt="${victim.name}"
-                        >
-                        `
-
-                        :
-
-                        `
-                        <div
-                            class="gameui-empty"
-                        >
-                            No photograph available.
-                        </div>
-                        `
-                    }
-
-                </div>
-
-
-                <div
-                    class="gameui-victim-details"
-                >
-
-                    <div
-                        class="gameui-victim-label"
-                    >
-                        VICTIM
-                    </div>
-
-
-                    <div
-                        class="gameui-victim-name"
-                    >
-                        ${victim.name}
-                    </div>
-
-
-                    <div
-                        class="gameui-detail-row"
-                    >
-
-                        <div
-                            class="gameui-detail-label"
-                        >
-                            DATE OF BIRTH
-                        </div>
-
-                        <div
-                            class="gameui-detail-value"
-                        >
-                            ${victim.birthday || "UNKNOWN"}
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="gameui-detail-row"
-                    >
-
-                        <div
-                            class="gameui-detail-label"
-                        >
-                            CAUSE OF DEATH
-                        </div>
-
-                        <div
-                            class="gameui-detail-value"
-                        >
-                            ${victim.cause || "UNKNOWN"}
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="gameui-detail-row"
-                    >
-
-                        <div
-                            class="gameui-detail-label"
-                        >
-                            STATUS
-                        </div>
-
-                        <div
-                            class="gameui-detail-value"
-                        >
-                            DECEASED — ACTIVE INVESTIGATION
-                        </div>
-
-                    </div>
-
-
-                    ${
-                        victim.location
-
-                        ?
-
-                        `
-                        <div
-                            class="gameui-detail-row"
-                        >
-
-                            <div
-                                class="gameui-detail-label"
-                            >
-                                RECOVERY LOCATION
-                            </div>
-
-                            <div
-                                class="gameui-detail-value"
-                            >
-                                ${victim.location}
-                            </div>
-
-                        </div>
-                        `
-
-                        :
-
-                        ""
-                    }
-
-
-                    <button
-                        class="
-                            gameui-victim-file-btn
-                        "
-                        id="showVictimFile"
-                    >
-                        SHOW VICTIM FILE
-                    </button>
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        document
-            .getElementById(
-                "showVictimFile"
-            )
-            .addEventListener(
-                "click",
-                () => {
-
-                    renderVictimFile(
-                        body
-                    );
-
-                }
+        const suspects =
+            state.characters.filter(
+                character =>
+                    state.suspects.includes(
+                        character.id
+                    )
             );
 
-    }
-
-
-    /* ============================================================
-       FULL VICTIM FILE
-    ============================================================ */
-
-    function renderVictimFile(body) {
-
-        const victim =
-            state.victim;
-
-
-        if (!victim) {
-
-            body.innerHTML = `
-
-                <h2>Victim File</h2>
-
-                <div class="gameui-empty">
-
-                    Victim information is unavailable.
-
-                </div>
-
-            `;
-
-            return;
-
-        }
-
 
         body.innerHTML = `
 
             <div
-                class="gameui-file"
+                class="gameui-victim-file"
             >
 
-                <!-- FILE HEADER -->
+
+                <!-- ====================================
+                     HEADER
+                ===================================== -->
 
                 <div
-                    class="gameui-file-header"
+                    class="gameui-victim-header"
                 >
 
                     <div>
 
                         <div
-                            class="gameui-file-department"
+                            class="gameui-victim-label"
                         >
                             POLICE DEPARTMENT
                         </div>
 
 
                         <div
-                            class="gameui-file-title"
+                            class="gameui-victim-title"
                         >
                             VICTIM INFORMATION
+                        </div>
+
+
+                        <div
+                            class="gameui-victim-case"
+                        >
+                            CASE #${victim.caseNumber}
                         </div>
 
                     </div>
 
 
                     <div
-                        class="gameui-file-case"
+                        class="gameui-victim-status"
                     >
-                        ACTIVE INVESTIGATION
+                        ${victim.caseStatus}
                     </div>
 
                 </div>
 
 
-                <!-- FILE CONTENT -->
+
+                <!-- ====================================
+                     VICTIM MAIN
+                ===================================== -->
 
                 <div
-                    class="gameui-file-content"
+                    class="gameui-victim-main"
                 >
 
-                    <!-- PHOTO -->
+
+                    <!-- PORTRAIT -->
 
                     <div
-                        class="gameui-file-photo"
+                        class="gameui-victim-portrait"
                     >
 
                         ${
@@ -1649,140 +1423,414 @@
                             `
                         }
 
+
+                        <div
+                            class="gameui-victim-portrait-label"
+                        >
+                            VICTIM PHOTOGRAPH
+                        </div>
+
                     </div>
 
 
-                    <!-- DATA -->
+
+                    <!-- DETAILS -->
 
                     <div
-                        class="gameui-file-data"
+                        class="gameui-victim-details"
                     >
 
-                        <div
-                            class="gameui-file-section-title"
-                        >
-                            VICTIM
-                        </div>
+                        ${victimInfoRow(
+                            "NAME",
+                            victim.name
+                        )}
 
+                        ${victimInfoRow(
+                            "DATE OF BIRTH",
+                            victim.birthday
+                        )}
 
-                        <div
-                            class="gameui-file-name"
-                        >
-                            ${victim.name}
-                        </div>
+                        ${victimInfoRow(
+                            "AGE",
+                            victim.age
+                        )}
 
+                        ${victimInfoRow(
+                            "SEX",
+                            victim.sex
+                        )}
 
-                        <div
-                            class="gameui-file-row"
-                        >
+                        ${victimInfoRow(
+                            "OCCUPATION",
+                            victim.occupation
+                        )}
 
-                            <div
-                                class="gameui-file-row-label"
-                            >
-                                FULL NAME
-                            </div>
+                        ${victimInfoRow(
+                            "ADDRESS",
+                            victim.address
+                        )}
 
-                            <div
-                                class="gameui-file-row-value"
-                            >
-                                ${victim.name}
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="gameui-file-row"
-                        >
-
-                            <div
-                                class="gameui-file-row-label"
-                            >
-                                DATE OF BIRTH
-                            </div>
-
-                            <div
-                                class="gameui-file-row-value"
-                            >
-                                ${victim.birthday || "UNKNOWN"}
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="gameui-file-row"
-                        >
-
-                            <div
-                                class="gameui-file-row-label"
-                            >
-                                CAUSE OF DEATH
-                            </div>
-
-                            <div
-                                class="gameui-file-row-value"
-                            >
-                                ${victim.cause || "UNKNOWN"}
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="gameui-file-row"
-                        >
-
-                            <div
-                                class="gameui-file-row-label"
-                            >
-                                RECOVERY LOCATION
-                            </div>
-
-                            <div
-                                class="gameui-file-row-value"
-                            >
-                                ${
-                                    victim.location ||
-                                    "UNKNOWN"
-                                }
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="gameui-file-row"
-                        >
-
-                            <div
-                                class="gameui-file-row-label"
-                            >
-                                CASE STATUS
-                            </div>
-
-                            <div
-                                class="gameui-file-row-value"
-                            >
-                                ACTIVE INVESTIGATION
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="gameui-file-note"
-                        >
-                            This file contains the currently
-                            available official information
-                            regarding the victim. Additional
-                            information may become available
-                            as the investigation progresses.
-                        </div>
+                        ${victimInfoRow(
+                            "EMERGENCY CONTACT",
+                            victim.emergencyContact
+                        )}
 
                     </div>
 
                 </div>
+
+
+
+                <!-- ====================================
+                     CASE INFORMATION
+                ===================================== -->
+
+                <section
+                    class="gameui-dossier-section"
+                >
+
+                    <div
+                        class="gameui-dossier-title"
+                    >
+                        CASE INFORMATION
+                    </div>
+
+
+                    <div
+                        class="gameui-case-grid"
+                    >
+
+                        ${caseGridItem(
+                            "CASE TYPE",
+                            victim.caseType
+                        )}
+
+                        ${caseGridItem(
+                            "STATUS",
+                            victim.caseStatus
+                        )}
+
+                        ${caseGridItem(
+                            "LOCATION",
+                            victim.location
+                        )}
+
+                        ${caseGridItem(
+                            "DATE",
+                            victim.date
+                        )}
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- ====================================
+                     DEATH / CRIME EVIDENCE
+                ===================================== -->
+
+                ${
+                    victim.deathImage ||
+                    victim.crimeSceneImage
+
+                    ?
+
+                    `
+                    <section
+                        class="gameui-dossier-section"
+                    >
+
+                        <div
+                            class="gameui-dossier-title"
+                        >
+                            DEATH / CRIME SCENE
+                        </div>
+
+
+                        <div
+                            class="gameui-evidence-grid"
+                        >
+
+                            ${
+                                victim.deathImage
+
+                                ?
+
+                                `
+                                <div
+                                    class="gameui-evidence-card"
+                                >
+
+                                    <img
+                                        src="${victim.deathImage}"
+                                        alt="Death evidence"
+                                    >
+
+                                    <div
+                                        class="gameui-evidence-label"
+                                    >
+                                        DEATH RECORD
+                                    </div>
+
+                                </div>
+                                `
+
+                                :
+
+                                ""
+                            }
+
+
+                            ${
+                                victim.crimeSceneImage
+
+                                ?
+
+                                `
+                                <div
+                                    class="gameui-evidence-card"
+                                >
+
+                                    <img
+                                        src="${victim.crimeSceneImage}"
+                                        alt="Crime scene"
+                                    >
+
+                                    <div
+                                        class="gameui-evidence-label"
+                                    >
+                                        CRIME SCENE
+                                    </div>
+
+                                </div>
+                                `
+
+                                :
+
+                                ""
+                            }
+
+                        </div>
+
+                    </section>
+                    `
+
+                    :
+
+                    ""
+                }
+
+
+
+                <!-- ====================================
+                     CASE NOTES
+                ===================================== -->
+
+                ${
+                    victim.notes
+
+                    ?
+
+                    `
+                    <section
+                        class="gameui-dossier-section"
+                    >
+
+                        <div
+                            class="gameui-dossier-title"
+                        >
+                            INVESTIGATION NOTES
+                        </div>
+
+
+                        <p
+                            style="
+                                margin:0;
+                                color:#c9c2b2;
+                                line-height:1.8;
+                                font-size:13px;
+                            "
+                        >
+                            ${victim.notes}
+                        </p>
+
+                    </section>
+                    `
+
+                    :
+
+                    ""
+                }
+
+
+
+                <!-- ====================================
+                     SUSPECTS
+                ===================================== -->
+
+                <section
+                    class="gameui-dossier-section"
+                >
+
+                    <div
+                        class="gameui-dossier-title"
+                    >
+                        IDENTIFIED SUSPECTS
+                    </div>
+
+
+                    ${
+                        suspects.length
+
+                        ?
+
+                        `
+                        <div
+                            class="gameui-file-suspects"
+                        >
+
+                            ${
+                                suspects
+                                    .map(
+                                        character => `
+
+                                        <div
+                                            class="gameui-file-suspect"
+                                        >
+
+                                            <div
+                                                class="gameui-file-suspect-photo"
+                                            >
+
+                                                ${
+                                                    character.img
+
+                                                    ?
+
+                                                    `
+                                                    <img
+                                                        src="${character.img}"
+                                                        alt="${character.name}"
+                                                    >
+                                                    `
+
+                                                    :
+
+                                                    "?"
+                                                }
+
+                                            </div>
+
+
+                                            <div
+                                                class="gameui-file-suspect-info"
+                                            >
+
+                                                <div
+                                                    class="gameui-file-suspect-name"
+                                                >
+                                                    ${character.name}
+                                                </div>
+
+
+                                                <span
+                                                    class="gameui-file-suspect-status"
+                                                >
+                                                    SUSPECT
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    `
+                                    )
+                                    .join("")
+                            }
+
+                        </div>
+                        `
+
+                        :
+
+                        `
+                        <div
+                            class="gameui-empty"
+                        >
+                            No suspects have been identified.
+                        </div>
+                        `
+                    }
+
+                </section>
+
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* ============================================================
+       VICTIM INFO ROW HELPER
+    ============================================================ */
+
+    function victimInfoRow(
+        label,
+        value
+    ) {
+
+        return `
+
+            <div
+                class="gameui-victim-info-row"
+            >
+
+                <span
+                    class="gameui-victim-info-label"
+                >
+                    ${label}
+                </span>
+
+
+                <span
+                    class="gameui-victim-info-value"
+                >
+                    ${value || "—"}
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* ============================================================
+       CASE GRID HELPER
+    ============================================================ */
+
+    function caseGridItem(
+        label,
+        value
+    ) {
+
+        return `
+
+            <div
+                class="gameui-case-grid-item"
+            >
+
+                <span>
+                    ${label}
+                </span>
+
+
+                <strong>
+                    ${value || "UNKNOWN"}
+                </strong>
 
             </div>
 
@@ -1795,7 +1843,13 @@
        PHONE
     ============================================================ */
 
-    function renderPhone(body) {
+    function renderPhone() {
+
+        const body =
+            document.getElementById(
+                "gameuiModalBody"
+            );
+
 
         const repair =
             state.phone.repairPercent;
@@ -1807,23 +1861,18 @@
 
             body.innerHTML = `
 
-                <h2>Phone</h2>
-
                 <div
                     class="gameui-phone-panel"
                 >
 
                     <h2>
-                        PHONE AVAILABLE
+                        Phone
                     </h2>
 
-                    <div
-                        class="gameui-phone-status"
-                    >
-                        The phone has been repaired
-                        and is now available as an
-                        investigation tool.
-                    </div>
+
+                    <p>
+                        Phone repaired and unlocked.
+                    </p>
 
 
                     <a
@@ -1837,87 +1886,84 @@
 
             `;
 
-            return;
-
         }
 
-
-        if (
+        else if (
             repair >= 100
         ) {
 
             body.innerHTML = `
-
-                <h2>Phone</h2>
 
                 <div
                     class="gameui-phone-panel"
                 >
 
                     <h2>
-                        REPAIR COMPLETE
+                        Phone
                     </h2>
 
-                    <div
-                        class="gameui-phone-status"
-                    >
-                        The phone is ready to be
-                        unlocked and used.
-                    </div>
+
+                    <p>
+                        Repair complete.
+                    </p>
+
+
+                    <p>
+                        You still need the
+                        victim's birthday.
+                    </p>
 
 
                     <a
                         class="gameui-small-btn"
-                        href="repair.html"
+                        href="victim-info.html"
                     >
-                        CONTINUE
+                        VIEW VICTIM INFO
                     </a>
 
                 </div>
 
             `;
 
-            return;
-
         }
 
+        else {
 
-        body.innerHTML = `
-
-            <h2>Phone</h2>
-
-            <div
-                class="gameui-phone-panel"
-            >
-
-                <h2>
-                    DAMAGED PHONE
-                </h2>
+            body.innerHTML = `
 
                 <div
-                    class="gameui-phone-status"
+                    class="gameui-phone-panel"
                 >
-                    Repair progress:
-                    ${repair}%
+
+                    <h2>
+                        Phone
+                    </h2>
+
+
+                    <p>
+                        Repair:
+                        ${repair}%
+                    </p>
+
+
+                    <a
+                        class="gameui-small-btn"
+                        href="repair.html"
+                    >
+                        CONTINUE REPAIR
+                    </a>
+
                 </div>
 
+            `;
 
-                <a
-                    class="gameui-small-btn"
-                    href="repair.html"
-                >
-                    CONTINUE REPAIR
-                </a>
-
-            </div>
-
-        `;
+        }
 
     }
 
 
     /* ============================================================
-       RENDER BAR COUNTS
+       RENDER BAR
     ============================================================ */
 
     function renderBar() {
@@ -1970,7 +2016,7 @@
         if (clueCount) {
 
             clueCount.textContent =
-                `CLUES ${state.clues.length}/${state.totalCluesPossible}`;
+                `Clues: ${state.clues.length}/${state.totalCluesPossible}`;
 
         }
 
@@ -1983,7 +2029,7 @@
 
     document.addEventListener(
         "DOMContentLoaded",
-        () => {
+        function(){
 
             buildBarOnce();
 
