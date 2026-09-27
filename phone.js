@@ -4,6 +4,9 @@
    ========================================================= */
 
 const PHONE_KEY = "brokenPhoneStateV6";
+const PHONE_REPAIRED_KEY = "brokenPhoneRepaired";
+const VICTIM_INFO_KEY = "brokenPhoneVictimInfo";
+
 const PASSCODE = "0521";
 
 
@@ -34,9 +37,7 @@ const appFiles = {
 
     music: "music.html",
 
-    clock: "clock.html",
-
-    "victim-info": "victim-info.html"
+    clock: "clock.html"
 
 };
 
@@ -111,12 +112,6 @@ const appInfo = {
         name: "Clock",
         icon: "◷",
         className: "clock-icon"
-    },
-
-    "victim-info": {
-        name: "Victim Info",
-        icon: "▤",
-        className: "victim-icon"
     }
 
 };
@@ -131,8 +126,8 @@ const defaultState = {
     hidden: false,
 
     /*
-       The phone starts LOCKED every time phone.html
-       is loaded.
+       Phone starts LOCKED when phone.html loads.
+       Repair completion only makes the phone visible.
     */
 
     unlocked: false,
@@ -144,6 +139,19 @@ const defaultState = {
     history: []
 
 };
+
+
+/* =========================================================
+   CHECK REPAIR STATUS
+   ========================================================= */
+
+function isPhoneRepaired() {
+
+    return localStorage.getItem(
+        PHONE_REPAIRED_KEY
+    ) === "true";
+
+}
 
 
 /* =========================================================
@@ -244,10 +252,6 @@ const appFrame =
 
 const toggle =
     document.getElementById("phoneToggle");
-
-
-const victimInfoButton =
-    document.getElementById("victimInfoButton");
 
 
 const homePages =
@@ -371,13 +375,143 @@ function showOnly(element) {
 
 
 /* =========================================================
+   UPDATE EXTERNAL VICTIM FILE
+   ========================================================= */
+
+/*
+   Victim File is OUTSIDE the phone.
+
+   Expected HTML:
+
+   <div id="externalVictimInfo">
+
+       <span data-victim="name"></span>
+       <span data-victim="age"></span>
+       <span data-victim="occupation"></span>
+       <span data-victim="location"></span>
+       <span data-victim="status"></span>
+
+   </div>
+*/
+
+function updateExternalVictimInfo() {
+
+    const panel =
+        document.getElementById(
+            "externalVictimInfo"
+        );
+
+
+    if (!panel) {
+
+        return;
+
+    }
+
+
+    /*
+       Victim File should only appear
+       after the phone has been repaired.
+    */
+
+    if (!isPhoneRepaired()) {
+
+        panel.classList.add(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    panel.classList.remove(
+        "hidden"
+    );
+
+
+    let victimInfo = {};
+
+
+    try {
+
+        victimInfo =
+            JSON.parse(
+                localStorage.getItem(
+                    VICTIM_INFO_KEY
+                )
+            ) || {};
+
+    } catch (error) {
+
+        console.error(
+            "Could not load victim information:",
+            error
+        );
+
+    }
+
+
+    const fields = {
+
+        name:
+            victimInfo.name ||
+            "Unknown",
+
+        age:
+            victimInfo.age ||
+            "Unknown",
+
+        occupation:
+            victimInfo.occupation ||
+            "Unknown",
+
+        location:
+            victimInfo.location ||
+            "Unknown",
+
+        status:
+            victimInfo.status ||
+            "Deceased"
+
+    };
+
+
+    Object.entries(fields)
+        .forEach(
+            ([key, value]) => {
+
+                const element =
+                    panel.querySelector(
+                        `[data-victim="${key}"]`
+                    );
+
+
+                if (element) {
+
+                    element.textContent =
+                        value;
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
    RENDER
    ========================================================= */
 
 function render() {
 
     if (!shell) {
+
+        updateExternalVictimInfo();
+
         return;
+
     }
 
 
@@ -385,6 +519,9 @@ function render() {
         "hidden-phone",
         state.hidden
     );
+
+
+    updateExternalVictimInfo();
 
 
     /* -----------------------------------------------------
@@ -492,7 +629,9 @@ function render() {
 function loadApp(app) {
 
     if (!appFrame) {
+
         return;
+
     }
 
 
@@ -565,7 +704,7 @@ function loadApp(app) {
 
     /* -----------------------------------------------------
        LOAD IFRAME
-       
+
        Don't reload the same app unnecessarily.
     ----------------------------------------------------- */
 
@@ -594,7 +733,9 @@ function loadApp(app) {
 function showPasscode() {
 
     if (state.unlocked) {
+
         return;
+
     }
 
 
@@ -618,7 +759,9 @@ function showPasscode() {
 function returnToLock() {
 
     if (state.unlocked) {
+
         return;
+
     }
 
 
@@ -656,7 +799,9 @@ function setupPasscode() {
 
 
     if (!pad) {
+
         return;
+
     }
 
 
@@ -906,7 +1051,9 @@ function setupPasscode() {
 function updateHomePage() {
 
     if (!homePages) {
+
         return;
+
     }
 
 
@@ -1143,6 +1290,7 @@ function handleSwipe() {
    ========================================================= */
 
 [
+
     lockScreen,
 
     passcodeScreen,
@@ -1153,7 +1301,9 @@ function handleSwipe() {
     screen => {
 
         if (!screen) {
+
             return;
+
         }
 
 
@@ -1203,7 +1353,9 @@ function mouseStart(event) {
 function mouseEnd(event) {
 
     if (!mouseDown) {
+
         return;
+
     }
 
 
@@ -1224,6 +1376,7 @@ function mouseEnd(event) {
 
 
 [
+
     homeScreen,
 
     lockScreen,
@@ -1234,7 +1387,9 @@ function mouseEnd(event) {
     screen => {
 
         if (!screen) {
+
             return;
+
         }
 
 
@@ -1282,7 +1437,7 @@ function openApp(app) {
     /*
        If opening an app from another app,
        remember the current app.
-       
+
        Example:
 
        Messages
@@ -1492,6 +1647,56 @@ function showPhone() {
 
 
 /* =========================================================
+   SHOW PHONE AFTER REPAIR
+   ========================================================= */
+
+function showPhoneAfterRepair() {
+
+    /*
+       Repair has finished.
+
+       The phone becomes visible automatically,
+       but remains locked until the player
+       enters the passcode.
+    */
+
+    localStorage.setItem(
+        PHONE_REPAIRED_KEY,
+        "true"
+    );
+
+
+    state.hidden =
+        false;
+
+
+    state.unlocked =
+        false;
+
+
+    state.currentApp =
+        "home";
+
+
+    state.homePage =
+        0;
+
+
+    state.history =
+        [];
+
+
+    saveState();
+
+
+    updateExternalVictimInfo();
+
+    render();
+
+}
+
+
+/* =========================================================
    OUTSIDE PHONE BUTTON
    ========================================================= */
 
@@ -1510,55 +1715,6 @@ if (toggle) {
                 closePhone();
 
             }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   VICTIM INFO
-   ========================================================= */
-
-/*
-   Victim Info is treated as a NORMAL PHONE APP.
-
-   If your HTML has:
-
-       id="victimInfoButton"
-
-   this will work.
-
-   If your HTML instead has:
-
-       data-app="victim-info"
-
-   the global app-button handler below
-   will also work.
-*/
-
-if (victimInfoButton) {
-
-    victimInfoButton.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-
-            if (!state.unlocked) {
-
-                return;
-
-            }
-
-
-            openApp(
-                "victim-info"
-            );
 
         }
     );
@@ -2088,13 +2244,13 @@ if (clearSearch) {
 /*
    ANY button with:
 
-       data-app="victim-info"
+       data-app="messages"
 
    automatically opens:
 
-       victim-info.html
+       messages.html
 
-   The same works for every other app.
+   Victim Info is intentionally NOT included here.
 */
 
 document
@@ -2339,7 +2495,33 @@ window.addEventListener(
 
 
         /* -------------------------------------------------
-           REPAIR.HTML CAN EXPLICITLY LOCK PHONE
+           REPAIR COMPLETE
+           
+           Repair.html should send:
+
+           {
+               type: "PHONE_REPAIRED"
+           }
+
+           The phone becomes visible automatically.
+        ------------------------------------------------- */
+
+        if (
+            data.type ===
+                "PHONE_REPAIRED"
+        ) {
+
+            showPhoneAfterRepair();
+
+            return;
+
+        }
+
+
+        /* -------------------------------------------------
+           REPAIR CAN EXPLICITLY LOCK PHONE
+           
+           Kept for compatibility with older code.
         ------------------------------------------------- */
 
         if (
@@ -2364,5 +2546,7 @@ window.addEventListener(
 setupPasscode();
 
 updateClock();
+
+updateExternalVictimInfo();
 
 render();
