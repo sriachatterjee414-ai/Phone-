@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -9,12 +10,24 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Broken Phone — Investigation</title>
+    <title>Broken Phone — Story</title>
 
     <link
         rel="stylesheet"
         href="story.css"
     >
+
+    <!-- Persistent Game UI -->
+    <link
+        rel="stylesheet"
+        href="persistent-ui.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="dialogue-controls.css"
+    >
+
 </head>
 
 <body>
@@ -27,12 +40,17 @@
 
     <div id="room" class="room">
 
-        <div id="roomImage" class="room-image"></div>
+        <div
+            id="roomImage"
+            class="room-image"
+        ></div>
+
 
         <div
             id="wakeOverlay"
             class="wake-overlay"
         ></div>
+
 
         <div
             id="blurLayer"
@@ -85,7 +103,10 @@
                     placeholder="Your name..."
                 >
 
-                <button id="nameContinue">
+                <button
+                    id="nameContinue"
+                    type="button"
+                >
                     CONTINUE
                 </button>
 
@@ -195,11 +216,22 @@
 
 </main>
 
-<script src="story.js"></script>
-    <link rel="stylesheet" href="dialogue-controls.css">
+
+<!-- =========================================
+     PERSISTENT GAME UI
+========================================== -->
+
+<script src="persistent-ui.js"></script>
+
+
+<!-- =========================================
+     STORY
+========================================== -->
 
 <script src="story.js"></script>
+
 <script src="dialogue-controls.js"></script>
 
 </body>
+
 </html>
