@@ -2,28 +2,47 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport"
-          content="width=device-width,
-                   initial-scale=1.0,
-                   maximum-scale=1.0,
-                   user-scalable=no">
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>Broken Phone</title>
 
     <link rel="stylesheet" href="phone.css">
-
 </head>
 
 <body>
 
-<main class="investigation-stage">
+<div class="investigation-stage">
 
-    <!-- =====================================================
+    <!-- =========================================
+         OUTSIDE-PHONE CONTROLS
+         ========================================= -->
+
+    <aside class="game-controls">
+
+        <button id="victimInfoButton" class="game-side-button">
+            <span class="side-button-icon victim-file-icon"></span>
+            <span class="side-button-text">
+                <strong>VICTIM FILE</strong>
+                <small>CASE INFORMATION</small>
+            </span>
+        </button>
+
+        <button id="phoneToggle" class="game-side-button">
+            <span class="side-button-icon device-icon"></span>
+            <span class="side-button-text">
+                <strong id="phoneToggleText">CLOSE DEVICE</strong>
+                <small id="phoneToggleSubtext">SECURE PHONE</small>
+            </span>
+        </button>
+
+    </aside>
+
+
+    <!-- =========================================
          PHONE
-    ====================================================== -->
+         ========================================= -->
 
     <section id="phoneShell" class="phone-shell">
 
@@ -31,62 +50,42 @@
 
             <div class="phone-bezel">
 
-                <!-- =================================================
+
+                <!-- =================================
                      LOCK SCREEN
-                ================================================== -->
+                     ================================= -->
 
                 <div id="lockScreen"
                      class="screen lock-screen">
 
-                    <div class="status-bar">
+                    <div class="android-status">
 
-                        <span id="lockStatusTime">
-                            00:00
-                        </span>
+                        <span id="lockStatusTime">00:00</span>
 
-                        <div class="status-icons">
-
-                            <span class="signal-icon">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                            </span>
-
-                            <span class="wifi-icon">
-                                ◔
-                            </span>
-
-                            <span class="battery-icon">
-                                <span></span>
-                            </span>
-
+                        <div class="status-right">
+                            <span class="signal-icon"></span>
+                            <span class="wifi-icon"></span>
+                            <span class="battery-icon"></span>
                         </div>
 
                     </div>
 
 
-                    <div class="lock-content">
+                    <div id="lockDate"
+                         class="lock-date">
+                        Sunday, September 27
+                    </div>
 
-                        <div id="lockDate"
-                             class="lock-date">
-                            Sunday, September 27
-                        </div>
+                    <div id="lockTime"
+                         class="lock-time">
+                        00:00
+                    </div>
 
-                        <div id="lockTime"
-                             class="lock-time">
-                            00:00
-                        </div>
 
-                        <div class="lock-weather">
+                    <div class="lock-weather">
 
-                            <span class="weather-cloud">
-                                ☁
-                            </span>
-
-                            <span>28°</span>
-
-                        </div>
+                        <span class="weather-symbol">☁</span>
+                        <span>28°</span>
 
                     </div>
 
@@ -94,22 +93,14 @@
                     <div class="lock-bottom">
 
                         <button class="lock-shortcut"
-                                type="button"
                                 aria-label="Camera">
-
-                            <svg viewBox="0 0 24 24">
-                                <path d="M8 6l1.4-2h5.2L16 6h2.5A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5v-8A2.5 2.5 0 0 1 5.5 6H8z"/>
-                                <circle cx="12" cy="12.5" r="3.2"/>
-                            </svg>
-
+                            <span class="camera-mini-icon"></span>
                         </button>
 
 
-                        <div class="unlock-prompt">
+                        <div class="unlock-hint">
 
-                            <div class="unlock-arrow">
-                                ↑
-                            </div>
+                            <span class="unlock-arrow">↑</span>
 
                             <span>
                                 Swipe up to unlock
@@ -119,13 +110,8 @@
 
 
                         <button class="lock-shortcut"
-                                type="button"
-                                aria-label="Flashlight">
-
-                            <svg viewBox="0 0 24 24">
-                                <path d="M9 3h6l1 4-2 2v9l-2 3-2-3V9L8 7l1-4z"/>
-                            </svg>
-
+                                aria-label="Phone">
+                            <span class="phone-mini-icon"></span>
                         </button>
 
                     </div>
@@ -133,75 +119,48 @@
                 </div>
 
 
-                <!-- =================================================
+                <!-- =================================
                      PASSCODE
-                ================================================== -->
+                     ================================= -->
 
                 <div id="passcodeScreen"
                      class="screen passcode-screen hidden">
 
-                    <div class="status-bar">
+                    <div class="android-status">
 
                         <span id="passcodeTime">
                             00:00
                         </span>
 
-                        <div class="status-icons">
-
-                            <span class="signal-icon">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                            </span>
-
-                            <span class="wifi-icon">
-                                ◔
-                            </span>
-
-                            <span class="battery-icon">
-                                <span></span>
-                            </span>
-
+                        <div class="status-right">
+                            <span class="signal-icon"></span>
+                            <span class="wifi-icon"></span>
+                            <span class="battery-icon"></span>
                         </div>
 
                     </div>
 
 
-                    <div class="passcode-content">
+                    <div class="passcode-title">
 
-                        <div class="passcode-lock-icon">
+                        <span class="passcode-lock-icon"></span>
 
-                            <svg viewBox="0 0 24 24">
-                                <rect x="5" y="10"
-                                      width="14"
-                                      height="10"
-                                      rx="2"/>
-
-                                <path d="M8 10V7
-                                         a4 4 0 0 1 8 0v3"/>
-                            </svg>
-
-                        </div>
-
-                        <h2>
-                            Enter passcode
-                        </h2>
+                        <h2>Enter passcode</h2>
 
                         <p>
-                            Device secured
+                            Passcode required
                         </p>
 
+                    </div>
 
-                        <div id="passcodeDots"
-                             class="passcode-dots">
 
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                    <div id="passcodeDots"
+                         class="passcode-dots">
 
-                        </div>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
 
                     </div>
 
@@ -211,15 +170,6 @@
                     </div>
 
 
-                    <button id="passcodeCancel"
-                            class="passcode-cancel"
-                            type="button">
-
-                        Cancel
-
-                    </button>
-
-
                     <div id="passcodeError"
                          class="passcode-error">
                     </div>
@@ -227,55 +177,39 @@
                 </div>
 
 
-                <!-- =================================================
-                     HOME SCREEN
-                ================================================== -->
+                <!-- =================================
+                     HOME
+                     ================================= -->
 
                 <div id="homeScreen"
                      class="screen home-screen hidden">
 
-
-                    <div class="status-bar home-status">
+                    <div class="android-status">
 
                         <span id="homeStatusTime">
                             00:00
                         </span>
 
-                        <div class="status-icons">
-
-                            <span class="signal-icon">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                            </span>
-
-                            <span class="wifi-icon">
-                                ◔
-                            </span>
-
-                            <span class="battery-icon">
-                                <span></span>
-                            </span>
-
+                        <div class="status-right">
+                            <span class="signal-icon"></span>
+                            <span class="wifi-icon"></span>
+                            <span class="battery-icon"></span>
                         </div>
 
                     </div>
 
 
-                    <!-- HOME PAGES -->
-
                     <div id="homePages"
                          class="home-pages">
 
 
-                        <!-- =================================================
+                        <!-- =========================
                              PAGE 1
-                        ================================================== -->
+                             ========================= -->
 
                         <div class="home-page">
 
-                            <div class="clock-widget">
+                            <div class="android-clock-widget">
 
                                 <div id="homeBigTime">
                                     00:00
@@ -290,16 +224,7 @@
 
                             <div class="google-search">
 
-                                <svg viewBox="0 0 24 24"
-                                     class="search-icon">
-
-                                    <circle cx="11"
-                                            cy="11"
-                                            r="6"/>
-
-                                    <path d="M16 16l5 5"/>
-
-                                </svg>
+                                <span class="google-g">G</span>
 
                                 <input id="appSearch"
                                        type="search"
@@ -307,24 +232,11 @@
                                        autocomplete="off">
 
                                 <button id="clearSearch"
-                                        type="button">
+                                        aria-label="Clear">
                                     ×
                                 </button>
 
-                                <svg class="mic-icon"
-                                     viewBox="0 0 24 24">
-
-                                    <rect x="8"
-                                          y="3"
-                                          width="8"
-                                          height="12"
-                                          rx="4"/>
-
-                                    <path d="M5 11a7 7 0 0 0 14 0
-                                             M12 18v3
-                                             M9 21h6"/>
-
-                                </svg>
+                                <span class="search-mic-icon"></span>
 
                             </div>
 
@@ -333,254 +245,57 @@
 
                                 <button class="app-icon"
                                         data-app="calls">
-
-                                    <span class="real-icon phone-icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M6.6 3.5l3 2.5-1.8 3
-                                                     c1 2 2.7 3.7 4.7 4.7
-                                                     l3-1.8 2.5 3
-                                                     c.6.7.5 1.7-.2 2.2
-                                                     -1 .8-2.1 1.1-3.2.7
-                                                     -4.2-1.3
-                                                     -7.1-4.1-8.4-8.4
-                                                     -.4-1.1-.1-2.2.7-3.2
-                                                     .5-.7 1.5-.8 2.2-.2z"/>
-                                        </svg>
-                                    </span>
-
-                                    <span>
-                                        Phone
-                                    </span>
-
+                                    <span class="real-icon phone-icon"></span>
+                                    <span>Phone</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="messages">
-
-                                    <span class="real-icon messages-icon">
-
-                                        <svg viewBox="0 0 24 24">
-
-                                            <path d="M4 5.5
-                                                     A2.5 2.5 0 0 1
-                                                     6.5 3h11
-                                                     A2.5 2.5 0 0 1
-                                                     20 5.5v8
-                                                     A2.5 2.5 0 0 1
-                                                     17.5 16H10l-4.5 4
-                                                     V16h-1A2.5 2.5 0 0 1
-                                                     2 13.5v-8z"/>
-
-                                            <path d="M7 8h10
-                                                     M7 11.5h6"/>
-
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Messages
-                                    </span>
-
+                                    <span class="real-icon messages-icon"></span>
+                                    <span>Messages</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="gallery">
-
-                                    <span class="real-icon gallery-icon">
-
-                                        <svg viewBox="0 0 24 24">
-
-                                            <rect x="3"
-                                                  y="4"
-                                                  width="18"
-                                                  height="16"
-                                                  rx="2"/>
-
-                                            <circle cx="8"
-                                                    cy="9"
-                                                    r="1.5"/>
-
-                                            <path d="M4 17l5-5
-                                                     3 3 2-2
-                                                     6 5"/>
-
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Gallery
-                                    </span>
-
+                                    <span class="real-icon gallery-icon"></span>
+                                    <span>Gallery</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="notes">
-
-                                    <span class="real-icon notes-icon">
-
-                                        <svg viewBox="0 0 24 24">
-
-                                            <path d="M6 3h12
-                                                     a2 2 0 0 1
-                                                     2 2v14
-                                                     a2 2 0 0 1
-                                                     -2 2H6
-                                                     a2 2 0 0 1
-                                                     -2-2V5
-                                                     a2 2 0 0 1
-                                                     2-2z"/>
-
-                                            <path d="M7.5 8h9
-                                                     M7.5 11.5h9
-                                                     M7.5 15h6"/>
-
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Notes
-                                    </span>
-
+                                    <span class="real-icon notes-icon"></span>
+                                    <span>Notes</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="contacts">
-
-                                    <span class="real-icon contacts-icon">
-
-                                        <svg viewBox="0 0 24 24">
-
-                                            <circle cx="12"
-                                                    cy="8"
-                                                    r="3"/>
-
-                                            <path d="M6 20
-                                                     a6 6 0 0 1
-                                                     12 0"/>
-
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Contacts
-                                    </span>
-
+                                    <span class="real-icon contacts-icon"></span>
+                                    <span>Contacts</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="browser">
-
-                                    <span class="real-icon browser-icon">
-
-                                        <svg viewBox="0 0 24 24">
-
-                                            <circle cx="12"
-                                                    cy="12"
-                                                    r="9"/>
-
-                                            <path d="M3 12h18
-                                                     M12 3
-                                                     c3 3 3 15 0 18
-                                                     M12 3
-                                                     c-3 3-3 15 0 18"/>
-
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Browser
-                                    </span>
-
+                                    <span class="real-icon browser-icon"></span>
+                                    <span>Browser</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="camera">
-
-                                    <span class="real-icon camera-icon">
-
-                                        <svg viewBox="0 0 24 24">
-
-                                            <path d="M5 7h3l1.3-2h5.4L16 7h3
-                                                     a2 2 0 0 1 2 2v9
-                                                     a2 2 0 0 1-2 2H5
-                                                     a2 2 0 0 1-2-2V9
-                                                     a2 2 0 0 1 2-2z"/>
-
-                                            <circle cx="12"
-                                                    cy="13"
-                                                    r="3.5"/>
-
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Camera
-                                    </span>
-
+                                    <span class="real-icon camera-icon"></span>
+                                    <span>Camera</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="settings">
-
-                                    <span class="real-icon settings-icon">
-
-                                        <svg viewBox="0 0 24 24">
-
-                                            <circle cx="12"
-                                                    cy="12"
-                                                    r="3"/>
-
-                                            <path d="M19 13.5
-                                                     l1.5 1
-                                                     -2 3
-                                                     -1.8-.8
-                                                     a7 7 0 0 1
-                                                     -2 1.2
-                                                     L14.5 20h-3
-                                                     l-.2-2.1
-                                                     a7 7 0 0 1
-                                                     -2-1.2
-                                                     l-1.8.8
-                                                     -2-3
-                                                     1.5-1
-                                                     a7 7 0 0 1
-                                                     0-3
-                                                     l-1.5-1
-                                                     2-3
-                                                     1.8.8
-                                                     a7 7 0 0 1
-                                                     2-1.2
-                                                     L11.5 4h3
-                                                     l.2 2.1
-                                                     a7 7 0 0 1
-                                                     2 1.2
-                                                     1.8-.8
-                                                     2 3
-                                                     -1.5 1
-                                                     a7 7 0 0 1
-                                                     0 3z"/>
-
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Settings
-                                    </span>
-
+                                    <span class="real-icon settings-icon"></span>
+                                    <span>Settings</span>
                                 </button>
 
                             </div>
@@ -588,190 +303,75 @@
                         </div>
 
 
-                        <!-- =================================================
+                        <!-- =========================
                              PAGE 2
-                        ================================================== -->
+                             ========================= -->
 
                         <div class="home-page">
 
-                            <div class="page-heading">
-                                Applications
+                            <div class="page-label">
+                                APPS
                             </div>
 
 
-                            <div class="app-grid secondary-grid">
+                            <div class="app-grid">
 
                                 <button class="app-icon"
                                         data-app="bank">
-
-                                    <span class="real-icon bank-icon">
-                                        $
-                                    </span>
-
-                                    <span>
-                                        Bank
-                                    </span>
-
+                                    <span class="real-icon bank-icon"></span>
+                                    <span>Bank</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="music">
-
-                                    <span class="real-icon music-icon">
-
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M9 18V5l10-2v13"/>
-                                            <circle cx="6"
-                                                    cy="18"
-                                                    r="3"/>
-                                            <circle cx="16"
-                                                    cy="16"
-                                                    r="3"/>
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Music
-                                    </span>
-
+                                    <span class="real-icon music-icon"></span>
+                                    <span>Music</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="clock">
-
-                                    <span class="real-icon clock-icon">
-
-                                        <svg viewBox="0 0 24 24">
-
-                                            <circle cx="12"
-                                                    cy="12"
-                                                    r="9"/>
-
-                                            <path d="M12 7v5l3 2"/>
-
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Clock
-                                    </span>
-
+                                    <span class="real-icon clock-icon"></span>
+                                    <span>Clock</span>
                                 </button>
 
                             </div>
 
-
-                            <!-- SUBTLE CLUE -->
-
-                            <button id="recoveredFile"
-                                    class="recovered-file"
-                                    type="button">
-
-                                <span class="file-symbol">
-
-                                    <svg viewBox="0 0 24 24">
-
-                                        <path d="M6 3h8l4 4v14H6z"/>
-                                        <path d="M14 3v5h5"/>
-                                        <path d="M9 13h6
-                                                 M9 16h4"/>
-
-                                    </svg>
-
-                                </span>
-
-                                <span class="file-text">
-
-                                    <strong>
-                                        RECOVERED FILE
-                                    </strong>
-
-                                    <small>
-                                        case_0147.dat
-                                    </small>
-
-                                </span>
-
-                                <span class="file-arrow">
-                                    ›
-                                </span>
-
-                            </button>
-
                         </div>
 
 
-                        <!-- =================================================
+                        <!-- =========================
                              PAGE 3
-                        ================================================== -->
+                             ========================= -->
 
                         <div class="home-page">
 
-                            <div class="page-heading">
-                                Utilities
+                            <div class="page-label">
+                                MORE
                             </div>
 
-                            <div class="app-grid secondary-grid">
+
+                            <div class="app-grid">
 
                                 <button class="app-icon"
-                                        data-app="browser">
-
-                                    <span class="real-icon browser-icon">
-
-                                        <svg viewBox="0 0 24 24">
-                                            <circle cx="12"
-                                                    cy="12"
-                                                    r="9"/>
-                                            <path d="M3 12h18"/>
-                                            <path d="M12 3
-                                                     c3 3 3 15 0 18"/>
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Browser
-                                    </span>
-
+                                        data-app="files">
+                                    <span class="real-icon files-icon"></span>
+                                    <span>Files</span>
                                 </button>
 
 
                                 <button class="app-icon"
                                         data-app="settings">
+                                    <span class="real-icon settings-icon"></span>
+                                    <span>Settings</span>
+                                </button>
 
-                                    <span class="real-icon settings-icon">
 
-                                        <svg viewBox="0 0 24 24">
-                                            <circle cx="12"
-                                                    cy="12"
-                                                    r="3"/>
-                                            <path d="M19 13.5l1.5 1-2 3
-                                                     -1.8-.8
-                                                     a7 7 0 0 1-2 1.2
-                                                     L14.5 20h-3
-                                                     l-.2-2.1
-                                                     a7 7 0 0 1-2-1.2
-                                                     l-1.8.8-2-3
-                                                     1.5-1a7 7 0 0 1 0-3
-                                                     l-1.5-1 2-3
-                                                     1.8.8a7 7 0 0 1 2-1.2
-                                                     L11.5 4h3
-                                                     l.2 2.1
-                                                     a7 7 0 0 1 2 1.2
-                                                     l1.8-.8 2 3
-                                                     -1.5 1a7 7 0 0 1 0 3z"/>
-                                        </svg>
-
-                                    </span>
-
-                                    <span>
-                                        Settings
-                                    </span>
-
+                                <button class="app-icon"
+                                        data-app="browser">
+                                    <span class="real-icon browser-icon"></span>
+                                    <span>Browser</span>
                                 </button>
 
                             </div>
@@ -781,14 +381,10 @@
                     </div>
 
 
-                    <!-- SEARCH RESULTS -->
-
                     <div id="searchResults"
                          class="search-results hidden">
                     </div>
 
-
-                    <!-- PAGE DOTS -->
 
                     <div id="pageDots"
                          class="page-dots">
@@ -806,140 +402,70 @@
 
                         <button class="dock-icon phone-icon"
                                 data-app="calls">
-
-                            <svg viewBox="0 0 24 24">
-                                <path d="M6.6 3.5l3 2.5-1.8 3
-                                         c1 2 2.7 3.7 4.7 4.7
-                                         l3-1.8 2.5 3
-                                         c.6.7.5 1.7-.2 2.2
-                                         -1 .8-2.1 1.1-3.2.7
-                                         -4.2-1.3
-                                         -7.1-4.1-8.4-8.4
-                                         -.4-1.1-.1-2.2.7-3.2
-                                         .5-.7 1.5-.8 2.2-.2z"/>
-                            </svg>
-
                         </button>
-
 
                         <button class="dock-icon messages-icon"
                                 data-app="messages">
-
-                            <svg viewBox="0 0 24 24">
-                                <path d="M4 5.5A2.5 2.5 0 0 1
-                                         6.5 3h11A2.5 2.5 0 0 1
-                                         20 5.5v8A2.5 2.5 0 0 1
-                                         17.5 16H10l-4.5 4V16h-1
-                                         A2.5 2.5 0 0 1 2 13.5v-8z"/>
-                                <path d="M7 8h10M7 11.5h6"/>
-                            </svg>
-
                         </button>
-
 
                         <button class="dock-icon gallery-icon"
                                 data-app="gallery">
-
-                            <svg viewBox="0 0 24 24">
-                                <rect x="3"
-                                      y="4"
-                                      width="18"
-                                      height="16"
-                                      rx="2"/>
-                                <circle cx="8"
-                                        cy="9"
-                                        r="1.5"/>
-                                <path d="M4 17l5-5
-                                         3 3 2-2 6 5"/>
-                            </svg>
-
                         </button>
-
 
                         <button class="dock-icon browser-icon"
                                 data-app="browser">
-
-                            <svg viewBox="0 0 24 24">
-                                <circle cx="12"
-                                        cy="12"
-                                        r="9"/>
-                                <path d="M3 12h18"/>
-                                <path d="M12 3
-                                         c3 3 3 15 0 18"/>
-                            </svg>
-
                         </button>
 
                     </div>
 
 
-                    <!-- ANDROID NAV -->
+                    <!-- NAVIGATION -->
 
                     <div id="androidNav"
                          class="android-nav">
 
                         <button id="navBack"
                                 aria-label="Back">
-
-                            <svg viewBox="0 0 24 24">
-                                <path d="M15 5l-7 7 7 7"/>
-                            </svg>
-
+                            <span class="nav-back-icon"></span>
                         </button>
-
 
                         <button id="navHome"
                                 aria-label="Home">
-
-                            <span class="home-nav-circle"></span>
-
+                            <span class="nav-home-icon"></span>
                         </button>
 
-
                         <button id="navRecent"
-                                aria-label="Recent apps">
-
-                            <svg viewBox="0 0 24 24">
-                                <rect x="6"
-                                      y="6"
-                                      width="12"
-                                      height="12"
-                                      rx="1"/>
-                            </svg>
-
+                                aria-label="Recent">
+                            <span class="nav-recent-icon"></span>
                         </button>
 
                     </div>
 
 
-                    <!-- RECENTS -->
+                    <!-- RECENT -->
 
                     <div id="recentPanel"
                          class="recent-panel hidden">
 
-                        <div class="recent-header">
-
-                            <span>
-                                Recent
-                            </span>
-
-                            <button id="closeRecent">
-                                ×
-                            </button>
-
+                        <div class="recent-title">
+                            RECENT APPS
                         </div>
 
-                        <div id="recentList">
-                        </div>
+                        <div id="recentList"></div>
+
+                        <button id="closeRecent"
+                                class="recent-close">
+                            CLOSE
+                        </button>
 
                     </div>
 
                 </div>
 
 
-                <!-- =================================================
-                     APP WINDOW
-                ================================================== -->
+                <!-- =================================
+                     PHONE APP
+                     ================================= -->
 
                 <div id="appScreen"
                      class="screen app-screen hidden">
@@ -947,24 +473,22 @@
                     <div class="app-topbar">
 
                         <button id="appBack"
-                                class="app-back"
+                                class="android-back"
                                 aria-label="Back">
-
-                            <svg viewBox="0 0 24 24">
-                                <path d="M15 5l-7 7 7 7"/>
-                            </svg>
-
+                            <span class="nav-back-icon"></span>
                         </button>
 
 
-                        <div id="appHeaderIcon"
-                             class="header-app-icon">
-                        </div>
+                        <div class="app-title">
 
+                            <span id="appHeaderIcon"
+                                  class="header-app-icon">
+                            </span>
 
-                        <div id="appHeaderName"
-                             class="app-title">
-                            App
+                            <span id="appHeaderName">
+                                App
+                            </span>
+
                         </div>
 
                     </div>
@@ -983,23 +507,44 @@
     </section>
 
 
-    <!-- =====================================================
-         SUBTLE OUTSIDE PHONE CONTROL
-    ====================================================== -->
+    <!-- =========================================
+         VICTIM INFO — OUTSIDE THE PHONE
+         ========================================= -->
 
-    <button id="phoneToggle"
-            class="phone-side-control"
-            type="button">
+    <section id="victimPanel"
+             class="victim-panel hidden">
 
-        <span class="side-control-dot"></span>
+        <div class="victim-panel-header">
 
-        <span id="phoneToggleText">
-            CLOSE DEVICE
-        </span>
+            <div>
+                <span class="victim-panel-kicker">
+                    INVESTIGATION DEPARTMENT
+                </span>
 
-    </button>
+                <h1>
+                    VICTIM FILE
+                </h1>
+            </div>
 
-</main>
+
+            <button id="closeVictimInfo"
+                    class="victim-close"
+                    aria-label="Close victim information">
+                <span></span>
+                <span></span>
+            </button>
+
+        </div>
+
+
+        <iframe id="victimFrame"
+                src=""
+                title="Victim Information">
+        </iframe>
+
+    </section>
+
+</div>
 
 
 <script src="phone.js"></script>
