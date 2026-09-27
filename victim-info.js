@@ -1,139 +1,242 @@
-/* =========================================
+/* ============================================================
+   BROKEN PHONE
    VICTIM INFORMATION SYSTEM
-========================================= */
+
+   Uses the SAME persistent state as persistent-ui.js:
+
+       brokenPhoneGameState
+
+   This means:
+
+       Characters
+       Suspects
+       Victim
+
+   remain synchronized across the game.
+   ============================================================ */
 
 
-/* =========================================
-   STORAGE KEYS
-========================================= */
+/* ============================================================
+   STORAGE
+============================================================ */
 
-const CASE_STAGE_KEY =
-    "brokenPhoneCaseStage";
+const GAME_STATE_KEY =
+    "brokenPhoneGameState";
 
 
 const PHONE_RETURN_KEY =
     "victimInfoReturnPage";
 
 
+/* ============================================================
+   DEFAULT VICTIM DATA
+============================================================ */
 
-/* =========================================
-   CASE STAGES
-========================================= */
+const DEFAULT_VICTIM = {
 
-/*
-    0 = Unknown
+    id:
+        "evelyn-carter",
 
-    1 = Person of Interest
+    name:
+        "Evelyn Carter",
 
-    2 = Primary Suspect
+    img:
+        "victim_portrait.png",
 
-    3 = Killer
+    birthday:
+        "May 21, 2001",
 
-    We can change this later from
-    investigation.html or another
-    part of the game.
-*/
+    age:
+        "24",
 
-const CASE_STAGES = {
+    sex:
+        "Female",
 
-    0: {
+    occupation:
+        "Unknown",
 
-        status:
-            "UNKNOWN",
+    address:
+        "Unknown",
 
-        name:
-            "Unknown",
+    emergency:
+        "Unknown",
 
-        age:
-            "Unknown",
+    phoneStatus:
+        "RECOVERED — DAMAGED",
 
-        connection:
-            "Unknown",
+    caseStatus:
+        "ACTIVE",
 
-        description:
-            "No identified suspect",
+    cause:
+        "UNDER INVESTIGATION",
 
-        caseStatus:
-            "ACTIVE INVESTIGATION"
+    timeOfDeath:
+        "UNKNOWN",
 
-    },
+    discoveryLocation:
+        "UNKNOWN",
 
+    dateDiscovered:
+        "OCTOBER 17",
 
-    1: {
+    crimeSceneImage:
+        "crime_scene.png",
 
-        status:
-            "PERSON OF INTEREST",
-
-        name:
-            "Unknown",
-
-        age:
-            "Unknown",
-
-        connection:
-            "Connected to victim",
-
-        description:
-            "Person of interest identified",
-
-        caseStatus:
-            "ACTIVE INVESTIGATION"
-
-    },
-
-
-    2: {
-
-        status:
-            "PRIMARY SUSPECT",
-
-        name:
-            "Unknown",
-
-        age:
-            "Unknown",
-
-        connection:
-            "Direct connection to victim",
-
-        description:
-            "Primary suspect identified",
-
-        caseStatus:
-            "SUSPECT IDENTIFIED"
-
-    },
-
-
-    3: {
-
-        status:
-            "KILLER",
-
-        name:
-            "Unknown",
-
-        age:
-            "Unknown",
-
-        connection:
-            "Responsible for victim's death",
-
-        description:
-            "Killer identified",
-
-        caseStatus:
-            "CASE SOLVED"
-
-    }
+    deathEvidenceImage:
+        "death_scene.png"
 
 };
 
 
+/* ============================================================
+   LOAD GAME STATE
+============================================================ */
 
-/* =========================================
+function loadGameState() {
+
+    try {
+
+        const raw =
+            localStorage.getItem(
+                GAME_STATE_KEY
+            );
+
+
+        if (!raw) {
+
+            return {
+
+                characters: [],
+
+                suspects: [],
+
+                victim: null
+
+            };
+
+        }
+
+
+        return JSON.parse(raw);
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Victim Info: Could not load game state.",
+            error
+        );
+
+
+        return {
+
+            characters: [],
+
+            suspects: [],
+
+            victim: null
+
+        };
+
+    }
+
+}
+
+
+/* ============================================================
+   GET VICTIM
+============================================================ */
+
+function getVictim() {
+
+    const state =
+        loadGameState();
+
+
+    if (state.victim) {
+
+        return {
+
+            ...DEFAULT_VICTIM,
+
+            ...state.victim
+
+        };
+
+    }
+
+
+    return {
+        ...DEFAULT_VICTIM
+    };
+
+}
+
+
+/* ============================================================
    ELEMENTS
-========================================= */
+============================================================ */
+
+const victimName =
+    document.getElementById(
+        "victimName"
+    );
+
+
+const victimPortrait =
+    document.getElementById(
+        "victimPortrait"
+    );
+
+
+const victimBirthday =
+    document.getElementById(
+        "victimBirthday"
+    );
+
+
+const victimAge =
+    document.getElementById(
+        "victimAge"
+    );
+
+
+const victimSex =
+    document.getElementById(
+        "victimSex"
+    );
+
+
+const victimOccupation =
+    document.getElementById(
+        "victimOccupation"
+    );
+
+
+const victimAddress =
+    document.getElementById(
+        "victimAddress"
+    );
+
+
+const victimEmergency =
+    document.getElementById(
+        "victimEmergency"
+    );
+
+
+const victimPhoneStatus =
+    document.getElementById(
+        "victimPhoneStatus"
+    );
+
+
+const victimCaseStatus =
+    document.getElementById(
+        "victimCaseStatus"
+    );
+
 
 const caseStatus =
     document.getElementById(
@@ -141,39 +244,81 @@ const caseStatus =
     );
 
 
-const caseTypeStatus =
+const crimeSceneImage =
     document.getElementById(
-        "caseTypeStatus"
+        "crimeSceneImage"
     );
 
 
-const suspectStatus =
+const deathEvidenceImage =
     document.getElementById(
-        "suspectStatus"
+        "deathEvidenceImage"
     );
 
 
-const suspectName =
+const crimeSceneCaption =
     document.getElementById(
-        "suspectName"
+        "crimeSceneCaption"
     );
 
 
-const suspectAge =
+const deathEvidenceCaption =
     document.getElementById(
-        "suspectAge"
+        "deathEvidenceCaption"
     );
 
 
-const suspectConnection =
+const causeOfDeath =
     document.getElementById(
-        "suspectConnection"
+        "causeOfDeath"
     );
 
 
-const suspectCard =
+const timeOfDeath =
     document.getElementById(
-        "suspectCard"
+        "timeOfDeath"
+    );
+
+
+const discoveryLocation =
+    document.getElementById(
+        "discoveryLocation"
+    );
+
+
+const dateDiscovered =
+    document.getElementById(
+        "dateDiscovered"
+    );
+
+
+const investigationStatus =
+    document.getElementById(
+        "investigationStatus"
+    );
+
+
+const fileVictimName =
+    document.getElementById(
+        "fileVictimName"
+    );
+
+
+const fileVictimBirthday =
+    document.getElementById(
+        "fileVictimBirthday"
+    );
+
+
+const phonePasscode =
+    document.getElementById(
+        "phonePasscode"
+    );
+
+
+const suspectList =
+    document.getElementById(
+        "suspectList"
     );
 
 
@@ -195,24 +340,480 @@ const backButton =
     );
 
 
-const caseTab =
-    document.getElementById(
-        "caseTab"
-    );
+/* ============================================================
+   FORMAT BIRTHDAY
+============================================================ */
+
+function getBirthdayPasscode(birthday) {
+
+    if (!birthday) {
+
+        return "----";
+
+    }
 
 
+    /*
+        Example:
 
-/* =========================================
+        May 21, 2001
+
+        becomes:
+
+        0521
+    */
+
+    const match =
+        birthday.match(
+            /([A-Za-z]+)\s+(\d{1,2})/
+        );
+
+
+    if (!match) {
+
+        return "----";
+
+    }
+
+
+    const monthName =
+        match[1].toLowerCase();
+
+
+    const day =
+        match[2].padStart(2, "0");
+
+
+    const months = {
+
+        january: "01",
+        february: "02",
+        march: "03",
+        april: "04",
+        may: "05",
+        june: "06",
+        july: "07",
+        august: "08",
+        september: "09",
+        october: "10",
+        november: "11",
+        december: "12"
+
+    };
+
+
+    const month =
+        months[monthName];
+
+
+    if (!month) {
+
+        return "----";
+
+    }
+
+
+    return month + day;
+
+}
+
+
+/* ============================================================
+   UPDATE VICTIM
+============================================================ */
+
+function updateVictimInformation() {
+
+    const victim =
+        getVictim();
+
+
+    /* -----------------------------
+       IDENTITY
+    ----------------------------- */
+
+    victimName.textContent =
+        victim.name;
+
+
+    victimPortrait.src =
+        victim.img ||
+        "victim_portrait.png";
+
+
+    victimPortrait.alt =
+        victim.name;
+
+
+    victimBirthday.textContent =
+        victim.birthday ||
+        "Unknown";
+
+
+    victimAge.textContent =
+        victim.age ||
+        "Unknown";
+
+
+    victimSex.textContent =
+        victim.sex ||
+        "Unknown";
+
+
+    victimOccupation.textContent =
+        victim.occupation ||
+        "Unknown";
+
+
+    victimAddress.textContent =
+        victim.address ||
+        "Unknown";
+
+
+    victimEmergency.textContent =
+        victim.emergency ||
+        "Unknown";
+
+
+    victimPhoneStatus.textContent =
+        victim.phoneStatus ||
+        "Unknown";
+
+
+    victimCaseStatus.textContent =
+        victim.caseStatus ||
+        "ACTIVE";
+
+
+    /* -----------------------------
+       CASE HEADER
+    ----------------------------- */
+
+    caseStatus.textContent =
+        victim.caseStatus ||
+        "ACTIVE INVESTIGATION";
+
+
+    /* -----------------------------
+       EVIDENCE
+    ----------------------------- */
+
+    crimeSceneImage.src =
+        victim.crimeSceneImage ||
+        "crime_scene.png";
+
+
+    deathEvidenceImage.src =
+        victim.deathEvidenceImage ||
+        "death_scene.png";
+
+
+    crimeSceneImage.alt =
+        "Crime scene — " +
+        victim.name;
+
+
+    deathEvidenceImage.alt =
+        "Forensic evidence — " +
+        victim.name;
+
+
+    /* -----------------------------
+       CASE DETAILS
+    ----------------------------- */
+
+    causeOfDeath.textContent =
+        victim.cause ||
+        "UNDER INVESTIGATION";
+
+
+    timeOfDeath.textContent =
+        victim.timeOfDeath ||
+        "UNKNOWN";
+
+
+    discoveryLocation.textContent =
+        victim.discoveryLocation ||
+        "UNKNOWN";
+
+
+    dateDiscovered.textContent =
+        victim.dateDiscovered ||
+        "UNKNOWN";
+
+
+    investigationStatus.textContent =
+        victim.caseStatus ||
+        "ACTIVE";
+
+
+    /* -----------------------------
+       IDENTIFICATION FILE
+    ----------------------------- */
+
+    fileVictimName.textContent =
+        victim.name;
+
+
+    fileVictimBirthday.textContent =
+        victim.birthday ||
+        "UNKNOWN";
+
+
+    phonePasscode.textContent =
+        getBirthdayPasscode(
+            victim.birthday
+        );
+
+}
+
+
+/* ============================================================
+   SUSPECT STATUS
+============================================================ */
+
+function getSuspectStatus(
+    characterId,
+    state
+) {
+
+    /*
+        For now every character placed
+        into Suspects is a person of interest.
+
+        Later we can add:
+
+        person of interest
+        primary suspect
+        killer
+
+        without changing the UI.
+    */
+
+    return "PERSON OF INTEREST";
+
+}
+
+
+/* ============================================================
+   RENDER SUSPECTS
+============================================================ */
+
+function renderSuspects() {
+
+    const state =
+        loadGameState();
+
+
+    const characters =
+        Array.isArray(
+            state.characters
+        )
+            ? state.characters
+            : [];
+
+
+    const suspectIds =
+        Array.isArray(
+            state.suspects
+        )
+            ? state.suspects
+            : [];
+
+
+    const victim =
+        state.victim;
+
+
+    /*
+        Only characters explicitly marked
+        as suspects appear here.
+    */
+
+    const suspects =
+        characters.filter(
+            character => {
+
+                if (
+                    !suspectIds.includes(
+                        character.id
+                    )
+                ) {
+
+                    return false;
+
+                }
+
+
+                /*
+                    Safety:
+                    victim cannot be a suspect.
+                */
+
+                if (
+                    victim &&
+                    victim.id === character.id
+                ) {
+
+                    return false;
+
+                }
+
+
+                return true;
+
+            }
+        );
+
+
+    /* ========================================================
+       NO SUSPECTS
+    ======================================================== */
+
+    if (!suspects.length) {
+
+        suspectList.innerHTML = `
+
+            <div class="no-suspects">
+
+                NO PERSONS OF INTEREST
+                HAVE BEEN IDENTIFIED.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* ========================================================
+       SUSPECT CARDS
+    ======================================================== */
+
+    suspectList.innerHTML = suspects
+        .map(
+            character => `
+
+                <article
+                    class="suspect-card"
+                >
+
+                    <div class="suspect-photo">
+
+                        ${
+                            character.img
+
+                            ?
+
+                            `
+                            <img
+                                src="${character.img}"
+                                alt="${character.name}"
+                            >
+                            `
+
+                            :
+
+                            `
+                            <div
+                                class="unknown-silhouette"
+                            >
+                                ?
+                            </div>
+                            `
+                        }
+
+                    </div>
+
+
+                    <div class="suspect-information">
+
+
+                        <div class="suspect-status">
+
+                            ${getSuspectStatus(
+                                character.id,
+                                state
+                            )}
+
+                        </div>
+
+
+                        <h2>
+                            ${character.name}
+                        </h2>
+
+
+                        <div class="suspect-row">
+
+                            <span>
+                                STATUS
+                            </span>
+
+                            <strong>
+                                Under investigation
+                            </strong>
+
+                        </div>
+
+
+                        <div class="suspect-row">
+
+                            <span>
+                                CONNECTION
+                            </span>
+
+                            <strong>
+                                Pending investigation
+                            </strong>
+
+                        </div>
+
+
+                        <div class="suspect-row">
+
+                            <span>
+                                EVIDENCE
+                            </span>
+
+                            <strong>
+                                ${
+                                    state.suspects.includes(
+                                        character.id
+                                    )
+                                    ?
+                                    "Flagged by investigator"
+                                    :
+                                    "None"
+                                }
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </article>
+
+            `
+        )
+        .join("");
+
+}
+
+
+/* ============================================================
    BIRTHDAY FILE
-========================================= */
+============================================================ */
 
 let birthdayFileShown = false;
 
 
-
 showBirthdayButton.addEventListener(
     "click",
-    function(){
+    function () {
 
         birthdayFileShown = true;
 
@@ -223,7 +824,7 @@ showBirthdayButton.addEventListener(
 
 
         showBirthdayButton.textContent =
-            "BIRTHDAY FILE OPEN";
+            "IDENTIFICATION FILE OPEN";
 
 
         showBirthdayButton.disabled =
@@ -233,163 +834,11 @@ showBirthdayButton.addEventListener(
 );
 
 
-
-/* =========================================
-   GET CASE STAGE
-========================================= */
-
-function getCaseStage(){
-
-    const saved =
-        parseInt(
-            localStorage.getItem(
-                CASE_STAGE_KEY
-            ),
-            10
-        );
-
-
-    if(
-        Number.isNaN(saved)
-    ){
-
-        return 0;
-
-    }
-
-
-    if(
-        saved < 0 ||
-        saved > 3
-    ){
-
-        return 0;
-
-    }
-
-
-    return saved;
-
-}
-
-
-
-/* =========================================
-   UPDATE SUSPECT
-========================================= */
-
-function updateSuspectInformation(){
-
-    const stage =
-        getCaseStage();
-
-
-    const data =
-        CASE_STAGES[stage];
-
-
-
-    caseStatus.textContent =
-        data.caseStatus;
-
-
-    caseTypeStatus.textContent =
-        stage === 3
-            ? "SOLVED"
-            : "ACTIVE";
-
-
-
-    suspectStatus.textContent =
-        data.status;
-
-
-    suspectName.textContent =
-        data.name;
-
-
-    suspectAge.textContent =
-        data.age;
-
-
-    suspectConnection.textContent =
-        data.connection;
-
-
-    suspectStatus.title =
-        data.description;
-
-
-
-    if(stage === 0){
-
-        suspectCard.classList.remove(
-            "identified"
-        );
-
-    }
-
-    else{
-
-        suspectCard.classList.add(
-            "identified"
-        );
-
-    }
-
-}
-
-
-
-/* =========================================
-   CHANGE CASE STAGE
-========================================= */
-
-/*
-    Other files can call:
-
-    setCaseStage(1)
-
-    or
-
-    setCaseStage(2)
-
-    or
-
-    setCaseStage(3)
-
-    when the investigation progresses.
-*/
-
-function setCaseStage(stage){
-
-    if(
-        stage < 0 ||
-        stage > 3
-    ){
-
-        return;
-
-    }
-
-
-    localStorage.setItem(
-        CASE_STAGE_KEY,
-        String(stage)
-    );
-
-
-    updateSuspectInformation();
-
-}
-
-
-
-/* =========================================
+/* ============================================================
    BACK BUTTON
-========================================= */
+============================================================ */
 
-function returnToPreviousPage(){
+function returnToPreviousPage() {
 
     const returnPage =
         localStorage.getItem(
@@ -397,7 +846,7 @@ function returnToPreviousPage(){
         );
 
 
-    if(returnPage){
+    if (returnPage) {
 
         localStorage.removeItem(
             PHONE_RETURN_KEY
@@ -407,21 +856,21 @@ function returnToPreviousPage(){
         window.location.href =
             returnPage;
 
+
         return;
 
     }
 
 
     /*
-       Fallback if victim information
-       was opened directly.
+        If opened directly,
+        return to the story.
     */
 
     window.location.href =
-        "phone.html";
+        "story.html";
 
 }
-
 
 
 backButton.addEventListener(
@@ -430,35 +879,54 @@ backButton.addEventListener(
 );
 
 
+/* ============================================================
+   IMAGE FALLBACKS
+============================================================ */
 
-/* =========================================
-   PERMANENT CASE TAB
-========================================= */
+victimPortrait.addEventListener(
+    "error",
+    function () {
 
-caseTab.addEventListener(
-    "click",
-    function(){
-
-        /*
-           Already on Victim Info,
-           so simply scroll to top.
-        */
-
-        window.scrollTo({
-
-            top:0,
-
-            behavior:"smooth"
-
-        });
+        this.style.display =
+            "none";
 
     }
 );
 
 
+crimeSceneImage.addEventListener(
+    "error",
+    function () {
 
-/* =========================================
+        this.style.display =
+            "none";
+
+    }
+);
+
+
+deathEvidenceImage.addEventListener(
+    "error",
+    function () {
+
+        this.style.display =
+            "none";
+
+    }
+);
+
+
+/* ============================================================
    INITIALIZE
-========================================= */
+============================================================ */
 
-updateSuspectInformation();
+function initializeVictimFile() {
+
+    updateVictimInformation();
+
+    renderSuspects();
+
+}
+
+
+initializeVictimFile();
