@@ -1,129 +1,1747 @@
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif}
-body{background:#151515;color:white}
-button,input{font:inherit;-webkit-tap-highlight-color:transparent}
-button{cursor:pointer}
+*{
+    box-sizing:border-box;
+}
 
-.investigation-stage{width:100%;height:100vh;position:relative;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#292929 0%,#111 70%)}
+html,
+body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#111;
+}
 
-.game-controls{position:fixed;right:22px;bottom:25px;display:flex;flex-direction:column;gap:12px;z-index:500}
-.game-button{min-width:165px;padding:15px 22px;color:#eee;background:rgba(5,5,5,.88);border:1px solid rgba(255,255,255,.45);outline:1px solid rgba(255,255,255,.16);outline-offset:-6px;font-family:Georgia,"Times New Roman",serif;font-size:13px;letter-spacing:3px;text-align:center;transition:.15s}
-.game-button:hover{background:rgba(45,45,45,.95)}
-.game-button:active{transform:scale(.97)}
+body{
+    color:white;
+}
 
-.phone-shell{position:relative;width:390px;height:795px;max-width:86vw;max-height:91vh;transition:opacity .25s,transform .25s}
-.phone-shell.hidden-phone{opacity:0;transform:scale(.88);pointer-events:none}
-.phone-frame{width:100%;height:100%;padding:6px;border-radius:48px;background:linear-gradient(145deg,#333,#050505 45%,#242424);box-shadow:0 30px 60px rgba(0,0,0,.55)}
-.phone-bezel{position:relative;width:100%;height:100%;overflow:hidden;border-radius:42px;border:3px solid #090909;background:#111}
+button,
+input{
+    font:inherit;
+    -webkit-tap-highlight-color:transparent;
+}
 
-.screen{position:absolute;inset:0;overflow:hidden}
-.hidden{display:none!important}
+button{
+    cursor:pointer;
+}
 
-.android-status{position:absolute;top:0;left:0;right:0;height:42px;padding:12px 17px 0;display:flex;justify-content:space-between;align-items:center;z-index:100;color:white;font-size:12px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.45)}
-.status-right{display:flex;align-items:center;gap:8px}
 
-.lock-screen{background:url("phone-lock.png") center/cover no-repeat;color:white}
-.lock-screen:after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15),transparent 35%,rgba(0,0,0,.18));pointer-events:none}
-.lock-date{position:absolute;top:105px;left:15px;right:15px;text-align:center;font-size:17px;font-weight:500;z-index:2}
-.lock-time{position:absolute;top:132px;left:0;right:0;text-align:center;font-size:64px;font-weight:300;letter-spacing:-3px;z-index:2}
-.lock-weather{position:absolute;top:220px;left:0;right:0;display:flex;justify-content:center;gap:7px;font-size:16px;z-index:2}
-.weather-symbol{font-size:25px}
-.lock-bottom{position:absolute;left:28px;right:28px;bottom:35px;display:flex;justify-content:space-between;align-items:center;z-index:2}
-.lock-shortcut{width:45px;height:45px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.35);backdrop-filter:blur(7px);border:1px solid rgba(255,255,255,.3)}
-.unlock-hint{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;text-shadow:0 1px 3px black}
-.unlock-arrow{font-size:22px;animation:unlockArrow 1.4s infinite}
-@keyframes unlockArrow{0%,100%{transform:translateY(3px)}50%{transform:translateY(-5px)}}
+/* =========================================================
+   INVESTIGATION ROOM
+========================================================= */
 
-.passcode-screen{background:url("phone-lock.png") center/cover;color:white}
-.passcode-screen:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.35);pointer-events:none}
-.passcode-title{position:absolute;top:100px;left:0;right:0;text-align:center;z-index:2}
-.passcode-lock{font-size:25px;margin-bottom:8px}
-.passcode-title h2{margin:0;font-size:20px}
-.passcode-title p{margin-top:7px;font-size:11px;opacity:.75}
-.passcode-dots{position:absolute;top:210px;left:0;right:0;display:flex;justify-content:center;gap:12px;z-index:2}
-.passcode-dots span{width:9px;height:9px;border-radius:50%;border:1px solid white}
-.passcode-dots span.filled{background:white}
-.passcode-pad{position:absolute;top:255px;left:35px;right:35px;display:grid;grid-template-columns:repeat(3,1fr);gap:13px 15px;z-index:2}
-.passcode-pad button{width:72px;height:72px;justify-self:center;border:0;border-radius:50%;background:rgba(30,30,30,.7);color:white;font-size:26px;border:1px solid rgba(255,255,255,.15)}
-.passcode-pad button:active{transform:scale(.92);background:rgba(100,100,100,.75)}
-.passcode-pad button small{display:block;font-size:8px;margin-top:2px}
-.passcode-error{position:absolute;top:690px;left:0;right:0;text-align:center;font-size:12px;z-index:3}
+.investigation-stage{
+    width:100%;
+    height:100vh;
+    position:relative;
 
-.home-screen{background:url("phone-home.png") center/cover no-repeat;color:white;touch-action:pan-y}
-.home-pages{position:absolute;inset:0;display:flex;width:300%;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
-.home-page{position:relative;width:33.333333%;flex-shrink:0;height:100%}
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-.android-clock-widget{position:absolute;top:67px;left:25px;text-shadow:0 2px 5px rgba(0,0,0,.45)}
-.android-clock-widget div:first-child{font-size:48px;font-weight:300;letter-spacing:-2px}
-.android-clock-widget div:last-child{margin-top:3px;font-size:13px}
+    background:
+        radial-gradient(
+            circle at center,
+            #303030 0%,
+            #181818 52%,
+            #090909 100%
+        );
+}
 
-.google-search{position:absolute;top:160px;left:20px;right:20px;height:49px;display:flex;align-items:center;gap:8px;padding:0 13px;border-radius:28px;background:rgba(255,255,255,.94);box-shadow:0 4px 12px rgba(0,0,0,.18);color:#555;z-index:40}
-.google-g{font-size:24px;font-weight:700;color:#4285f4}
-.google-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:#333;font-size:14px}
-.google-search input::placeholder{color:#777}
-.google-search button{border:0;background:transparent;color:#777;font-size:22px;padding:2px 5px}
-.mic{font-size:10px;color:#4285f4}
 
-.app-grid{position:absolute;top:235px;left:27px;right:27px;display:grid;grid-template-columns:repeat(4,1fr);gap:27px 13px;justify-items:center}
-.home-page:nth-child(2) .app-grid,.home-page:nth-child(3) .app-grid{top:165px}
-.page-label{position:absolute;top:90px;left:25px;font-family:Georgia,serif;font-size:19px;letter-spacing:3px;text-shadow:0 2px 4px black}
+/* =========================================================
+   PHONE
+========================================================= */
 
-.app-icon{width:70px;padding:0;border:0;background:transparent;color:white;display:flex;flex-direction:column;align-items:center;gap:6px;text-shadow:0 1px 3px rgba(0,0,0,.65);transition:transform .12s}
-.app-icon:active{transform:scale(.92)}
-.app-icon>span:last-child{font-size:10px;white-space:nowrap}
-.real-icon{width:58px;height:58px;border-radius:15px;display:grid;place-items:center;color:white;font-size:27px;box-shadow:0 5px 10px rgba(0,0,0,.25)}
+.phone-shell{
+    position:relative;
 
-.phone-icon{background:linear-gradient(145deg,#69f28d,#16d967)}
-.messages-icon{background:linear-gradient(145deg,#55e87b,#1acb63)}
-.gallery-icon{background:linear-gradient(135deg,#ffbd62,#ee62a2,#64c6ec)}
-.notes-icon{background:linear-gradient(145deg,#67d9f4,#269ee4)}
-.contacts-icon{background:linear-gradient(145deg,#7bb7ff,#3979e9)}
-.browser-icon{background:linear-gradient(145deg,#4ca8f5,#1765cf)}
-.camera-icon{background:linear-gradient(145deg,#5b646b,#22282d)}
-.settings-icon{background:linear-gradient(145deg,#f1f1f1,#aab0b5);color:#333}
-.bank-icon{background:linear-gradient(145deg,#667ba6,#26395d)}
-.music-icon{background:linear-gradient(145deg,#ff7897,#ee456e)}
-.clock-icon{background:linear-gradient(145deg,#fff,#c9ced2);color:#333}
-.victim-icon{background:linear-gradient(145deg,#3a3a3a,#080808);border:1px solid rgba(255,255,255,.4)}
+    width:390px;
+    height:795px;
 
-.search-results{position:absolute;top:215px;left:20px;right:20px;max-height:400px;overflow-y:auto;background:rgba(255,255,255,.97);color:#222;border-radius:18px;z-index:80;box-shadow:0 8px 25px rgba(0,0,0,.35);padding:7px}
-.search-result{width:100%;border:0;background:transparent;display:flex;align-items:center;gap:12px;padding:8px;text-align:left;color:#222}
-.search-result:hover{background:#eee;border-radius:12px}
-.search-result .real-icon{width:43px;height:43px;font-size:20px}
+    max-width:86vw;
+    max-height:91vh;
 
-.page-dots{position:absolute;left:0;right:0;bottom:78px;display:flex;justify-content:center;gap:6px;z-index:30}
-.page-dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55)}
-.page-dots span.active{width:18px;background:white;border-radius:8px}
+    transition:
+        opacity .35s ease,
+        transform .35s ease,
+        filter .35s ease;
 
-.android-dock{position:absolute;left:18px;right:18px;bottom:25px;height:62px;padding:5px 13px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;border-radius:22px;background:rgba(255,255,255,.22);backdrop-filter:blur(12px);z-index:25}
-.dock-icon{width:49px;height:49px;justify-self:center;border:0;border-radius:14px;color:white;font-size:23px}
-.dock-icon:active{transform:scale(.9)}
+    z-index:20;
+}
 
-.android-nav{position:absolute;left:0;right:0;bottom:0;height:30px;display:flex;justify-content:space-around;align-items:center;background:rgba(0,0,0,.86);z-index:400}
-.android-nav button{width:33%;height:30px;border:0;background:transparent;color:white;font-size:14px}
-.android-nav button:active{background:rgba(255,255,255,.15)}
+.phone-shell.hidden-phone{
+    opacity:0;
+    transform:
+        translateX(30px)
+        scale(.94);
 
-.app-screen{background:white;color:#222;z-index:100}
-.app-topbar{position:absolute;top:0;left:0;right:0;height:60px;display:flex;align-items:center;gap:10px;padding:8px 13px;background:rgba(255,255,255,.96);border-bottom:1px solid #ddd;z-index:10}
-.android-back{width:40px;height:40px;border:0;background:transparent;color:#333;font-size:34px;line-height:1}
-.app-title{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
-.header-app-icon{width:29px;height:29px;border-radius:8px;display:grid;place-items:center;color:white}
-#appFrame{position:absolute;top:60px;left:0;width:100%;height:calc(100% - 60px);border:0;background:white}
+    pointer-events:none;
+}
 
-.recent-panel{position:absolute;inset:0;z-index:300;background:rgba(15,15,15,.97);padding:70px 20px 55px;overflow-y:auto}
-.recent-title{font-family:Georgia,serif;letter-spacing:3px;margin-bottom:20px}
-.recent-card{margin-bottom:10px;padding:12px;background:#242424;border:1px solid #444;border-radius:13px}
-.recent-open{width:100%;border:0;background:transparent;color:white;display:flex;align-items:center;gap:12px;text-align:left}
-.recent-open .real-icon{width:45px;height:45px}
-.recent-close{margin-top:15px;padding:10px 20px;background:transparent;color:white;border:1px solid #777;border-radius:8px}
+
+.phone-frame{
+    width:100%;
+    height:100%;
+
+    padding:7px;
+
+    border-radius:50px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #414141 0%,
+            #111 25%,
+            #050505 50%,
+            #252525 100%
+        );
+
+    box-shadow:
+        0 40px 80px rgba(0,0,0,.65),
+        inset 0 1px 1px rgba(255,255,255,.18);
+}
+
+
+.phone-bezel{
+    position:relative;
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    border-radius:43px;
+
+    border:2px solid #050505;
+
+    background:#080808;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+
+/* =========================================================
+   GENERIC SCREEN
+========================================================= */
+
+.screen{
+    position:absolute;
+    inset:0;
+
+    overflow:hidden;
+}
+
+.hidden{
+    display:none!important;
+}
+
+
+/* =========================================================
+   STATUS BAR
+========================================================= */
+
+.status-bar{
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:38px;
+
+    padding:
+        11px
+        18px
+        0
+        18px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    color:white;
+
+    font-size:11px;
+    font-weight:600;
+
+    z-index:200;
+
+    text-shadow:
+        0 1px 3px rgba(0,0,0,.8);
+}
+
+.status-icons{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+
+/* SIGNAL */
+
+.signal-icon{
+    height:12px;
+
+    display:flex;
+    align-items:flex-end;
+    gap:2px;
+}
+
+.signal-icon i{
+    display:block;
+    width:2.5px;
+    background:white;
+    border-radius:2px;
+}
+
+.signal-icon i:nth-child(1){
+    height:4px;
+}
+
+.signal-icon i:nth-child(2){
+    height:6px;
+}
+
+.signal-icon i:nth-child(3){
+    height:8px;
+}
+
+.signal-icon i:nth-child(4){
+    height:10px;
+}
+
+
+/* WIFI */
+
+.wifi-icon{
+    font-size:16px;
+    line-height:10px;
+    transform:rotate(-45deg);
+}
+
+
+/* BATTERY */
+
+.battery-icon{
+    width:20px;
+    height:10px;
+
+    border:1px solid rgba(255,255,255,.9);
+
+    border-radius:3px;
+
+    padding:1px;
+
+    position:relative;
+}
+
+.battery-icon:after{
+    content:"";
+
+    position:absolute;
+
+    right:-3px;
+    top:2px;
+
+    width:2px;
+    height:5px;
+
+    background:white;
+
+    border-radius:0 2px 2px 0;
+}
+
+.battery-icon span{
+    display:block;
+
+    width:80%;
+    height:100%;
+
+    background:white;
+
+    border-radius:1px;
+}
+
+
+/* =========================================================
+   LOCK SCREEN
+========================================================= */
+
+.lock-screen{
+    color:white;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.12),
+            rgba(0,0,0,.25)
+        ),
+        url("phone-lock.png")
+        center/cover
+        no-repeat;
+}
+
+.lock-screen:after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.05),
+            transparent 45%,
+            rgba(0,0,0,.28)
+        );
+
+    pointer-events:none;
+}
+
+
+.lock-content{
+    position:absolute;
+
+    top:100px;
+    left:0;
+    right:0;
+
+    text-align:center;
+
+    z-index:5;
+
+    text-shadow:
+        0 3px 12px rgba(0,0,0,.65);
+}
+
+.lock-date{
+    font-size:16px;
+    font-weight:500;
+    opacity:.95;
+}
+
+.lock-time{
+    margin-top:4px;
+
+    font-size:67px;
+    line-height:1;
+
+    font-weight:300;
+
+    letter-spacing:-4px;
+}
+
+.lock-weather{
+    margin-top:14px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:8px;
+
+    font-size:14px;
+}
+
+.weather-cloud{
+    font-size:22px;
+}
+
+
+.lock-bottom{
+    position:absolute;
+
+    left:28px;
+    right:28px;
+    bottom:39px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    z-index:5;
+}
+
+
+.lock-shortcut{
+    width:47px;
+    height:47px;
+
+    padding:12px;
+
+    display:grid;
+    place-items:center;
+
+    border:1px solid rgba(255,255,255,.28);
+
+    border-radius:50%;
+
+    background:rgba(0,0,0,.28);
+
+    backdrop-filter:blur(10px);
+
+    color:white;
+
+    transition:.15s;
+}
+
+.lock-shortcut:hover{
+    background:rgba(255,255,255,.12);
+}
+
+.lock-shortcut svg{
+    width:22px;
+    height:22px;
+
+    fill:none;
+    stroke:white;
+    stroke-width:1.7;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+.unlock-prompt{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    gap:2px;
+
+    font-size:10px;
+
+    opacity:.85;
+
+    text-shadow:
+        0 2px 5px black;
+}
+
+.unlock-arrow{
+    font-size:23px;
+
+    animation:
+        unlockArrow 1.5s infinite;
+}
+
+@keyframes unlockArrow{
+
+    0%,
+    100%{
+        transform:translateY(3px);
+        opacity:.6;
+    }
+
+    50%{
+        transform:translateY(-4px);
+        opacity:1;
+    }
+}
+
+
+/* =========================================================
+   PASSCODE
+========================================================= */
+
+.passcode-screen{
+    background:
+        linear-gradient(
+            rgba(8,8,8,.82),
+            rgba(8,8,8,.94)
+        ),
+        url("phone-lock.png")
+        center/cover;
+}
+
+
+.passcode-content{
+    position:absolute;
+
+    top:82px;
+    left:0;
+    right:0;
+
+    text-align:center;
+}
+
+.passcode-lock-icon{
+    width:38px;
+    height:38px;
+
+    margin:auto;
+
+    display:grid;
+    place-items:center;
+
+    opacity:.9;
+}
+
+.passcode-lock-icon svg{
+    width:27px;
+    height:27px;
+
+    fill:none;
+    stroke:white;
+    stroke-width:1.7;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.passcode-content h2{
+    margin:12px 0 4px;
+
+    font-size:20px;
+    font-weight:500;
+}
+
+.passcode-content p{
+    margin:0;
+
+    font-size:11px;
+
+    color:rgba(255,255,255,.55);
+}
+
+
+.passcode-dots{
+    margin-top:26px;
+
+    display:flex;
+    justify-content:center;
+
+    gap:13px;
+}
+
+.passcode-dots span{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    border:1px solid rgba(255,255,255,.7);
+}
+
+.passcode-dots span.filled{
+    background:white;
+}
+
+
+.passcode-pad{
+    position:absolute;
+
+    top:270px;
+
+    left:50px;
+    right:50px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:13px 17px;
+}
+
+.passcode-pad button{
+    width:68px;
+    height:68px;
+
+    justify-self:center;
+
+    border-radius:50%;
+
+    border:1px solid
+        rgba(255,255,255,.12);
+
+    background:
+        rgba(255,255,255,.065);
+
+    color:white;
+
+    font-size:24px;
+
+    transition:
+        background .12s,
+        transform .12s;
+}
+
+.passcode-pad button:hover{
+    background:
+        rgba(255,255,255,.13);
+}
+
+.passcode-pad button:active{
+    transform:scale(.91);
+    background:
+        rgba(255,255,255,.2);
+}
+
+.passcode-pad small{
+    display:block;
+
+    margin-top:1px;
+
+    font-size:7px;
+
+    opacity:.55;
+
+    letter-spacing:1px;
+}
+
+
+.passcode-cancel{
+    position:absolute;
+
+    bottom:48px;
+    left:0;
+    right:0;
+
+    margin:auto;
+
+    border:0;
+
+    background:transparent;
+
+    color:rgba(255,255,255,.65);
+
+    font-size:12px;
+}
+
+.passcode-error{
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    bottom:76px;
+
+    text-align:center;
+
+    color:#ffb2b2;
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   HOME SCREEN
+========================================================= */
+
+.home-screen{
+    background:
+        linear-gradient(
+            rgba(0,0,0,.03),
+            rgba(0,0,0,.08)
+        ),
+        url("phone-home.png")
+        center/cover
+        no-repeat;
+
+    color:white;
+
+    touch-action:pan-y;
+}
+
+
+.home-pages{
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    width:300%;
+
+    transition:
+        transform .38s
+        cubic-bezier(.2,.8,.2,1);
+}
+
+.home-page{
+    position:relative;
+
+    width:33.333333%;
+
+    height:100%;
+
+    flex-shrink:0;
+}
+
+
+/* =========================================================
+   CLOCK WIDGET
+========================================================= */
+
+.clock-widget{
+    position:absolute;
+
+    top:66px;
+    left:25px;
+
+    text-shadow:
+        0 3px 8px rgba(0,0,0,.55);
+}
+
+.clock-widget div:first-child{
+    font-size:48px;
+
+    font-weight:300;
+
+    letter-spacing:-3px;
+}
+
+.clock-widget div:last-child{
+    margin-top:4px;
+
+    font-size:12px;
+
+    opacity:.85;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.google-search{
+    position:absolute;
+
+    top:153px;
+    left:20px;
+    right:20px;
+
+    height:47px;
+
+    display:flex;
+    align-items:center;
+
+    gap:10px;
+
+    padding:
+        0
+        13px;
+
+    border-radius:25px;
+
+    background:
+        rgba(255,255,255,.93);
+
+    box-shadow:
+        0 6px 18px
+        rgba(0,0,0,.25);
+
+    color:#555;
+
+    z-index:50;
+}
+
+.search-icon{
+    width:18px;
+    height:18px;
+
+    fill:none;
+
+    stroke:#666;
+    stroke-width:2;
+
+    stroke-linecap:round;
+}
+
+.google-search input{
+    flex:1;
+
+    min-width:0;
+
+    border:0;
+    outline:0;
+
+    background:transparent;
+
+    color:#222;
+
+    font-size:14px;
+}
+
+.google-search input::placeholder{
+    color:#777;
+}
+
+.google-search button{
+    border:0;
+    background:transparent;
+
+    color:#777;
+
+    font-size:21px;
+
+    padding:0 3px;
+}
+
+.mic-icon{
+    width:17px;
+    height:17px;
+
+    fill:none;
+
+    stroke:#666;
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+}
+
+
+/* =========================================================
+   APP GRID
+========================================================= */
+
+.app-grid{
+    position:absolute;
+
+    top:229px;
+
+    left:25px;
+    right:25px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:27px 11px;
+
+    justify-items:center;
+}
+
+
+.app-icon{
+    width:72px;
+
+    padding:0;
+
+    border:0;
+
+    background:transparent;
+
+    color:white;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    gap:7px;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,.7);
+
+    transition:
+        transform .12s;
+}
+
+.app-icon:active{
+    transform:scale(.9);
+}
+
+.app-icon>span:last-child{
+    font-size:10px;
+
+    white-space:nowrap;
+}
+
+
+/* =========================================================
+   REALISTIC ICONS
+========================================================= */
+
+.real-icon{
+    width:58px;
+    height:58px;
+
+    border-radius:17px;
+
+    display:grid;
+    place-items:center;
+
+    color:white;
+
+    box-shadow:
+        0 6px 12px
+        rgba(0,0,0,.3);
+
+    overflow:hidden;
+}
+
+.real-icon svg{
+    width:29px;
+    height:29px;
+
+    fill:none;
+
+    stroke:currentColor;
+
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+/* PHONE */
+
+.phone-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #62dc83,
+            #17a957
+        );
+}
+
+
+/* MESSAGES */
+
+.messages-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #62df83,
+            #13b75c
+        );
+}
+
+
+/* GALLERY */
+
+.gallery-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #ffbd65,
+            #ef6e91 55%,
+            #5cbde8
+        );
+}
+
+
+/* NOTES */
+
+.notes-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #55d8f0,
+            #258fd4
+        );
+}
+
+
+/* CONTACTS */
+
+.contacts-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #7eb7ff,
+            #3979df
+        );
+}
+
+
+/* BROWSER */
+
+.browser-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #5eb4f8,
+            #1265c6
+        );
+}
+
+
+/* CAMERA */
+
+.camera-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #667078,
+            #20262a
+        );
+}
+
+
+/* SETTINGS */
+
+.settings-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #f4f4f4,
+            #b3b8bc
+        );
+
+    color:#333;
+}
+
+
+/* BANK */
+
+.bank-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #667ba7,
+            #293b61
+        );
+
+    font-size:27px;
+    font-weight:500;
+}
+
+
+/* MUSIC */
+
+.music-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #ff7797,
+            #df3d68
+        );
+}
+
+
+/* CLOCK */
+
+.clock-icon{
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #c7ccd0
+        );
+
+    color:#333;
+}
+
+
+/* =========================================================
+   SECOND PAGE
+========================================================= */
+
+.page-heading{
+    position:absolute;
+
+    top:72px;
+    left:25px;
+
+    font-size:18px;
+
+    letter-spacing:.5px;
+
+    text-shadow:
+        0 2px 5px black;
+}
+
+.secondary-grid{
+    top:135px;
+}
+
+
+/* =========================================================
+   RECOVERED FILE
+========================================================= */
+
+.recovered-file{
+    position:absolute;
+
+    left:22px;
+    right:22px;
+
+    bottom:126px;
+
+    height:58px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:
+        0
+        13px;
+
+    border:1px solid
+        rgba(255,255,255,.16);
+
+    border-radius:14px;
+
+    background:
+        rgba(0,0,0,.25);
+
+    backdrop-filter:blur(10px);
+
+    color:white;
+
+    text-align:left;
+
+    box-shadow:
+        0 7px 20px
+        rgba(0,0,0,.2);
+
+    transition:
+        background .15s,
+        border .15s;
+}
+
+.recovered-file:hover{
+    background:
+        rgba(255,255,255,.09);
+
+    border-color:
+        rgba(255,255,255,.28);
+}
+
+.file-symbol{
+    width:33px;
+    height:33px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:9px;
+
+    background:
+        rgba(255,255,255,.1);
+}
+
+.file-symbol svg{
+    width:19px;
+    height:19px;
+
+    fill:none;
+
+    stroke:#eee;
+
+    stroke-width:1.5;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.file-text{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:2px;
+
+    flex:1;
+}
+
+.file-text strong{
+    font-size:10px;
+
+    font-weight:600;
+
+    letter-spacing:1.4px;
+
+    color:#ddd;
+}
+
+.file-text small{
+    font-size:9px;
+
+    color:rgba(255,255,255,.48);
+
+    font-family:
+        monospace;
+}
+
+.file-arrow{
+    font-size:24px;
+
+    color:
+        rgba(255,255,255,.45);
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
+
+.search-results{
+    position:absolute;
+
+    top:207px;
+
+    left:20px;
+    right:20px;
+
+    max-height:390px;
+
+    overflow-y:auto;
+
+    padding:6px;
+
+    background:
+        rgba(250,250,250,.97);
+
+    color:#222;
+
+    border-radius:17px;
+
+    box-shadow:
+        0 12px 30px
+        rgba(0,0,0,.4);
+
+    z-index:100;
+}
+
+.search-result{
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:#222;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:8px;
+
+    border-radius:12px;
+
+    text-align:left;
+}
+
+.search-result:hover{
+    background:#eee;
+}
+
+.search-result .real-icon{
+    width:42px;
+    height:42px;
+
+    border-radius:12px;
+}
+
+
+/* =========================================================
+   PAGE DOTS
+========================================================= */
+
+.page-dots{
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    bottom:94px;
+
+    display:flex;
+    justify-content:center;
+
+    gap:6px;
+
+    z-index:30;
+}
+
+.page-dots span{
+    width:5px;
+    height:5px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,255,255,.45);
+
+    transition:.2s;
+}
+
+.page-dots span.active{
+    width:17px;
+
+    border-radius:7px;
+
+    background:white;
+}
+
+
+/* =========================================================
+   DOCK
+========================================================= */
+
+.android-dock{
+    position:absolute;
+
+    left:17px;
+    right:17px;
+
+    bottom:35px;
+
+    height:59px;
+
+    padding:
+        5px 12px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:8px;
+
+    border-radius:21px;
+
+    background:
+        rgba(255,255,255,.17);
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    backdrop-filter:
+        blur(18px);
+
+    z-index:25;
+}
+
+.dock-icon{
+    width:48px;
+    height:48px;
+
+    justify-self:center;
+
+    border:0;
+
+    border-radius:14px;
+
+    color:white;
+
+    display:grid;
+    place-items:center;
+
+    box-shadow:
+        0 4px 10px
+        rgba(0,0,0,.25);
+}
+
+.dock-icon svg{
+    width:24px;
+    height:24px;
+
+    fill:none;
+
+    stroke:currentColor;
+
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.dock-icon:active{
+    transform:scale(.9);
+}
+
+
+/* =========================================================
+   ANDROID NAVIGATION
+========================================================= */
+
+.android-nav{
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    bottom:0;
+
+    height:29px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    align-items:center;
+
+    background:
+        rgba(0,0,0,.8);
+
+    z-index:150;
+}
+
+.android-nav button{
+    height:29px;
+
+    border:0;
+
+    background:transparent;
+
+    color:white;
+
+    display:grid;
+    place-items:center;
+
+    opacity:.82;
+}
+
+.android-nav button:hover{
+    background:
+        rgba(255,255,255,.08);
+}
+
+.android-nav svg{
+    width:17px;
+    height:17px;
+
+    fill:none;
+
+    stroke:white;
+
+    stroke-width:2;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.home-nav-circle{
+    width:12px;
+    height:12px;
+
+    border:
+        1.7px solid white;
+
+    border-radius:50%;
+}
+
+
+/* =========================================================
+   APP SCREEN
+========================================================= */
+
+.app-screen{
+    background:#f7f7f7;
+
+    color:#222;
+
+    z-index:120;
+}
+
+
+.app-topbar{
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:60px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:
+        8px 13px;
+
+    background:
+        rgba(255,255,255,.97);
+
+    border-bottom:
+        1px solid #ddd;
+
+    box-shadow:
+        0 1px 5px
+        rgba(0,0,0,.08);
+
+    z-index:20;
+}
+
+
+.app-back{
+    width:39px;
+    height:39px;
+
+    padding:9px;
+
+    display:grid;
+    place-items:center;
+
+    border:0;
+
+    background:transparent;
+
+    color:#333;
+
+    border-radius:50%;
+}
+
+.app-back:hover{
+    background:#eee;
+}
+
+.app-back svg{
+    width:22px;
+    height:22px;
+
+    fill:none;
+
+    stroke:#222;
+
+    stroke-width:2;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+.header-app-icon{
+    width:30px;
+    height:30px;
+
+    border-radius:9px;
+
+    display:grid;
+    place-items:center;
+
+    color:white;
+
+    font-size:0;
+}
+
+.header-app-icon svg{
+    width:18px;
+    height:18px;
+}
+
+
+.app-title{
+    font-size:15px;
+
+    font-weight:600;
+}
+
+
+#appFrame{
+    position:absolute;
+
+    top:60px;
+    left:0;
+
+    width:100%;
+
+    height:
+        calc(100% - 60px);
+
+    border:0;
+
+    background:white;
+}
+
+
+/* =========================================================
+   RECENT APPS
+========================================================= */
+
+.recent-panel{
+    position:absolute;
+
+    inset:0;
+
+    z-index:300;
+
+    padding:
+        45px 16px 40px;
+
+    overflow-y:auto;
+
+    background:
+        rgba(12,12,12,.96);
+
+    backdrop-filter:
+        blur(20px);
+}
+
+.recent-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:17px;
+
+    font-size:20px;
+
+    font-weight:500;
+}
+
+.recent-header button{
+    width:32px;
+    height:32px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,255,255,.08);
+
+    color:white;
+
+    font-size:21px;
+}
+
+.recent-card{
+    margin-bottom:10px;
+
+    padding:11px;
+
+    background:#202020;
+
+    border:
+        1px solid #363636;
+
+    border-radius:14px;
+}
+
+.recent-open{
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    text-align:left;
+}
+
+.recent-open .real-icon{
+    width:44px;
+    height:44px;
+}
+
+
+/* =========================================================
+   SIDE CONTROL
+========================================================= */
+
+.phone-side-control{
+    position:fixed;
+
+    right:23px;
+    bottom:25px;
+
+    height:38px;
+
+    padding:
+        0
+        14px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    border-radius:20px;
+
+    background:
+        rgba(10,10,10,.52);
+
+    backdrop-filter:
+        blur(12px);
+
+    color:
+        rgba(255,255,255,.58);
+
+    font-size:9px;
+
+    letter-spacing:1.8px;
+
+    z-index:500;
+
+    transition:
+        background .2s,
+        color .2s;
+}
+
+.phone-side-control:hover{
+    background:
+        rgba(255,255,255,.09);
+
+    color:white;
+}
+
+.side-control-dot{
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,255,255,.55);
+
+    box-shadow:
+        0 0 8px
+        rgba(255,255,255,.25);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media(max-width:600px){
-.phone-shell{width:88vw;height:90vh}
-.game-controls{right:8px;bottom:12px}
-.game-button{min-width:135px;padding:12px;font-size:10px;letter-spacing:2px}
+
+    .phone-shell{
+        width:88vw;
+        height:90vh;
+    }
+
+    .phone-side-control{
+        right:9px;
+        bottom:12px;
+    }
+
 }
+
 @media(max-height:700px){
-.phone-shell{height:94vh}
-.app-grid{top:220px}
-.google-search{top:145px}
+
+    .phone-shell{
+        height:94vh;
+    }
+
+    .app-grid{
+        top:220px;
+    }
+
+    .google-search{
+        top:145px;
+    }
+
 }
