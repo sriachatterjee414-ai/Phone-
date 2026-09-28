@@ -387,7 +387,33 @@ button{
 }
 
 
+.case-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+
+.investigation-clue-count{
+
+    color:#c9a46b;
+
+    font-size:12px;
+
+    letter-spacing:1px;
+
+    white-space:nowrap;
+
+}
+
+
 .title{
+
+    display:block;
 
     font-size:19px;
 
@@ -410,6 +436,13 @@ button{
     font-weight:bold;
 
     transition:.2s;
+}
+
+
+.topbar{
+
+    right:82px;
+
 }
 
 
@@ -1012,6 +1045,28 @@ button{
     .inspect-window{
 
         width:90%;
+
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    .topbar{
+
+        right:12px;
+
+    }
+
+
+    .topbar button{
+
+        position:absolute;
+
+        top:58px;
+
+        right:0;
 
     }
 

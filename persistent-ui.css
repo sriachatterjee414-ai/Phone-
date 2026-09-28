@@ -47,7 +47,7 @@
     position:fixed;
 
     top:18px;
-    right:22px;
+    right:80px;
 
     z-index:9999;
 
@@ -146,17 +146,22 @@
 
 .gameui-clues {
 
+    position:fixed;
+
+    top:18px;
+
+    left:22px;
+
+    z-index:10000;
+
+    pointer-events:none;
+
     color:
         var(--gameui-muted);
 
     font-size:13px;
 
-    padding-left:11px;
-
-    margin-left:4px;
-
-    border-left:
-        1px solid #383838;
+    padding:9px 0;
 
     white-space:nowrap;
 
@@ -1319,11 +1324,20 @@
 
         right:10px;
 
-        top:10px;
+        top:68px;
 
         justify-content:center;
 
         flex-wrap:wrap;
+
+    }
+
+
+    .gameui-clues {
+
+        top:12px;
+
+        left:12px;
 
     }
 

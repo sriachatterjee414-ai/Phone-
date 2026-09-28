@@ -12,6 +12,51 @@ const INVENTORY_KEY =
     "brokenPhoneInventory";
 
 
+function updateInvestigationClueCount(){
+
+    const clueCount =
+        document.getElementById(
+            "investigationClueCount"
+        );
+
+    if(!clueCount){
+
+        return;
+
+    }
+
+    try{
+
+        const state = JSON.parse(
+            localStorage.getItem(
+                "brokenPhoneGameState"
+            ) || "{}"
+        );
+
+        const collected =
+            Array.isArray(state.clues)
+                ? state.clues.length
+                : 0;
+
+        const total =
+            Number.isFinite(state.totalCluesPossible)
+                ? state.totalCluesPossible
+                : 15;
+
+        clueCount.textContent =
+            `Clues: ${collected}/${total}`;
+
+    }
+    catch(error){
+
+        clueCount.textContent =
+            "Clues: 0/15";
+
+    }
+
+}
+
+
 /* =========================================
    REQUIRED REPAIR PARTS
 ========================================= */
@@ -1007,3 +1052,6 @@ window.addEventListener(
     }
 
 );
+
+
+updateInvestigationClueCount();
