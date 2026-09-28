@@ -896,7 +896,7 @@ const apps = {
 
     calls: {
         name: "Phone",
-        file: "phone-calls.html"
+        file: "calls.html"
     },
 
     messages: {

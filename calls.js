@@ -28,7 +28,8 @@ const people = [
             "Sep 26 · 8:16 PM"
         ]
     },
-    name: "unknown",
+    {
+        name: "unknown",
         number: "+1 (212) 665-2174",
         initials: "SM",
         type: "Mobile",
