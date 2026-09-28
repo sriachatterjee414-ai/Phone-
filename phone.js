@@ -20,6 +20,9 @@ const toggleText =
 const victimInfoButton =
     document.getElementById("victimInfoButton");
 
+const investigationControls =
+    document.getElementById("investigationControls");
+
 
 const lockScreen =
     document.getElementById("lockScreen");
@@ -397,6 +400,16 @@ function showScreen(screenName) {
         appScreen.classList.add(
             "hidden"
         );
+
+    }
+
+
+    if (investigationControls) {
+
+        investigationControls.style.display =
+            screenName === "app"
+                ? "none"
+                : "flex";
 
     }
 

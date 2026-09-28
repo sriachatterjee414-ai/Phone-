@@ -2001,6 +2001,13 @@ chatBack.addEventListener(
 
         renderMessageList();
 
+        parent.postMessage(
+            {
+                type: "PHONE_BACK"
+            },
+            "*"
+        );
+
     }
 );
 
@@ -2020,8 +2027,12 @@ backBtn.addEventListener(
     "click",
     () => {
 
-        window.location.href =
-            PHONE_HOME_FILE;
+        parent.postMessage(
+            {
+                type: "PHONE_BACK"
+            },
+            "*"
+        );
 
     }
 );
