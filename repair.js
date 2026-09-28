@@ -61,6 +61,9 @@ const INVENTORY_KEY =
 const REPAIR_COMPLETE_KEY =
     "brokenPhoneRepairComplete";
 
+const REPAIR_SESSION_KEY =
+    "brokenPhoneRepairSession";
+
 
 /* =========================================
    REQUIRED REPAIR COMPONENTS
@@ -320,11 +323,49 @@ const completeSound =
    These reset every time repair.html opens.
 ========================================= */
 
+function loadRepairSession() {
+    try {
+        const saved = JSON.parse(
+            localStorage.getItem(REPAIR_SESSION_KEY) || "null"
+        );
+
+        if (!saved || !Array.isArray(saved.usedParts)) return null;
+
+        const saveSlot = JSON.parse(
+            localStorage.getItem("brokenPhoneSaveSlot") || "null"
+        );
+
+        if (
+            saved.repairFinished &&
+            localStorage.getItem("brokenPhoneResumePage") !== "repair.html" &&
+            saveSlot?.page !== "repair.html"
+        ) {
+            return null;
+        }
+
+        return {
+            condition: Math.max(0, Math.min(100, Number(saved.condition) || 0)),
+            usedParts: saved.usedParts.filter(id => ITEM_DATA[id]),
+            repairFinished: Boolean(saved.repairFinished)
+        };
+    } catch {
+        return null;
+    }
+}
+
 let condition = 0;
 
 let usedParts = [];
 
 let repairFinished = false;
+
+function saveRepairSession() {
+    localStorage.setItem(REPAIR_SESSION_KEY, JSON.stringify({
+        condition,
+        usedParts,
+        repairFinished
+    }));
+}
 
 
 /* =========================================
@@ -481,6 +522,8 @@ function updateMeter() {
             "DEVICE RESTORED";
 
     }
+
+    saveRepairSession();
 
 }
 
@@ -1424,6 +1467,8 @@ skipRepairButton.addEventListener(
         }
 
 
+        localStorage.removeItem(REPAIR_SESSION_KEY);
+
         window.location.href =
             "phone.html";
 
@@ -1484,6 +1529,8 @@ if (
             }
 
 
+            localStorage.removeItem(REPAIR_SESSION_KEY);
+
             window.location.href =
                 "phone.html";
 
@@ -1498,6 +1545,8 @@ if (
 ========================================= */
 
 function setupPreviousRepairState() {
+
+    if (repairFinished) return;
 
 
     if (
@@ -1544,6 +1593,9 @@ function setupPreviousRepairState() {
 
 function resetCurrentRepairAttempt() {
 
+    const savedSession =
+        loadRepairSession();
+
 
     repair.classList.remove(
         "restored"
@@ -1561,15 +1613,15 @@ function resetCurrentRepairAttempt() {
 
 
     condition =
-        0;
+        savedSession?.condition || 0;
 
 
     usedParts =
-        [];
+        savedSession?.usedParts || [];
 
 
     repairFinished =
-        false;
+        savedSession?.repairFinished || false;
 
 
     appliedParts.innerHTML =
@@ -1587,6 +1639,11 @@ function resetCurrentRepairAttempt() {
     conditionText.textContent =
         "PHONE DAMAGED";
 
+    usedParts.forEach(id => {
+        const item = ITEM_DATA[id];
+        if (item) addAppliedPart(item.name, item.correct);
+    });
+
 
     inspectButton.disabled =
         false;
@@ -1595,6 +1652,14 @@ function resetCurrentRepairAttempt() {
     inspectButton.classList.remove(
         "hidden"
     );
+
+    if (repairFinished) {
+        repair.classList.add("restored");
+        blackout.classList.add("hidden");
+        completePanel.classList.remove("hidden");
+        inspectButton.disabled = true;
+        inspectButton.classList.add("hidden");
+    }
 
 
     updateMeter();
@@ -1610,3 +1675,7 @@ resetCurrentRepairAttempt();
 
 
 setupPreviousRepairState();
+
+if (localStorage.getItem("brokenPhoneResumePage") === "repair.html") {
+    localStorage.removeItem("brokenPhoneResumePage");
+}

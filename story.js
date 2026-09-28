@@ -94,7 +94,8 @@ const nameContinue =
    PLAYER NAME
 ============================================================ */
 
-let playerName = "";
+let playerName =
+    localStorage.getItem("brokenPhonePlayerName") || "";
 
 
 /* ============================================================
@@ -1104,7 +1105,21 @@ function startDialogue() {
     );
 
 
-    dialogueIndex = 0;
+    const savedDialogueIndex =
+        localStorage.getItem("brokenPhoneResumeDialogueIndex");
+
+    const shouldResumeDialogue =
+        localStorage.getItem("brokenPhoneResumePage") === "story.html" &&
+        savedDialogueIndex !== null;
+
+    dialogueIndex = shouldResumeDialogue
+        ? Math.min(Math.max(Number(savedDialogueIndex) || 0, 0), dialogue.length - 1)
+        : 0;
+
+    if (shouldResumeDialogue) {
+        localStorage.removeItem("brokenPhoneResumePage");
+        localStorage.removeItem("brokenPhoneResumeDialogueIndex");
+    }
 
 
     displayDialogue();
@@ -1132,6 +1147,10 @@ function displayDialogue() {
 
     const line =
         dialogue[dialogueIndex];
+
+    if (window.GameSave) {
+        GameSave.setDialogueIndex(dialogueIndex);
+    }
 
 
     /*
@@ -1188,6 +1207,26 @@ function displayDialogue() {
     );
 
 }
+
+
+window.addEventListener(
+    "brokenPhonePlayerNameChanged",
+    function(event) {
+
+        playerName =
+            event.detail || "Y/N";
+
+        if (
+            dialogueBox &&
+            !dialogueBox.classList.contains("hidden")
+        ) {
+
+            displayDialogue();
+
+        }
+
+    }
+);
 
 
 /* ============================================================
@@ -1547,6 +1586,25 @@ window.addEventListener(
     function() {
 
         setTimeout(() => {
+
+            const savedDialogueIndex =
+                localStorage.getItem("brokenPhoneResumeDialogueIndex");
+
+            const resumingStory =
+                localStorage.getItem("brokenPhoneResumePage") === "story.html" &&
+                savedDialogueIndex !== null;
+
+            if (resumingStory) {
+                registerRyan();
+
+                if (officer) {
+                    officer.classList.remove("hidden");
+                    officer.classList.add("approach");
+                }
+
+                startDialogue();
+                return;
+            }
 
             beginOpening();
 

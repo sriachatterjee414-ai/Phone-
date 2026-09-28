@@ -726,3 +726,108 @@ body {
         font-size: 16px;
     }
 }
+
+.menu-button:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.continue-preview {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: none;
+    place-items: center;
+    padding: 20px;
+}
+
+.continue-preview.open {
+    display: grid;
+}
+
+.continue-preview-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .78);
+    backdrop-filter: blur(4px);
+}
+
+.continue-preview-dialog {
+    position: relative;
+    width: min(430px, 100%);
+    padding: 34px 30px 28px;
+    border: 1px solid rgba(216, 197, 174, .72);
+    background: rgba(12, 9, 8, .98);
+    color: #eee2d2;
+    box-shadow: 0 18px 55px rgba(0, 0, 0, .7);
+}
+
+.continue-preview-label {
+    margin-bottom: 10px;
+    color: #c9a46b;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.continue-preview-dialog h2 {
+    margin: 0 0 20px;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+.continue-preview-details {
+    display: grid;
+    gap: 10px;
+    padding: 16px 0 22px;
+    border-top: 1px solid rgba(216, 197, 174, .2);
+    border-bottom: 1px solid rgba(216, 197, 174, .2);
+    color: #c7b8a7;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.continue-preview-details strong {
+    color: #eee2d2;
+    font-family: "Special Elite", "Courier New", monospace;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.load-save-button,
+.cancel-save-button {
+    width: 100%;
+    min-height: 45px;
+    margin-top: 16px;
+    border: 1px solid #d8c5ae;
+    background: rgba(10, 8, 7, .72);
+    color: #eee2d2;
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+}
+
+.load-save-button {
+    border-color: #c9a46b;
+    background: #c9a46b;
+    color: #21170e;
+}
+
+.load-save-button:hover {
+    background: #ead0a0;
+}
+
+.cancel-save-button {
+    margin-top: 9px;
+}
+
+.cancel-save-button:hover {
+    background: #eee2d2;
+    color: #120e0c;
+}
+
+.continue-preview-dialog .close-settings {
+    z-index: 1;
+}

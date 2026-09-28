@@ -11,7 +11,7 @@
 
     <title>Broken Phone</title>
 
-    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="menu.css?v=local-save-2">
 </head>
 
 <body>
@@ -64,6 +64,67 @@
             </button>
 
         </nav>
+
+
+        <section
+            class="continue-preview"
+            id="continuePreview"
+            aria-hidden="true"
+        >
+
+            <div
+                class="continue-preview-backdrop"
+                id="closeContinuePreviewBackdrop"
+            ></div>
+
+            <div
+                class="continue-preview-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="continuePreviewTitle"
+            >
+
+                <button
+                    class="close-settings"
+                    id="closeContinuePreview"
+                    type="button"
+                    aria-label="Close saved game preview"
+                >
+                    ×
+                </button>
+
+                <div class="continue-preview-label">
+                    LOCAL SAVE
+                </div>
+
+                <h2 id="continuePreviewTitle">
+                    SAVED GAME
+                </h2>
+
+                <div
+                    class="continue-preview-details"
+                    id="continuePreviewDetails"
+                ></div>
+
+                <button
+                    class="load-save-button"
+                    id="loadSavedGame"
+                    type="button"
+                >
+                    LOAD SAVE
+                </button>
+
+                <button
+                    class="cancel-save-button"
+                    id="cancelContinuePreview"
+                    type="button"
+                >
+                    CANCEL
+                </button>
+
+            </div>
+
+        </section>
 
 
         <!-- Settings panel -->
@@ -161,7 +222,8 @@
     </main>
 
 
-    <script src="menu.js"></script>
+    <script src="game-save.js?v=save-slot-3"></script>
+    <script src="menu.js?v=save-slot-3"></script>
 
 </body>
 

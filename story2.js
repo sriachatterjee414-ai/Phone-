@@ -13,7 +13,7 @@ const story2Ambience = document.getElementById("story2Ambience");
 const story2DialogueAdvance = document.getElementById("story2DialogueAdvance");
 const story2CompleteSound = document.getElementById("story2CompleteSound");
 
-const playerName =
+let playerName =
     localStorage.getItem("brokenPhonePlayerName") || "Y/N";
 
 const STORY2_COMPLETE_KEY =
@@ -225,7 +225,21 @@ const dialogue = [
     { speaker: "RYAN", expression: "sarcastic", text: "I knew you'd say that." }
 ];
 
-let dialogueIndex = 0;
+const savedStory2DialogueIndex =
+    localStorage.getItem("brokenPhoneResumeDialogueIndex");
+
+const resumeStory2Dialogue =
+    localStorage.getItem("brokenPhoneResumePage") === "story2.html" &&
+    savedStory2DialogueIndex !== null;
+
+let dialogueIndex = resumeStory2Dialogue
+    ? Math.min(Math.max(Number(savedStory2DialogueIndex) || 0, 0), dialogue.length - 1)
+    : 0;
+
+if (resumeStory2Dialogue) {
+    localStorage.removeItem("brokenPhoneResumePage");
+    localStorage.removeItem("brokenPhoneResumeDialogueIndex");
+}
 let story2AmbienceRequested = false;
 
 function playStory2Sound(audio, volume = 0.55) {
@@ -300,12 +314,20 @@ function displayDialogue() {
     }
 
     const line = dialogue[dialogueIndex];
+    if (window.GameSave) {
+        GameSave.setDialogueIndex(dialogueIndex);
+    }
     const name = line.speaker === "Y/N" ? playerName : line.speaker;
     speakerName.textContent = name;
     dialogueText.textContent = line.text.replace(/Y\/N/g, playerName);
     updateExpression(line.speaker, line.expression);
     updateCharacterStage(dialogueIndex);
 }
+
+window.addEventListener("brokenPhonePlayerNameChanged", event => {
+    playerName = event.detail || "Y/N";
+    if (!dialogueBox.classList.contains("hidden")) displayDialogue();
+});
 
 function advanceDialogue() {
     if (dialogueBox.classList.contains("hidden")) return;

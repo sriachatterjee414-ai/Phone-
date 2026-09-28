@@ -297,7 +297,7 @@ function hidePhone() {
         );
 
         window.location.href =
-            "story2.html?v=ryan-frames-7";
+            "story2.html?v=save-slot-3";
 
     }
 

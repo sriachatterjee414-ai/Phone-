@@ -103,11 +103,41 @@ enterGame.addEventListener("click", () => {
     let destination = "story.html";
 
     if (isContinueFlow) {
-        if (localStorage.getItem("brokenPhoneStory2Started") === "true") {
+        const resumePage =
+            localStorage.getItem("brokenPhoneResumePage");
+
+        const allowedPages = new Set([
+            "story.html",
+            "investigation.html",
+            "desk.html",
+            "cabinet.html",
+            "table.html",
+            "repair.html",
+            "phone.html",
+            "story2.html",
+            "messages.html",
+            "calls.html",
+            "contacts.html",
+            "gallery.html",
+            "notes.html",
+            "browser.html",
+            "camera.html",
+            "bank.html",
+            "music.html",
+            "clock.html",
+            "settings.html",
+            "victim-info.html"
+        ]);
+
+        if (allowedPages.has(resumePage)) {
+            destination = resumePage === "story2.html"
+                ? "story2.html?v=save-slot-3"
+                : resumePage;
+        } else if (localStorage.getItem("brokenPhoneStory2Started") === "true") {
             destination =
                 localStorage.getItem("brokenPhoneStory2Complete") === "true"
                     ? "phone.html"
-                    : "story2.html?v=ryan-frames-7";
+                    : "story2.html?v=save-slot-3";
         } else if (localStorage.getItem("brokenPhoneRepairComplete") === "true") {
             destination = "phone.html";
         } else if (localStorage.getItem("brokenPhoneStory1Complete") === "true") {

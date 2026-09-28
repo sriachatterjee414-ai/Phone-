@@ -55,27 +55,66 @@ const hallAmbience =
 const radioStatic =
     document.getElementById("radioStatic");
 
-const NEW_GAME_STORAGE_KEYS = [
-    "brokenPhonePlayerName",
-    "brokenPhonePlayerPassword",
-    "brokenPhoneStarted",
-    "brokenPhoneStory1Complete",
-    "brokenPhoneStory2Started",
-    "brokenPhoneStory2Complete",
-    "brokenPhoneRepairComplete",
-    "brokenPhonePhoneVisible",
-    "brokenPhoneInventory",
-    "brokenPhoneRepairSelectedItem",
-    "brokenPhoneReturnPage",
-    "brokenPhoneGameState",
-    "brokenPhoneVictimSentMessages"
-];
+const continuePreview =
+    document.getElementById("continuePreview");
 
-function resetGameProgress() {
-    NEW_GAME_STORAGE_KEYS.forEach(key => {
-        localStorage.removeItem(key);
-    });
+const continuePreviewDetails =
+    document.getElementById("continuePreviewDetails");
+
+function refreshContinueButton() {
+    const available =
+        typeof GameSave !== "undefined" && GameSave.hasSave();
+
+    continueBtn.disabled = !available;
+    continueBtn.setAttribute("aria-disabled", String(!available));
 }
+
+function closeContinuePreview() {
+    continuePreview.classList.remove("open");
+    continuePreview.setAttribute("aria-hidden", "true");
+}
+
+function openContinuePreview() {
+    const save = GameSave?.getSave();
+    if (!save) {
+        refreshContinueButton();
+        return;
+    }
+
+    const savedDate = new Date(save.savedAt);
+    const dateLabel = Number.isNaN(savedDate.getTime())
+        ? "Unknown save time"
+        : savedDate.toLocaleString();
+
+    const previewLines = [
+        save.playerName || "Player",
+        `Checkpoint: ${save.section || "Game"}`,
+        `${save.inventoryCount || 0} inventory items · ${save.clueCount || 0} clues`,
+        `Saved: ${dateLabel}`
+    ];
+
+    continuePreviewDetails.replaceChildren(
+        ...previewLines.map(text => {
+            const line = document.createElement("div");
+            line.textContent = text;
+            return line;
+        })
+    );
+
+    continuePreview.classList.add("open");
+    continuePreview.setAttribute("aria-hidden", "false");
+}
+
+refreshContinueButton();
+
+document.getElementById("closeContinuePreview").addEventListener("click", closeContinuePreview);
+document.getElementById("cancelContinuePreview").addEventListener("click", closeContinuePreview);
+document.getElementById("closeContinuePreviewBackdrop").addEventListener("click", closeContinuePreview);
+
+document.getElementById("loadSavedGame").addEventListener("click", () => {
+    if (!GameSave.restore()) return;
+    window.location.href = "signin.html?continue=1";
+});
 
 
 /* =========================================
@@ -469,7 +508,7 @@ newGameBtn.addEventListener(
 
         startMenuAudio();
 
-        resetGameProgress();
+        GameSave.reset();
 
 
         /*
@@ -497,29 +536,7 @@ continueBtn.addEventListener(
     () => {
 
         startMenuAudio();
-
-
-        const savedName =
-            localStorage.getItem(
-                "brokenPhonePlayerName"
-            );
-
-
-        if (savedName) {
-
-            setTimeout(() => {
-
-                window.location.href =
-                    "signin.html?continue=1";
-
-            }, 150);
-
-        } else {
-
-            alert(
-                "No saved game found."
-            );
-        }
+        openContinuePreview();
     }
 );
 
