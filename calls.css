@@ -508,6 +508,14 @@ body {
     flex-direction: column;
 
     align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 96px 24px 44px;
+
+    overflow-y: auto;
 }
 
 .call-screen.hidden {
@@ -529,7 +537,7 @@ body {
 }
 
 .calling-person {
-    margin-top: 110px;
+    margin-top: 0;
 
     text-align: center;
 }
@@ -581,19 +589,15 @@ body {
 ========================================= */
 
 .call-controls {
-    position: absolute;
+    width: min(80%, 650px);
 
-    bottom: 240px;
-
-    width: 80%;
-
-    max-width: 650px;
+    flex: 0 0 auto;
 
     display: grid;
 
     grid-template-columns: repeat(3, 1fr);
 
-    gap: 38px;
+    gap: 38px 18px;
 }
 
 .call-control {
@@ -628,11 +632,9 @@ body {
 ========================================= */
 
 .call-bottom {
-    position: absolute;
+    width: min(80%, 420px);
 
-    bottom: 55px;
-
-    width: 80%;
+    flex: 0 0 auto;
 
     display: flex;
 
@@ -669,4 +671,68 @@ body {
     transform: rotate(135deg);
 
     cursor: pointer;
+}
+
+
+@media (max-height: 620px) {
+
+    .call-screen {
+        justify-content: space-between;
+
+        gap: 10px;
+
+        padding: 68px 16px 16px;
+    }
+
+    .call-avatar {
+        width: clamp(64px, 18vh, 100px);
+        height: clamp(64px, 18vh, 100px);
+    }
+
+    .calling-person h1 {
+        margin: 10px 0 2px;
+
+        font-size: clamp(20px, 5vh, 28px);
+    }
+
+    .calling-person p {
+        font-size: 16px;
+    }
+
+    .calling-status {
+        margin-top: 6px;
+
+        font-size: 14px;
+    }
+
+    .call-controls {
+        width: min(100%, 520px);
+
+        gap: 10px 8px;
+    }
+
+    .call-control {
+        gap: 5px;
+
+        font-size: 24px;
+    }
+
+    .call-control small {
+        font-size: 13px;
+    }
+
+    .call-bottom {
+        width: min(82%, 360px);
+    }
+
+    .speaker-button,
+    .dialpad-button {
+        font-size: 28px;
+    }
+
+    .end-call {
+        width: 64px;
+        height: 64px;
+    }
+
 }
