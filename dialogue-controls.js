@@ -17,7 +17,10 @@ let controlsCreated = false;
 
 function createDialogueControls() {
 
-    if (controlsCreated) return;
+    if (
+        controlsCreated ||
+        document.getElementById("dialogueControls")
+    ) return;
 
     if (typeof dialogueBox === "undefined" || !dialogueBox) {
         console.error("Dialogue box not found.");
@@ -360,11 +363,22 @@ function updateControlsVisibility() {
 
 
     const isHidden =
-        dialogueBox.style.display === "none";
+        dialogueBox.classList.contains("hidden") ||
+        window.getComputedStyle(dialogueBox).display === "none";
+
+    const gameuiOverlay =
+        document.getElementById("gameuiOverlay");
+
+    const historyPanel =
+        document.getElementById("dialogueHistoryPanel");
+
+    const isModalOpen =
+        (gameuiOverlay && !gameuiOverlay.classList.contains("hidden")) ||
+        (historyPanel && historyPanel.classList.contains("active"));
 
 
     controls.style.display =
-        isHidden ? "none" : "flex";
+        isHidden || isModalOpen ? "none" : "flex";
 }
 
 

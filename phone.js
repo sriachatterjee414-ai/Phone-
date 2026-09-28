@@ -133,6 +133,20 @@ const REPAIRED_KEY =
 const PHONE_VISIBLE_KEY =
     "brokenPhonePhoneVisible";
 
+const STORY_PHONE_OVERLAY =
+    new URLSearchParams(window.location.search).get("storyOverlay") === "1";
+
+if (STORY_PHONE_OVERLAY) {
+
+    document.documentElement.classList.add(
+        "story-phone-iframe"
+    );
+
+}
+
+const STORY2_COMPLETE_KEY =
+    "brokenPhoneStory2Complete";
+
 
 /* =========================================================
    STATE
@@ -259,6 +273,33 @@ function hidePhone() {
 
 
     updatePhoneToggle();
+
+
+    if (STORY_PHONE_OVERLAY) {
+
+        window.parent.postMessage(
+            { type: "broken-phone-hidden" },
+            window.location.origin
+        );
+
+        return;
+
+    }
+
+
+    if (
+        localStorage.getItem(STORY2_COMPLETE_KEY) !== "true"
+    ) {
+
+        localStorage.setItem(
+            "brokenPhoneStory2Started",
+            "true"
+        );
+
+        window.location.href =
+            "story2.html?v=ryan-frames-7";
+
+    }
 
 }
 
@@ -1890,6 +1931,34 @@ victimInfoButton.addEventListener(
 function initializePhone() {
 
     checkRepairState();
+
+
+    if (STORY_PHONE_OVERLAY) {
+
+        if (!phoneRepaired) {
+
+            window.location.replace("repair.html");
+
+            return;
+
+        }
+
+
+        phoneVisible = true;
+
+        savePhoneVisibility();
+
+        phoneShell.classList.remove(
+            "hidden-phone"
+        );
+
+        updatePhoneToggle();
+
+        showScreen("lock");
+
+        return;
+
+    }
 
 
     /* =====================================================

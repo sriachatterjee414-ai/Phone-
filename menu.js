@@ -55,6 +55,28 @@ const hallAmbience =
 const radioStatic =
     document.getElementById("radioStatic");
 
+const NEW_GAME_STORAGE_KEYS = [
+    "brokenPhonePlayerName",
+    "brokenPhonePlayerPassword",
+    "brokenPhoneStarted",
+    "brokenPhoneStory1Complete",
+    "brokenPhoneStory2Started",
+    "brokenPhoneStory2Complete",
+    "brokenPhoneRepairComplete",
+    "brokenPhonePhoneVisible",
+    "brokenPhoneInventory",
+    "brokenPhoneRepairSelectedItem",
+    "brokenPhoneReturnPage",
+    "brokenPhoneGameState",
+    "brokenPhoneVictimSentMessages"
+];
+
+function resetGameProgress() {
+    NEW_GAME_STORAGE_KEYS.forEach(key => {
+        localStorage.removeItem(key);
+    });
+}
+
 
 /* =========================================
    AUDIO SETTINGS
@@ -447,6 +469,8 @@ newGameBtn.addEventListener(
 
         startMenuAudio();
 
+        resetGameProgress();
+
 
         /*
            Give the audio a moment to start
@@ -486,7 +510,7 @@ continueBtn.addEventListener(
             setTimeout(() => {
 
                 window.location.href =
-                    "signin.html";
+                    "signin.html?continue=1";
 
             }, 150);
 

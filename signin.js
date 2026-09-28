@@ -18,6 +18,17 @@ const backButton =
 const errorMessage =
     document.getElementById("errorMessage");
 
+const isContinueFlow =
+    new URLSearchParams(window.location.search).get("continue") === "1";
+
+if (isContinueFlow) {
+    playerName.value =
+        localStorage.getItem("brokenPhonePlayerName") || "";
+
+    playerPassword.value =
+        localStorage.getItem("brokenPhonePlayerPassword") || "";
+}
+
 
 /* =========================================
    ENTER GAME
@@ -89,8 +100,22 @@ enterGame.addEventListener("click", () => {
        story.html
     ------------------------- */
 
-    window.location.href =
-        "story.html";
+    let destination = "story.html";
+
+    if (isContinueFlow) {
+        if (localStorage.getItem("brokenPhoneStory2Started") === "true") {
+            destination =
+                localStorage.getItem("brokenPhoneStory2Complete") === "true"
+                    ? "phone.html"
+                    : "story2.html?v=ryan-frames-7";
+        } else if (localStorage.getItem("brokenPhoneRepairComplete") === "true") {
+            destination = "phone.html";
+        } else if (localStorage.getItem("brokenPhoneStory1Complete") === "true") {
+            destination = "investigation.html";
+        }
+    }
+
+    window.location.href = destination;
 
 });
 

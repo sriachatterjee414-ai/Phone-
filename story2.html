@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broken Phone - Story 2</title>
+    <link rel="stylesheet" href="story2.css?v=ryan-frames-7">
+    <link rel="stylesheet" href="persistent-ui.css?v=ryan-frames-7">
+    <link rel="stylesheet" href="dialogue-controls.css">
+</head>
+<body>
+    <main id="game">
+        <div class="room-image" aria-hidden="true"></div>
+        <div class="room-shade" aria-hidden="true"></div>
+
+        <div class="case-heading">
+            <span>CASE 001</span>
+            <span>FIELD BRIEFING</span>
+        </div>
+
+        <section class="character-stage" aria-label="Investigation team">
+            <figure class="character character-lena" data-character="lena" aria-hidden="true">
+                <img id="lenaImage" src="lenaneutral.png" alt="Lena Brooks">
+            </figure>
+
+            <figure class="character character-ryan" data-character="ryan" aria-hidden="true">
+                <img id="ryanImage" src="ryan_neutral.png" alt="Ryan Hale">
+            </figure>
+
+            <figure class="character character-max" data-character="max" aria-hidden="true">
+                <img id="maxImage" src="maxneutral.png" alt="Max Turner">
+            </figure>
+        </section>
+
+        <section id="dialogueBox" class="dialogue-box hidden" aria-live="polite">
+            <div id="speakerName" class="speaker-name">RYAN</div>
+            <div id="dialogueText" class="dialogue-text"></div>
+            <button id="nextDialogue" class="next-button" type="button" aria-label="Next dialogue">&#9662;</button>
+        </section>
+
+        <section id="storyEnd" class="story-end hidden" aria-live="polite">
+            <div class="end-label">CASE 001</div>
+            <h1>The briefing is complete.</h1>
+            <p>The investigation is active.</p>
+            <button id="returnToPhone" type="button">CONTINUE</button>
+        </section>
+    </main>
+
+    <section id="storyPhoneOverlay" class="phone-overlay" aria-label="Repaired phone" aria-hidden="true">
+        <iframe id="storyPhoneFrame" title="Repaired phone"></iframe>
+    </section>
+
+    <audio id="story2Ambience" src="story2_ambience.mp3" loop preload="auto"></audio>
+    <audio id="story2DialogueAdvance" src="story2_dialogue_advance.mp3" preload="auto"></audio>
+    <audio id="story2CompleteSound" src="story2_complete.mp3" preload="auto"></audio>
+
+    <script src="persistent-ui.js?v=ryan-frames-7"></script>
+    <script src="story2.js?v=ryan-frames-7"></script>
+    <script src="dialogue-controls.js?v=story2-controls-2"></script>
+</body>
+</html>

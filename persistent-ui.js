@@ -214,6 +214,35 @@
         },
 
 
+        updateCharacter(
+            id,
+            name,
+            img
+        ) {
+
+            const character =
+                state.characters.find(
+                    entry => entry.id === id
+                );
+
+
+            if (!character) {
+
+                this.addCharacter(id, name, img);
+
+                return;
+
+            }
+
+
+            character.name = name;
+            character.img = img || character.img;
+
+            saveState();
+
+        },
+
+
         /* ========================================================
            SET VICTIM
 
@@ -281,6 +310,18 @@
                     extra.date ||
                     "",
 
+                dateDiscovered:
+                    extra.dateDiscovered ||
+                    "",
+
+                phoneStatus:
+                    extra.phoneStatus ||
+                    "",
+
+                timeOfDeath:
+                    extra.timeOfDeath ||
+                    "",
+
                 deathImage:
                     extra.deathImage ||
                     "",
@@ -320,6 +361,12 @@
             }
 
             else {
+
+                existingCharacter.name =
+                    name;
+
+                existingCharacter.img =
+                    img || "";
 
                 existingCharacter.isVictim =
                     true;
@@ -968,6 +1015,7 @@
                         <img
                             src="${selected.img}"
                             alt="${selected.name}"
+                                onerror="this.remove()"
                         >
                         `
 
@@ -1231,6 +1279,7 @@
                                             <img
                                                 src="${character.img}"
                                                 alt="${character.name}"
+                                                onerror="this.remove()"
                                             >
                                             `
 
@@ -1409,6 +1458,7 @@
                             <img
                                 src="${victim.img}"
                                 alt="${victim.name}"
+                                onerror="this.remove()"
                             >
                             `
 
@@ -1475,6 +1525,11 @@
                             victim.emergencyContact
                         )}
 
+                        ${victimInfoRow(
+                            "CAUSE OF DEATH",
+                            victim.cause
+                        )}
+
                     </div>
 
                 </div>
@@ -1518,6 +1573,16 @@
                         ${caseGridItem(
                             "DATE",
                             victim.date
+                        )}
+
+                        ${caseGridItem(
+                            "DISCOVERED",
+                            victim.dateDiscovered
+                        )}
+
+                        ${caseGridItem(
+                            "PHONE STATUS",
+                            victim.phoneStatus
                         )}
 
                     </div>
@@ -1565,6 +1630,7 @@
                                     <img
                                         src="${victim.deathImage}"
                                         alt="Death evidence"
+                                        onerror="this.onerror=null;this.src='death_scene.png'"
                                     >
 
                                     <div
@@ -1595,6 +1661,7 @@
                                     <img
                                         src="${victim.crimeSceneImage}"
                                         alt="Crime scene"
+                                        onerror="this.onerror=null;this.src='crime_scene.png'"
                                     >
 
                                     <div

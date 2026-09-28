@@ -143,7 +143,7 @@ function registerEvelyn() {
             GameUI.addCharacter(
                 "evelyn_carter",
                 "Evelyn Carter",
-                "victim.png"
+                "victim_portrait.png"
             );
 
         }
@@ -162,7 +162,7 @@ function registerEvelyn() {
             GameUI.setVictim(
                 "evelyn_carter",
                 "Evelyn Carter",
-                "victim.png",
+                "victim_portrait.png",
                 "Stabbed after being found tied to a tree in a jungle.",
                 "May 21, 2002"
             );
@@ -1347,6 +1347,11 @@ document.addEventListener(
 ============================================================ */
 
 function finishDialogue() {
+
+    localStorage.setItem(
+        "brokenPhoneStory1Complete",
+        "true"
+    );
 
     if (dialogueBox) {
 

@@ -438,14 +438,13 @@
 
     width:auto;
 
-    height:72%;
+    height:min(74vh, 720px);
 
-    max-width:60%;
+    max-width:none;
 
     object-fit:contain;
 
-    object-position:
-        center bottom;
+    object-position:center bottom;
 
     align-self:flex-end;
 
@@ -616,16 +615,13 @@
 
 .gameui-character-card img {
 
-    width:auto;
+    width:100%;
 
     height:95px;
 
-    max-width:100%;
+    object-fit:cover;
 
-    object-fit:contain;
-
-    object-position:
-        center bottom;
+    object-position:center 25%;
 
     margin:0;
 
@@ -1353,9 +1349,11 @@
 
     .gameui-character-main img {
 
-        height:65%;
+        width:min(80vw, 330px);
 
-        max-width:75%;
+        height:min(52dvh, 420px);
+
+        max-width:none;
 
     }
 

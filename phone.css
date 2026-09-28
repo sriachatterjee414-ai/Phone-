@@ -47,6 +47,17 @@ body {
     gap: 12px;
 }
 
+html.story-phone-iframe #investigationControls {
+    top: 18px;
+    right: 22px;
+    bottom: auto;
+    z-index: 10001;
+}
+
+html.story-phone-iframe #gameuiBar {
+    display: none !important;
+}
+
 .investigation-button {
     border: 1px solid rgba(255,255,255,.25);
 
